@@ -1,0 +1,172 @@
+// * color
+// ? basic
+$basic-white: #ffffff;
+$sub-white: #EFEFEF;
+$primary-color: #2196F3;
+$secondary-color: #4A148C;
+$tertiary-color: #1142e2;
+$error-message-color: #f44336;
+$modal-background: rgba(0, 0, 0, 0.637);
+
+// ? text
+$text-main-color: #111111;
+$text-sub-color: #666666;
+// *user-image 
+@mixin user-image {
+  -moz-border-radius: 60px;
+  -webkit-border-radius: 60px;
+  box-shadow: 0 0 0 3px #2196F3;
+  -webkit-box-shadow: 0 0 0 3px #2196F3;
+  -moz-box-shadow: 0 0 0 3px #2196F3;
+  border-radius: 50%;
+}
+
+// * button
+// ? basic
+$gradation-blue-left: #1142e2;
+$gradation-blue-right: #19bde6;
+@mixin blue-btn {
+  background: linear-gradient(60deg, $gradation-blue-left, $gradation-blue-right);
+}
+
+// ? apply & important
+$gradation-red-left: #D81B60;
+$gradation-red-right: #EC407A;
+@mixin red-btn {
+  background: linear-gradient(60deg, $gradation-red-left, $gradation-red-right);
+}
+
+// ? done
+$gradation-grey-left: #424242;
+$gradation-grey-right: #9E9E9E;
+@mixin grey-btn {
+  background: linear-gradient(60deg, $gradation-grey-left, $gradation-grey-right);
+}
+
+// ? register & important
+$gradation-purple-left: #673AB7;
+$gradation-purple-right: #AB47BC;
+@mixin purple-btn {
+  background: linear-gradient(60deg, $gradation-purple-left, $gradation-purple-right);
+}
+
+
+
+// * box-shadow
+// ? button
+$box-shadow-btn: #d4d4d4;
+@mixin box-shadow-btn {
+  box-shadow: 0 0px 5px 2px $box-shadow-btn;
+}
+// ? manage
+$box-shadow-manage: #02020278;
+@mixin box-shadow-manage {
+  box-shadow: 0 0px 5px 2px $box-shadow-manage;
+}
+
+
+// * border
+// ? basic
+$card-border-color: #B9B9B9;
+@mixin card-border-color {
+  border: solid 1px $card-border-color;
+}
+
+// ? input
+$input-border-color: #A3A1A1;
+@mixin input-border-color {
+  border: solid 1px $input-border-color;
+}
+
+// ? primary-color-border
+$primary-border-color: #2196F3;
+@mixin primary-border_color {
+  border: solid 1px $primary-border-color;
+}
+
+
+// * hover 
+// ? form
+@mixin form-hover {
+  @include primary-border_color;
+  outline: none;
+  box-shadow: 0 0 5px 1px #2195f348;
+}
+// ? button
+@mixin btn-hover {
+  box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
+}
+// ? red-button-hover
+@mixin red-btn-hover {
+  @include red-btn;
+  color: #F8FAFF;
+  appearance: none;
+  border: none;
+  box-shadow: 0 5px 20px -3px #CD106E;
+  transition: .3s;
+}
+// ? manage-hover
+$manage-hover-color: rgba(199, 199, 199, 0.281);
+
+// * skill-color 
+//? language
+$language-color: #3F51B5;
+@mixin border_language {
+  border: solid 1px $language-color;
+}
+
+// ? framework
+$framework-color: #2196F3;
+@mixin border_framework {
+  border: solid 1px $primary-color;
+}
+
+// ? skill
+$skill-color: #00BCD4;
+@mixin border-skill {
+  border: solid 1px $skill-color;
+}
+
+
+// * skill-detail
+//? language 
+@mixin detail-language {
+  @include border_language;
+  color: $language-color;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px / 5px;
+  margin-right: 10px;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+// ? framework
+@mixin detail-framework {
+  @include border_framework;
+  color: $framework-color;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px / 5px;
+  margin-right: 10px;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+// ? skill
+@mixin detail-skill {
+  @include border-skill;
+  color: $skill-color;
+  margin-top: 1rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px / 5px;
+  margin-right: 10px;
+  display: inline-block;
+  text-align: center;
+  font-weight: bold;
+  font-size: 14px;
+}
