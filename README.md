@@ -1,4 +1,5 @@
-# team_dev
+# team_devlop-fornt (ver 2)
+Typescript導入後
 
 ## Docker setup
 ```
