@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-// import search from '@/store/modules/search.js'
+import auth from './modules/auth' 
+import search from './modules/search'
 import createPersistedState from "vuex-persistedstate" //? State の値を localStorageに保存するためのプラグイン
 
 Vue.use(Vuex)
@@ -16,8 +17,8 @@ export default new Vuex.Store({
   actions: {},
 
   modules: {
-    // auth,
-    // search
+    auth,
+    search
   },
   plugins: [createPersistedState({storage: window.localStorage})] //? State の値を localStorageに保存するためのプラグイン
 })

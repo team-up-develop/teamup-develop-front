@@ -1,8 +1,7 @@
 <template>
   <div id="app">
-    <!--! $store.state.auth.userId || -->
-    <Header></Header>
-    <!-- <header-login-false v-else /> -->
+    <Header v-if="loginFlag == true"/>
+    <header-login-false v-else />
     <div class="container">
       <router-view/>
     </div>
@@ -14,7 +13,7 @@
 import Vue from 'vue';
 import Header from '@/components/common/entire/Header.vue'
 import Footer from '@/components/common/entire/Footer.vue'
-// import HeaderLoginFalse from '@/components/common/entire/HeaderLoginFalse.vue'
+import HeaderLoginFalse from '@/components/common/entire/HeaderLoginFalse.vue'
 
 export default Vue.extend({ 
   name: 'App',
@@ -27,19 +26,19 @@ export default Vue.extend({
     // LeftSideBar
     Header,
     Footer,
-    // HeaderLoginFalse,
+    HeaderLoginFalse,
     // login
   },
   mounted() {
-  // console.log(this.$store.state.auth.userId)
-    // if(this.$store.state.auth.userId) {
-      // this.loginFlag = true;
-      // console.log(this.loginFlag)
-    //   console.log("ログイン中です")
-    // }
-    // else {
-    //   console.log("ログアウト中")
-    // }
+  console.log(this.$store.state.auth.userId)
+    if(this.$store.state.auth.userId) {
+      this.loginFlag = true;
+      console.log(this.loginFlag)
+      console.log("ログイン中です")
+    }
+    else {
+      console.log("ログアウト中")
+    }
   }
 });
 </script>
@@ -57,7 +56,7 @@ export default Vue.extend({
 }
 .container {
   width: 100%;
-  margin-top: 3.7rem;
+  /* margin-top: 3.7rem; */
   /* height: 100%; */
   /* background-color: #F2F6F7; */
   /* background-color: #FAFAFA; */

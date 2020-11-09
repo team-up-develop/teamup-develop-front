@@ -242,7 +242,7 @@ export default Vue.extend({
       frameworks: [],//? フレームワーク取得
       selectedSkill: [], //? その他スキル v-model
       skills: [], //? その他スキル取得
-      freeWord: "", //!this.$store.state.search.freeWord, //? フリーワード 
+      freeWord: this.$store.state.search.freeWord, //!this.$store.state.search.freeWord, //? フリーワード 
       loading: true, 
       jobDetail: null, //? 案件詳細 
       detailFlag: false, //? 案件詳細を表示するためのフラグ
