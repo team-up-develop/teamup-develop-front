@@ -2,7 +2,9 @@ import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
 import Home from '../views/Home.vue'
 import About from '../views/common/About.vue'
+import Jobs from '@/views/job/Jobs.vue'
 import JobCreate from '@/views/job/JobCreate.vue'
+import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 // import TopPage from '../views/common/TopPage.vue'
 
 Vue.use(VueRouter)
@@ -27,9 +29,19 @@ const routes: Array<RouteConfig> = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
-    path: '/job/create/1',
+    path: '/jobs',
+    name: 'Jobs',
+    component: Jobs
+  },
+  {
+    path: '/job_create/1',
     name: 'JobCreate',
     component: JobCreate
+  },
+  {
+    path: '/job_create/2',
+    name: 'JobCreateSkill',
+    component: JobCreateSkill
   },
   {
     path: '/about',

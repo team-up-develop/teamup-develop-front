@@ -28,7 +28,7 @@
         <textarea type="text" name="" @input="onTextJobDescription" v-model="jobDescription" placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" maxlength="250"></textarea>
         <!-- <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small> -->
       </div>
-      <router-link to='/jobcreate/session2' class="job-create-btn-area">
+      <router-link to='/job_create/2' class="job-create-btn-area">
         <button class="next-btn" @click="nextCreateBtn">
           次へ 1/2
         </button>
@@ -44,15 +44,7 @@ import Vue from 'vue';
 // import axios from 'axios'
 import Loading from '@/components/common/loading/Loading.vue'
 
-type languages = {
-  id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Date;
-  programingLanguageName: string;
-}
-
-interface PostData {
+interface JobCreateData {
   jobTitle: string | null;  //? タイトル
   jobDescription: string | null; //? 詳細
   devStartDate: string | null; //? 開発開始
@@ -65,13 +57,12 @@ export type DataType = {
   jobDescription: string | null;
   devStartDate: string | null;
   devEndDate: string | null;
-  titleLimit: number | boolean | null;
+  titleLimit: number | null;
   jobDescriptionLimit: number | null;
   errors: string[];
   errorsDevStartDates: string[];
   errorDevEndDates: string[];
 }
-
 
 export default Vue.extend({ 
   data(): DataType {
@@ -106,7 +97,7 @@ export default Vue.extend({
 
   // },
   methods: {
-    nextCreateBtn(e: any) { //e
+    nextCreateBtn(e: any) { //! Todo 明示的なanyにしているがLinterでErrorを出してくれてる。あまり良くない書き方
       //* エラーメッセージ
       if(!this.jobTitle || !this.devStartDate || !this.devEndDate) {
         this.errors = [];
@@ -119,7 +110,7 @@ export default Vue.extend({
       }
       // * PostData
       if(this.jobTitle && this.devStartDate && this.devEndDate) {
-        const params: PostData = {
+        const params: JobCreateData = {
           jobTitle : this.jobTitle,  //? タイトル
           jobDescription: this.jobDescription, //? 詳細
           devStartDate: this.devStartDate, //? 開発開始
