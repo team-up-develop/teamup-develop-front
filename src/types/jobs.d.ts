@@ -7,7 +7,7 @@ export interface JobCreateData {
 }
 
 // * 案件作成 session2 完了
-export interface JobCreateDataCom {
+export interface JobCreateDataComp {
   userId: number, //? ログインUserId
   jobTitle : string | null,  //? タイトル
   jobDescription: string | null, //? 詳細

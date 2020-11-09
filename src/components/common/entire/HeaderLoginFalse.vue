@@ -65,14 +65,21 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 // import LogoImage from '.../assets/logo.jpg'
 // import $ from 'jquery'
-export default {
+export type DataType = {
+  isActive: boolean;
+  hasError: boolean;
+  gnav: boolean;
+}
+
+export default Vue.extend({ 
   props: {
     flag: Boolean
   },
-  data() {
+  data(): DataType {
     return {
       // assetsImage: LogoImage,
       // assetsImage_NG: '.../assets/logo.jpg',
@@ -85,7 +92,7 @@ export default {
     }
   },
   methods: {
-    show(e) {
+    show(e: any) {
       const elm = e.currentTarget;
       const className = elm.className;
       if(className.indexOf('is-open') != -1) {
@@ -118,7 +125,7 @@ export default {
     //   pos = $(this).scrollTop();
     // });
   }
-}
+});
 </script>
 
 <style lang="scss" scoped>

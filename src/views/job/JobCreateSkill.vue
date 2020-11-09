@@ -76,7 +76,7 @@ import Vue from 'vue';
 import axios from 'axios'
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
-import { JobCreateDataCom } from '@/types/jobs';
+import { JobCreateDataComp } from '@/types/jobs';
 import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
@@ -196,7 +196,7 @@ export default Vue.extend({
       const devEnd = devEndDateString
       const devEndDate = toDate(devEnd, '-');
 
-      const params: JobCreateDataCom = {
+      const params: JobCreateDataComp = {
         userId: this.$store.state.auth.userId, //? ログインUserId
         jobTitle : jobTitle,  //? タイトル
         jobDescription: jobDescription, //? 詳細

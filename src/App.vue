@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header v-if="loginFlag == true"/>
+    <Header  v-if="$store.state.auth.userId || this.loginFlag == true"/>
     <header-login-false v-else />
     <div class="container">
       <router-view/>
