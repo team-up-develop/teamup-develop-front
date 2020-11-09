@@ -12,12 +12,16 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import { VueLoading } from 'vue-loading-template'
 
-export default {
+export type DataType = {
+  loading: boolean;
+}
+export default Vue.extend({ 
   name: 'loading',
-  data() {
+  data(): DataType {
     return {
       loading: true
     }
@@ -25,8 +29,7 @@ export default {
   components: {
     VueLoading,
   },
-
-}
+});
 </script>
 
 <style lang="scss" scoped>

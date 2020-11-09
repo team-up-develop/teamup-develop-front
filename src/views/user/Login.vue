@@ -29,12 +29,19 @@
   </section>
 </template>
 
-<script>
-import Loading from '@/components/common/loading/Loading'
+<script lang="ts">
 import Vue from 'vue';
+import Loading from '@/components/common/loading/Loading.vue'
+
+export type DataType = {
+  LoginName: string;
+  LoginPassword: string;
+  loginErrorFlag: boolean;
+  loading: boolean;
+}
 
 export default Vue.extend({ 
-  data() {
+  data(): DataType {
     return {
       LoginName: '',
       LoginPassword: '',
@@ -43,7 +50,7 @@ export default Vue.extend({
     }
   },
   methods: {
-    login() {
+    login(): void {
       this.$store.dispatch('login', {
         LoginName: this.LoginName,
         LoginPassword: this.LoginPassword,

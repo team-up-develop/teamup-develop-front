@@ -74,16 +74,24 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 // import LogoImage from '.../assets/logo.jpg'
 // import $ from 'jquery'
-export default {
+export type DataType = {
+  userId: number;
+  isActive: boolean;
+  hasError: boolean;
+  gnav: boolean;
+}
+
+export default Vue.extend({ 
   // props: {
   //   flag: Boolean
   // },
-  data() {
+  data(): DataType {
     return {
-      userId: 1, //!this.$store.state.auth.userId,
+      userId: this.$store.state.auth.userId,
       // assetsImage: LogoImage,
       // assetsImage_NG: '.../assets/logo.jpg',
       // staticImage: '.../assets/logo.jpg',
@@ -96,22 +104,23 @@ export default {
   },
   created() {
     if( this.userId !== undefined) {
+      console.log("aaaaaaaaaaa")
       // this.userId = this.$store.state.auth.userId;
       console.log(this.userId)
     }
   },
   methods: {
-    // show(e) {
-    //   const elm = e.currentTarget;
-    //   const className = elm.className;
-    //   if(className.indexOf('is-open') != -1) {
-    //     this.gnav = false;
-    //     elm.className = 'button';
-    //   } else {
-    //     this.gnav = true;
-    //     elm.className += " is-open";
-    //   }
-    // },
+    show(e: any) {
+      const elm = e.currentTarget;
+      const className = elm.className;
+      if(className.indexOf('is-open') != -1) {
+        this.gnav = false;
+        elm.className = 'button';
+      } else {
+        this.gnav = true;
+        elm.className += " is-open";
+      }
+    },
     // * Header を閉じる
     closeHeader() {
       this.gnav = false;
@@ -138,7 +147,7 @@ export default {
     //   pos = $(this).scrollTop();
     // });
   }
-}
+});
 </script>
 
 <style lang="scss" scoped>
