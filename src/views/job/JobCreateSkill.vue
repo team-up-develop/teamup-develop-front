@@ -74,30 +74,26 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import vSelect from 'vue-select'
+import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import { JobCreateDataCom } from '@/types/jobs';
+import { Language } from '@/types/index';
+import { Framework } from '@/types/index';
+import { Skill } from '@/types/index';
 
 export type DataType = {
   selectedLang: [];
-  languages: [];
+  languages: {}[];
   selectedFramwork: [];
-  framworks: [];
+  framworks: {}[];
   selectedSkill: [];
-  skills: [];
+  skills: {}[];
   selectedCommunication: number;
   recruitNumber: number;
   selectedLangErrors: string[];
   selectedFramworkErrors: string[];
   selectedSkillErrors: string[];
 }
-
-// interface Language {
-//   id: number;
-//   createdAt: Date;
-//   updatedAt: Date;
-//   deletedAt: Date | null;
-//   programingLanguageName: string;
-// }
 
 export default Vue.extend({
   data(): DataType {
@@ -116,26 +112,21 @@ export default Vue.extend({
     }
   },
   mounted() {
-    // ! response が any です。 interface で 肩を宣言するとErrorになってしまう Type 'Language' is not assignable to type '[]'.
     // *開発言語
-    axios.get('http://localhost:8888/api/v1/programing_language')
+    axios.get<Language[]>('http://localhost:8888/api/v1/programing_language')
       .then(response => {
-          // this.loading = false;
-          // const array = [];
         this.languages = response.data;
       })
-    // ! response が any です。 interface で 肩を宣言するとErrorになってしまう Type 'Language' is not assignable to type '[]'.
     // * フレームワーク
-    axios.get('http://localhost:8888/api/v1/programing_framework')
+    axios.get<Framework[]>('http://localhost:8888/api/v1/programing_framework')
       .then(response => {
-          this.framworks = response.data
+          this.framworks = response.data;
           // console.log(this.framworks)
       })
-    // ! response が any です。 interface で 肩を宣言するとErrorになってしまう Type 'Language' is not assignable to type '[]'. 
     // * その他スキル
-    axios.get('http://localhost:8888/api/v1/skill')
+    axios.get<Skill[]>('http://localhost:8888/api/v1/skill')
       .then(response => {
-          this.skills = response.data
+          this.skills = response.data;
           // console.log(this.skills)
       })
   },
@@ -205,7 +196,7 @@ export default Vue.extend({
       const devEnd = devEndDateString
       const devEndDate = toDate(devEnd, '-');
 
-      const params = {
+      const params: JobCreateDataCom = {
         userId: this.$store.state.auth.userId, //? ログインUserId
         jobTitle : jobTitle,  //? タイトル
         jobDescription: jobDescription, //? 詳細
