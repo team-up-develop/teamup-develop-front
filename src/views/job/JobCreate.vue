@@ -43,13 +43,7 @@
 import Vue from 'vue';
 // import axios from 'axios'
 import Loading from '@/components/common/loading/Loading.vue'
-
-interface JobCreateData {
-  jobTitle: string | null;  //? タイトル
-  jobDescription: string | null; //? 詳細
-  devStartDate: string | null; //? 開発開始
-  devEndDate: string | null; //? 開発終了
-}
+import { JobCreateData } from '@/types/jobs';
 
 export type DataType = {
   loading: boolean;
