@@ -43,7 +43,7 @@
               <div class="menu-list-icon-area">
                 <!-- <font-awesome-icon icon="user-plus" class="icon"/> -->
               </div>
-              <router-link to="/jobcreate" class="router-link">募集する</router-link>
+              <router-link to="/job_create/1" class="router-link">募集する</router-link>
             </li>
             <li class="menu-list">
               <div class="menu-list-icon-area">
@@ -76,7 +76,7 @@
 
 <script>
 // import LogoImage from '.../assets/logo.jpg'
-import $ from 'jquery'
+// import $ from 'jquery'
 export default {
   // props: {
   //   flag: Boolean
@@ -118,25 +118,25 @@ export default {
     }
   },
   mounted() {
-    // * Header 上下スクロール
-    let pos = 0;
-    $(window).on('scroll', function(){
+    // // * Header 上下スクロール
+    // let pos = 0;
+    // $(window).on('scroll', function(){
 
-      if($(this).scrollTop() > 50 ){
-        if($(this).scrollTop() < pos ){
-          // ? 上スクロール時に表示
-          $('.header-wrapper').addClass('_show');
-        }else{
-          //? 下 スクロール時に表示
-          $('.header-wrapper').removeClass('_show');
-        }
-      } else {
-        $('.header-wrapper').addClass('_show');
-      }
+    //   if($(this).scrollTop() > 50 ){
+    //     if($(this).scrollTop() < pos ){
+    //       // ? 上スクロール時に表示
+    //       $('.header-wrapper').addClass('_show');
+    //     }else{
+    //       //? 下 スクロール時に表示
+    //       $('.header-wrapper').removeClass('_show');
+    //     }
+    //   } else {
+    //     $('.header-wrapper').addClass('_show');
+    //   }
 
-      //? スクロールが停止した位置を保持
-      pos = $(this).scrollTop();
-    });
+    //   //? スクロールが停止した位置を保持
+    //   pos = $(this).scrollTop();
+    // });
   }
 }
 </script>

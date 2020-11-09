@@ -5,6 +5,7 @@ import About from '../views/common/About.vue'
 import Jobs from '@/views/job/Jobs.vue'
 import JobCreate from '@/views/job/JobCreate.vue'
 import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
+import Login from '@/views/user/Login.vue'
 // import TopPage from '../views/common/TopPage.vue'
 
 Vue.use(VueRouter)
@@ -47,6 +48,11 @@ const routes: Array<RouteConfig> = [
     path: '/about',
     component: About,
     name: 'about'
+  },
+  {
+    path: '/login',
+    component: Login,
+    name: 'Login'
   },
 ]
 
