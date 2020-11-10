@@ -1,6 +1,7 @@
-import { Job } from '@/types/jobs';
+import { Job } from '@/types/job';
+import { User } from '@/types/user';
 export interface ManageJob {
-  applyStatus: {};
+  applyStatus: ApplyStatus;
   applyStatusId: number;
   createdAt: Date;
   deletedAt: null | Date;
@@ -8,6 +9,14 @@ export interface ManageJob {
   job: Job;
   jobId: number;
   updatedAt: Date;
-  user: {};
+  user: User;
   userId: number;
+}
+
+export interface ApplyStatus {
+  createdAt: Date;
+  deletedAt: Date | null;
+  id: number;
+  statusName: "応募" | "参加" | "落選" | "主宰"; 
+  updatedAt: Date;
 }
