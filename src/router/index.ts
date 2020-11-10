@@ -7,7 +7,9 @@ import JobCreate from '@/views/job/JobCreate.vue'
 import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 import Login from '@/views/user/Login.vue'
 // import TopPage from '../views/common/TopPage.vue'
-
+import Manage from '@/views/manage/Manage.vue'
+import Favorite from '@/views/favorite/Favorite.vue'
+import Apply from '@/views/apply/Apply.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -53,6 +55,21 @@ const routes: Array<RouteConfig> = [
     path: '/login',
     component: Login,
     name: 'Login'
+  },
+  {
+    path: '/manage',
+    component: Manage,
+    name: 'Manage'
+  },
+  {
+    path: '/manage/favorite_job',
+    component: Favorite,
+    name: 'ManageFavorite'
+  },
+  {
+    path: '/manage/apply_job',
+    component: Apply,
+    name: 'ManageApply'
   },
 ]
 
