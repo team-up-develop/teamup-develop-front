@@ -43,7 +43,7 @@
 import Vue from 'vue';
 // import axios from 'axios'
 import Loading from '@/components/common/loading/Loading.vue'
-import { JobCreateData } from '@/types/jobs';
+import { JobCreateData } from '@/types/job';
 
 export type DataType = {
   loading: boolean;
@@ -91,7 +91,7 @@ export default Vue.extend({
 
   // },
   methods: {
-    nextCreateBtn(e: any) { //! Todo 明示的なanyにしているがLinterでErrorを出してくれてる。あまり良くない書き方
+    nextCreateBtn(e: any) { // ! Todo 明示的なanyにしているがLinterでErrorを出してくれてる。あまり良くない書き方
       //* エラーメッセージ
       if(!this.jobTitle || !this.devStartDate || !this.devEndDate) {
         this.errors = [];

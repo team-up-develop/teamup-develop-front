@@ -1,8 +1,8 @@
 <template>
   <div class="job-cards">
     <div class="job-cards__top">
-      <span>{{ job.jobTitle | truncateTitle }}</span>
-      <p>{{ job.jobTitle | truncateTitleResponsive }}</p>
+      <span>{{ jobTitle }}</span>
+      <p>{{ jobTitleResponsive }}</p>
     </div>
     <div class="job-cards__center">
       <!-- カード スキルコンポーネント -->
@@ -46,23 +46,27 @@ export default {
     moment(value, format) {
       return moment(value).format(format);
     },
+  },
+  computed: {
     //* 案件タイトル 文字制限
-    truncateTitle: function(value) {
-      const length = 40;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
+    jobTitle: function() {
+      if(this.job) {
+        if(this.job.jobTitle.length > 40) {
+          return this.job.jobTitle.substring(0,40) + '...';
+        }
+        return this.job.jobTitle;
       }
-      return value.substring(0, length) + ommision;
+      return "";
     },
     //* 案件タイトル レスポンシブ文字制限
-    truncateTitleResponsive: function(value) {
-      const length = 35;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
+    jobTitleResponsive: function() {
+      if(this.job) {
+        if(this.job.jobTitle.length > 30) {
+          return this.job.jobTitle.substring(0,30) + '...';
+        }
+        return this.job.jobTitle;
       }
-      return value.substring(0, length) + ommision;
+      return "";
     },
   },
   components: {
@@ -222,17 +226,17 @@ export default {
     height: 285px;
   }
   .job-cards {
-    .job-cards-top {
+    &__top {
       font-size: 16px;
       width: calc(100% - 2rem);
       // background-color: yellow;
-      padding: 2rem 1rem 1rem 1rem;
+      padding: 1.3rem 1rem 1rem 1rem;
 
       span {
         display: none;
       }
       p {
-        display: inline;
+        display: block;
       }
     }
   }
