@@ -1,3 +1,7 @@
+import { User } from '@/types/user';
+import { Language } from '@/types/index';
+import { Framework } from '@/types/index';
+import { Skill } from '@/types/index';
 // * 案件
 export interface Job {
   createdAt: Date;
@@ -8,14 +12,14 @@ export interface Job {
   jobDescription: string | null;
   jobStatusId: 1;
   jobTitle: string;
-  programingFramework: [];
-  programingLanguage: [];
+  programingFramework: Framework[];
+  programingLanguage: Language[];
   publicationPeriod: Date;
   recruitmentNumbers: number;
-  skill: [];
+  skill: Skill[];
   updatedAt: Date;
   useMenter?: boolean;
-  user: {};
+  user: User;
   userId: number;
 }
 
