@@ -76,7 +76,7 @@ import Vue from 'vue';
 import axios from 'axios'
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
-import { JobCreateDataComp } from '@/types/jobs';
+import { JobCreateDataComp } from '@/types/job';
 import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
@@ -159,19 +159,19 @@ export default Vue.extend({
       // * 応募者人数を文字列から数値に変換
       const recruitNum = Number(this.recruitNumber);
       // * 言語を {id: Number}に変換
-      const languageArray = [];
+      const languageArray: {}[] = [];
       for(let i = 0; i < this.selectedLang.length; i++) {
         // console.log({id: this.selectedLang[i]})
         languageArray.push({id: this.selectedLang[i]})
       }
       // * フレームワークを{id: Number}に変換
-      const framworksArray = [];
+      const framworksArray: {}[] = [];
       for(let c = 0; c < this.selectedFramwork.length; c++) {
         // console.log({id: this.selectedLang[i]})
         framworksArray.push({id: this.selectedFramwork[c]})
       }
       // * その他スキルを {id: Number}に変換
-      const skillArray = [];
+      const skillArray: {}[] = [];
       for(let d = 0; d < this.selectedSkill.length; d++) {
         // console.log({id: this.selectedLang[i]})
         skillArray.push({id: this.selectedSkill[d]})
@@ -182,7 +182,7 @@ export default Vue.extend({
       const devStartDateString = sessionStorage.getItem('devStartDateString');
       const devEndDateString = sessionStorage.getItem('devEndDateString');
 
-      //! 宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
+      // ! 宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
       // * date型に変換のための data用意
       function toDate (str, delim) {
         const arr = str.split(delim)

@@ -101,7 +101,7 @@
       <div class="job-wrapper-right" v-if="detailFlag === true">
         <div class="top-job-detail-area">
           <div class="top-job-detail-area__title">
-            {{ jobDetail.jobTitle | truncateDetailTitle }}
+            {{ detailJobTitle }}
           </div>
           <!-- ログイン時 -->
           <div v-if="entryRedirect == false">
@@ -242,7 +242,7 @@ export default Vue.extend({
       frameworks: [],//? フレームワーク取得
       selectedSkill: [], //? その他スキル v-model
       skills: [], //? その他スキル取得
-      freeWord: this.$store.state.search.freeWord, //!this.$store.state.search.freeWord, //? フリーワード 
+      freeWord: this.$store.state.search.freeWord, 
       loading: true, 
       jobDetail: null, //? 案件詳細 
       detailFlag: false, //? 案件詳細を表示するためのフラグ
@@ -253,12 +253,13 @@ export default Vue.extend({
       modal: false, //?モーダルを開いてるか否か
       saveFlag: true, //? 案件保存しているかを判定
       limitationList:1,
-      userId: 1, //! this.$store.state.auth.userId, //? stateの値を保存する
+      userId: this.$store.state.auth.userId, 
       entryRedirect: false, //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
       langModal: false, //? 言語モーダル
       frameworkModal: false, //? フレームワークモーダル
       skillModal: false, //? その他スキルモーダル
       buttonActive: false, //? 右側浮いてるボタン
+      username: 'Helloaaaaaaaaaaa'
     }
   },
   filters: {
@@ -266,15 +267,19 @@ export default Vue.extend({
     moment(value, format) {
       return moment(value).format(format);
     },
+  },
+  computed: {
     //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value) {
-      const length = 60;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
+    detailJobTitle: function () {
+      if(this.jobDetail) {
+        if(this.jobDetail.jobTitle.length > 60) {
+          return this.jobDetail.jobTitle.substring(0,60) + '...';
+        }
+        return this.jobDetail.jobTitle;
       }
-      return value.substring(0, length) + ommision;
-    },
+
+      return "";
+    }
   },
   created() {
     // * 投稿一覧取得
