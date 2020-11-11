@@ -1,4 +1,7 @@
 import axios from 'axios'
+import { GetterTree } from 'vuex';
+import { ActionTree } from 'vuex';
+import { MutationTree } from 'vuex';
 import router from '@/router/index.ts' // Vue router instance
 
 interface State {
@@ -18,12 +21,12 @@ const state: State = {
   errorFlag: false
 }
 
-const getters = {
+const getters: GetterTree<State, LoginData> = {
   userId: (state: State)  => state.userId,
   // errorFlag: (state: State) => state.errorFlag
 }
 
-const mutations = {
+const mutations: MutationTree<State> = {
   // * idToken を使用する
   updateIdToken(state: State, idToken: string | null) {
     state.idToken = idToken;
@@ -39,10 +42,9 @@ const mutations = {
 }
 
 // ! commit は 暗黙的な anyになってます Binding element 'commit' implicitly has an 'any' type.
-const actions = {
+const actions: ActionTree<State, LoginData> = {
   // * ログイン
   login({ commit }, authData: LoginData ) {
-    console.log("下ですよーー〜ーーーーーー")
     console.log(authData)
     const params = {
       LoginName: authData.LoginName,

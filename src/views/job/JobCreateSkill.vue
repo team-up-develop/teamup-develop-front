@@ -184,7 +184,7 @@ export default Vue.extend({
 
       // ! 宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
       // * date型に変換のための data用意
-      function toDate (str, delim) {
+      function toDate (str: any, delim: any) {
         const arr = str.split(delim)
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
