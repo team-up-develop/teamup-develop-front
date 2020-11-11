@@ -11,6 +11,7 @@ import Manage from '@/views/manage/Manage.vue'
 import Favorite from '@/views/favorite/Favorite.vue'
 import FavoriteJobDetail from '@/views/favorite/FavoriteJobDetail.vue'
 import Apply from '@/views/apply/Apply.vue'
+import ApplyJobDetail from '@/views/apply/ApplyJobDetail.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -86,6 +87,13 @@ const routes: Array<RouteConfig> = [
     path: '/manage/apply_job',
     component: Apply,
     name: 'ManageApply'
+  },
+  {
+    path: '/manage/apply_job/:id/',
+    component: ApplyJobDetail,
+    props: route => ({
+      id: Number(route.params.id),
+    })
   },
 ]
 
