@@ -6,7 +6,7 @@ Typescript導入後
  docker-compose up -d --build
 ```
 
-### container in
+### in container & bash start up
 ```
 docker-compose exec app sh
 ```
