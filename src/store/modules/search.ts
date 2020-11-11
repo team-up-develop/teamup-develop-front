@@ -50,7 +50,7 @@ const mutations: MutationTree<State> = {
 
 const actions: ActionTree<State, SearchData> = {
   // * フリーワード 検索
-  freeWordSearch({ commit }, freeWord: State) {
+  freeWordSearch({ commit }, freeWord: SearchData) {
     // router.push('/jobs');
     commit('freeWord', freeWord.freeWord)
   },

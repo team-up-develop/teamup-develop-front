@@ -3,7 +3,7 @@
     <!-- 右側浮いてるボタン -->
     <transition name="button">
       <div class="scroll-area" v-show="buttonActive">
-        <!-- <a href="#"><font-awesome-icon icon="arrow-up" class="icon"/></a> -->
+        <a href="#"><font-awesome-icon icon="arrow-up" class="icon"/></a>
       </div>
     </transition>
     <!-- 言語検索 モーダル画面 -->
@@ -93,7 +93,7 @@
       <div class="job-wrapper-left-false" v-else>
         この条件での開発案件はありませんでした。<br>
         別のキーワードで検索してください。
-        <!-- <p>検索キーワード <span> {{ freeWord }}{{ selectedLang }}{{ selectedFramework }}{{ selectedSkill }}</span></p> -->
+        <p>検索キーワード <span> {{ freeWord }}{{ selectedLang }}{{ selectedFramework }}{{ selectedSkill }}</span></p>
       </div>
       <router-link :to="`/jobs/${ job.id }`" class="router-1" v-for="job in jobs" :key="job.id" >
         <card-job :job="job"></card-job>
@@ -111,9 +111,8 @@
                 応募済み
               </div>
               <div class="btn-box-save">
-                <!-- <save-btn :jobId='id' class="btn"></save-btn> -->
-                <!-- <font-awesome-icon icon="heart" class="save-icon" @click="saveJob" v-if="saveFlag"/> -->
-                <!-- <font-awesome-icon icon="heart" class="save-end-icon" @click="deleteJob" v-if="saveFlag == false"/> -->
+                <font-awesome-icon icon="heart" class="save-icon" @click="saveJob" v-if="saveFlag"/>
+                <font-awesome-icon icon="heart" class="save-end-icon" @click="deleteJob" v-if="saveFlag == false"/>
               </div>
             </div>
             <div v-else>
@@ -130,7 +129,7 @@
               <button class="btn-box-apply" @click="registerRedirect">応募する</button>
               <div class="btn-box-save">
                 <button @click="registerRedirect">仮ボタン</button>
-                <!-- <font-awesome-icon icon="heart" class="save-icon" @click="registerRedirect"/> -->
+                <font-awesome-icon icon="heart" class="save-icon" @click="registerRedirect"/>
               </div>
             </div>
           </div>
@@ -138,7 +137,7 @@
         <!-- 右側案件詳細 -->
         <div class="main-job-detail-area">
           <div class="tag-area">
-            <!-- <font-awesome-icon icon="chevron-circle-right" class="icon"/>  -->
+            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             投稿者
           </div>
           <router-link :to="`/account/profile/${ jobDetail.userId }`"> 
@@ -147,7 +146,7 @@
             </div>
           </router-link>
           <div class="tag-area">
-            <!-- <font-awesome-icon icon="chevron-circle-right" class="icon"/>  -->
+            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             開発言語
           </div>
           <div class="post-user-area">
@@ -159,7 +158,7 @@
             </div>
           </div>
           <div class="tag-area">
-            <!-- <font-awesome-icon icon="chevron-circle-right" class="icon"/>  -->
+            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             フレームワーク
           </div>
           <div class="post-user-area">
@@ -170,7 +169,7 @@
             </div>
           </div>
           <div class="tag-area">
-            <!-- <font-awesome-icon icon="chevron-circle-right" class="icon"/>  -->
+            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             その他スキル
           </div>
           <div class="post-user-area">
@@ -182,21 +181,21 @@
             </div>
           </div>
           <div class="tag-area">
-            <!-- <font-awesome-icon icon="chevron-circle-right" class="icon"/>  -->
+            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             開発期間
           </div>
           <div class="post-user-area">
             {{ jobDetail.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ jobDetail.devEndDate | moment("YYYY年 M月 D日")}}
           </div>
           <div class="tag-area">
-            <!-- <font-awesome-icon icon="chevron-circle-right" class="icon"/>  -->
+            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             募集人数
           </div>
           <div class="post-user-area">
             {{ jobDetail.recruitmentNumbers }} 人
           </div>
           <div class="tag-area">
-            <!-- <font-awesome-icon icon="chevron-circle-right" class="icon"/>  -->
+            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             開発詳細
           </div>
           <div class="post-user-area">
