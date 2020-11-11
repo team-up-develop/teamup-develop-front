@@ -134,7 +134,7 @@ export default Vue.extend({
         this.jobTitle = jobTitle;
       }
     },
-    //* タイトル文字制限
+    //* タイトル文字制限 
     onInputTitle: function(): void  {
       if(this.jobTitle == null) {
         console.log("null")

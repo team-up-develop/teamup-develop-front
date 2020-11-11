@@ -1,4 +1,14 @@
+import { ActionTree } from 'vuex';
+import { GetterTree } from 'vuex';
+import { MutationTree } from 'vuex';
 interface State {
+  freeWord: string;
+  language: [] | null;
+  framwork: [] | null;
+  skill: [] | null;
+}
+
+export interface SearchData {
   freeWord: string;
   language: [] | null;
   framwork: [] | null;
@@ -12,14 +22,14 @@ const state: State = {
   skill: null
 }
 
-const getters = {
+const getters: GetterTree<State, SearchData> = {
   freeWord: (state: State) => state.freeWord,
   language: (state: State) => state.language,
   framwork: (state: State) => state.framwork,
   skill: (state: State) => state.skill,
 }
 
-const mutations = {
+const mutations: MutationTree<State> = {
   // * フリーワード 格納
   freeWord(state: State, freeWord: string) {
     state.freeWord = freeWord
@@ -38,7 +48,7 @@ const mutations = {
   }
 }
 
-const actions = {
+const actions: ActionTree<State, SearchData> = {
   // * フリーワード 検索
   freeWordSearch({ commit }, freeWord: State) {
     // router.push('/jobs');

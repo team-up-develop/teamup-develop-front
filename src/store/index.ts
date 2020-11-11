@@ -8,7 +8,7 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   // * 状態保存
-  state: {},
+  state: {}, //! Todo 
 
   getters: {},
 
@@ -18,7 +18,7 @@ export default new Vuex.Store({
 
   modules: {
     auth,
-    search
+    search // ! Todo
   },
   plugins: [createPersistedState({storage: window.localStorage})] //? State の値を localStorageに保存するためのプラグイン
 })
