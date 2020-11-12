@@ -250,6 +250,7 @@ export default Vue.extend({
     position: absolute;
     right: 0;
     height: 82%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.26);
   }
 
   .job-create-radio {

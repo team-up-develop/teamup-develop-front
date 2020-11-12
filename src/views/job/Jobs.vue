@@ -15,7 +15,7 @@
             <label for="" class="checkbox">{{ lang.programingLanguageName }}</label>
           </div>
         <template slot="footer">
-          <div @click="getParams" class="serach-btn">
+          <div @click="searchLanguage" class="serach-btn">
             検索する
           </div>
         </template>
@@ -30,7 +30,7 @@
             <label for="" class="checkbox">{{ framework.programingFrameworkName }}</label>
           </div>
         <template slot="footer">
-          <div @click="getFramework" class="serach-btn">
+          <div @click="searchFramework" class="serach-btn">
             検索する
           </div>
         </template>
@@ -45,7 +45,7 @@
             <label for="" class="checkbox">{{ skill.skillName }}</label>
           </div>
         <template slot="footer">
-          <div @click="getSkill" class="serach-btn">
+          <div @click="searchSkill" class="serach-btn">
             検索する
           </div>
         </template>
@@ -405,7 +405,7 @@ export default Vue.extend({
       this.$router.push('/register');
     },
     // * 開発言語検索
-    getParams() {
+    searchLanguage() {
       const array = [];
       const languageState = []; //? Stateにフレームワークを複数いれるための配列
       const params = {
@@ -448,7 +448,7 @@ export default Vue.extend({
         })
     },
     // * フレームワーク検索
-    getFramework() {
+    searchFramework() {
       const arrayFramework = [];
       const frameworkState = []; //? Stateにフレームワークを複数いれるための配列
       const params = {
@@ -490,7 +490,7 @@ export default Vue.extend({
         })
     },
     // * その他スキル 検索
-    getSkill() {
+    searchSkill() {
       this.loading = false;
       const arraySkill = [];
       const skillState = []; //? Stateにその他スキルを複数いれるための配列
@@ -876,6 +876,7 @@ export default Vue.extend({
   color: #111111;
   border: solid 1px $card-border-color;
   text-align: left;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.26);
 
   .top-job-detail-area {
     width: calc(100% - 4rem);

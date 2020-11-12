@@ -140,8 +140,7 @@ export default Vue.extend({
     border-left: solid 1px $card-border-color;
     position: relative;
     font-size: 14px;
-
-  /* padding: 0rem 4rem; */
+    box-shadow: 0 1px 3px rgba(0,0,0,0.26);
 
     .manage-job-area {
       @include box-shadow-manage;
