@@ -1,3 +1,63 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import moment from "moment";
+
+export type DataType = {
+  manageJobs: [];
+  loginFlag: boolean;
+  userId: number;
+}
+
+export default Vue.extend({ 
+  data(): DataType {
+    return {
+      manageJobs: [],
+      loginFlag: false,
+      userId: this.$store.state.auth.userId
+    }
+  },
+  filters: {
+    // * date型を文字に変換
+    moment(value: string, format: string) {
+      return moment(value).format(format);
+    },
+    //* 案件タイトル 文字制限
+    truncateTitle: function(value: string) {
+      const length = 25;
+      const ommision = "...";
+      if (value.length <= length) {
+        return value;
+      }
+      return value.substring(0, length) + ommision;
+    },
+    //* 案件タイトル レスポンシブ 文字制限
+    truncateResponsiveTitle: function(value: string) {
+      const length = 15;
+      const ommision = "...";
+      if (value.length <= length) {
+        return value;
+      }
+      return value.substring(0, length) + ommision;
+    },
+  },
+  mounted() {
+    // * 管理案件を取得
+    if(this.userId) {
+      this.loginFlag = true
+      axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+      .then(response => {
+        this.manageJobs = response.data
+      })
+    }
+    else {
+      this.loginFlag = false;
+      this.$router.push('/login');
+    }
+  }
+});
+</script>
+
 <template>
   <div class="manage-wrapper">
     <div v-if="loginFlag === true" class="job-manage-wrapper">
@@ -54,64 +114,6 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-import axios from 'axios'
-import moment from "moment";
-
-export type DataType = {
-  manageJobs: [];
-  loginFlag: boolean;
-  userId: number;
-}
-
-export default Vue.extend({ 
-  data(): DataType {
-    return {
-      manageJobs: [],
-      loginFlag: false,
-      userId: this.$store.state.auth.userId
-    }
-  },
-  filters: {
-    // * date型を文字に変換
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    },
-    //* 案件タイトル 文字制限
-    truncateTitle: function(value: string) {
-      const length = 25;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-    //* 案件タイトル レスポンシブ 文字制限
-    truncateResponsiveTitle: function(value: string) {
-      const length = 15;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
-  mounted() {
-    // * 管理案件を取得
-    if(this.userId) {
-      this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
-      .then(response => {
-        this.manageJobs = response.data
-      })
-    }
-    else {
-      this.loginFlag = false;
-    }
-  }
-});
-</script>
 
 <style lang="scss" scoped>
 .router-link :hover {

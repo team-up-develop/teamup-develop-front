@@ -4,7 +4,7 @@ import axios from 'axios'
 import moment from "moment";
 import Applybtn from '@/components/button/Applybtn.vue'
 import FavoriteDetailBtn from '@/components/button/FavoriteDetailBtn.vue'
-// import Loading from '@/components/common/Loading'
+import Loading from '@/components/common/loading/Loading.vue'
 import ApplyModal from '@/components/modal/ApplyModal.vue'
 // import GithubImage from '@/assets/github.png'
 import { Job } from '@/types/job';
@@ -31,7 +31,7 @@ export default Vue.extend({
       userId: this.$store.state.auth.userId,
       selfJobPost: false, //? 自分の案件かを判定
       loginFlag: false, //? ログインしているかを判定
-      loading: false,
+      loading: true, //? ローディング
       applyFlug: true,
       modal: false,
       // jobs: [],
@@ -43,29 +43,24 @@ export default Vue.extend({
       return moment(value).format(format);
     }
   },
-  created() {
+  mounted() {
     // * 詳細画面情報を取得
     axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-          // this.loading = true;
-          console.log(response.data)
-          this.job = response.data
-          console.log("よまれてるよ")
-      })
-    // * 自分の案件かを判定
-    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
     .then(response => {
-      for(let i = 0; i < response.data.length; i++){
-        const selfJob = response.data[i]
-        if(selfJob.id === this.id){
-          this.selfJobPost = true
-        }
-      }
+      setTimeout(() => {
+        this.loading = false;
+        this.job = response.data
+        console.log("よまれてるよ")
+      }, 1000)
     })
   },
-  mounted() {
-    this.loginFlag = true
-  // * ログインユーザーが応募済みか応募済みではないかを判定する
+  created() {
+    if(this.userId) {
+      this.loginFlag = true
+    } else {
+      this.$router.push('/login');
+    }
+    // * ログインユーザーが応募済みか応募済みではないかを判定する
     axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
     .then(response => {
       const arrayApply = []
@@ -77,6 +72,16 @@ export default Vue.extend({
         this.applyFlug = false
       } else {
         console.log("まだ応募していません")
+      }
+    })
+    // * 自分の案件かを判定
+    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    .then(response => {
+      for(let i = 0; i < response.data.length; i++){
+        const selfJob = response.data[i]
+        if(selfJob.id === this.id){
+          this.selfJobPost = true
+        }
       }
     })
   },
@@ -94,7 +99,6 @@ export default Vue.extend({
     getJob() {
       axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
         .then(response => {
-          // this.loading = true;
           this.job = response.data
           console.log(this.job)
           console.log(this.id)
@@ -122,124 +126,124 @@ export default Vue.extend({
   components: {
     Applybtn,
     FavoriteDetailBtn,
-    // Loading,
+    Loading,
     ApplyModal,
   }
 });
 </script>
 
-
 <template>
   <div class="detail-wrapper">
-  <!-- 応募する モーダル画面 -->
-  <div class="example-modal-window">
-    <ApplyModal @close="closeModal" v-if="modal">
-      <p>応募を完了してよろしいですか？</p>
-      <template slot="footer">
-        <applybtn :jobId='id'></applybtn>
-        <button @click="doSend" class="modal-btn">キャンセル</button>
-      </template>
-    </ApplyModal>
-  </div>
-    <div class="detail-post-user-area">
-      <div class="detail-tag">投稿者</div>
-      <div class="post-user-area">
-        <div class="left-user-area">
-          <div class="user-image"></div>
-        </div>
-        <div class="right-user-area">
-          <div class="user-profile-area">
-            <div class="user-name-are">
-              <div class="user-name-tag">名前</div>
-              <router-link :to="`/account/profile/${ job.userId }`"> 
-                <div class="user-name">
-                  {{ job.user.userName }} 
+    <!-- 応募する モーダル画面 -->
+    <div class="example-modal-window">
+      <ApplyModal @close="closeModal" v-if="modal">
+        <p>応募を完了してよろしいですか？</p>
+        <template slot="footer">
+          <applybtn :jobId='id'></applybtn>
+          <button @click="doSend" class="modal-btn">キャンセル</button>
+        </template>
+      </ApplyModal>
+    </div>
+    <section v-if="loading == false">
+      <div class="detail-post-user-area">
+        <div class="detail-tag">投稿者</div>
+        <div class="post-user-area">
+          <div class="left-user-area">
+            <div class="user-image"></div>
+          </div>
+          <div class="right-user-area">
+            <div class="user-profile-area">
+              <div class="user-name-are">
+                <div class="user-name-tag">名前</div>
+                <router-link :to="`/account/profile/${ job.userId }`"> 
+                  <div class="user-name">
+                    {{ job.user.userName }} 
+                  </div>
+                </router-link>
+              </div>
+              <div class="user-introduce-area">
+                <div class="introduce-tag">学習開始</div>
+                <div class="introduce">
+                  {{ job.user.learningStartDate | moment("YYYY年 M月 D日") }}
                 </div>
-              </router-link>
+              </div>
             </div>
-            <div class="user-introduce-area">
-              <div class="introduce-tag">学習開始</div>
-              <div class="introduce">
-                {{ job.user.learningStartDate | moment("YYYY年 M月 D日") }}
+            <div class="user-url-area">
+              <div class="user-github" @click="gitTab">
+                <img class="img" src="@/assets/github.png" width="50" />
+                </div>
+              <div class="user-twtter" @click="twitterTab">
+                Twiiter
               </div>
             </div>
           </div>
-          <div class="user-url-area">
-            <div class="user-github" @click="gitTab">
-              <img class="img" src="@/assets/github.png" width="50" />
+        </div>
+      </div>
+      <div class="detail-post-skill-area">
+        <div class="detail-tag">開発技術</div>
+        <div class="skill-detail-area">
+          <div class="lang-area">
+            <label for="name" class="name-tag">開発言語</label>
+            <div class="lang-box">
+              <div class="skill-tag"  v-for="langage in job.programingLanguage" :key="langage.id">
+                {{ langage.programingLanguageName }}
               </div>
-            <div class="user-twtter" @click="twitterTab">
-              Twiiter
+            </div>
+          </div>
+          <div class="lang-area">
+            <label for="name" class="name-tag">フレームワーク</label>
+            <div class="lang-box">
+              <div class="flame-tag" v-for="framework in job.programingFramework" :key="framework.programingFrameworkName">
+                {{ framework.programingFrameworkName }}
+              </div>
+            </div>
+          </div>
+          <div class="lang-area">
+            <label for="name" class="name-tag">その他関連スキル</label>
+            <div class="lang-box">
+              <div class="other-tag" v-for="skill in job.skill" :key="skill.skillName">
+                {{ skill.skillName }}
+              </div>
             </div>
           </div>
         </div>
       </div>
-    </div>
-    <div class="detail-post-skill-area">
-      <div class="detail-tag">開発技術</div>
-      <div class="skill-detail-area">
-        <div class="lang-area">
-          <label for="name" class="name-tag">開発言語</label>
-          <div class="lang-box">
-            <div class="skill-tag"  v-for="langage in job.programingLanguage" :key="langage.id">
-              {{ langage.programingLanguageName }}
+      <div class="detail-post-detail-area">
+        <div class="detail-area">
+          <div class="detail-tag">開発詳細</div>
+          <div class="dev-detail-area">
+            <div class="detail-leff-area">
+              <div class="detail-information">
+                <div class="tag">タイトル</div>
+                <div class="sub-area">{{ job.jobTitle }}</div>
+              </div>
+              <div class="detail-information">
+                <div class="tag">募集人数</div>
+                <div class="sub-area">{{ job.recruitmentNumbers }}人</div>
+              </div>
+              <div class="detail-information">
+                <div class="tag">応募ケース</div>
+                <div class="sub-area">新規開発</div>
+              </div>
+              <div class="detail-information">
+                <div class="tag">開発期間</div>
+                <div class="sub-area">{{ job.devStartDate | moment("YYYY年 M月 D日") }} ~ {{ job.devEndDate  | moment("YYYY年 M月 D日")}}</div>
+              </div>
+              <div class="detail-information">
+                <div class="tag">応募ケース</div>
+                <div class="sub-area">{{ job.jobDescription }}</div>
+              </div>
             </div>
-          </div>
-        </div>
-        <div class="lang-area">
-          <label for="name" class="name-tag">フレームワーク</label>
-          <div class="lang-box">
-            <div class="flame-tag" v-for="framework in job.programingFramework" :key="framework.programingFrameworkName">
-              {{ framework.programingFrameworkName }}
-            </div>
-          </div>
-        </div>
-        <div class="lang-area">
-          <label for="name" class="name-tag">その他関連スキル</label>
-          <div class="lang-box">
-            <div class="other-tag" v-for="skill in job.skill" :key="skill.skillName">
-              {{ skill.skillName }}
-            </div>
+            <!-- <div class="detail-right-area">
+              <div class="tag">募集内容詳細</div>
+              <div class="description">
+                {{ job.jobDescription }}
+              </div>
+            </div> -->
           </div>
         </div>
       </div>
-    </div>
-    <div class="detail-post-detail-area">
-      <div class="detail-area">
-        <div class="detail-tag">開発詳細</div>
-        <div class="dev-detail-area">
-          <div class="detail-leff-area">
-            <div class="detail-information">
-              <div class="tag">タイトル</div>
-              <div class="sub-area">{{ job.jobTitle }}</div>
-            </div>
-            <div class="detail-information">
-              <div class="tag">募集人数</div>
-              <div class="sub-area">{{ job.recruitmentNumbers }}人</div>
-            </div>
-            <div class="detail-information">
-              <div class="tag">応募ケース</div>
-              <div class="sub-area">新規開発</div>
-            </div>
-            <div class="detail-information">
-              <div class="tag">開発期間</div>
-              <div class="sub-area">{{ job.devStartDate | moment("YYYY年 M月 D日") }} ~ {{ job.devEndDate  | moment("YYYY年 M月 D日")}}</div>
-            </div>
-            <div class="detail-information">
-              <div class="tag">応募ケース</div>
-              <div class="sub-area">{{ job.jobDescription }}</div>
-            </div>
-          </div>
-          <!-- <div class="detail-right-area">
-            <div class="tag">募集内容詳細</div>
-            <div class="description">
-              {{ job.jobDescription }}
-            </div>
-          </div> -->
-        </div>
-      </div>
-    </div>
-    <div class="button-area">
+      <div class="button-area">
         <div v-if="loginFlag === true" class="button-action-area">
           <div class="" v-if="selfJobPost">
             自分の案件
@@ -257,7 +261,10 @@ export default Vue.extend({
         <div v-else>
           ログインが必要です！
         </div>
-    </div>
+      </div>
+    </section>
+    <Loading v-else>
+    </Loading>
   </div>
 </template>
 

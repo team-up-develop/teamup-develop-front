@@ -1,44 +1,3 @@
-<template>
-  <div class="create-wrapper">
-    <div class="job-create-wrapper" v-show="!loading">
-      <div class="job-create-title-area">
-        <label for="name" class="label">案件タイトル</label><label for="name" class="label-required">必須</label>
-          <label v-if="errors.length" class="error-label">
-            <p v-for="error in errors" :key="error" class="error-message">{{ error }}</p>
-          </label>
-        <input type="text" v-model="jobTitle" @input="onInputTitle" placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)" maxlength="60" >
-          <small id="rem">残り{{60 - titleLimit }}文字</small>
-      </div>
-      <div class="job-create-time-area">
-        <label for="name" class="label">開発開始時期</label><label for="name" class="label-required">必須</label>
-          <label v-if="errorsDevStartDates.length" class="error-label">
-            <p v-for="errorsDevStartDate in errorsDevStartDates" :key="errorsDevStartDate" class="error-message">{{ errorsDevStartDate }}</p>
-          </label>
-        <input type="date" v-model="devStartDate">
-      </div>
-      <div class="job-create-time-area">
-      <label for="name" class="label">開発終了時期</label><label for="name" class="label-required">必須</label>
-        <label v-if="errorDevEndDates.length" class="error-label">
-          <p v-for="errorDevEndDate in errorDevEndDates" :key="errorDevEndDate" class="error-message">{{ errorDevEndDate }}</p>
-        </label>
-      <input type="date" v-model="devEndDate">
-      </div>
-      <div class="job-create-detail-area">
-        <label for="name" class="label">概要</label>
-        <textarea type="text" name="" @input="onTextJobDescription" v-model="jobDescription" placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" maxlength="250"></textarea>
-        <!-- <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small> -->
-      </div>
-      <router-link to='/job_create/2' class="job-create-btn-area">
-        <button class="next-btn" @click="nextCreateBtn">
-          次へ 1/2
-        </button>
-      </router-link>
-    </div>
-    <Loading v-show="loading">
-    </Loading>
-  </div>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 // import axios from 'axios'
@@ -156,6 +115,47 @@ export default Vue.extend({
   },
 });
 </script>
+
+<template>
+  <div class="create-wrapper">
+    <div class="job-create-wrapper" v-show="!loading">
+      <div class="job-create-title-area">
+        <label for="name" class="label">案件タイトル</label><label for="name" class="label-required">必須</label>
+          <label v-if="errors.length" class="error-label">
+            <p v-for="error in errors" :key="error" class="error-message">{{ error }}</p>
+          </label>
+        <input type="text" v-model="jobTitle" @input="onInputTitle" placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)" maxlength="60" >
+          <small id="rem">残り{{60 - titleLimit }}文字</small>
+      </div>
+      <div class="job-create-time-area">
+        <label for="name" class="label">開発開始時期</label><label for="name" class="label-required">必須</label>
+          <label v-if="errorsDevStartDates.length" class="error-label">
+            <p v-for="errorsDevStartDate in errorsDevStartDates" :key="errorsDevStartDate" class="error-message">{{ errorsDevStartDate }}</p>
+          </label>
+        <input type="date" v-model="devStartDate">
+      </div>
+      <div class="job-create-time-area">
+      <label for="name" class="label">開発終了時期</label><label for="name" class="label-required">必須</label>
+        <label v-if="errorDevEndDates.length" class="error-label">
+          <p v-for="errorDevEndDate in errorDevEndDates" :key="errorDevEndDate" class="error-message">{{ errorDevEndDate }}</p>
+        </label>
+      <input type="date" v-model="devEndDate">
+      </div>
+      <div class="job-create-detail-area">
+        <label for="name" class="label">概要</label>
+        <textarea type="text" name="" @input="onTextJobDescription" v-model="jobDescription" placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" maxlength="250"></textarea>
+        <!-- <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small> -->
+      </div>
+      <router-link to='/job_create/2' class="job-create-btn-area">
+        <button class="next-btn" @click="nextCreateBtn">
+          次へ 1/2
+        </button>
+      </router-link>
+    </div>
+    <Loading v-show="loading">
+    </Loading>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 /* 文字制限 */

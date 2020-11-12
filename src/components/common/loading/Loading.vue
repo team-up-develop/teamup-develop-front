@@ -1,17 +1,3 @@
-<template>
-  <div class="container" v-show="loading">
-    <div class="fullview">
-      <div class="loading-spacer"></div>
-      <vue-loading 
-        type="spiningDubbles"
-        color="#2196F3"
-        :size="{ width: '200px', height: '105px' }"
-        >
-      </vue-loading>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 import { VueLoading } from 'vue-loading-template'
@@ -31,6 +17,20 @@ export default Vue.extend({
   },
 });
 </script>
+
+<template>
+  <div class="container" v-show="loading">
+    <div class="fullview">
+      <div class="loading-spacer"></div>
+      <vue-loading 
+        type="spiningDubbles"
+        color="#2196F3"
+        :size="{ width: '200px', height: '105px' }"
+        >
+      </vue-loading>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .container {
