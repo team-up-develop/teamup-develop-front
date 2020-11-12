@@ -18,7 +18,7 @@ npm run serve
 
 ### errorが起きるはずです。
 その際に必要なパッケージをInstallしてくださいと指示があるはずです。
-それらを指示通りbash内でinstallしてください。
+それらを指示通りコンテナ内でinstallしてください。
 そちらで完了です。
 
 ### vue cli not found と出た場合
