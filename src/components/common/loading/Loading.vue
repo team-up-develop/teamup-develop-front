@@ -3,7 +3,7 @@
     <div class="fullview">
       <div class="loading-spacer"></div>
       <vue-loading 
-        type="bubbles"
+        type="spiningDubbles"
         color="#2196F3"
         :size="{ width: '200px', height: '105px' }"
         >
@@ -34,7 +34,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 .container {
-  width: 90%;
+  width: 83%;
   height: 68vh;
   position: relative;
 }

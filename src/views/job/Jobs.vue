@@ -876,7 +876,6 @@ export default Vue.extend({
   color: #111111;
   border: solid 1px $card-border-color;
   text-align: left;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.26);
 
   .top-job-detail-area {
     width: calc(100% - 4rem);
@@ -1046,7 +1045,6 @@ export default Vue.extend({
   cursor: pointer;
   border: none;
   margin-top: 4px;
-  color: #F8FAFF;
   appearance: none;
   border: none;
   transition: .3s;
