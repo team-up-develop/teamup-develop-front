@@ -1,57 +1,3 @@
-<template>
-  <div class="manage-wrapper">
-    <div v-if="loginFlag === true" class="job-manage-wrapper">
-      <router-link to="/manage" class="router-link">
-        <div class="manage-job-area">
-          <p>管理案件</p> 
-        </div>
-      </router-link>
-      <router-link to="/manage/apply_job" class="router-link">
-        <div class="apply-job-area">
-          <p>応募案件</p>
-        </div>
-      </router-link>
-      <div class="save-job-area">
-        <p>保存案件</p> 
-      </div>
-      <div class="title-area">案件タイトル</div>
-      <div class="time-area">開発期間</div>
-      <div class="skill-area">開発言語</div>
-      <div class="job-wrapper-area">
-        <router-link :to="`/manage/favorite_job/${ jobs.jobId }`" v-for="jobs in favoriteJobs" :key="jobs.id" class="router">
-          <div class="job-area">
-            <div class="job-area-box">
-              <span>{{ jobs.job.jobTitle | truncateTitle }}</span>
-              <p>{{ jobs.job.jobTitle | truncateResponsiveTitle }}</p>
-            </div>
-            <div class="job-area-box">
-              <span>{{ jobs.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ jobs.devEndDate | moment("YYYY年 M月 D日")}}</span>
-              <p>{{ jobs.devStartDate | moment("YYYY/M/D") }}  ~  {{ jobs.devEndDate | moment("YYYY/M/D")}}</p>
-            </div>
-            <div class="job-area-box">
-              <div class="lang"
-                v-for="(langage, index) in jobs.job.programingLanguage.slice(0,2)" 
-                :key="`langage-${index}`"
-              >
-                {{ langage.programingLanguageName }}  ,
-              </div>
-              <div class="lang" 
-                v-for="(framework, index) in jobs.job.programingFramework.slice(0,2)" 
-                :key="`framework-${index}`"
-              >
-                {{ framework.programingFrameworkName }}  ,
-              </div>
-            </div>
-          </div>
-        </router-link>
-      </div>
-    </div>
-    <div v-else>
-      ログインが必要です！
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
@@ -115,6 +61,61 @@ export default Vue.extend({
   },
 });
 </script>
+
+<template>
+  <div class="manage-wrapper">
+    <div v-if="loginFlag === true" class="job-manage-wrapper">
+      <router-link to="/manage" class="router-link">
+        <div class="manage-job-area">
+          <p>管理案件</p> 
+        </div>
+      </router-link>
+      <router-link to="/manage/apply_job" class="router-link">
+        <div class="apply-job-area">
+          <p>応募案件</p>
+        </div>
+      </router-link>
+      <div class="save-job-area">
+        <p>保存案件</p> 
+      </div>
+      <div class="title-area">案件タイトル</div>
+      <div class="time-area">開発期間</div>
+      <div class="skill-area">開発言語</div>
+      <div class="job-wrapper-area">
+        <router-link :to="`/manage/favorite_job/${ jobs.jobId }`" v-for="jobs in favoriteJobs" :key="jobs.id" class="router">
+          <div class="job-area">
+            <div class="job-area-box">
+              <span>{{ jobs.job.jobTitle | truncateTitle }}</span>
+              <p>{{ jobs.job.jobTitle | truncateResponsiveTitle }}</p>
+            </div>
+            <div class="job-area-box">
+              <span>{{ jobs.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ jobs.devEndDate | moment("YYYY年 M月 D日")}}</span>
+              <p>{{ jobs.devStartDate | moment("YYYY/M/D") }}  ~  {{ jobs.devEndDate | moment("YYYY/M/D")}}</p>
+            </div>
+            <div class="job-area-box">
+              <div class="lang"
+                v-for="(langage, index) in jobs.job.programingLanguage.slice(0,2)" 
+                :key="`langage-${index}`"
+              >
+                {{ langage.programingLanguageName }}  ,
+              </div>
+              <div class="lang" 
+                v-for="(framework, index) in jobs.job.programingFramework.slice(0,2)" 
+                :key="`framework-${index}`"
+              >
+                {{ framework.programingFrameworkName }}  ,
+              </div>
+            </div>
+          </div>
+        </router-link>
+      </div>
+    </div>
+    <div v-else>
+      ログインが必要です！
+    </div>
+  </div>
+</template>
+
 
 <style lang="scss" scoped>
 .router-link {

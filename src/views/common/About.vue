@@ -1,3 +1,25 @@
+<script lang="ts">
+import Loading from '@/components/common/loading/Loading.vue'
+import Vue from 'vue';
+
+export default Vue.extend({
+  components: {
+    Loading
+  },
+  data() {
+    return {
+      loading: true, 
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 1000)
+  }
+});
+</script>
+
+
 <template>
   <section>
     <div class="wrapper" v-show="!loading">
@@ -42,26 +64,6 @@
   </section>
 </template>
 
-<script lang="ts">
-import Loading from '@/components/common/loading/Loading.vue'
-import Vue from 'vue';
-
-export default Vue.extend({
-  components: {
-    Loading
-  },
-  data() {
-    return {
-      loading: true, 
-    }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000)
-  }
-});
-</script>
 
 <style lang="scss" scoped>
 // * 背景 波 
