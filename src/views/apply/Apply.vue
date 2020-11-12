@@ -145,7 +145,6 @@ export default Vue.extend({
     background-color: $basic-white;
     position: relative;
     font-size: 14px;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.26);
 
 
     .manage-job-area {

@@ -76,7 +76,7 @@ export default Vue.extend({
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 500)
+    }, 900)
     // * セッションストレージの値をフォームに格納する
     const jobTitle = sessionStorage.getItem('jobTitle');
     const jobDescription = sessionStorage.getItem('jobDescription');
@@ -181,7 +181,6 @@ export default Vue.extend({
     position: absolute;
     right: 0;
     height: 80%;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.26);
   }
 }
 

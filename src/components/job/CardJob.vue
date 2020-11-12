@@ -85,7 +85,6 @@ export default {
   border-radius: 8px;
   transition: .3s;
   color: $text-main-color;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.26);
 
   &__top {
     width: calc(100% - 60px);
