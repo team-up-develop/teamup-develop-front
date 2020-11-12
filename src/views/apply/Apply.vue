@@ -62,6 +62,7 @@ export default Vue.extend({
     }
     else {
       this.loginFlag = false;
+      this.$router.push('/login');
     }
   }
 });
