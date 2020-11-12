@@ -1,3 +1,119 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import moment from "moment";
+import Applybtn from '@/components/button/Applybtn.vue'
+import FavoriteDetailBtn from '@/components/button/FavoriteDetailBtn.vue'
+// import Loading from '@/components/common/Loading'
+import ApplyModal from '@/components/modal/ApplyModal.vue'
+import { Job } from '@/types/job';
+
+export type DataType = {
+  job: Job;
+  userId: number;
+  selfJobPost: boolean; //? 自分の案件かを判定
+  loginFlag: boolean; //? ログインしているかを判定
+  loading: boolean;
+  applyFlug: boolean;
+  modal: boolean;
+  // jobs: [],
+  // assetsImage: GithubImage,
+}
+export default Vue.extend({ 
+  props: {
+    id: Number,
+  },
+  data(): DataType {
+    return {
+      job: {}, //! TODO: Type '{}' is missing the following properties from type 'Job':
+      userId: this.$store.state.auth.userId,
+      loginFlag: false, //? ログインしているかを判定
+      loading: false,
+      applyFlug: true,
+      modal: false,
+      // jobs: [],
+      // assetsImage: GithubImage,
+    }
+  },
+  filters: {
+    moment(value: string, format: string) {
+      return moment(value).format(format);
+    }
+  },
+  created() {
+    // * 詳細画面情報を取得
+    axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
+      .then(response => {
+          // this.loading = true;
+          console.log(response.data)
+          this.job = response.data
+          console.log("よまれてるよ")
+      })
+  },
+  mounted() {
+    this.loginFlag = true
+  // * ログインユーザーが応募済みか応募済みではないかを判定する
+    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
+    .then(response => {
+      const arrayApply = []
+      for(let c = 0; c < response.data.length; c++){
+        const applyData = response.data[c];
+        arrayApply.push(applyData.job.id)
+      }
+      if (arrayApply.includes(this.id)) {
+        this.applyFlug = false
+      } else {
+        console.log("まだ応募していません")
+      }
+    })
+  },
+  methods: {
+    // * モーダルを開く
+    openModal() {
+      this.modal = true
+    },
+    closeModal() {
+      this.modal = false
+    },
+    doSend() {
+        this.closeModal()
+    },
+    getJob() {
+      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
+        .then(response => {
+          // this.loading = true;
+          this.job = response.data
+        })
+    },
+    // * Twitter をタブで開く
+    twitterTab() {
+      if(this.job.user.twitterAccount == null) {
+        return this.job.user.twitterAccount;
+      } else {
+        const url: string = this.job.user.twitterAccount;
+        return window.open(url);
+      }
+    },
+    // * Github をタブで開く
+    gitTab() {
+      if(this.job.user.githubAccount == null) {
+        return this.job.user.githubAccount;
+      } else {
+        const url: string = this.job.user.githubAccount;
+        return window.open(url);
+      }
+    }
+  },
+  components: {
+    Applybtn,
+    FavoriteDetailBtn,
+    // Loading,
+    ApplyModal,
+  }
+});
+</script>
+
+
 <template>
   <div class="detail-wrapper">
     <div class="detail-post-user-area">
@@ -124,107 +240,6 @@
     </div>
   </div>
 </template>
-
-<script>
-import axios from 'axios'
-import moment from "moment";
-import Applybtn from '@/components/button/Applybtn'
-import FavoriteDetailBtn from '@/components/button/FavoriteDetailBtn'
-// import Loading from '@/components/common/Loading'
-import ApplyModal from '@/components/modal/ApplyModal'
-import GithubImage from '@/assets/github.png'
-export default {
-  props: {
-    id: Number,
-  },
-  data() {
-    return {
-      job: {},
-      userId: this.$store.state.auth.userId,
-      loginFlag: false, //? ログインしているかを判定
-      loading: false,
-      applyFlug: true,
-      modal: false,
-      jobs: [],
-      assetsImage: GithubImage,
-    }
-  },
-  filters: {
-    moment(value, format) {
-      return moment(value).format(format);
-    }
-  },
-  created() {
-    // * 詳細画面情報を取得
-    axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-          // this.loading = true;
-          console.log(response.data)
-          this.job = response.data
-          console.log("よまれてるよ")
-      })
-  },
-  mounted() {
-    this.loginFlag = true
-  // * ログインユーザーが応募済みか応募済みではないかを判定する
-    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
-    .then(response => {
-      const arrayApply = []
-      for(let c = 0; c < response.data.length; c++){
-        const applyData = response.data[c];
-        arrayApply.push(applyData.job.id)
-      }
-      if (arrayApply.includes(this.id)) {
-        this.applyFlug = false
-      } else {
-        console.log("まだ応募していません")
-      }
-    })
-  },
-  methods: {
-    // * モーダルを開く
-    openModal() {
-      this.modal = true
-    },
-    closeModal() {
-      this.modal = false
-    },
-    doSend() {
-        this.closeModal()
-    },
-    getJob() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-        .then(response => {
-          // this.loading = true;
-          this.job = response.data
-        })
-    },
-    // * Twitter をタブで開く
-    twitterTab() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-        this.job = response.data
-        return window.open(this.job.user.twitterAccount)
-      })
-    },
-    // * Github をタブで開く
-    gitTab() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-        this.job = response.data
-        console.log(this.job)
-        return window.open(this.job.user.githubAccount)
-      })
-    },
-  },
-  components: {
-    Applybtn,
-    FavoriteDetailBtn,
-    // Loading,
-    ApplyModal,
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 .router {
