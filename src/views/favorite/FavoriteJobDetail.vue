@@ -130,33 +130,48 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import axios from 'axios'
 import moment from "moment";
-import Applybtn from '@/components/button/Applybtn'
-import FavoriteDetailBtn from '@/components/button/FavoriteDetailBtn'
+import Applybtn from '@/components/button/Applybtn.vue'
+import FavoriteDetailBtn from '@/components/button/FavoriteDetailBtn.vue'
 // import Loading from '@/components/common/Loading'
-import ApplyModal from '@/components/modal/ApplyModal'
-import GithubImage from '@/assets/github.png'
-export default {
+import ApplyModal from '@/components/modal/ApplyModal.vue'
+// import GithubImage from '@/assets/github.png'
+import { Job } from '@/types/job';
+
+export type DataType = {
+  job: Job;
+  userId: number;
+  selfJobPost: boolean; //? 自分の案件かを判定
+  loginFlag: boolean; //? ログインしているかを判定
+  loading: boolean;
+  applyFlug: boolean;
+  modal: boolean;
+  // jobs: [],
+  // assetsImage: GithubImage,
+}
+
+export default Vue.extend({ 
   props: {
     id: Number,
   },
-  data() {
+  data(): DataType {
     return {
-      job: {},
+      job: {}, //! TODO: Type '{}' is missing the following properties from type 'Job':
       userId: this.$store.state.auth.userId,
       selfJobPost: false, //? 自分の案件かを判定
       loginFlag: false, //? ログインしているかを判定
       loading: false,
       applyFlug: true,
       modal: false,
-      jobs: [],
-      assetsImage: GithubImage,
+      // jobs: [],
+      // assetsImage: GithubImage,
     }
   },
   filters: {
-    moment(value, format) {
+    moment(value: string, format: string) {
       return moment(value).format(format);
     }
   },
@@ -207,7 +222,7 @@ export default {
     },
     doSend() {
         this.closeModal()
-      },
+    },
     getJob() {
       axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
         .then(response => {
@@ -219,20 +234,21 @@ export default {
     },
     // * Twitter をタブで開く
     twitterTab() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-        this.job = response.data
-        return window.open(this.job.user.twitterAccount)
-      })
+      if(this.job.user.twitterAccount == null) {
+        return this.job.user.twitterAccount;
+      } else {
+        const url: string = this.job.user.twitterAccount;
+        return window.open(url);
+      }
     },
     // * Github をタブで開く
     gitTab() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-        this.job = response.data
-        console.log(this.job)
-        return window.open(this.job.user.githubAccount)
-      })
+      if(this.job.user.githubAccount == null) {
+        return this.job.user.githubAccount;
+      } else {
+        const url: string = this.job.user.githubAccount;
+        return window.open(url);
+      }
     },
   },
   components: {
@@ -241,7 +257,7 @@ export default {
     // Loading,
     ApplyModal,
   }
-}
+});
 </script>
 
 <style lang="scss" scoped>
@@ -279,6 +295,7 @@ export default {
   padding: 2rem 4rem;
   margin-bottom: 2rem;
   position: relative;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.26);
 }
 
 /* ユーザー画像 start*/
@@ -412,6 +429,7 @@ export default {
     padding: 1.5rem 4rem 1rem 4rem;
     margin-bottom: 2rem;
     position: relative;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
   }
 }
 
@@ -460,6 +478,7 @@ export default {
     margin-bottom: 2rem;
     position: relative;
     line-height: 1.8;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
   }
 }
 
@@ -537,6 +556,28 @@ export default {
   }
 }
 
+/* 応募済みボタン */
+.btn-box-apply-false {
+  @include grey-btn;
+  @include box-shadow-btn;
+  color: $basic-white;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 39%;
+  padding: 1.2rem 4rem;
+  transition: .3s;
+  border-radius: 50px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  margin: auto;
+  font-size: 1.3rem;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+}
+
 .favorite-btn-area {
   position: absolute;
   right: 0;
@@ -556,16 +597,20 @@ export default {
 }
 @media screen and (max-width: 1200px) {
   .detail-wrapper {
+
     .post-user-area{
+
       .left-user-area {
         width: 20%;
         height: 100%;
+
         .user-image {
           @include user-image;
           width: 130px;
           height: 130px;
         }
       }
+
       .right-user-area {
         width: 57%;
         position: absolute;
@@ -573,6 +618,7 @@ export default {
         top: 0;
         padding: 2rem 4rem 2rem 2rem;
         text-align: left;
+
         .user-profile-area {
           width: 65%;
           height: 100%;
@@ -586,18 +632,23 @@ export default {
 @media screen and (max-width: 900px) {
   .detail-wrapper {
     width: 90%;
+
     .detail-post-user-area{
       width: 85%;
+
       .post-user-area{
+
         .left-user-area {
           width: 20%;
           height: 100%;
+
           .user-image {
             @include user-image;
             width: 130px;
             height: 130px;
           }
         }
+
         .right-user-area {
           width: 50%;
           position: absolute;
@@ -605,6 +656,7 @@ export default {
           top: 0;
           padding: 2rem 4rem 2rem 2rem;
           text-align: left;
+
           .user-profile-area {
             width: 60%;
             height: 100%;
@@ -625,11 +677,15 @@ export default {
 }
 @media screen and (max-width: 768px) {
   .detail-wrapper{
+
     .detail-post-user-area{
       width: 95%;
+
       .post-user-area{
         padding: 2rem;
+
         .left-user-area{
+
           .user-image{
             width: 120px;
             height: 120px;
@@ -678,6 +734,16 @@ export default {
           left: 0;
           top: 0;
           width: 60%;
+          padding: 1.2rem 2rem;
+          font-size: 1rem;
+        }
+
+        /* 応募済みボタン */
+        .btn-box-apply-false {
+          position: absolute;
+          left: 0;
+          top: 0;
+          width: 38%;
           padding: 1.2rem 2rem;
           font-size: 1rem;
         }
@@ -780,6 +846,4 @@ export default {
     }
   }
 }
-
-
 </style>
