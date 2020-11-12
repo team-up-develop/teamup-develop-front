@@ -1,76 +1,3 @@
-<template>
-  <div class="create-wrapper">
-    <div class="job-create-wrapper">
-      <div class="job-create-area">
-        <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須</label>
-        <label v-if="selectedLangErrors.length" class="error-label">
-          <p v-for="selectedLangError in selectedLangErrors" :key="selectedLangError" class="error-message">
-            {{ selectedLangError }}</p>
-        </label>
-        <v-select
-          class="input-area"
-          multiple
-          :options="languages"
-          label="programingLanguageName"
-          v-model="selectedLang"
-          :reduce="languages => languages.id"
-        />
-        <!-- <h1>Selected 言語:{{ selectedLang }}</h1> -->
-      </div>
-      <div class="job-create-area">
-        <label for="name" class="label">フレームワーク</label><label for="name" class="label-required">必須</label>
-        <label v-if="selectedFramworkErrors.length" class="error-label">
-          <p v-for="selectedFramworkError in selectedFramworkErrors" :key="selectedFramworkError" class="error-message">
-            {{ selectedFramworkError }}</p>
-        </label>
-        <v-select
-            class="input-area"
-            multiple
-            :options="framworks"
-            label="programingFrameworkName"
-            v-model="selectedFramwork"
-            :reduce="framworks => framworks.id"
-        />
-        <!-- <h1>Selected フレームワーク: {{ selectedFramwork }}</h1> -->
-      </div>
-      <div class="job-create-area">
-        <label for="name" class="label">その他技術</label><label for="name" class="label-required">必須</label>
-        <label v-if="selectedSkillErrors.length" class="error-label">
-          <p v-for="selectedSkillError in selectedSkillErrors" :key="selectedSkillError" class="error-message">
-            {{ selectedSkillError }}</p>
-        </label>
-        <v-select
-            class="input-area"
-            multiple
-            :options="skills"
-            label="skillName"
-            v-model="selectedSkill"
-            :reduce="skills => skills.id"
-        />
-        <!-- <h1>Selected フレームワーク: {{ selectedFramwork }}</h1> -->
-      </div>
-      <div class="job-create-area">
-        <label for="name" class="label">募集人数</label><label for="name" class="label-required">必須</label>
-        <div class="job-create-radio">
-        <!-- <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="0">未定</label> -->
-        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="1">1人</label>
-        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="2">2人</label>
-        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="3">3人</label>
-        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="4">4人</label>
-        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="5">5人</label>
-        <!-- <p>Selected 開発メンバー {{ recruitNumber }} 人</p> -->
-      </div>
-      </div>
-      <div class="button-are">
-        <button @click="createJob" class="post-job-btn">案件投稿する</button>
-        <router-link to='/job_create/1' class="post-job-back">
-          戻る 1/2
-        </router-link>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
@@ -232,6 +159,80 @@ export default Vue.extend({
   }
 });
 </script>
+
+<template>
+  <div class="create-wrapper">
+    <div class="job-create-wrapper">
+      <div class="job-create-area">
+        <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須</label>
+        <label v-if="selectedLangErrors.length" class="error-label">
+          <p v-for="selectedLangError in selectedLangErrors" :key="selectedLangError" class="error-message">
+            {{ selectedLangError }}</p>
+        </label>
+        <v-select
+          class="input-area"
+          multiple
+          :options="languages"
+          label="programingLanguageName"
+          v-model="selectedLang"
+          :reduce="languages => languages.id"
+        />
+        <!-- <h1>Selected 言語:{{ selectedLang }}</h1> -->
+      </div>
+      <div class="job-create-area">
+        <label for="name" class="label">フレームワーク</label><label for="name" class="label-required">必須</label>
+        <label v-if="selectedFramworkErrors.length" class="error-label">
+          <p v-for="selectedFramworkError in selectedFramworkErrors" :key="selectedFramworkError" class="error-message">
+            {{ selectedFramworkError }}</p>
+        </label>
+        <v-select
+            class="input-area"
+            multiple
+            :options="framworks"
+            label="programingFrameworkName"
+            v-model="selectedFramwork"
+            :reduce="framworks => framworks.id"
+        />
+        <!-- <h1>Selected フレームワーク: {{ selectedFramwork }}</h1> -->
+      </div>
+      <div class="job-create-area">
+        <label for="name" class="label">その他技術</label><label for="name" class="label-required">必須</label>
+        <label v-if="selectedSkillErrors.length" class="error-label">
+          <p v-for="selectedSkillError in selectedSkillErrors" :key="selectedSkillError" class="error-message">
+            {{ selectedSkillError }}</p>
+        </label>
+        <v-select
+            class="input-area"
+            multiple
+            :options="skills"
+            label="skillName"
+            v-model="selectedSkill"
+            :reduce="skills => skills.id"
+        />
+        <!-- <h1>Selected フレームワーク: {{ selectedFramwork }}</h1> -->
+      </div>
+      <div class="job-create-area">
+        <label for="name" class="label">募集人数</label><label for="name" class="label-required">必須</label>
+        <div class="job-create-radio">
+        <!-- <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="0">未定</label> -->
+        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="1">1人</label>
+        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="2">2人</label>
+        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="3">3人</label>
+        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="4">4人</label>
+        <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="5">5人</label>
+        <!-- <p>Selected 開発メンバー {{ recruitNumber }} 人</p> -->
+      </div>
+      </div>
+      <div class="button-are">
+        <button @click="createJob" class="post-job-btn">案件投稿する</button>
+        <router-link to='/job_create/1' class="post-job-back">
+          戻る 1/2
+        </router-link>
+      </div>
+    </div>
+  </div>
+</template>
+
 
 <style lang="scss" scoped>
 .create-wrapper {
