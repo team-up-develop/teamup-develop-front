@@ -128,7 +128,6 @@
             <div class="top-job-detail-bottom">
               <button class="btn-box-apply" @click="registerRedirect">応募する</button>
               <div class="btn-box-save">
-                <button @click="registerRedirect">仮ボタン</button>
                 <font-awesome-icon icon="heart" class="save-icon" @click="registerRedirect"/>
               </div>
             </div>

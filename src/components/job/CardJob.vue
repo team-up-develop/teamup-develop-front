@@ -85,6 +85,7 @@ export default {
   border-radius: 8px;
   transition: .3s;
   color: $text-main-color;
+  cursor: pointer;
 
   &__top {
     width: calc(100% - 60px);

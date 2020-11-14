@@ -603,6 +603,28 @@ export default Vue.extend({
   background-color: #d8d6d6;
   border-radius: 5px / 5px;
 }
+
+/* モーダル内のキャンセルボタン */
+.modal-btn {
+  @include blue-btn;
+  padding: 1rem 2.4rem;
+  border-radius: 50px;
+  font-weight: 600;
+  color: $basic-white;
+  line-height: 1;
+  text-align: center;
+  max-width: 280px;
+  margin-left: 1.2rem;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 1rem;
+  outline: none;
+}
+
 @media screen and (max-width: 1200px) {
   .detail-wrapper {
 
