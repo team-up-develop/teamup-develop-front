@@ -12,3 +12,11 @@ export interface User {
   userBirthday: Date;
   userName: string;
 }
+
+// * 登録
+export interface RegisterSessionParams {
+  userName: string,
+  nickName: string,
+  userBirthday: string,
+  learningStartDate: string,
+}
