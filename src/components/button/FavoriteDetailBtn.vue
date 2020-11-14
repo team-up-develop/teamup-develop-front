@@ -73,6 +73,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 // * 現在は使用していない
 .btn-box-save {
   @include blue-btn;
@@ -81,7 +83,7 @@ export default {
   box-shadow: 0 0px 5px 2px #d4d4d4;
   border-radius: 50px;
   font-weight: 600;
-  color: $basic-white;
+  // color: $basic-white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -104,7 +106,7 @@ export default {
   box-shadow: 0 0px 10px 5px #d4d4d4;
   border-radius: 50px;
   font-weight: 600;
-  color: $basic-white;
+  // color: $basic-white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -117,8 +119,8 @@ export default {
 .icon {
   font-size: 30px;
   padding: 10px;
-  width: 12.5%;
-  height: 12.5%;
+  width: 58px;
+  height: 58px;
   color: $basic-white;
   cursor: pointer;
   background-color: #d8d6d6;
@@ -128,8 +130,8 @@ export default {
 .save-icon {
   font-size: 30px;
   padding: 10px;
-  width: 12.5%;
-  height: 12.5%;
+  width: 58px;
+  height: 58px;
   color: red;
   cursor: pointer;
   background-color: #d8d6d6;

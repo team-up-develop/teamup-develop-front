@@ -175,7 +175,7 @@ export default {
     // background-color: blue;
 
     .langage {
-      @include border_language;
+      // @include border_language;
       color: $language-color;
       margin: 5px 0px 0px 5px;
       text-align: left;
@@ -188,7 +188,7 @@ export default {
     }
 
     .framework {
-      @include border_framework;
+      // @include border_framework;
       margin: 5px 0px 0 5px;
       text-align: left;
       display: inline-block;
@@ -201,7 +201,7 @@ export default {
     }
 
     .skill {
-      @include border-skill;
+      // @include border-skill;
       color: $skill-color;
       margin: 5px 0px 0 5px;
       text-align: left;
@@ -318,7 +318,7 @@ export default {
       // background-color: blue;
 
       .langage {
-        @include border_language;
+        // @include border_language;
         color: $language-color;
         margin: 5px 0px 0px 5px;
         text-align: left;
@@ -331,7 +331,7 @@ export default {
       }
 
       .framework {
-        @include border_framework;
+        // @include border_framework;
         margin: 5px 0px 0 5px;
         text-align: left;
         display: inline-block;
@@ -344,7 +344,7 @@ export default {
       }
 
       .skill {
-        @include border-skill;
+        // @include border-skill;
         color: $skill-color;
         margin: 5px 0px 0 5px;
         text-align: left;

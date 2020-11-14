@@ -76,21 +76,21 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 .job-cards {
   width: 97%;
-  height: 292px;
   margin: 10px 0.5%;
   border: solid 1px $card-border-color;
   background-color: $basic-white;
   border-radius: 8px;
   transition: .3s;
   color: $text-main-color;
+  cursor: pointer;
+  min-height: 292px; //? 最低限の高さ Card
 
   &__top {
-    width: calc(100% - 60px);
-    height: calc(30% - 60px);
     text-align: left;
-    padding: 2rem 2rem 1rem 1.5rem;
+    padding: 2rem 2rem 0 1.5rem;
     font-weight: bold;
     pointer-events: none;
     font-size: 18px;
@@ -101,27 +101,22 @@ export default {
   }
 
   &__center {
-    width: calc(100% - 40px);
-    height: calc(35% - 20px);
     padding: 10px 1.5rem 0 1.5rem;
     text-align: left;
     pointer-events: none;
   }
 
   &__bottom {
-    width: calc(100% - 50px);
-    height: calc(38% - 20px);
-    padding: 10px 25px;
+    padding: 1rem 0px 1.5rem 0 ;
     pointer-events: none;
     margin-top: 0.2rem;
 
     .product-start-end {
+      padding: 0rem 0px 0 2rem;
       width: 100%;
       height: 40%;
       text-align: left;
       pointer-events: none;
-
-      /* font-weight: bold; */
 
       .product-start-end-tag {
         display: inline-block;
@@ -138,16 +133,18 @@ export default {
     }
 
     .post-user-area {
-      width: 100%;
-      height: 60%;
+      padding: 0.5rem 0px 0 2rem;
+      // width: 30%;
       text-align: left;
       pointer-events: none;
-
-      /* font-weight: bold; */
+      position: relative;
+      display: grid;
+      gap: 10px;
+      grid-template-columns: 2fr 1fr;
 
       .post-user-image {
         width: 55px;
-        height: 100%;
+        height: 55px;
         border-radius: 50%;
         -moz-border-radius: 60px;
         -webkit-border-radius: 60px;
@@ -155,22 +152,21 @@ export default {
         box-shadow: 0 0 0 3px $primary-color;
         -webkit-box-shadow: 0 0 0 3px $primary-color;
         -moz-box-shadow: 0 0 0 3px $primary-color;
-        display: inline-block;
         pointer-events: none;
+        position: relative;
       }
 
       .post-user-name-area {
-        display: inline-block;
-        width: 50%;
-        height: 60%;
-        padding: 0.1rem 1rem;
+        text-align: left;
+        padding: 1.5rem 0rem;
         position: relative;
         pointer-events: none;
         font-size: 14px;
+        position: absolute;
+        left: 0;
+        margin-left: 6rem;
 
         .post-user-name {
-          position: absolute;
-          top: 0;
           pointer-events: none;
         }
       }

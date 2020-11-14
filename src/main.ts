@@ -6,6 +6,7 @@ import 'normalize.css'
 import { library } from '@fortawesome/fontawesome-svg-core'
 import { faLaptop, faUser, faBell, faHistory, faBars, faUserPlus, faBookmark, faComments, faArchive, faAddressCard, faUsers, faUserAltSlash, faEye, faThumbsUp, faChevronCircleRight, faHeart, faSearch, faPaperPlane, faArrowUp} from '@fortawesome/free-solid-svg-icons'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
+import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
 
@@ -17,5 +18,6 @@ library.add(faLaptop, faUser, faBell, faHistory, faBars, faUserPlus, faBookmark,
 new Vue({
   router,
   store,
+  vuetify,
   render: h => h(App)
 }).$mount('#app')

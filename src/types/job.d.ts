@@ -52,13 +52,13 @@ export interface JobCreateData {
 
 // * 案件作成 session2 完了
 export interface JobCreateDataComp {
-  userId: number, //? ログインUserId
-  jobTitle : string | null,  //? タイトル
-  jobDescription: string | null, //? 詳細
-  devStartDate: Date,  //? 開始日
-  devEndDate: Date, //? 終了日
-  programingLanguage: {}[],  //? プログラミング言語
-  programingFramework: {}[] , //? フレームワーク
-  skill: {}[], //? その他開発スキル,
-  recruitmentNumbers: number //?募集人数
+  userId: number; //? ログインUserId
+  jobTitle: string | null;  //? タイトル
+  jobDescription: string | null; //? 詳細
+  devStartDate: Date;  //? 開始日
+  devEndDate: Date; //? 終了日
+  programingLanguage: {}[];  //? プログラミング言語
+  programingFramework: {}[] ; //? フレームワーク
+  skill: {}[]; //? その他開発スキル,
+  recruitmentNumbers: number; //?募集人数
 }

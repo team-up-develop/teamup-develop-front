@@ -6,6 +6,7 @@ import Jobs from '@/views/job/Jobs.vue'
 import JobCreate from '@/views/job/JobCreate.vue'
 import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 import Login from '@/views/user/Login.vue'
+import RegisterStep1 from '@/views/user/register_session/RegisterStep1.vue'
 // import TopPage from '../views/common/TopPage.vue'
 import Manage from '@/views/manage/Manage.vue'
 import Favorite from '@/views/favorite/Favorite.vue'
@@ -61,6 +62,12 @@ const routes: Array<RouteConfig> = [
     path: '/login',
     component: Login,
     name: 'Login'
+  },
+  // * 本登録登録 
+  {
+    path: '/step/1',
+    name: 'RegisterStep1',
+    component: RegisterStep1
   },
   // * 管理
   // ? 管理 管理

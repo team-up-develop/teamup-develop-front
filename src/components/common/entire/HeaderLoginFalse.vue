@@ -1,3 +1,66 @@
+<script lang="ts">
+import Vue from 'vue';
+// import LogoImage from '.../assets/logo.jpg'
+// import $ from 'jquery'
+export type DataType = {
+  isActive: boolean;
+  hasError: boolean;
+  gnav: boolean;
+}
+
+export default Vue.extend({ 
+  props: {
+    flag: Boolean
+  },
+  data(): DataType {
+    return {
+      // assetsImage: LogoImage,
+      // assetsImage_NG: '.../assets/logo.jpg',
+      // staticImage: '.../assets/logo.jpg',
+      isActive: true,
+      hasError: false,
+      gnav: false //? ハンバーガーメニューフラグ
+      // userName: null,
+      // message: ""
+    }
+  },
+  methods: {
+    show(e: any) {
+      const elm = e.currentTarget;
+      const className = elm.className;
+      if(className.indexOf('is-open') != -1) {
+        this.gnav = false;
+        elm.className = 'button';
+      } else {
+        this.gnav = true;
+        elm.className += " is-open";
+      }
+    },
+  },
+  mounted() {
+    // * Header 上下スクロール
+    // let pos = 0;
+    // $(window).on('scroll', function(){
+
+    //   if($(this).scrollTop() > 60 ){
+    //     if($(this).scrollTop() < pos ){
+    //       // ? 上スクロール時に表示
+    //       $('.header-wrapper').addClass('_show');
+    //     }else{
+    //       //? 下 スクロール時に表示
+    //       $('.header-wrapper').removeClass('_show');
+    //     }
+    //   } else {
+    //     $('.header-wrapper').addClass('_show');
+    //   }
+
+    //   //? スクロールが停止した位置を保持
+    //   pos = $(this).scrollTop();
+    // });
+  }
+});
+</script>
+
 <template>
   <div class="header-wrapper">
     <div class="header-wrapper-area">
@@ -65,70 +128,9 @@
   </div>
 </template>
 
-<script lang="ts">
-import Vue from 'vue';
-// import LogoImage from '.../assets/logo.jpg'
-// import $ from 'jquery'
-export type DataType = {
-  isActive: boolean;
-  hasError: boolean;
-  gnav: boolean;
-}
-
-export default Vue.extend({ 
-  props: {
-    flag: Boolean
-  },
-  data(): DataType {
-    return {
-      // assetsImage: LogoImage,
-      // assetsImage_NG: '.../assets/logo.jpg',
-      // staticImage: '.../assets/logo.jpg',
-      isActive: true,
-      hasError: false,
-      gnav: false //? ハンバーガーメニューフラグ
-      // userName: null,
-      // message: ""
-    }
-  },
-  methods: {
-    show(e: any) {
-      const elm = e.currentTarget;
-      const className = elm.className;
-      if(className.indexOf('is-open') != -1) {
-        this.gnav = false;
-        elm.className = 'button';
-      } else {
-        this.gnav = true;
-        elm.className += " is-open";
-      }
-    },
-  },
-  mounted() {
-    // * Header 上下スクロール
-    // let pos = 0;
-    // $(window).on('scroll', function(){
-
-    //   if($(this).scrollTop() > 60 ){
-    //     if($(this).scrollTop() < pos ){
-    //       // ? 上スクロール時に表示
-    //       $('.header-wrapper').addClass('_show');
-    //     }else{
-    //       //? 下 スクロール時に表示
-    //       $('.header-wrapper').removeClass('_show');
-    //     }
-    //   } else {
-    //     $('.header-wrapper').addClass('_show');
-    //   }
-
-    //   //? スクロールが停止した位置を保持
-    //   pos = $(this).scrollTop();
-    // });
-  }
-});
-</script>
-
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .router-link-active {
   border-bottom: 4px solid $primary-color;
   font-weight: bold;
@@ -169,7 +171,7 @@ export default Vue.extend({
     .header-logo {
       width: 60%;
       height: calc(100% - 2.8rem);
-      // background-color: rgba(94, 94, 94, 0.226);
+      background-color: rgba(94, 94, 94, 0.226);
       padding: 1.2rem 0;
     }
   }
@@ -276,13 +278,13 @@ ul {
   padding: 0.8rem 0;
 
   .user-login-btn {
-    @include blue-btn ;
+    // @include blue-btn ;
     display: block;
     padding: 0.9rem 2rem;
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.363);
     border-radius: 50px;
     font-weight: 600;
-    color: $basic-white;
+    // color: $basic-white;
     line-height: 1;
     text-align: center;
     max-width: 280px;
@@ -300,7 +302,7 @@ ul {
     box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.363);
     border-radius: 50px;
     font-weight: 600;
-    color: $basic-white;
+    // color: $basic-white;
     line-height: 1;
     text-align: center;
     max-width: 280px;

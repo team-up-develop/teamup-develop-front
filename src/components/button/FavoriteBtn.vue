@@ -1,13 +1,3 @@
-<template>
-  <div>
-    <font-awesome-icon icon="heart" class="icon" @click="saveJob" v-if="flag"/>
-    <font-awesome-icon icon="heart" class="save-icon" @click="deleteJob" v-if="flag == false"/>
-    <!-- <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
-      削除する
-    </div> -->
-  </div>
-</template>
-
 <script>
 import axios from 'axios'
 export default {
@@ -72,12 +62,23 @@ export default {
 }
 </script>
 
+<template>
+  <div>
+    <font-awesome-icon icon="heart" class="icon" @click="saveJob" v-if="flag"/>
+    <font-awesome-icon icon="heart" class="save-icon" @click="deleteJob" v-if="flag == false"/>
+    <!-- <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
+      削除する
+    </div> -->
+  </div>
+</template>
+
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 .icon {
   font-size: 30px;
   padding: 10px;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
   color: $basic-white;
   cursor: pointer;
   background-color: #d8d6d6;
@@ -87,8 +88,8 @@ export default {
 .save-icon {
   font-size: 30px;
   padding: 10px;
-  width: 20px;
-  height: 20px;
+  width: 50px;
+  height: 50px;
   color: red;
   cursor: pointer;
   background-color: #d8d6d6;

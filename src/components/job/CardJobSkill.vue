@@ -50,6 +50,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 .langage {
   @include border_language;
   color: $language-color;

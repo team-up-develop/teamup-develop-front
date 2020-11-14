@@ -128,7 +128,6 @@
             <div class="top-job-detail-bottom">
               <button class="btn-box-apply" @click="registerRedirect">応募する</button>
               <div class="btn-box-save">
-                <button @click="registerRedirect">仮ボタン</button>
                 <font-awesome-icon icon="heart" class="save-icon" @click="registerRedirect"/>
               </div>
             </div>
@@ -566,7 +565,7 @@ export default Vue.extend({
         jobId: this.jobDetail.id, 
         userId: 1 
       };
-      axios.post(`${this.$baseURL}/favorite_job/`, params)
+      axios.post(`http://localhost:8888/api/v1/favorite_job/`, params)
       .then(response => {
         this.saveFlag = false
         console.log(response)
@@ -581,7 +580,7 @@ export default Vue.extend({
         jobId: this.jobDetail.id,
         userId: 1
       };
-      axios.delete(`${this.$baseURL}/favorite_job/`,{data: params})
+      axios.delete(`http://localhost:8888/api/v1/favorite_job/`,{data: params})
       .then(response => {
         this.saveFlag = true
         console.log(response.data)
@@ -716,6 +715,8 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .job-cards.sample-active {
   border-bottom: 4px solid #ff0800;
   font-weight: bold;
@@ -727,7 +728,7 @@ export default Vue.extend({
 
 // * 詳細検索 
 .search-area {
-  width: calc(100% - 6rem);
+  width: 100%;
   height: 48px;
   background-color: $basic-white;
   position: absolute;
@@ -878,7 +879,6 @@ export default Vue.extend({
   text-align: left;
 
   .top-job-detail-area {
-    width: calc(100% - 4rem);
     border-bottom: solid 1px $card-border-color;
     font-weight: bold;
     padding: 1.5rem 2rem 1rem 2rem;
@@ -902,14 +902,13 @@ export default Vue.extend({
 
 .btn-box-save {
   display: inline-block;
-  height: calc(100% - 1rem);
+  // height: calc(100% - 1rem);
   padding: 0.3rem 0 0 1.2rem;
   position: absolute;
   top: 0;
 }
 
 .job-wrapper-right .main-job-detail-area {
-  width: calc(100% - 4rem);
   height: calc(79% - 1rem);
   overflow: auto;
   padding: 0 2rem 1rem 2rem;
@@ -1096,10 +1095,10 @@ export default Vue.extend({
 
 // * 保存アイコン 
 .save-icon {
-  font-size: 30px;
-  padding: 10px;
-  width: 20px;
-  height: 20px;
+  font-size: 20px;
+  width: 42px;
+  height: 42px;
+  padding: 0.5rem;
   color: $basic-white;
   cursor: pointer;
   background-color: #d8d6d6;
@@ -1107,10 +1106,10 @@ export default Vue.extend({
 }
 
 .save-end-icon {
-  font-size: 30px;
-  padding: 10px;
-  width: 20px;
-  height: 20px;
+  font-size: 20px;
+  width: 42px;
+  height: 42px;
+  padding: 0.5rem;
   color: red;
   cursor: pointer;
   background-color: #d8d6d6;

@@ -1,16 +1,3 @@
-<template>
-  <div class="modal-apply-area">
-    <div class="btn-apply" @click="applyJob">
-      応募する
-    </div>
-    <complite-modal @close="closeCompliteModal" v-if="compliteModal">
-      <p>応募が完了しました。</p>
-      <template slot="footer">
-      </template>
-    </complite-modal>
-  </div>
-</template>
-
 <script>
 import axios from 'axios'
 import CompliteModal from '@/components/modal/CompliteModal.vue'
@@ -57,7 +44,23 @@ export default {
 }
 </script>
 
+
+<template>
+  <div class="modal-apply-area">
+    <div class="btn-apply" @click="applyJob">
+      応募する
+    </div>
+    <complite-modal @close="closeCompliteModal" v-if="compliteModal">
+      <p>応募が完了しました。</p>
+      <template slot="footer">
+      </template>
+    </complite-modal>
+  </div>
+</template>
+
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .modal-apply-area {
   width: 47%;
 }

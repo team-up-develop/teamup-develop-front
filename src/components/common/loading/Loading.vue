@@ -35,11 +35,11 @@ export default Vue.extend({
 <style lang="scss" scoped>
 .container {
   width: 83%;
-  height: 68vh;
+  height: 100vh;
   position: relative;
 }
 .fullview {
-  width: 80%;
+  width: 100%;
   height: 120%;
   position: fixed;
   top: 0;

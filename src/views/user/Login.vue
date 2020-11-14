@@ -100,7 +100,7 @@ export default Vue.extend({
 
 /* 登録カード */
 .login-title {
-  color: $primary-color;
+  // color: $primary-color;
   font-size: 1.8rem;
   font-weight: bold;
   height: 50px;
@@ -123,7 +123,7 @@ export default Vue.extend({
     text-align: left;
 
     span {
-      color: $error-message-color;
+      // color: $error-message-color;
       font-weight: bold;
     }
   }
@@ -134,7 +134,7 @@ export default Vue.extend({
 
     span {
       cursor: pointer;
-      color: $primary-color;
+      // color: $primary-color;
     }
   }
 
@@ -162,7 +162,7 @@ export default Vue.extend({
 
     input {
       &[type='text']:focus, &[type='password']:focus {
-        @include primary-border_color;
+        // @include primary-border_color;
         outline: none;
         box-shadow: 0 0 5px 1px #2195f348;
       }
@@ -170,7 +170,7 @@ export default Vue.extend({
   }
 
   .btn-area .login-btn {
-    @include blue-btn;
+    // @include blue-btn;
     display: block;
     padding: 1.2rem 5rem;
     border-radius: 50px;
@@ -207,7 +207,7 @@ export default Vue.extend({
     width: 80%;
     height: 60vh;
     margin: 0rem auto 3rem auto;
-    border: solid 1px $card-border-color;
+    // border: solid 1px $card-border-color;
     border-radius: 20px;
     padding: 2rem;
 
@@ -298,7 +298,7 @@ export default Vue.extend({
     width: calc(97% - 2rem);
     height: 70%;
     margin: 0rem auto 3rem auto;
-    border: solid 1px $card-border-color;
+    // border: solid 1px $card-border-color;
     border-radius: 20px;
     padding: 2rem 1rem;
   }
