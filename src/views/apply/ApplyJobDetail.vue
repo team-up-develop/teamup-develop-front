@@ -17,7 +17,6 @@ export type DataType = {
   applyFlug: boolean;
   modal: boolean;
   // jobs: [],
-  // assetsImage: GithubImage,
 }
 export default Vue.extend({ 
   props: {
@@ -32,7 +31,6 @@ export default Vue.extend({
       applyFlug: true,
       modal: false,
       // jobs: [],
-      // assetsImage: GithubImage,
     }
   },
   filters: {
@@ -125,7 +123,7 @@ export default Vue.extend({
     <section v-if="loading == false">
       <div class="detail-post-user-area">
         <div class="detail-tag">投稿者</div>
-        <div class="post-user-area">
+        <v-card class="post-user-area">
           <div class="left-user-area">
             <div class="user-image"></div>
           </div>
@@ -155,11 +153,11 @@ export default Vue.extend({
               </div>
             </div>
           </div>
-        </div>
+        </v-card>
       </div>
       <div class="detail-post-skill-area">
         <div class="detail-tag">開発技術</div>
-        <div class="skill-detail-area">
+        <v-card class="skill-detail-area">
           <div class="lang-area">
             <label for="name" class="name-tag">開発言語</label>
             <div class="lang-box">
@@ -184,12 +182,12 @@ export default Vue.extend({
               </div>
             </div>
           </div>
-        </div>
+        </v-card>
       </div>
       <div class="detail-post-detail-area">
         <div class="detail-area">
           <div class="detail-tag">開発詳細</div>
-          <div class="dev-detail-area">
+          <v-card class="dev-detail-area">
             <div class="detail-leff-area">
               <div class="detail-information">
                 <div class="tag">タイトル</div>
@@ -218,7 +216,7 @@ export default Vue.extend({
                 {{ job.jobDescription }}
               </div>
             </div> -->
-          </div>
+          </v-card>
         </div>
       </div>
       <div class="button-area">
@@ -282,13 +280,14 @@ export default Vue.extend({
 }
 
 /* 投稿者 カード中身 */
-.detail-wrapper .detail-post-user-area .post-user-area {
+.detail-wrapper 
+.detail-post-user-area 
+.post-user-area {
   @include card-border-color;
   border-radius: 4px;
   padding: 2rem 4rem;
   margin-bottom: 2rem;
   position: relative;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.26)
 }
 
 // * ユーザー画像 start
@@ -422,7 +421,6 @@ export default Vue.extend({
     padding: 1.5rem 4rem 1rem 4rem;
     margin-bottom: 2rem;
     position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
   }
 }
 
@@ -471,7 +469,6 @@ export default Vue.extend({
     margin-bottom: 2rem;
     position: relative;
     line-height: 1.8;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
   }
 }
 

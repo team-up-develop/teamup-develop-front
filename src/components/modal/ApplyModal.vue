@@ -2,6 +2,9 @@
   <transition name="modal" appear>
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
+        <div class="modal-top">
+          <!-- <p>✖️</p> -->
+        </div>
         <div class="modal-content">
           <slot/>
         </div>
@@ -36,10 +39,22 @@
   background: $basic-white;
   border-radius: 8px;
   overflow: hidden;
+  position: relative;
+}
+
+.modal-top {
+  width: 100%;
+  height: 42px;
+  position: absolute;
+  top: 0;
+  margin-bottom: 2rem;
+  background-color: $sub-white;
+  border-bottom: 1px solid $card-border-color;
 }
 
 .modal-content {
-  padding: 4rem 6rem;
+  position: relative;
+  padding: 5rem 6rem 4rem 6rem;
 }
 
 .modal-footer {

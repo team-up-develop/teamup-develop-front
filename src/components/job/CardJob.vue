@@ -86,7 +86,7 @@ export default {
   transition: .3s;
   color: $text-main-color;
   cursor: pointer;
-  min-height: 292px; //? 最低限の高さ Card
+  // min-height: 292px; //? 最低限の高さ Card
 
   &__top {
     text-align: left;

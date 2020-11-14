@@ -147,7 +147,7 @@ export default Vue.extend({
     <section v-if="loading == false">
       <div class="detail-post-user-area">
         <div class="detail-tag">投稿者</div>
-        <div class="post-user-area">
+        <v-card class="post-user-area">
           <div class="left-user-area">
             <div class="user-image"></div>
           </div>
@@ -177,11 +177,11 @@ export default Vue.extend({
               </div>
             </div>
           </div>
-        </div>
+        </v-card>
       </div>
       <div class="detail-post-skill-area">
         <div class="detail-tag">開発技術</div>
-        <div class="skill-detail-area">
+        <v-card class="skill-detail-area">
           <div class="lang-area">
             <label for="name" class="name-tag">開発言語</label>
             <div class="lang-box">
@@ -206,12 +206,12 @@ export default Vue.extend({
               </div>
             </div>
           </div>
-        </div>
+        </v-card>
       </div>
       <div class="detail-post-detail-area">
         <div class="detail-area">
           <div class="detail-tag">開発詳細</div>
-          <div class="dev-detail-area">
+          <v-card class="dev-detail-area">
             <div class="detail-leff-area">
               <div class="detail-information">
                 <div class="tag">タイトル</div>
@@ -240,7 +240,7 @@ export default Vue.extend({
                 {{ job.jobDescription }}
               </div>
             </div> -->
-          </div>
+          </v-card>
         </div>
       </div>
       <div class="button-area">
@@ -299,13 +299,14 @@ export default Vue.extend({
 }
 
 /* 投稿者 カード中身 */
-.detail-wrapper .detail-post-user-area .post-user-area {
+.detail-wrapper 
+.detail-post-user-area 
+.post-user-area {
   @include card-border-color;
   border-radius: 4px;
   padding: 2rem 4rem;
   margin-bottom: 2rem;
   position: relative;
-  box-shadow: 0 2px 5px rgba(0,0,0,0.26);
 }
 
 /* ユーザー画像 start*/
@@ -439,7 +440,6 @@ export default Vue.extend({
     padding: 1.5rem 4rem 1rem 4rem;
     margin-bottom: 2rem;
     position: relative;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
   }
 }
 
@@ -474,7 +474,8 @@ export default Vue.extend({
 }
 
 /* 開発詳細 カード */
-.detail-wrapper .detail-post-detail-area {
+.detail-wrapper 
+.detail-post-detail-area {
   width: 80%;
   display: flex;
   flex-direction: column;
@@ -488,11 +489,11 @@ export default Vue.extend({
     margin-bottom: 2rem;
     position: relative;
     line-height: 1.8;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.26);
   }
 }
 
-.dev-detail-area .detail-leff-area {
+.dev-detail-area 
+.detail-leff-area {
   display: inline-block;
   width: 100%;
   height: 100%;
@@ -514,7 +515,8 @@ export default Vue.extend({
   font-size: 14px;
 }
 
-.dev-detail-area .detail-right-area {
+.dev-detail-area 
+.detail-right-area {
   line-height: 1.8;
   width: calc(50% - 5rem);
   display: inline-block;
@@ -629,9 +631,7 @@ export default Vue.extend({
 
 @media screen and (max-width: 1200px) {
   .detail-wrapper {
-
     .post-user-area{
-
       .left-user-area {
         width: 20%;
         height: 100%;
@@ -669,7 +669,6 @@ export default Vue.extend({
       width: 85%;
 
       .post-user-area{
-
         .left-user-area {
           width: 20%;
           height: 100%;
@@ -697,11 +696,11 @@ export default Vue.extend({
         }
       }
     }
-    /* スキル カード */
+    //* スキル カード 
     .detail-post-skill-area{
       width: 85%;
     }
-    /* 詳細 カード */
+    //* 詳細 カード 
     .detail-post-detail-area{
       width: 85%;
     }
@@ -736,15 +735,15 @@ export default Vue.extend({
         }
       }
     }
-    /* スキル カード */
+    //* スキル カード 
     .detail-post-skill-area{
       width: 95%;
     }
-    /* 詳細 カード */
+    //* 詳細 カード 
     .detail-post-detail-area{
       width: 95%;
     }
-    /* ボタンエリア */
+    //* ボタンエリア 
     .button-area {
       width: 90%;
       margin: 0 auto;
@@ -770,7 +769,7 @@ export default Vue.extend({
           font-size: 1rem;
         }
 
-        /* 応募済みボタン */
+        //* 応募済みボタン 
         .btn-box-apply-false {
           position: absolute;
           left: 0;
@@ -783,7 +782,7 @@ export default Vue.extend({
     }
   }
 }
-/* スマホレスポンシブ */
+//* スマホレスポンシブ 
 @media screen and (max-width: 500px) {
   .detail-wrapper{
     width:  97%;
@@ -819,7 +818,7 @@ export default Vue.extend({
         }
       }
     }
-    /* スキル カード */
+    //** スキル カード 
     .detail-post-skill-area{
       width: 100%;
 
@@ -827,7 +826,7 @@ export default Vue.extend({
         padding: 1.5rem 1rem;
       }
     }
-    /* 詳細 カード */
+    //* 詳細 カード 
     .detail-post-detail-area{
       width: 100%;
     }
@@ -835,7 +834,7 @@ export default Vue.extend({
 }
 
 @media screen and (max-width: 420px) {
-.detail-wrapper{
+  .detail-wrapper{
     .detail-post-user-area{
       width: 100%;
       .post-user-area{
@@ -860,15 +859,15 @@ export default Vue.extend({
         }
       }
     }
-    /* スキル カード */
+    //* スキル カード */
     .detail-post-skill-area{
       width: 100%;
     }
-    /* 詳細 カード */
+    //* 詳細 カード */
     .detail-post-detail-area{
       width: 100%;
     }
-    /* ボタンエリア */
+    //* ボタンエリア */
     .button-area {
       .button-action-area {
         margin: 0em auto 4rem auto;
