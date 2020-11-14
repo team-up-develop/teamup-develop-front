@@ -4,7 +4,7 @@
     <header-login-false v-else />
     <v-main class="container">
       <router-view/>
-      <Footer></Footer>
+      <Footer/>
     </v-main>
   </v-app>
 </template>
@@ -34,7 +34,7 @@ export default Vue.extend({
     }
   },  
   mounted() {
-  console.log(this.$store.state.auth.userId)
+    console.log(this.$store.state.auth.userId)
     if(this.$store.state.auth.userId) {
       this.loginFlag = true;
       console.log(this.loginFlag)

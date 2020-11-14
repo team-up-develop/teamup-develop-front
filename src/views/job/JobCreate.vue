@@ -118,7 +118,7 @@ export default Vue.extend({
 
 <template>
   <div class="create-wrapper">
-    <div class="job-create-wrapper" v-show="!loading">
+    <v-card class="job-create-wrapper" v-show="!loading">
       <div class="job-create-title-area">
         <label for="name" class="label">案件タイトル</label><label for="name" class="label-required">必須</label>
           <label v-if="errors.length" class="error-label">
@@ -151,7 +151,7 @@ export default Vue.extend({
           次へ 1/2
         </button>
       </router-link>
-    </div>
+    </v-card>
     <Loading v-show="loading">
     </Loading>
   </div>
@@ -175,13 +175,10 @@ export default Vue.extend({
 
   .job-create-wrapper {
     @include card-border-color;
-    // width: calc(100% - 5rem);
     border-radius: 20px;
     margin: 2rem 0rem;
     background-color: $basic-white;
     padding: 2.5rem;
-    // position: absolute;
-    // right: 0;
     height: 80%;
   }
 }

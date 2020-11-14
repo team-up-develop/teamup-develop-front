@@ -207,7 +207,8 @@
       </div>
       <div class="job-wrapper-right-false" v-else>
         <!-- 右側の登録コンポーネント -->
-        <job-register-false/>
+        <job-register-false v-if="!userId"/>
+        <JobRightLogin v-else/>
       </div>
       <v-content>
         <div class="text-center">
@@ -234,6 +235,7 @@ import Loading from '@/components/common/loading/Loading.vue'
 import ApplyModal from '@/components/modal/ApplyModal.vue'
 import Applybtn from '@/components/button/Applybtn.vue'
 import JobRegisterFalse from '@/components/job/JobRegisterFalse.vue'
+import JobRightLogin from '@/components/job/JobRightLogin.vue'
 import CardJob from '@/components/job/CardJob.vue'
 import LanguageSearchModal from '@/components/modal/LanguageSearchModal.vue'
 import FrameworkSearchModal from '@/components/modal/FrameworkSearchModal.vue'
@@ -290,7 +292,7 @@ export default Vue.extend({
       }
 
       return "";
-    }
+    },
   },
   created() {
     // * 投稿一覧取得
@@ -314,6 +316,7 @@ export default Vue.extend({
         this.jobs = posts
 
         // * ページネーション
+        this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
         this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
         this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
 
@@ -735,7 +738,8 @@ export default Vue.extend({
     CardJob,
     LanguageSearchModal,
     FrameworkSearchModal,
-    SkillSearchModal
+    SkillSearchModal,
+    JobRightLogin
   },
 });
 </script>
@@ -980,10 +984,11 @@ export default Vue.extend({
 
 .post-user-name-area {
   line-height: 1.8;
-  font-size: 14px;
+  // font-size: 14px;
   text-decoration: underline;
   cursor: pointer;
   margin-bottom: 0.3rem;
+  font-size: 16px;
 
   &:hover {
     color: $primary-color;
@@ -1167,13 +1172,13 @@ export default Vue.extend({
   display: inline-block;
   margin-top: 1rem;
 }
+
 .job-wrapper-left-false {
   width: 43%;
   flex: 1 0 auto;
   align-items: center;
   justify-content: center;
   display: inline-block;
-  margin-top: 15rem;
 }
 
 .label-lang {
@@ -1240,7 +1245,7 @@ label.checkbox {
 
 @media screen and (max-width: 1289px) {
   .job-wrapper .job-wrapper-center {
-    width: 95%;
+    width: 99%;
   }
 
   .job-wrapper-right {

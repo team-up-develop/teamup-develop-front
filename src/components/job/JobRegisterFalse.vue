@@ -52,7 +52,6 @@ export default {
     // height: calc(44vh - 4rem);
     background-color: $basic-white;
     border-radius: 8px;
-    margin-bottom: 23rem;
     margin-top: 3.5rem;
     padding: 0 2rem 2rem 2rem;
     position: sticky;

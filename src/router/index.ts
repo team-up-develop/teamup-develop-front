@@ -15,6 +15,8 @@ import Favorite from '@/views/favorite/Favorite.vue'
 import FavoriteJobDetail from '@/views/favorite/FavoriteJobDetail.vue'
 import Apply from '@/views/apply/Apply.vue'
 import ApplyJobDetail from '@/views/apply/ApplyJobDetail.vue'
+import Chat from '@/views/chat/Chat.vue'
+import ChatDetail from '@/views/chat/ChatDetail.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -102,6 +104,19 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/apply_job/:id/',
     component: ApplyJobDetail,
+    props: route => ({
+      id: Number(route.params.id),
+    })
+  },
+  // * チャット
+  {
+    path: '/chat',
+    name: 'Chat',
+    component: Chat
+  },
+  {
+    path: '/chat/:id/',
+    component: ChatDetail,
     props: route => ({
       id: Number(route.params.id),
     })

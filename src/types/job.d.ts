@@ -22,25 +22,6 @@ export interface Job  {
   user: User;
   userId: number;
 }
-// export type Job =  {
-//   createdAt: Date;
-//   deletedAt: null | Date;
-//   devEndDate: Date;
-//   devStartDate: Date;
-//   id: number;
-//   jobDescription: string | null;
-//   jobStatusId: 1;
-//   jobTitle: string;
-//   programingFramework: Framework[];
-//   programingLanguage: Language[];
-//   publicationPeriod: Date;
-//   recruitmentNumbers: number;
-//   skill: Skill[];
-//   updatedAt: Date;
-//   useMenter?: boolean;
-//   user: User;
-//   userId: number;
-// } | {};
 
 // * 案件作成時 session1 
 export interface JobCreateData {

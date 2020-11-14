@@ -40,7 +40,7 @@ export default Vue.extend({
 }
 .fullview {
   width: 100%;
-  height: 120%;
+  height: 80%;
   position: fixed;
   top: 0;
   right: 0;

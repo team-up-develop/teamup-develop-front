@@ -70,7 +70,7 @@ export default Vue.extend({
 
 <template>
   <div class="manage-wrapper">
-    <div v-if="loginFlag === true" class="job-manage-wrapper">
+    <v-card v-if="loginFlag === true" class="job-manage-wrapper">
       <router-link to="/manage" class="router-link">
         <div class="manage-job-area">
           <span>管理案件</span> 
@@ -115,7 +115,7 @@ export default Vue.extend({
           </div>
         </router-link>
       </div>
-    </div>
+    </v-card>
     <div v-else>
       ログインが必要です！
     </div>
@@ -136,24 +136,25 @@ export default Vue.extend({
 }
 
 .manage-wrapper {
-  width: 92%;
+  width: 100%;
   height: 89.5vh;
   margin: 0 auto;
 
   .job-manage-wrapper {
-    @include card-border-color;
-    width: 95%;
+    // @include card-border-color;
+    
+    width: 90%;
     height: calc(90vh - 5rem);
     border-radius: 20px;
-    margin: 2rem 2rem;
+    margin: 2rem auto 0 auto;
     background-color: $basic-white;
     position: relative;
     font-size: 14px;
 
     .manage-job-area {
-      width: 33.2%;
+      width: 33.3%;
       padding: 1rem 0;
-      border-radius: 20px 0 0 0;
+      border-radius: 15px 0 0 0;
       background-color: #606060;
       display: inline-block;
       color: $basic-white;
@@ -163,7 +164,7 @@ export default Vue.extend({
 
     .apply-job-area {
       @include box-shadow-manage ;
-      width: 33.2%;
+      width: 33.4%;
       padding: 1rem 0;
       background-color: #606060;
       display: inline-block;
@@ -175,9 +176,9 @@ export default Vue.extend({
     }
 
     .save-job-area {
-      width: 33.2%;
+      width: 33.3%;
       padding: 1rem 0;
-      border-radius: 0 20px 0 0;
+      border-radius: 0 15px 0 0;
       background-color: #606060;
       display: inline-block;
       color: $basic-white;
@@ -186,7 +187,7 @@ export default Vue.extend({
   }
 
   .title-area {
-    width: 33.2%;
+    width: 33.3%;
     // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     background-color: $secondary-color;
@@ -196,7 +197,7 @@ export default Vue.extend({
   }
 
   .time-area {
-    width: 33.2%;
+    width: 33.4%;
     // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     border-left: 1px solid $basic-white;
@@ -208,7 +209,7 @@ export default Vue.extend({
   }
 
   .skill-area {
-    width: 33.2%;
+    width: 33.3%;
     // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     background-color: $secondary-color;
