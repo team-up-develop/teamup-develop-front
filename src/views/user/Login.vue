@@ -79,6 +79,11 @@ export default Vue.extend({
 </script>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
+section {
+  height: 95vh;
+}
 .router-link {
   text-decoration: none;
 }
@@ -88,9 +93,7 @@ export default Vue.extend({
   margin: 0 auto;
 
   .login-container {
-    width: calc(100% - 12rem);
     max-width: 500px;
-    height: 66vh;
     margin: 0rem auto 3rem auto;
     border: solid 1px #B9B9B9;
     border-radius: 20px;
@@ -98,9 +101,9 @@ export default Vue.extend({
   }
 }
 
-/* 登録カード */
+//* 登録カード 
 .login-title {
-  // color: $primary-color;
+  color: $primary-color;
   font-size: 1.8rem;
   font-weight: bold;
   height: 50px;
@@ -108,7 +111,7 @@ export default Vue.extend({
   margin-top: 1rem;
 }
 
-/* フォーム & ボタン ボックス */
+//* フォーム & ボタン ボックス 
 .login-container .login-box {
   width: 90%;
   height: 90%;
@@ -123,7 +126,7 @@ export default Vue.extend({
     text-align: left;
 
     span {
-      // color: $error-message-color;
+      color: $error-message-color;
       font-weight: bold;
     }
   }
@@ -134,7 +137,7 @@ export default Vue.extend({
 
     span {
       cursor: pointer;
-      // color: $primary-color;
+      color: $primary-color;
     }
   }
 
@@ -162,7 +165,7 @@ export default Vue.extend({
 
     input {
       &[type='text']:focus, &[type='password']:focus {
-        // @include primary-border_color;
+        @include primary-border_color;
         outline: none;
         box-shadow: 0 0 5px 1px #2195f348;
       }
@@ -170,7 +173,7 @@ export default Vue.extend({
   }
 
   .btn-area .login-btn {
-    // @include blue-btn;
+    @include blue-btn;
     display: block;
     padding: 1.2rem 5rem;
     border-radius: 50px;
@@ -199,23 +202,6 @@ export default Vue.extend({
   .btn-area {
     padding: 20% 0 0 0;
     height: 30%;
-  }
-}
-
-@media (max-width: 1200px) {
-  .login-wrapper .login-container {
-    width: 80%;
-    height: 60vh;
-    margin: 0rem auto 3rem auto;
-    // border: solid 1px $card-border-color;
-    border-radius: 20px;
-    padding: 2rem;
-
-    .login-box
-    .btn-area {
-      padding: 17% 0 0 0;
-      height: 30%;
-    }
   }
 }
 
@@ -298,7 +284,7 @@ export default Vue.extend({
     width: calc(97% - 2rem);
     height: 70%;
     margin: 0rem auto 3rem auto;
-    // border: solid 1px $card-border-color;
+    border: solid 1px $card-border-color;
     border-radius: 20px;
     padding: 2rem 1rem;
   }

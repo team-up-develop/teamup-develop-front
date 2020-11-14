@@ -7,6 +7,7 @@ export type DataType = {
   nickName: string;
   userBirthday: string;
   learningStartDate: string;
+  dialog: boolean;
 }
 
 export default Vue.extend({ 
@@ -16,6 +17,7 @@ export default Vue.extend({
       nickName: '',
       userBirthday: '',
       learningStartDate: '',
+      dialog: false,
     }
   },
   methods: {
@@ -38,7 +40,13 @@ export default Vue.extend({
       else {
         console.log("必須が入力されていません")
       }
-    }
+    },
+    // mouseOverAction() {
+    //   this.hoverFlag = true
+    // },
+    // mouseLeaveAction(){
+    //   this.hoverFlag = false
+    // }
   }
 });
 </script>
@@ -64,6 +72,45 @@ export default Vue.extend({
             </div>
             <div class="input-area">
               <label for="name" class="label">ユーザー名</label><label for="name" class="label-required">必須</label>
+              <template>
+                <div class="user-dialog-tag">
+                  <v-dialog
+                    v-model="dialog"
+                    width="500"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <span
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                      ユーザー名とは？
+                      </span>
+                    </template>
+                    <v-card>
+                      <v-card-title class="headline light-blue lighten-2">
+                        <span class="user-dialog-title-text">ユーザー名とは？</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <p class="text">
+                          ユーザー名とは、等アプリケーションにて表示される名前になります。
+                          チームメンバーに覚えてもらいやすい名前にすることがおすすめです！
+                        </p>
+                      </v-card-text>
+                      <v-divider></v-divider>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="primary"
+                          text
+                          @click="dialog = false"
+                        >
+                          閉じる
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </div>
+              </template>
               <input type="text" v-model="nickName"  placeholder="例) チームアップ 太郎" maxlength="30" >
             </div>
             <div class="input-area">
@@ -85,12 +132,27 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+// * Vutify
+.user-dialog-title-text {
+  color: $basic-white;
+  font-weight: bold;
+}
+.text {
+  padding: 1rem 0 0 0 ;
+}
+
+
+section {
+  height: 95vh;
+}
 .wrapper {
   width: 45%;
+  height: 90%;
   margin: 0 auto;
 
   .title {
-    // color: $secondary-color;
+    color: $secondary-color;
     font-size: 1.8rem;
     font-weight: bold;
     height: 50px;
@@ -98,9 +160,9 @@ export default Vue.extend({
     margin-top: 1rem;
   }
   .container {
-    width: calc(100% - 12rem);
+    // width: calc(100% - 12rem);
     max-width: 500px;
-    height: 66vh;
+    height: 90%;
     margin: 0rem auto 3rem auto;
     border: solid 1px #B9B9B9;
     border-radius: 20px;
@@ -118,7 +180,7 @@ export default Vue.extend({
 
         span {
           font-weight: bold;
-          // color: $secondary-color;
+          color: $secondary-color;
         }
 
         .step-graph {
@@ -126,39 +188,45 @@ export default Vue.extend({
           height: 8px;
           margin: 0 auto;
           border-radius: 35px;
-          // background-color: $basic-white;
-          // border: solid 1px $text-sub-color;
+          background-color: $basic-white;
+          border: solid 1px $text-sub-color;
 
           &__line {
             width: 33%;
             height: 100%;
             border-radius: 35px;
-            // background-color: $secondary-color;
+            background-color: $secondary-color;
           }
         }
       }
 
       .box-center {
         width: 100%;
-        height: 70%;
-        // background-color: blueviolet;
         display: flex;
         flex-direction: column;
         text-align: left;
-        // color: $text-main-color;
+        color: $text-main-color;
+        margin-bottom: 0.5rem;
 
         .input-area {
           height: 16%;
-          margin-bottom: 1.5rem;
+          margin-bottom: 1rem;
 
           .label {
             font-weight: bold;
-            // margin-bottom: 1rem;
+            margin-bottom: 1rem;
+          }
+          .user-dialog-tag {
+            font-size: 12px;
+            color: $primary-color;
+            text-decoration: underline;
+            display: inline;
+            margin-left: 0.2rem;
           }
 
           .label-required {
-            // color: $basic-white;
-            // background-color: $error-message-color;
+            color: $basic-white;
+            background-color: $error-message-color;
             font-size: 12px;
             font-weight: bold;
             border-radius: 25px;
@@ -168,9 +236,9 @@ export default Vue.extend({
           }
 
           input[type='text'] {
-            // @include input-border-color;
-            // background-color: $sub-white;
-            // color: $text-main-color;
+            @include input-border-color;
+            background-color: $sub-white;
+            color: $text-main-color;
             font: 16px/24px sans-serif;
             box-sizing: border-box;
             width: 100%;
@@ -182,14 +250,14 @@ export default Vue.extend({
             margin-top: 0.5rem;
 
             &:focus {
-              // @include form-hover;
+              @include form-hover;
             }
           }
 
           input[type='date'] {
-            // @include input-border-color;
-            // background-color: $sub-white;
-            // color: $text-main-color;
+            @include input-border-color;
+            background-color: $sub-white;
+            color: $text-main-color;
             font: 16px/24px sans-serif;
             box-sizing: border-box;
             width: 100%;
@@ -201,7 +269,7 @@ export default Vue.extend({
             margin-top: 0.5rem;
 
             &:focus {
-              // @include form-hover;
+              @include form-hover;
             }
           }
 
@@ -215,9 +283,9 @@ export default Vue.extend({
         bottom: 0;
 
         .next-btn {
-          // @include box-shadow-btn;
-          // @include purple-btn;
-          // color: $basic-white;
+          @include box-shadow-btn;
+          @include purple-btn;
+          color: $basic-white;
           text-align: left;
           display: block;
           padding: 1.1rem 4rem;
@@ -237,12 +305,11 @@ export default Vue.extend({
           outline: none;
 
           &:hover {
-            // @include box-shadow-btn;
+            @include box-shadow-btn;
           }
         }
       }
     }
   }
-
 }
 </style>
