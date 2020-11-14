@@ -7,6 +7,8 @@ import JobCreate from '@/views/job/JobCreate.vue'
 import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 import Login from '@/views/user/Login.vue'
 import RegisterStep1 from '@/views/user/register_session/RegisterStep1.vue'
+import RegisterStep2 from '@/views/user/register_session/RegisterStep2.vue'
+import RegisterStep3 from '@/views/user/register_session/RegisterStep3.vue'
 // import TopPage from '../views/common/TopPage.vue'
 import Manage from '@/views/manage/Manage.vue'
 import Favorite from '@/views/favorite/Favorite.vue'
@@ -68,6 +70,16 @@ const routes: Array<RouteConfig> = [
     path: '/step/1',
     name: 'RegisterStep1',
     component: RegisterStep1
+  },
+  {
+    path: '/step/2',
+    name: 'RegisterStep2',
+    component: RegisterStep2
+  },
+  {
+    path: '/step/3',
+    name: 'RegisterStep3',
+    component: RegisterStep3
   },
   // * 管理
   // ? 管理 管理
