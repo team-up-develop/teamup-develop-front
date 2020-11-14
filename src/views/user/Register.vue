@@ -1,42 +1,11 @@
-<template>
-  <section>
-    <div class="login-wrapper" v-show="!loading">
-      <div class="login-title">LOGIN</div>
-      <div class="login-container">
-        <div class="login-box">
-          <div class="error-flag" v-if="loginErrorFlag == true">
-            <span>メールアドレス か パスワードが違います</span>
-          </div>
-          <div v-else>
-          </div>
-          <div class="name-form">
-            <label for="name" class="label">ログイン名</label>
-            <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
-          </div>
-          <div class="name-form">
-            <label for="name" class="label">パスワード</label>
-            <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
-          </div>
-          <div class="btn-area">
-            <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
-            <div @click="login" class="login-btn">ログイン</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <Loading v-show="loading">
-    </Loading>
-  </section>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
+import axios from 'axios'
 import Loading from '@/components/common/loading/Loading.vue'
 
 export type DataType = {
   LoginName: string;
   LoginPassword: string;
-  loginErrorFlag: boolean;
   loading: boolean;
 }
 
@@ -45,27 +14,23 @@ export default Vue.extend({
     return {
       LoginName: '',
       LoginPassword: '',
-      loginErrorFlag: false,
-      loading: true, 
+      loading: true,
     }
   },
   methods: {
-    login(): void {
-      this.$store.dispatch('login', {
+    register() {
+      const data = {
         LoginName: this.LoginName,
         LoginPassword: this.LoginPassword,
-      })
-      // this.LoginName = "";
-      // this.LoginPassword = "";
-      setTimeout(() => {
-        if (this.$store.state.auth.errorFlag === true) {
-          this.loginErrorFlag = true;
-        }
-      }, 1000)
+      }
+      axios.post(`http://localhost:8888/api/v1/signup`, data)
+      .then(response => {
+        console.log(response);
+        return this.$router.push('/register/sent_mail');
+      });
+      this.LoginName = "";
+      this.LoginPassword = "";
     },
-  },
-  created() {
-    this.$store.state.auth.errorFlag = false;
   },
   mounted() {
     setTimeout(() => {
@@ -77,6 +42,33 @@ export default Vue.extend({
   }
 });
 </script>
+
+<template>
+  <section>
+    <div class="login-wrapper" v-show="!loading">
+      <div class="login-title">REGISTER</div>
+      <div class="login-container">
+        <div class="login-box">
+          <div class="name-form">
+            <label for="name" class="label">ログイン名</label>
+            <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
+          </div>
+          <div class="name-form">
+            <label for="name" class="label">パスワード</label>
+            <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
+          </div>
+          <div class="btn-area">
+            <p>登録済みの方は<router-link to="/login" class="router-link"><span>こちら</span></router-link></p>
+            <div @click="register" class="login-btn">新規登録</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Loading v-show="loading">
+    </Loading>
+  </section>
+</template>
+
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -103,7 +95,7 @@ section {
 
 //* 登録カード 
 .login-title {
-  color: $primary-color;
+  color: $secondary-color;
   font-size: 1.6rem;  
   font-weight: bold;
   height: 50px;
@@ -138,7 +130,7 @@ section {
 
     span {
       cursor: pointer;
-      color: $primary-color;
+      color: $secondary-color;
     }
   }
 
@@ -178,7 +170,7 @@ section {
   }
 
   .btn-area .login-btn {
-    @include blue-btn;
+    @include purple-btn;
     display: block;
     padding: 1.2rem 5rem;
     border-radius: 50px;

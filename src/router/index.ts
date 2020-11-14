@@ -1,11 +1,11 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import Home from '../views/Home.vue'
 import About from '../views/common/About.vue'
 import Jobs from '@/views/job/Jobs.vue'
 import JobCreate from '@/views/job/JobCreate.vue'
 import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 import Login from '@/views/user/Login.vue'
+import Register from '@/views/user/Register.vue'
 import RegisterStep1 from '@/views/user/register_session/RegisterStep1.vue'
 import RegisterStep2 from '@/views/user/register_session/RegisterStep2.vue'
 import RegisterStep3 from '@/views/user/register_session/RegisterStep3.vue'
@@ -23,19 +23,6 @@ const routes: Array<RouteConfig> = [
   //   component: TopPage,
   //   name: 'topPage'
   // },
-  {
-    path: '/',
-    name: 'Home',
-    component: Home
-  },
-  {
-    path: '/aboutaa',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  },
   // * 案件
   {
     path: '/jobs',
@@ -64,6 +51,11 @@ const routes: Array<RouteConfig> = [
     path: '/login',
     component: Login,
     name: 'Login'
+  },
+  {
+    path: '/register',
+    name: 'register',
+    component: Register
   },
   // * 本登録登録 
   {
