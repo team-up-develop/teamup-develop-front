@@ -170,3 +170,8 @@ $skill-color: #00BCD4;
   font-weight: bold;
   font-size: 14px;
 }
+
+// * card login / register...
+@mixin card-margin {
+  margin: 2rem auto 0 auto;
+}

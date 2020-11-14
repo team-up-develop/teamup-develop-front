@@ -230,7 +230,7 @@ ul {
       top: 0;
       right: 0;
       text-align: center;
-      padding: 1rem  0;
+      padding: 0.85rem  0;
       text-decoration: none;
       color: #666666;
       font-size: 14px;

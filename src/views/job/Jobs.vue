@@ -78,9 +78,9 @@
     <div class="job-wrapper-center" v-show="!loading">
       <div class="job-wrapper-left" v-if="jobsNullFlag === false">
         <div 
-          v-for="job in jobs" 
+          v-for="job in displayJobs" 
           class="router" 
-          :key="job.id"  
+          :key="job.index"  
           :value="job.id"
           @click="getJob(job)" 
           :jobId='job'
@@ -95,7 +95,7 @@
         別のキーワードで検索してください。
         <p>検索キーワード <span> {{ freeWord }}{{ selectedLang }}{{ selectedFramework }}{{ selectedSkill }}</span></p>
       </div>
-      <router-link :to="`/jobs/${ job.id }`" class="router-1" v-for="job in jobs" :key="job.id" >
+      <router-link :to="`/jobs/${ job.id }`" class="router-1" v-for="job in displayJobs" :key="job.index" >
         <card-job :job="job"></card-job>
       </router-link>
       <div class="job-wrapper-right" v-if="detailFlag === true">
@@ -209,6 +209,16 @@
         <!-- 右側の登録コンポーネント -->
         <job-register-false/>
       </div>
+      <v-content>
+        <div class="text-center">
+          <v-pagination
+            v-model="page"
+            :length="paginationLength"
+            circle
+            @input = "pageChange"
+          ></v-pagination>
+        </div>     
+      </v-content>
     </div>
     <Loading v-show="loading">
     </Loading>
@@ -257,7 +267,10 @@ export default Vue.extend({
       frameworkModal: false, //? フレームワークモーダル
       skillModal: false, //? その他スキルモーダル
       buttonActive: false, //? 右側浮いてるボタン
-      username: 'Helloaaaaaaaaaaa'
+      page: 1, //? 現在のページ
+      displayJobs: [], //? 表示する案件
+      jobsPageSize: 5, //? ページに表示する案件の数
+      paginationLength: 0, //? ページネーション番号
     }
   },
   filters: {
@@ -299,6 +312,11 @@ export default Vue.extend({
           }
         }
         this.jobs = posts
+
+        // * ページネーション
+        this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+        this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+
         // * トップページから 開発言語 検索した際の処理
         // if(!this.$store.state.search.language) {
         //   console.log("language はnullです")
@@ -399,6 +417,14 @@ export default Vue.extend({
     }
   },
   methods: {
+    // * ページネーション
+    pageChange: function(pageNumber){
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.displayJobs = this.jobs.slice(this.jobsPageSize*(pageNumber -1), this.jobsPageSize*(pageNumber));
+      }, 1000);
+    },
     // * 非ログイン時 登録リダイレクト
     registerRedirect() {
       this.$router.push('/register');
