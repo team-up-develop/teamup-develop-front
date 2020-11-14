@@ -269,6 +269,8 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .router {
   text-decoration: none;
   color: $basic-white;

@@ -158,6 +158,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
 /* 文字制限 */
 #rem {
   color: #7c7c7c;
@@ -166,20 +167,21 @@ export default Vue.extend({
 
 /* Wrapper */
 .create-wrapper {
-  width: 85%;
-  height: 90vh;
+  width: 90%;
+  height: 100vh;
+  // height: 100%;
   margin: 0 auto;
   position: relative;
 
   .job-create-wrapper {
     @include card-border-color;
-    width: calc(100% - 5rem);
+    // width: calc(100% - 5rem);
     border-radius: 20px;
     margin: 2rem 0rem;
     background-color: $basic-white;
     padding: 2.5rem;
-    position: absolute;
-    right: 0;
+    // position: absolute;
+    // right: 0;
     height: 80%;
   }
 }
@@ -391,7 +393,6 @@ export default Vue.extend({
     padding: 2rem 1rem 1rem 1rem;
 
     .next-btn {
-      width: 49%;
       padding: 1.1rem 2.3rem;
     }
   }

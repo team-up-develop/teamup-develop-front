@@ -148,7 +148,7 @@ export default Vue.extend({
           }
 
           .register {
-            @include purple-btn;
+            // @include purple-btn;
             text-align: left;
             display: block;
             padding: 1.1rem 4rem;
@@ -156,7 +156,7 @@ export default Vue.extend({
             border: none;
             font-size: .875rem;
             font-weight: 600;
-            color: $basic-white;
+            // color: $basic-white;
             line-height: 1;
             text-align: center;
             max-width: 280px;

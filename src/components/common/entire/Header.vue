@@ -1,79 +1,3 @@
-<template>
-  <div class="header-wrapper">
-    <div class="header-wrapper-area">
-      <div class="header-logo-area">
-        <div class="header-logo">
-      <!-- <div class="responsive-header">
-        <button class="button" type="button" name="button" @click="show">
-          <span class="top"></span>
-          <span class="middle"></span>
-          <span class="bottom"></span>
-        </button>
-        <transition>
-          <nav id="gnav" class="nav" v-if="gnav">
-            <div class="nav__body" @click="closeHeader">
-              <ul class="nav__lst">
-                <li class="nav__item"><router-link to="/jobs">案件を探す</router-link></li>
-                <li class="nav__item"><router-link to="/jobcreate">募集する</router-link></li>
-                <li class="nav__item"><router-link to="/chat">連絡する</router-link></li>
-                <li class="nav__item"><router-link to="/manage">管理する</router-link></li>
-                <li class="nav__item"><router-link :to="`/account/profile/${ this.userId }`">プロフィール</router-link></li>
-              </ul>
-            </div>
-          </nav>
-        </transition>
-      </div> -->
-          <!-- <div
-            class="static"
-            v-bind:class="{ active: isActive, 'text-danger': hasError }"
-          ></div> -->
-          <!-- <img class="img" src="../assets/logo.jpg" width="130" /> -->
-        </div>
-      </div>
-      <div class="header-main-area">
-        <div class="header-main-left" v-bind:class="{ active: isActive, 'text-danger': hasError }">
-          <ul>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="search" class="icon"/> -->
-              </div>
-              <router-link to="/jobs" class="router-link">案件を探す</router-link>
-            </li>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="user-plus" class="icon"/> -->
-              </div>
-              <router-link to="/job_create/1" class="router-link">募集する</router-link>
-            </li>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="comments" class="icon"/> -->
-              </div>
-              <router-link to="/chat" class="router-link">連絡する</router-link>
-            </li>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="address-card" class="icon"/> -->
-              </div>
-              <router-link to="/manage" class="router-link">管理する</router-link>
-            </li>
-            <!-- <li class="menu-list">
-              <div class="menu-list-icon-area">
-              </div>
-              <router-link to="/manage/ManageRejectDetail" class="router-link">pagination</router-link>
-            </li> -->
-          </ul>
-        </div>
-        <div class="header-main-right">
-          <router-link :to="`/account/profile/1`">
-            <div class="user-image"></div>
-          </router-link>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 // import LogoImage from '.../assets/logo.jpg'
@@ -150,7 +74,85 @@ export default Vue.extend({
 });
 </script>
 
+<template>
+  <div class="header-wrapper">
+    <div class="header-wrapper-area">
+      <div class="header-logo-area">
+        <div class="header-logo">
+      <!-- <div class="responsive-header">
+        <button class="button" type="button" name="button" @click="show">
+          <span class="top"></span>
+          <span class="middle"></span>
+          <span class="bottom"></span>
+        </button>
+        <transition>
+          <nav id="gnav" class="nav" v-if="gnav">
+            <div class="nav__body" @click="closeHeader">
+              <ul class="nav__lst">
+                <li class="nav__item"><router-link to="/jobs">案件を探す</router-link></li>
+                <li class="nav__item"><router-link to="/jobcreate">募集する</router-link></li>
+                <li class="nav__item"><router-link to="/chat">連絡する</router-link></li>
+                <li class="nav__item"><router-link to="/manage">管理する</router-link></li>
+                <li class="nav__item"><router-link :to="`/account/profile/${ this.userId }`">プロフィール</router-link></li>
+              </ul>
+            </div>
+          </nav>
+        </transition>
+      </div> -->
+          <!-- <div
+            class="static"
+            v-bind:class="{ active: isActive, 'text-danger': hasError }"
+          ></div> -->
+          <!-- <img class="img" src="../assets/logo.jpg" width="130" /> -->
+        </div>
+      </div>
+      <div class="header-main-area">
+        <div class="header-main-left" v-bind:class="{ active: isActive, 'text-danger': hasError }">
+          <ul>
+            <li class="menu-list">
+              <div class="menu-list-icon-area">
+                <!-- <font-awesome-icon icon="search" class="icon"/> -->
+              </div>
+              <router-link to="/jobs" class="router-link">案件を探す</router-link>
+            </li>
+            <li class="menu-list">
+              <div class="menu-list-icon-area">
+                <!-- <font-awesome-icon icon="user-plus" class="icon"/> -->
+              </div>
+              <router-link to="/job_create/1" class="router-link">募集する</router-link>
+            </li>
+            <li class="menu-list">
+              <div class="menu-list-icon-area">
+                <!-- <font-awesome-icon icon="comments" class="icon"/> -->
+              </div>
+              <router-link to="/chat" class="router-link">連絡する</router-link>
+            </li>
+            <li class="menu-list">
+              <div class="menu-list-icon-area">
+                <!-- <font-awesome-icon icon="address-card" class="icon"/> -->
+              </div>
+              <router-link to="/manage" class="router-link">管理する</router-link>
+            </li>
+            <!-- <li class="menu-list">
+              <div class="menu-list-icon-area">
+              </div>
+              <router-link to="/manage/ManageRejectDetail" class="router-link">pagination</router-link>
+            </li> -->
+          </ul>
+        </div>
+        <div class="header-main-right">
+          <router-link :to="`/account/profile/1`">
+            <div class="user-image"></div>
+          </router-link>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .router-link-active {
   border-bottom: 4px solid $primary-color;
   font-weight: bold;
@@ -191,7 +193,7 @@ export default Vue.extend({
     .header-logo {
       width: 60%;
       height: calc(100% - 2.8rem);
-      // background-color: rgba(94, 94, 94, 0.226);
+      background-color: rgba(94, 94, 94, 0.226);
       padding: 1.2rem 0;
     }
   }
@@ -250,7 +252,7 @@ ul {
       top: 0;
       right: 0;
       text-align: center;
-      padding: 1rem  0;
+      padding: 0.85rem  0;
       text-decoration: none;
       color: $text-sub-color;
       font-size: 14px;
@@ -365,7 +367,7 @@ ul {
   height: 100%;
   position: fixed;
   background-color: #ffffff;
-  // background-color: $modal-background;
+  background-color: $modal-background;
   top: 0;
   left: 0;
   z-index: 99;

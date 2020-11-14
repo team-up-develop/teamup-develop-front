@@ -90,7 +90,7 @@ export default Vue.extend({
   margin: 0 auto;
 
   .title {
-    color: $secondary-color;
+    // color: $secondary-color;
     font-size: 1.8rem;
     font-weight: bold;
     height: 50px;
@@ -118,7 +118,7 @@ export default Vue.extend({
 
         span {
           font-weight: bold;
-          color: $secondary-color;
+          // color: $secondary-color;
         }
 
         .step-graph {
@@ -126,14 +126,14 @@ export default Vue.extend({
           height: 8px;
           margin: 0 auto;
           border-radius: 35px;
-          background-color: $basic-white;
-          border: solid 1px $text-sub-color;
+          // background-color: $basic-white;
+          // border: solid 1px $text-sub-color;
 
           &__line {
             width: 33%;
             height: 100%;
             border-radius: 35px;
-            background-color: $secondary-color;
+            // background-color: $secondary-color;
           }
         }
       }
@@ -145,7 +145,7 @@ export default Vue.extend({
         display: flex;
         flex-direction: column;
         text-align: left;
-        color: $text-main-color;
+        // color: $text-main-color;
 
         .input-area {
           height: 16%;
@@ -157,8 +157,8 @@ export default Vue.extend({
           }
 
           .label-required {
-            color: $basic-white;
-            background-color: $error-message-color;
+            // color: $basic-white;
+            // background-color: $error-message-color;
             font-size: 12px;
             font-weight: bold;
             border-radius: 25px;
@@ -168,9 +168,9 @@ export default Vue.extend({
           }
 
           input[type='text'] {
-            @include input-border-color;
-            background-color: $sub-white;
-            color: $text-main-color;
+            // @include input-border-color;
+            // background-color: $sub-white;
+            // color: $text-main-color;
             font: 16px/24px sans-serif;
             box-sizing: border-box;
             width: 100%;
@@ -182,14 +182,14 @@ export default Vue.extend({
             margin-top: 0.5rem;
 
             &:focus {
-              @include form-hover;
+              // @include form-hover;
             }
           }
 
           input[type='date'] {
-            @include input-border-color;
-            background-color: $sub-white;
-            color: $text-main-color;
+            // @include input-border-color;
+            // background-color: $sub-white;
+            // color: $text-main-color;
             font: 16px/24px sans-serif;
             box-sizing: border-box;
             width: 100%;
@@ -201,7 +201,7 @@ export default Vue.extend({
             margin-top: 0.5rem;
 
             &:focus {
-              @include form-hover;
+              // @include form-hover;
             }
           }
 
@@ -215,9 +215,9 @@ export default Vue.extend({
         bottom: 0;
 
         .next-btn {
-          @include box-shadow-btn;
-          @include purple-btn;
-          color: $basic-white;
+          // @include box-shadow-btn;
+          // @include purple-btn;
+          // color: $basic-white;
           text-align: left;
           display: block;
           padding: 1.1rem 4rem;
@@ -237,7 +237,7 @@ export default Vue.extend({
           outline: none;
 
           &:hover {
-            @include box-shadow-btn;
+            // @include box-shadow-btn;
           }
         }
       }

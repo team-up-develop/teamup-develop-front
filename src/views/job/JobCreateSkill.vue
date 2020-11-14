@@ -235,21 +235,23 @@ export default Vue.extend({
 
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .create-wrapper {
-  width: 85%;
-  height: 90vh;
+  width: 90%;
+  height: 100vh;
   margin: 0 auto;
   position: relative;
 
   .job-create-wrapper {
     @include card-border-color;
     background-color: $basic-white;
-    width: calc(100% - 5rem);
+    // width: calc(100% - 5rem);
     border-radius: 20px;
     margin: 2rem 0rem;
     padding: 2.5rem;
-    position: absolute;
-    right: 0;
+    // position: absolute;
+    // right: 0;
     height: 82%;
   }
 

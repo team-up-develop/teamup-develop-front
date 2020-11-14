@@ -252,6 +252,8 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .router {
   text-decoration: none;
   color: $basic-white;
@@ -289,7 +291,7 @@ export default Vue.extend({
   box-shadow: 0 2px 5px rgba(0,0,0,0.26)
 }
 
-/* ユーザー画像 start*/
+// * ユーザー画像 start
 .post-user-area {
   .left-user-area {
     width: 20%;
@@ -318,7 +320,7 @@ export default Vue.extend({
   }
 }
 
-/* ユーザー 詳細情報 start */
+// * ユーザー 詳細情報 start
 .user-profile-area {
   .user-name-are {
     width: 45%;
@@ -555,7 +557,7 @@ export default Vue.extend({
   position: absolute;
   left: 0;
   top: 0;
-  width: 39%;
+  width: 60%;
   padding: 1.2rem 4rem;
   transition: .3s;
   border-radius: 50px;

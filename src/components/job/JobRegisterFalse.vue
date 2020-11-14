@@ -1,22 +1,3 @@
-<template>
-  <div>
-    <div class="false-user-login">
-      <div class="top-login-title">
-        簡単登録
-      </div>
-      <div class="register-form-area">
-        <label for="name" class="label">ログイン名</label>
-        <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
-        <label for="name" class="label">パスワード</label>
-        <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
-      </div>
-      <div @click="register" class="register-btn">新規登録</div>
-    </div>
-    <!-- <div class="false-user-Advertisement">
-    </div> -->
-  </div>
-</template>
-
 <script>
 import axios from 'axios'
 export default {
@@ -43,11 +24,32 @@ export default {
 }
 </script>
 
+<template>
+  <section>
+    <div class="false-user-login">
+      <div class="top-login-title">
+        簡単登録
+      </div>
+      <div class="register-form-area">
+        <label for="name" class="label">ログイン名</label>
+        <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
+        <label for="name" class="label">パスワード</label>
+        <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
+      </div>
+      <div @click="register" class="register-btn">新規登録</div>
+    </div>
+    <!-- <div class="false-user-Advertisement">
+    </div> -->
+  </section>
+</template>
+
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
   .false-user-login {
     @include card-border-color;
-    width: calc(75% - 4rem);
-    height: calc(44vh - 4rem);
+    width: 75%;
+    // height: calc(44vh - 4rem);
     background-color: $basic-white;
     border-radius: 8px;
     margin-bottom: 23rem;
@@ -85,25 +87,27 @@ export default {
     width: 100%;
     height: 65%;
     margin-top: 0.5rem;
-  }
+    display: flex;
+    flex-direction: column;
 
-  .input {
-    width: calc(100% - 2rem);
-    background: #EFEFEF;
-    border: none;
-    border-radius: 0;
-    outline: none;
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-    padding: 1rem;
-    border-radius: 4px;
-    margin: 0 0 20px;
-  }
+    .input {
+      width: calc(100% - 2rem);
+      background: #EFEFEF;
+      border: none;
+      border-radius: 0;
+      outline: none;
+      -webkit-appearance: none;
+      -moz-appearance: none;
+      appearance: none;
+      padding: 1rem;
+      border-radius: 4px;
+      margin: 0 0 20px;
+    }
 
-  .label {
-    color: #444444;
-    font-size: 14px;
+    .label {
+      color: #444444;
+      font-size: 14px;
+    }
   }
 
   .false-user-Advertisement {

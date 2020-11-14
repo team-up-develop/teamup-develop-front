@@ -63,17 +63,17 @@ export default Vue.extend({
     <div v-if="loginFlag === true" class="job-manage-wrapper">
       <router-link to="/manage" class="router-no-link">
         <div class="manage-job-area">
-          <p>管理案件</p> 
+          <span>管理案件</span> 
         </div>
       </router-link>
       <router-link to="/manage/apply_job" class="router-link">
         <div class="apply-job-area">
-          <p>応募案件</p>
+          <span>応募案件</span>
         </div>
       </router-link>
       <router-link to="/manage/favorite_job" class="router-link">
         <div class="save-job-area">
-          <p>保存案件</p> 
+          <span>保存案件</span> 
         </div>
       </router-link>
       <div class="title-area">案件タイトル</div>
@@ -116,13 +116,15 @@ export default Vue.extend({
 
 
 <style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
 .router-link :hover {
   opacity: 0.8 ;
 }
 
 .router-no-link, .router-link {
   text-decoration: none;
-  color: $basic-white;
+  // color: $basic-white;
 }
 
 .manage-wrapper {
@@ -136,7 +138,6 @@ export default Vue.extend({
     border-radius: 20px;
     margin: 2rem 2rem;
     background-color: #ffffff;
-    // float: right;
     border-bottom: solid 1px $card-border-color;
     border-right: solid 1px $card-border-color;
     border-left: solid 1px $card-border-color;
@@ -146,19 +147,19 @@ export default Vue.extend({
     .manage-job-area {
       @include box-shadow-manage;
       width: 33.2%;
-      height: calc(68px - 1.6rem);
-      padding: 0.8rem 0;
+      // height: calc(68px - 1.6rem);
+      padding: 1rem 0;
       border-radius: 20px 0 0 0;
       background-color: $secondary-color;
       display: inline-block;
       color: $basic-white;
       font-weight: bold;
-      }
+    }
 
     .apply-job-area {
       width: 33.2%;
-      height: calc(68px - 1.6rem);
-      padding: 0.8rem 0;
+      // height: calc(68px - 1.6rem);
+      padding: 1rem 0;
       background-color: #606060;
       display: inline-block;
       color: $basic-white;
@@ -169,8 +170,8 @@ export default Vue.extend({
 
     .save-job-area {
       width: 33.2%;
-      height: calc(68px - 1.6rem);
-      padding: 0.8rem 0;
+      // height: calc(68px - 1.6rem);
+      padding: 1rem 0;
       border-radius: 0 20px 0 0;
       background-color: #606060;
       display: inline-block;
@@ -182,7 +183,7 @@ export default Vue.extend({
 
   .title-area {
     width: 33.2%;
-    height: calc(48px - 1.8rem);
+    // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     background-color: $secondary-color;
     display: inline-block;
@@ -192,7 +193,7 @@ export default Vue.extend({
 
   .time-area {
     width: 33.2%;
-    height: calc(48px - 1.8rem);
+    // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     border-left: 1px solid $basic-white;
     border-right: 1px solid $basic-white;
@@ -204,7 +205,7 @@ export default Vue.extend({
 
   .skill-area {
     width: 33.2%;
-    height: calc(48px - 1.8rem);
+    // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     background-color: $secondary-color;
     display: inline-block;
@@ -224,7 +225,7 @@ export default Vue.extend({
 
   .job-area {
     transition: .2s;
-    border-bottom: 1px solid #9c9c9c;
+    // border-bottom: 1px solid #9c9c9c;
   }
 
   .job-wrapper-area {
@@ -237,8 +238,8 @@ export default Vue.extend({
 
       .job-area-box {
         width: 33.2%;
-        // border-bottom: 1px solid #9c9c9c;
-        height: calc(48px - 1.6rem);
+        border-bottom: 1px solid #9c9c9c;
+        // height: calc(48px - 1.6rem);
         padding: 0.8rem 0;
         color: $text-main-color;
         font-size: 14px;
@@ -269,7 +270,7 @@ export default Vue.extend({
       margin: 2rem 2rem;
 
       .job-area {
-        // display:flex;
+        display:flex;
       }
     }
   }
@@ -297,7 +298,7 @@ export default Vue.extend({
         width: 33.1%;
         height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
-        }
+      }
 
       .apply-job-area {
         width: 33.1%;

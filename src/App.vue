@@ -1,34 +1,38 @@
 <template>
-  <div id="app">
+  <v-app class="app">
     <Header  v-if="$store.state.auth.userId || this.loginFlag == true"/>
     <header-login-false v-else />
-    <div class="container">
+    <v-main class="container">
       <router-view/>
-    </div>
-    <Footer></Footer>
-  </div>
+      <Footer></Footer>
+    </v-main>
+  </v-app>
 </template>
 
-<script>
+<script lang="ts">
 import Vue from 'vue';
 import Header from '@/components/common/entire/Header.vue'
 import Footer from '@/components/common/entire/Footer.vue'
 import HeaderLoginFalse from '@/components/common/entire/HeaderLoginFalse.vue'
 
-export default Vue.extend({ 
+export type DataType = {
+  loginFlag: boolean;
+}
+
+export default Vue.extend({
   name: 'App',
-  data() {
-    return {
-      loginFlag: false
-    }
-  },
+
   components: {
-    // LeftSideBar
     Header,
     Footer,
     HeaderLoginFalse,
-    // login
   },
+
+  data(): DataType {
+    return {
+      loginFlag: false
+    }
+  },  
   mounted() {
   console.log(this.$store.state.auth.userId)
     if(this.$store.state.auth.userId) {
@@ -44,7 +48,7 @@ export default Vue.extend({
 </script>
 
 <style scoped>
-#app {
+.app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -56,12 +60,17 @@ export default Vue.extend({
 }
 .container {
   width: 100%;
-  /* margin-top: 3.7rem; */
-  /* height: 100%; */
-  /* background-color: #F2F6F7; */
-  /* background-color: #FAFAFA; */
-  /* right: 0; */
   display: inline-block;
   position: relative;
+}
+@media (min-width: 960px) {
+.container[data-v-7ba5bd90] {
+  max-width: none;
+}
+}
+@media (min-width: 960px) {
+  .container {
+    max-width: none;
+  }
 }
 </style>
