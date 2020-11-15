@@ -1283,13 +1283,23 @@ label.checkbox {
 }
 
 @media screen and (max-width: 700px) {
-  .search-area .search-freewrod-box {
-    position: relative;
-    padding: 0.4rem 1rem;
-    margin-left: 0.5rem;
-    margin-right: 0;
-    width: 40%;
+  .search-area {
+    &__freewrod {
+      position: relative;
+      margin-right: 0;
+      padding: 0.4rem 1rem;
+      margin-left: 0.5rem;
+      width: 50%;
+    }
+    .search-freewrod-box {
+      position: relative;
+      padding: 0.4rem 1rem;
+      margin-left: 0.5rem;
+      margin-right: 0;
+      width: 40%;
+    }
   }
+
   .job-wrapper-left {
     width: 100%;
   }

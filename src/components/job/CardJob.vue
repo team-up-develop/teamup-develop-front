@@ -197,10 +197,16 @@ export default {
     text-decoration: underline;
     display: block;
   }
-  .job-cards .job-cards-bottom .product-start-end .product-start-end-tag {
+  .job-cards 
+  .job-cards-bottom 
+  .product-start-end 
+  .product-start-end-tag {
     display: none;
   }
-  .job-cards .job-cards-bottom .product-start-end .product-start-end-time {
+  .job-cards 
+  .job-cards-bottom 
+  .product-start-end 
+  .product-start-end-time {
     padding: 0;
   }
 
@@ -208,29 +214,29 @@ export default {
     padding: 10px 1rem 0 1rem;
   }
 
-  .job-cards-bottom {
+  .job-cards__bottom {
     padding: 10px 1rem;
 
-    .product-start-end .product-start-end-time {
-      padding: 0 10px;
+    .product-start-end {
+      padding: 0 0 0 0.5rem;
+
+      .product-start-end-time {
+        padding: 0 10px;
+      }
     }
   }
 }
 
 @media screen and (max-width: 420px) {
   .job-cards {
-    height: 285px;
-  }
-  .job-cards {
     &__top {
       font-size: 16px;
-      width: calc(100% - 2rem);
-      // background-color: yellow;
-      padding: 1.3rem 1rem 1rem 1rem;
+      padding: 1rem 0.8rem 0 0.8rem;
 
       span {
         display: none;
       }
+      
       p {
         display: block;
       }
@@ -238,21 +244,18 @@ export default {
   }
 
   .job-cards  {
-    .job-cards-center {
+    &__center {
       height: 30%;
-      width: calc(100% - 1rem);
-      padding: 0.5rem 0.5rem 0.2rem 0.5rem;
+      padding: 0rem 0.5rem;
     }
   }
 
   .job-cards  {
-    .job-cards-bottom {
-      padding: 0 1.2rem;
-      height: 33%;
+    &__bottom {
+      padding: 0.5rem 0 0.5rem 0;
 
       .post-user-area {
-        width: 100%;
-        height: 60%;
+        padding: 0.5rem 0px 0.5rem 1rem;
       }
 
       .product-start-end .product-start-end-tag {

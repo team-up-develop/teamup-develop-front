@@ -339,7 +339,7 @@ export default Vue.extend({
 /* タブレット */
 @media screen and (max-width: 900px) {
   .create-wrapper .job-create-wrapper {
-    width: calc(100% - 3rem);
+    width: 100%;
     border-radius: 20px;
     margin: 2rem 0rem;
     background-color: $basic-white;
@@ -360,14 +360,14 @@ export default Vue.extend({
 /* スマホ */
 @media (max-width: 500px){
   .create-wrapper .job-create-wrapper {
-    width: calc(100% - 2rem);
+    width: 100%;
     padding: 2rem 1rem;
     margin: 2rem auto 2rem auto;
   }
   .job-create-wrapper .job-create-time-area{
     input[type='date'] {
-        width: 100%;
-  }
+      width: 100%;
+    }
   }
   .job-create-wrapper .job-create-btn-area {
     .next-btn {
@@ -379,23 +379,29 @@ export default Vue.extend({
 @media (max-width: 420px) {
   .create-wrapper {
     width: 100%;
-    height: 100vh;
     margin: 0 auto;
     position: relative;
   }
-  .create-wrapper .job-create-wrapper {
-    width: calc(97% - 2rem);
+  .create-wrapper 
+  .job-create-wrapper {
+    width: calc(97% - 0.5rem);
     margin: 2rem auto;
     position: relative;
     padding: 2rem 1rem 1rem 1rem;
-
-    .next-btn {
-      padding: 1.1rem 2.3rem;
+  }
+  .job-create-wrapper 
+  .job-create-time-area{
+    input[type='date'] {
+      width: 100%;
     }
   }
-  .job-create-wrapper .job-create-time-area{
-    input[type='date'] {
-        width: 100%;
+  .job-create-wrapper 
+    .job-create-btn-area {
+      width: 100px;
+      height: 100px;
+      background-color: rebeccapurple;
+    .next-btn {
+      margin-bottom: 1rem;
     }
   }
 }
