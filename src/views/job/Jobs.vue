@@ -210,7 +210,8 @@
         <job-register-false v-if="!userId"/>
         <JobRightLogin v-else/>
       </div>
-      <v-content>
+      <!-- ページネーション -->
+      <v-main>
         <div class="text-center">
           <v-pagination
             v-model="page"
@@ -219,7 +220,7 @@
             @input = "pageChange"
           ></v-pagination>
         </div>     
-      </v-content>
+      </v-main>
     </div>
     <Loading v-show="loading">
     </Loading>
