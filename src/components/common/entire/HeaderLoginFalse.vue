@@ -371,17 +371,17 @@ ul {
   }
 }
 .nav {
-  width: 45%;
+  width: 40%;
   height: 100%;
   position: fixed;
-  background-color: $modal-background;
+  background-color: #ffffff;
   top: 0;
   left: 0;
   overflow-y: scroll;
   z-index: 99;
   
   &__body {
-    padding: 60px 20px;
+    padding: 60px 0rem;
   }
   
   &__lst {
@@ -396,8 +396,8 @@ ul {
       margin-top: 8px;
     }
     a {
-      font-size: 16px;
-      color: $basic-white;
+      font-size: 14px;
+      color: $text-sub-color;
       text-decoration: none;
       padding: 2px 0;
     }

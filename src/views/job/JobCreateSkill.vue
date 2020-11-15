@@ -391,7 +391,7 @@ export default Vue.extend({
 /* タブレット */
 @media screen and (max-width: 900px) {
   .create-wrapper .job-create-wrapper {
-    width: calc(100% - 3rem);
+    width: 100%;
     border-radius: 20px;
     margin: 2rem 0rem;
     background-color: $basic-white;
@@ -413,9 +413,9 @@ export default Vue.extend({
 /* スマホ */
 @media (max-width: 500px){
   .create-wrapper .job-create-wrapper {
-    width: calc(100% - 2rem);
+    width: 100%;
     padding: 2rem 1rem;
-    margin: 2rem auto 2rem auto;
+    margin: 2rem auto;
   }
   .job-create-wrapper .button-are  { 
     .post-job-btn {
@@ -435,7 +435,7 @@ export default Vue.extend({
     position: relative;
   }
   .create-wrapper .job-create-wrapper {
-    width: calc(97% - 2rem);
+    width: calc(97% - 0.5rem);
     margin: 2rem auto;
     position: relative;
     padding: 2rem 1rem 1rem 1rem;

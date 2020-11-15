@@ -79,7 +79,7 @@ export default Vue.extend({
     <div class="header-wrapper-area">
       <div class="header-logo-area">
         <div class="header-logo">
-      <!-- <div class="responsive-header">
+      <div class="responsive-header">
         <button class="button" type="button" name="button" @click="show">
           <span class="top"></span>
           <span class="middle"></span>
@@ -90,7 +90,7 @@ export default Vue.extend({
             <div class="nav__body" @click="closeHeader">
               <ul class="nav__lst">
                 <li class="nav__item"><router-link to="/jobs">案件を探す</router-link></li>
-                <li class="nav__item"><router-link to="/jobcreate">募集する</router-link></li>
+                <li class="nav__item"><router-link to="/job_create/1">募集する</router-link></li>
                 <li class="nav__item"><router-link to="/chat">連絡する</router-link></li>
                 <li class="nav__item"><router-link to="/manage">管理する</router-link></li>
                 <li class="nav__item"><router-link :to="`/account/profile/${ this.userId }`">プロフィール</router-link></li>
@@ -98,7 +98,7 @@ export default Vue.extend({
             </div>
           </nav>
         </transition>
-      </div> -->
+      </div>
           <!-- <div
             class="static"
             v-bind:class="{ active: isActive, 'text-danger': hasError }"
@@ -342,7 +342,7 @@ ul {
   }
   
   span {
-    display: block;
+    display: flex;
     width: 20px;
     height: 1px;
     margin: auto;
@@ -363,17 +363,16 @@ ul {
   }
 }
 .nav {
-  width: 45%;
+  width: 40%;
   height: 100%;
   position: fixed;
   background-color: #ffffff;
-  background-color: $modal-background;
   top: 0;
   left: 0;
   z-index: 99;
   
   &__body {
-    padding: 60px 20px;
+    padding: 60px 1rem;
   }
   
   &__lst {

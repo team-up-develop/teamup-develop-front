@@ -1,34 +1,3 @@
-<template>
-  <section>
-    <div class="login-wrapper" v-show="!loading">
-      <div class="login-title">LOGIN</div>
-      <div class="login-container">
-        <div class="login-box">
-          <div class="error-flag" v-if="loginErrorFlag == true">
-            <span>メールアドレス か パスワードが違います</span>
-          </div>
-          <div v-else>
-          </div>
-          <div class="name-form">
-            <label for="name" class="label">ログイン名</label>
-            <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
-          </div>
-          <div class="name-form">
-            <label for="name" class="label">パスワード</label>
-            <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
-          </div>
-          <div class="btn-area">
-            <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
-            <div @click="login" class="login-btn">ログイン</div>
-          </div>
-        </div>
-      </div>
-    </div>
-    <Loading v-show="loading">
-    </Loading>
-  </section>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 import Loading from '@/components/common/loading/Loading.vue'
@@ -77,6 +46,37 @@ export default Vue.extend({
   }
 });
 </script>
+
+<template>
+  <section>
+    <div class="login-wrapper" v-show="!loading">
+      <div class="login-title">LOGIN</div>
+      <div class="login-container">
+        <div class="login-box">
+          <div class="error-flag" v-if="loginErrorFlag == true">
+            <span>メールアドレス か パスワードが違います</span>
+          </div>
+          <div v-else>
+          </div>
+          <div class="name-form">
+            <label for="name" class="label">ログイン名</label>
+            <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
+          </div>
+          <div class="name-form">
+            <label for="name" class="label">パスワード</label>
+            <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
+          </div>
+          <div class="btn-area">
+            <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
+            <div @click="login" class="login-btn">ログイン</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <Loading v-show="loading">
+    </Loading>
+  </section>
+</template>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
