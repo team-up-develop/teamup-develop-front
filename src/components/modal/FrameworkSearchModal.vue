@@ -2,9 +2,12 @@
   <transition name="modal" appear>
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
-        <div class="modal-content">
+        <v-card-title class="headline grey lighten-2">
+          フレームワーク
+        </v-card-title>
+        <v-card-text class="modal-content">
           <slot/>
-        </div>
+        </v-card-text>
         <footer class="modal-footer">
           <slot name="footer">
             <button @click="$emit('close')">Close</button>
@@ -43,12 +46,6 @@ export default {
   background: $basic-white;
   border-radius: 8px;
   overflow: hidden;
-}
-
-.modal-content {
-  padding: 2rem 4rem;
-  height: 64vh;
-  text-align: left;
 }
 
 .modal-footer {

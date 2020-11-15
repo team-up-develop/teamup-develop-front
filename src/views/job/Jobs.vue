@@ -7,13 +7,14 @@
       </div>
     </transition>
     <!-- 言語検索 モーダル画面 -->
-    <div class="example-modal-window">
+    <div class="modal-window">
       <LanguageSearchModal @close="closeLangSearchModal" v-if="langModal">
-        <p class="label-lang">開発言語 選択</p>
+        <div class="modal-content">
           <div class="round" v-for="lang in languages" v-bind:key="lang.id">
           <input type="checkbox"  id="checkbox" v-model="selectedLang" v-bind:value="lang.id">
             <label for="" class="checkbox">{{ lang.programingLanguageName }}</label>
           </div>
+        </div>
         <template slot="footer">
           <div @click="searchLanguage" class="serach-btn">
             検索する
@@ -22,13 +23,14 @@
       </LanguageSearchModal>
     </div>
     <!-- フレームワーク検索 モーダル画面 -->
-    <div class="example-modal-window">
+    <div class="modal-window">
       <FrameworkSearchModal @close="closeFrameworkSearchModal" v-if="frameworkModal">
-        <p class="label-lang">フレームワーク 選択</p>
+        <div class="modal-content">
           <div class="round" v-for="framework in frameworks" v-bind:key="framework.id">
           <input type="checkbox"  id="checkbox" v-model="selectedFramework" v-bind:value="framework.id">
             <label for="" class="checkbox">{{ framework.programingFrameworkName }}</label>
           </div>
+        </div>
         <template slot="footer">
           <div @click="searchFramework" class="serach-btn">
             検索する
@@ -37,13 +39,14 @@
       </FrameworkSearchModal>
     </div>
     <!-- その他スキル検索 モーダル画面 -->
-    <div class="example-modal-window">
+    <div class="modal-window">
       <SkillSearchModal @close="closeSkillSearchModal" v-if="skillModal">
-        <p class="label-lang">その他スキル 選択</p>
-          <div class="round-skill" v-for="skill in skills" v-bind:key="skill.id">
+        <div class="modal-content">
+          <div class="round" v-for="skill in skills" v-bind:key="skill.id">
           <input type="checkbox"  id="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
             <label for="" class="checkbox">{{ skill.skillName }}</label>
           </div>
+        </div>
         <template slot="footer">
           <div @click="searchSkill" class="serach-btn">
             検索する
@@ -52,7 +55,7 @@
       </SkillSearchModal>
     </div>
     <!-- 応募する モーダル画面 -->
-    <div class="example-modal-window">
+    <div class="modal-window">
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template slot="footer">
@@ -1188,18 +1191,15 @@ export default Vue.extend({
   color: #111111;
 }
 
+// * モーダル
+.modal-content {
+  // background-color: yellow;
+  margin-top: 1rem;
+}
 .round {
   text-align: left;
-  width: 24%;
+  width: 20%;
   margin-right: 0.3rem;
-  display: inline-block;
-  position: relative;
-  margin-bottom: 2rem;
-}
-.round-skill {
-  text-align: left;
-  width: 22%;
-  margin-right: 0.2rem;
   display: inline-block;
   position: relative;
   margin-bottom: 2rem;
@@ -1217,16 +1217,17 @@ input[type="checkbox"] {
 label.checkbox {
   position: absolute;
   top: 0;
-  margin-top: 0.37rem;
+  margin-top: 0.3rem;
   color: #111111;
   margin-left: 0.4rem;
   font-size: 14px;
+  font-weight: bold;
 }
 
 .serach-btn {
   @include blue-btn;
   display: block;
-  width: 77%;
+  width: 70%;
   padding: 1rem 2rem;
   border-radius: 8px;
   font-weight: 600;
