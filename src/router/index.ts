@@ -9,7 +9,7 @@ import Register from '@/views/user/Register.vue'
 import RegisterStep1 from '@/views/user/register_session/RegisterStep1.vue'
 import RegisterStep2 from '@/views/user/register_session/RegisterStep2.vue'
 import RegisterStep3 from '@/views/user/register_session/RegisterStep3.vue'
-// import TopPage from '../views/common/TopPage.vue'
+import TopPage from '../views/common/TopPage.vue'
 import Manage from '@/views/manage/Manage.vue'
 import Favorite from '@/views/favorite/Favorite.vue'
 import FavoriteJobDetail from '@/views/favorite/FavoriteJobDetail.vue'
@@ -20,11 +20,12 @@ import ChatDetail from '@/views/chat/ChatDetail.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
-  // {
-  //   path: '/',
-  //   component: TopPage,
-  //   name: 'topPage'
-  // },
+  // * トップページ
+  {
+    path: '/',
+    component: TopPage,
+    name: 'topPage'
+  },
   // * 案件
   {
     path: '/jobs',
