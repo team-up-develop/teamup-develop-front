@@ -63,7 +63,7 @@ export default Vue.extend({
         @include purple-btn;
         @include box-shadow-btn;
         display: block;
-        padding: 1.2rem 3.5rem;
+        padding: 1.2rem 4rem;
         border-radius: 50px;
         font-size: .875rem;
         font-weight: 700;

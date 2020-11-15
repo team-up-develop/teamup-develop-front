@@ -134,6 +134,11 @@ export default Vue.extend({
 
 <template>
   <div class="detail-wrapper">
+    <div class="back-space">
+      <router-link :to="`/manage/favorite_job`">
+      <p>＜ 管理画面に戻る</p>
+      </router-link>
+    </div>
     <!-- 応募する モーダル画面 -->
     <div class="example-modal-window">
       <ApplyModal @close="closeModal" v-if="modal">
@@ -280,6 +285,14 @@ export default Vue.extend({
   width: 85%;
   padding: 3.5rem 0rem;
   margin: 0 auto;
+  position: relative;
+
+  .back-space {
+    position: absolute;
+    left: 0;
+    top: 0;
+    margin-top: 1rem;
+  }
 
   .detail-post-user-area {
     width: 80%;
@@ -576,7 +589,7 @@ export default Vue.extend({
   position: absolute;
   left: 0;
   top: 0;
-  width: 39%;
+  width: 60%;
   padding: 1.2rem 4rem;
   transition: .3s;
   border-radius: 50px;
@@ -774,7 +787,7 @@ export default Vue.extend({
           position: absolute;
           left: 0;
           top: 0;
-          width: 38%;
+          width: 60%;
           padding: 1.2rem 2rem;
           font-size: 1rem;
         }
