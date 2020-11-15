@@ -301,6 +301,8 @@ export default Vue.extend({
   created() {
     // * 投稿一覧取得
     const posts = [];
+    console.log("↓ 下が選択された言語ですよ！！！！！！！！！！！！！！！！！！")
+    console.log(this.selectedLang)
     axios.get('http://localhost:8888/api/v1/job', {
       // headers: {
       //   Authorization: `Bearer ${ localStorage.userId }`
@@ -325,79 +327,79 @@ export default Vue.extend({
         this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
 
         // * トップページから 開発言語 検索した際の処理
-        // if(!this.$store.state.search.language) {
-        //   console.log("language はnullです")
-        // }
-        // else {
-        //   const arrayLanguagekNum = [];
-        //   const languageNum = this.$store.state.search.language;
-        //   for(let s = 0; s < languageNum.length; s++) {
-        //     const languageNumParams = languageNum[s]
-        //     this.selectedLang.push(languageNumParams)
-        //     const queryParamsLanguage =  'programing_framework_id' + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
-        //     arrayLanguagekNum.push(queryParamsLanguage)
-        //   }
-        //   const LastLanguageNum = arrayLanguagekNum.join('');
-        //   axios.get(`http://localhost:8888/api/v1/job/?${LastLanguageNum}`)
-        //   .then(response => {
-        //     this.jobs = response.data
-        //     if(this.jobs.length == 0) {
-        //       this.jobsNullFlag = true;
-        //     }
-        //   })
-        //   // * もし案件が存在しなかったら処理が走る
-        //   if(!this.jobs.length) {
-        //     this.jobsNullFlag = true;
-        //   }
-        // }
-        // // * トップページから フレームワーク 検索した際の処理
-        // if(!this.$store.state.search.framwork) {
-        //   console.log("framwork はnullです")
-        // }
-        // else {
-        //   const arrayFrameworkNum = [];
-        //   const framworkNum = this.$store.state.search.framwork;
-        //   for(let k = 0; k < framworkNum.length; k++) {
-        //     const framworkNumParams = framworkNum[k]
-        //     this.selectedFramework.push(framworkNumParams)
-        //     const queryParams =  'programing_framework_id' + '[' + Number(framworkNumParams - 1) + ']' + '=' + framworkNumParams + '&';
-        //     arrayFrameworkNum.push(queryParams)
-        //   }
-        //   const LastFrameworkNum = arrayFrameworkNum.join('');
-        //   axios.get(`http://localhost:8888/api/v1/job/?${LastFrameworkNum}`)
-        //   .then(response => {
-        //     this.jobs = response.data
-        //     if(this.jobs.length == 0) {
-        //       this.jobsNullFlag = true;
-        //     }
-        //   })
-        // }
-        // // * トップページから その他スキル 検索した際の処理
-        // if(!this.$store.state.search.skill) {
-        //   console.log("skill はnullです")
-        // }
-        // else {
-        //   const arraySkillNum = [];
-        //   const skillNum = this.$store.state.search.skill;
-        //   for(let l = 0; l < skillNum.length; l++) {
-        //     const skillNumParams = skillNum[l]
-        //     this.selectedSkill.push(skillNumParams)
-        //     const queryParamsSkill = 'skill_id' + '[' + Number(skillNumParams - 1) + ']' + '=' + skillNumParams + '&';
-        //     arraySkillNum.push(queryParamsSkill)
-        //   }
-        //   const LastSkillNum = arraySkillNum.join('');
-        //   axios.get(`http://localhost:8888/api/v1/job/?${LastSkillNum}`)
-        //   .then(response => {
-        //     this.jobs = response.data
-        //     if(this.jobs.length == 0) {
-        //       this.jobsNullFlag = true;
-        //     }
-        //   })
-        // }
-        // // * もし案件が存在しなかったら処理が走る
-        // if(!this.jobs.length) {
-        //   this.jobsNullFlag = true;
-        // }
+        if(!this.$store.state.search.language) {
+          console.log("language はnullです")
+        }
+        else {
+          const arrayLanguagekNum = [];
+          const languageNum = this.$store.state.search.language;
+          for(let s = 0; s < languageNum.length; s++) {
+            const languageNumParams = languageNum[s]
+            this.selectedLang.push(languageNumParams)
+            const queryParamsLanguage =  'programing_framework_id' + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
+            arrayLanguagekNum.push(queryParamsLanguage)
+          }
+          const LastLanguageNum = arrayLanguagekNum.join('');
+          axios.get(`http://localhost:8888/api/v1/job/?${LastLanguageNum}`)
+          .then(response => {
+            this.jobs = response.data
+            if(this.jobs.length == 0) {
+              this.jobsNullFlag = true;
+            }
+          })
+          // * もし案件が存在しなかったら処理が走る
+          if(!this.jobs.length) {
+            this.jobsNullFlag = true;
+          }
+        }
+        // * トップページから フレームワーク 検索した際の処理
+        if(!this.$store.state.search.framwork) {
+          console.log("framwork はnullです")
+        }
+        else {
+          const arrayFrameworkNum = [];
+          const framworkNum = this.$store.state.search.framwork;
+          for(let k = 0; k < framworkNum.length; k++) {
+            const framworkNumParams = framworkNum[k]
+            this.selectedFramework.push(framworkNumParams)
+            const queryParams =  'programing_framework_id' + '[' + Number(framworkNumParams - 1) + ']' + '=' + framworkNumParams + '&';
+            arrayFrameworkNum.push(queryParams)
+          }
+          const LastFrameworkNum = arrayFrameworkNum.join('');
+          axios.get(`http://localhost:8888/api/v1/job/?${LastFrameworkNum}`)
+          .then(response => {
+            this.jobs = response.data
+            if(this.jobs.length == 0) {
+              this.jobsNullFlag = true;
+            }
+          })
+        }
+        // * トップページから その他スキル 検索した際の処理
+        if(!this.$store.state.search.skill) {
+          console.log("skill はnullです")
+        }
+        else {
+          const arraySkillNum = [];
+          const skillNum = this.$store.state.search.skill;
+          for(let l = 0; l < skillNum.length; l++) {
+            const skillNumParams = skillNum[l]
+            this.selectedSkill.push(skillNumParams)
+            const queryParamsSkill = 'skill_id' + '[' + Number(skillNumParams - 1) + ']' + '=' + skillNumParams + '&';
+            arraySkillNum.push(queryParamsSkill)
+          }
+          const LastSkillNum = arraySkillNum.join('');
+          axios.get(`http://localhost:8888/api/v1/job/?${LastSkillNum}`)
+          .then(response => {
+            this.jobs = response.data
+            if(this.jobs.length == 0) {
+              this.jobsNullFlag = true;
+            }
+          })
+        }
+        // * もし案件が存在しなかったら処理が走る
+        if(!this.jobs.length) {
+          this.jobsNullFlag = true;
+        }
       }, 2000);
     })
     .catch(error => {

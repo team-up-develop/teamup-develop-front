@@ -1,28 +1,28 @@
 <template>
   <section>
     <!-- 案件カード デスクトップ -->
-    <router-link :to="`/jobs/${ newJob.id }`" class="job-card-desktop" v-for="newJob in newJobsDesktop" :key="newJob.id">
+    <router-link :to="`/jobs/${ recommendJob.id }`" class="job-card-desktop" v-for="recommendJob in recommendJobsDesktop" :key="recommendJob.id">
       <div class="job-card-desktop__top">
-        <span>{{ newJob.jobTitle | truncateTitle }}</span>
+        <span>{{ recommendJob.jobTitle | truncateTitle }}</span>
       </div>
       <div class="job-card-desktop__center">
         <div class="langage" 
-          v-for="(langage, index) in newJob.programingLanguage.slice(0,2)" 
-          :key="`langageDesktop-${ index }`"
+          v-for="(langage, index) in recommendJob.programingLanguage.slice(0,2)" 
+          :key="`langage-${ index }`"
         >
           {{ langage.programingLanguageName }}
         </div> 
         <div 
           class="framework" 
-          v-for="(framework, index) in newJob.programingFramework.slice(0,2)" 
-          :key="`frameworkDesktop-${ index }`"
+          v-for="(framework, index) in recommendJob.programingFramework.slice(0,2)" 
+          :key="`framework-${ index }`"
         >
           {{ framework.programingFrameworkName }}
         </div> 
         <div 
           class="skill" 
-          v-for="(skill, index) in newJob.skill.slice(0,2)" 
-          :key="`skillDesktop-${ index }`"
+          v-for="(skill, index) in recommendJob.skill.slice(0,2)" 
+          :key="`skill-${ index }`"
         >
           {{ skill.skillName }}
         </div> 
@@ -33,41 +33,41 @@
             開発期間:
           </div>
           <div class="product-start-end-time">
-            {{ newJob.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ newJob.devEndDate | moment("YYYY年 M月 D日")}}
+            {{ recommendJob.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ recommendJob.devEndDate | moment("YYYY年 M月 D日")}}
           </div>
         </div>
         <div class="post-user-area">
           <div class="post-user-image"></div>
           <div class="post-user-name-area">
             <div class="post-user-name">
-              {{ newJob.user.userName }}
+              {{ recommendJob.user.userName }}
             </div>
           </div>
         </div>
       </div>
     </router-link>
     <!-- 通常時案件カード -->
-    <router-link :to="`/jobs/${ newJob.id }`" class="job-card" v-for="newJob in newJobs" :key="newJob.id">
+    <router-link :to="`/jobs/${ recommendJob.id }`" class="job-card" v-for="recommendJob in recommendJobs" :key="recommendJob.id">
       <div class="job-card__top">
-        <span>{{ newJob.jobTitle | truncateTitle }}</span>
+        <span>{{ recommendJob.jobTitle | truncateTitle }}</span>
       </div>
       <div class="job-card__center">
         <div class="langage" 
-          v-for="(langage, index) in newJob.programingLanguage.slice(0,2)" 
+          v-for="(langage, index) in recommendJob.programingLanguage.slice(0,2)" 
           :key="`langage-${ index }`"
         >
           {{ langage.programingLanguageName }}
         </div> 
         <div 
           class="framework" 
-          v-for="(framework, index) in newJob.programingFramework.slice(0,2)" 
+          v-for="(framework, index) in recommendJob.programingFramework.slice(0,2)" 
           :key="`framework-${ index }`"
         >
           {{ framework.programingFrameworkName }}
         </div> 
         <div 
           class="skill" 
-          v-for="(skill, index) in newJob.skill.slice(0,2)" 
+          v-for="(skill, index) in recommendJob.skill.slice(0,2)" 
           :key="`skill-${ index }`"
         >
           {{ skill.skillName }}
@@ -79,14 +79,14 @@
             開発期間:
           </div>
           <div class="product-start-end-time">
-            {{ newJob.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ newJob.devEndDate | moment("YYYY年 M月 D日")}}
+            {{ recommendJob.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ recommendJob.devEndDate | moment("YYYY年 M月 D日")}}
           </div>
         </div>
         <div class="post-user-area">
           <div class="post-user-image"></div>
           <div class="post-user-name-area">
             <div class="post-user-name">
-              {{ newJob.user.userName }}
+              {{ recommendJob.user.userName }}
             </div>
           </div>
         </div>
@@ -101,15 +101,15 @@ import moment from "moment";
 export default {
   data() {
     return {
-      newJobsDesktop: [], //? デスクトップサイズ 案件4つ
-      newJobs: [] //? 通常 案件3つ
+      recommendJobsDesktop: [], //? デスクトップサイズ 案件4つ
+      recommendJobs: [] //? 通常 案件3つ
     }
   },
   created() {
     axios.get('http://localhost:8888/api/v1/job')
     .then(response => {
-      this.newJobsDesktop = response.data.slice(0, 4)
-      this.newJobs = response.data.slice(0, 3)
+      this.recommendJobsDesktop = response.data.slice(0, 4)
+      this.recommendJobs = response.data.slice(0, 3)
     })
   },
   filters: {
@@ -177,7 +177,7 @@ export default {
     // background-color: blue;
 
     .langage {
-      // @include border_language;
+      @include border_language;
       color: $language-color;
       margin: 5px 0px 0px 5px;
       text-align: left;
@@ -190,7 +190,7 @@ export default {
     }
 
     .framework {
-      // @include border_framework;
+      @include border_framework;
       margin: 5px 0px 0 5px;
       text-align: left;
       display: inline-block;
@@ -203,7 +203,7 @@ export default {
     }
 
     .skill {
-      // @include border-skill;
+      @include border-skill;
       color: $skill-color;
       margin: 5px 0px 0 5px;
       text-align: left;
@@ -320,7 +320,7 @@ export default {
       // background-color: blue;
 
       .langage {
-        // @include border_language;
+        @include border_language;
         color: $language-color;
         margin: 5px 0px 0px 5px;
         text-align: left;
@@ -333,7 +333,7 @@ export default {
       }
 
       .framework {
-        // @include border_framework;
+        @include border_framework;
         margin: 5px 0px 0 5px;
         text-align: left;
         display: inline-block;
@@ -346,7 +346,7 @@ export default {
       }
 
       .skill {
-        // @include border-skill;
+        @include border-skill;
         color: $skill-color;
         margin: 5px 0px 0 5px;
         text-align: left;
