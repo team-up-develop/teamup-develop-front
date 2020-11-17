@@ -164,7 +164,7 @@ export default Vue.extend({
   <div class="create-wrapper">
     <div class="job-create-wrapper">
       <div class="job-create-area">
-        <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須</label>
+        <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須 5つまで</label>
         <label v-if="selectedLangErrors.length" class="error-label">
           <p v-for="selectedLangError in selectedLangErrors" :key="selectedLangError" class="error-message">
             {{ selectedLangError }}</p>
@@ -176,11 +176,12 @@ export default Vue.extend({
           label="programingLanguageName"
           v-model="selectedLang"
           :reduce="languages => languages.id"
+          :selectable="() => selectedLang.length < 5"
         />
         <!-- <h1>Selected 言語:{{ selectedLang }}</h1> -->
       </div>
       <div class="job-create-area">
-        <label for="name" class="label">フレームワーク</label><label for="name" class="label-required">必須</label>
+        <label for="name" class="label">フレームワーク</label><label for="name" class="label-required">必須 5つまで</label>
         <label v-if="selectedFramworkErrors.length" class="error-label">
           <p v-for="selectedFramworkError in selectedFramworkErrors" :key="selectedFramworkError" class="error-message">
             {{ selectedFramworkError }}</p>
@@ -192,11 +193,12 @@ export default Vue.extend({
             label="programingFrameworkName"
             v-model="selectedFramwork"
             :reduce="framworks => framworks.id"
+            :selectable="() => selectedFramwork.length < 5"
         />
         <!-- <h1>Selected フレームワーク: {{ selectedFramwork }}</h1> -->
       </div>
       <div class="job-create-area">
-        <label for="name" class="label">その他技術</label><label for="name" class="label-required">必須</label>
+        <label for="name" class="label">その他技術</label><label for="name" class="label-required">必須 5つまで</label>
         <label v-if="selectedSkillErrors.length" class="error-label">
           <p v-for="selectedSkillError in selectedSkillErrors" :key="selectedSkillError" class="error-message">
             {{ selectedSkillError }}</p>
@@ -208,6 +210,7 @@ export default Vue.extend({
             label="skillName"
             v-model="selectedSkill"
             :reduce="skills => skills.id"
+            :selectable="() => selectedSkill.length < 5"
         />
         <!-- <h1>Selected フレームワーク: {{ selectedFramwork }}</h1> -->
       </div>
