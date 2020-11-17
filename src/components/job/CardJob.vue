@@ -89,6 +89,7 @@ export default {
   // min-height: 292px; //? 最低限の高さ Card
 
   &__top {
+    min-height: 86px; //? テスト
     text-align: left;
     padding: 2rem 2rem 0 1.5rem;
     font-weight: bold;
@@ -101,6 +102,7 @@ export default {
   }
 
   &__center {
+    min-height: 88px; //? テスト
     padding: 10px 1.5rem 0 1.5rem;
     text-align: left;
     pointer-events: none;
