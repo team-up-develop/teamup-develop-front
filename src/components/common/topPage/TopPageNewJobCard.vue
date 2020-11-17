@@ -1,3 +1,50 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import moment from "moment";
+export default Vue.extend({ 
+  data() {
+    return {
+      newJobsDesktop: [], //? デスクトップサイズ 案件4つ
+      newJobs: [] //? 通常 案件3つ
+    }
+  },
+  created() {
+    axios.get('http://localhost:8888/api/v1/job')
+    .then(response => {
+      this.newJobsDesktop = response.data.slice(0, 4)
+      this.newJobs = response.data.slice().reverse(); //? 最新にする
+      this.newJobs = this.newJobs.slice(0, 3)
+    })
+  },
+  filters: {
+    // * date型を文字に変換
+    moment(value: string, format: string) {
+      return moment(value).format(format);
+    },
+    //* 案件タイトル 文字制限
+    truncateTitle: function(value: string) {
+      const length = 40;
+      const ommision = "...";
+      if (value.length <= length) {
+        return value;
+      }
+      return value.substring(0, length) + ommision;
+    },
+    //* 案件タイトル レスポンシブ文字制限
+    truncateTitleResponsive: function(value: string) {
+      const length = 35;
+      const ommision = "...";
+      if (value.length <= length) {
+        return value;
+      }
+      return value.substring(0, length) + ommision;
+    },
+  },
+});
+</script>
+
+
 <template>
   <section>
     <!-- 案件カード デスクトップ -->
@@ -46,8 +93,18 @@
         </div>
       </div>
     </router-link>
+    <v-row
+      :align="align"
+      no-gutters
+      style="height: 150px;"
+    >
     <!-- 通常時案件カード -->
-    <router-link :to="`/jobs/${ newJob.id }`" class="job-card" v-for="newJob in newJobs" :key="newJob.id">
+    <v-card 
+      :to="`/jobs/${ newJob.id }`" 
+      class="job-card" 
+      v-for="newJob in newJobs" 
+      :key="newJob.id"
+    >
       <div class="job-card__top">
         <span>{{ newJob.jobTitle | truncateTitle }}</span>
       </div>
@@ -91,53 +148,11 @@
           </div>
         </div>
       </div>
-    </router-link>
+    </v-card>
+    </v-row>
   </section>
 </template>
 
-<script>
-import axios from 'axios'
-import moment from "moment";
-export default {
-  data() {
-    return {
-      newJobsDesktop: [], //? デスクトップサイズ 案件4つ
-      newJobs: [] //? 通常 案件3つ
-    }
-  },
-  created() {
-    axios.get('http://localhost:8888/api/v1/job')
-    .then(response => {
-      this.newJobsDesktop = response.data.slice(0, 4)
-      this.newJobs = response.data.slice(0, 3)
-    })
-  },
-  filters: {
-    // * date型を文字に変換
-    moment(value, format) {
-      return moment(value).format(format);
-    },
-    //* 案件タイトル 文字制限
-    truncateTitle: function(value) {
-      const length = 40;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-    //* 案件タイトル レスポンシブ文字制限
-    truncateTitleResponsive: function(value) {
-      const length = 35;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -289,38 +304,36 @@ export default {
     display: none;
   }
   .job-card {
-    width: 32%;
-    height: 252px;
+    // width: 32%;
+    width: 430px;
+    // height: 252px;
     margin: 1rem 0.5%;
     border: solid 1px $card-border-color;
     background-color: $basic-white;
     border-radius: 8px;
     transition: .3s;
     color: $text-main-color;
-    display: inline-block;
+    display: block;
+    // display: inline-block;
 
     &__top {
-      width: calc(100% - 3.5rem);
-      height: calc(38% - 60px);
       text-align: left;
-      padding: 1.2rem 2rem 1rem 1.5rem;
+      padding: 2rem 2rem 0 1.5rem;
       font-weight: bold;
       pointer-events: none;
-      font-size: 16px;
+      font-size: 18px;
       text-decoration: underline;
-      // background-color: yellow;
+      // background-color: green;
     }
 
     &__center {
-      width: calc(100% - 3rem);
-      height: calc(40% - 20px);
-      padding: 0px 1.5rem 0 1.5rem;
+      padding: 10px 1.5rem 0 1.5rem;
       text-align: left;
       pointer-events: none;
       // background-color: blue;
 
       .langage {
-        // @include border_language;
+        @include border_language;
         color: $language-color;
         margin: 5px 0px 0px 5px;
         text-align: left;
@@ -333,7 +346,7 @@ export default {
       }
 
       .framework {
-        // @include border_framework;
+        @include border_framework;
         margin: 5px 0px 0 5px;
         text-align: left;
         display: inline-block;
@@ -346,7 +359,7 @@ export default {
       }
 
       .skill {
-        // @include border-skill;
+        @include border-skill;
         color: $skill-color;
         margin: 5px 0px 0 5px;
         text-align: left;
@@ -361,8 +374,7 @@ export default {
 
 
     &__bottom {
-      width: calc(100% - 50px);
-      height: calc(38% - 20px);
+      // background-color: purple;
       padding: 0px 25px 10px 25px;
       pointer-events: none;
       margin-top: 0.5rem;
