@@ -3,7 +3,7 @@
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <v-card-title class="headline grey lighten-2">
-          その他スキル
+          <span>その他スキル</span>
         </v-card-title>
         <v-card-text class="modal-content">
           <slot/>
@@ -78,5 +78,16 @@ export default {
 
 .modal-enter, .modal-window {
   transform: translateY(-20px);
+}
+
+.v-card__text {
+  width: 83%;
+  // background-color: green;
+  margin: 0 auto;
+  text-align: left;
+}
+
+span {
+  font-weight: bold;
 }
 </style>
