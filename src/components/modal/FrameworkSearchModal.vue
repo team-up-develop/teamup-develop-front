@@ -3,7 +3,7 @@
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <v-card-title class="headline grey lighten-2">
-          フレームワーク
+          <span>フレームワーク</span>
         </v-card-title>
         <v-card-text class="modal-content">
           <slot/>
@@ -76,5 +76,9 @@ export default {
 
 .modal-enter, .modal-window {
   transform: translateY(-20px);
+}
+
+span {
+  font-weight: bold;
 }
 </style>

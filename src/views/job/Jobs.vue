@@ -42,7 +42,7 @@
     <div class="modal-window">
       <SkillSearchModal @close="closeSkillSearchModal" v-if="skillModal">
         <div class="modal-content">
-          <div class="round" v-for="skill in skills" v-bind:key="skill.id">
+          <div class="round-skill" v-for="skill in skills" v-bind:key="skill.id">
           <input type="checkbox"  id="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
             <label for="" class="checkbox">{{ skill.skillName }}</label>
           </div>
@@ -66,9 +66,12 @@
     </div>
     <!-- 検索エリアバー -->
     <div class="search-area">
-      <button class="search-area__modal-btn" @click="langSearchModal">開発言語</button>
-      <button class="search-area__modal-btn" @click="frameworkSearchModal">フレームワーク</button>
-      <button class="search-area__modal-btn" @click="skillSearchModal">その他技術</button>
+      <button v-if="selectedLang.length == 0" class="search-area__modal-btn" @click="langSearchModal">開発言語</button>
+      <button v-else class="search-area__modal-btn-active" @click="langSearchModal">開発言語++</button>
+      <button v-if="selectedFramework.length == 0" class="search-area__modal-btn" @click="frameworkSearchModal">フレームワーク</button>
+      <button v-else class="search-area__modal-btn-active" @click="frameworkSearchModal">フレームワーク++</button>
+      <button v-if="selectedSkill.length== 0" class="search-area__modal-btn" @click="skillSearchModal">その他技術</button>
+      <button v-else class="search-area__modal-btn-active" @click="skillSearchModal">その他技術++</button>
       <input
         type="text" 
         v-model="freeWord" 
@@ -297,6 +300,13 @@ export default Vue.extend({
 
       return "";
     },
+    // languageState() {
+    //   if(this.selectedLang.length == 0) {
+    //     return "開発言語"
+    //   } else {
+    //     return "開発言語++"
+    //   }
+    // }
   },
   created() {
     // * 投稿一覧取得
@@ -796,6 +806,26 @@ export default Vue.extend({
     }
   }
 
+  &__modal-btn-active {
+    @include primary-border_color;
+    color: $primary-color;
+    background-color: $basic-white;
+    margin-top: 0.4rem;
+    padding: 0.5rem 1.5rem;
+    border-radius: 50rem;
+    cursor: pointer;
+    font-weight: bold;
+    margin-left: 0.7rem;
+    transition: .3s;
+    outline: none;
+
+    &:hover {
+      @include primary-border_color;
+      color: $primary-color;
+      transition: .3s;
+    }
+  }
+
   &__freewrod {
     @include input-border-color;
     color: $text-main-color;
@@ -1198,6 +1228,14 @@ export default Vue.extend({
   // background-color: yellow;
   margin-top: 1rem;
 }
+.round-skill {
+  text-align: left;
+  width: 24%;
+  margin-right: 0.3rem;
+  display: inline-block;
+  position: relative;
+  margin-bottom: 2rem;
+}
 .round {
   text-align: left;
   width: 20%;
@@ -1221,9 +1259,8 @@ label.checkbox {
   top: 0;
   margin-top: 0.3rem;
   color: #111111;
-  margin-left: 0.4rem;
+  margin-left: 0.2rem;
   font-size: 14px;
-  font-weight: bold;
 }
 
 .serach-btn {
