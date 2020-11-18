@@ -555,7 +555,7 @@ export default Vue.extend({
   }
 }
 
-/* 応募するボタン */
+//* 応募するボタン */
 .btn-box-apply {
   @include red-btn;
   @include box-shadow-btn;
@@ -581,7 +581,7 @@ export default Vue.extend({
   }
 }
 
-/* 応募済みボタン */
+//* 応募済みボタン */
 .btn-box-apply-false {
   @include grey-btn;
   @include box-shadow-btn;
@@ -621,20 +621,19 @@ export default Vue.extend({
   border-radius: 5px / 5px;
 }
 
-/* モーダル内のキャンセルボタン */
+// * モーダル内のキャンセルボタン 
 .modal-btn {
-  @include blue-btn;
+  @include red-cancel-btn;
+  @include box-shadow-btn;
   padding: 1rem 2.4rem;
   border-radius: 50px;
   font-weight: 600;
-  color: $basic-white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
   margin-left: 1.2rem;
   font-size: 1rem;
   cursor: pointer;
-  border: none;
   position: absolute;
   top: 0;
   right: 0;

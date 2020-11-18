@@ -1,20 +1,39 @@
 <script lang="ts">
 import Vue from 'vue';
-import axios from 'axios'
+import axios from 'axios';
 import moment from "moment";
 import { ManageJob } from '@/types/Manage';
+// import StatusChange from '@/components/manage/StatusChange'
 
 export type DataType = {
+  applyUsers: ManageJob[];
+  applyUsersNum: number;
+  assginUsers: ManageJob[];
+  assginUsersNum: number;
+  rejectUsers: ManageJob[];
+  rejectUsersNum: number;
+  favoriteUsers: ManageJob[];
+  favoriteUsersNum: number;
   manageJobs: ManageJob[];
-  loginFlag: boolean;
   userId: number;
 }
 
-export default Vue.extend({ 
+export default Vue.extend({
+  props: {
+    // * job.idを受け取る
+    id: Number,
+  },
   data(): DataType {
     return {
-      manageJobs: [],
-      loginFlag: false,
+      applyUsers: [], //? 応募者
+      applyUsersNum: 0,//? 応募者人数
+      assginUsers: [], //? 参加者
+      assginUsersNum: 0, //? 参加者人数
+      rejectUsers: [], //? 拒否者
+      rejectUsersNum: 0, //? 拒否者人数
+      favoriteUsers: [], //? お気に入りしているユーザー一覧
+      favoriteUsersNum: 0, //? お気に入りしているユーザー 人数
+      manageJobs: [], //? 管理
       userId: this.$store.state.auth.userId
     }
   },
@@ -23,18 +42,9 @@ export default Vue.extend({
     moment(value: string, format: string) {
       return moment(value).format(format);
     },
-    //* 案件タイトル 文字制限
-    truncateTitle: function(value: string) {
-      const length = 25;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-    //* 案件タイトル レスポンシブ 文字制限
-    truncateResponsiveTitle: function(value: string) {
-      const length = 15;
+    //* 案件タイトル 詳細 文字制限
+    truncateDetailTitle: function(value: string) {
+      const length = 60;
       const ommision = "...";
       if (value.length <= length) {
         return value;
@@ -42,79 +52,114 @@ export default Vue.extend({
       return value.substring(0, length) + ommision;
     },
   },
+  created() {
+    // * 参加者をステータスごとに取り出す
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=1`)
+    .then(response => {
+      this.applyUsers = response.data
+      this.applyUsersNum = response.data.length
+    })
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=2`)
+    .then(response => {
+      this.assginUsers = response.data
+      this.assginUsersNum = response.data.length
+    })
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=3`)
+    .then(response => {
+      this.rejectUsers = response.data
+      this.rejectUsersNum = response.data.length
+    })
+
+    axios.get(`http://localhost:8888/api/v1/favorite_job/?job_id=${ this.id }`)
+    .then(response => {
+      this.favoriteUsers = response.data
+      this.favoriteUsersNum = this.favoriteUsers.length
+    })
+  },
   mounted() {
-    // * 管理案件を取得
-    if(this.userId) {
-      this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    // * 管理している案件を取得する
+    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    .then(response => {
+      this.manageJobs = response.data
+    })
+  },
+  methods: {
+    // * 参加者 リアルタイムで変更する
+    compliteAssgin(){
+      // * 参加者をステータスごとに取り出す
+      axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=1`)
       .then(response => {
-        this.manageJobs = response.data
+        this.applyUsers = response.data
+        this.applyUsersNum = response.data.length
+      })
+      axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=2`)
+      .then(response => {
+        this.assginUsers = response.data
+        this.assginUsersNum = response.data.length
+      })
+    },
+    // *拒否者 リアルタイムで取得
+    compliteReject() {
+      // * 参加者をステータスごとに取り出す
+      axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=1`)
+      .then(response => {
+        this.applyUsers = response.data
+        this.applyUsersNum = response.data.length
+      })
+      axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=3`)
+      .then(response => {
+        this.rejectUsers = response.data
+        this.rejectUsersNum = response.data.length
       })
     }
-    else {
-      this.loginFlag = false;
-      this.$router.push('/login');
-    }
+  },
+  components: {
+    // StatusChange
   }
 });
 </script>
 
 <template>
   <div class="manage-wrapper">
-    <v-card v-if="loginFlag === true" class="job-manage-wrapper">
-      <router-link to="/manage" class="router-no-link">
+    <v-card class="job-manage-wrapper">
+      <router-link :to="`/manage/applicant/${ id }`" class="router-no-link">
         <div class="manage-job-area">
-          <span>管理案件</span> 
+          <span>応募者 <font-awesome-icon icon="user" class="icon"/></span> 
         </div>
       </router-link>
-      <router-link to="/manage/apply_job" class="router-link">
+      <router-link :to="`/manage/participate/${ id }`" class="router-link">
         <div class="apply-job-area">
-          <span>応募案件</span>
+          <span>参加者 <font-awesome-icon icon="users" class="icon"/></span>
         </div>
       </router-link>
-      <router-link to="/manage/favorite_job" class="router-link">
-        <div class="save-job-area">
-          <span>保存案件</span> 
+      <router-link :to="`/manage/reject/${ id }`" class="router-link">
+        <div class="reject-job-area">
+          <span>拒否者 <font-awesome-icon icon="user-alt-slash" class="icon"/></span> 
         </div>
       </router-link>
-      <div class="title-area">案件タイトル</div>
-      <div class="time-area">開発期間</div>
-      <div class="skill-area">開発言語</div>
+      <div class="title-area">名前</div>
+      <div class="time-area">学習開始日</div>
+      <div class="skill-area">スキル</div>
       <div class="job-wrapper-area">
-        <router-link :to="`/manage/applicant/${ jobs.id }`" v-for="jobs in manageJobs" :key="jobs.id" class="router">
+        <router-link :to="`/account/profile/${ rejectUser.userId }`" v-for="rejectUser in rejectUsers" :key="rejectUser.id" class="router">
           <div class="job-area">
             <div class="job-area-box">
-              <span>{{ jobs.jobTitle | truncateTitle }}</span>
-              <p>{{ jobs.jobTitle | truncateResponsiveTitle }}</p>
+              <span>{{ rejectUser.user.userName }}</span>
+              <p>{{ rejectUser.user.userName }}</p>
             </div>
             <div class="job-area-box">
-              <span>{{ jobs.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ jobs.devEndDate | moment("YYYY年 M月 D日")}}</span>
-              <p>{{ jobs.devStartDate | moment("YYYY/M/D") }}  ~  {{ jobs.devEndDate | moment("YYYY/M/D")}}</p>
+              <span>{{ rejectUser.user.learningStartDate | moment("YYYY年 M月 D日") }}</span>
+              <p>{{ rejectUser.user.learningStartDate | moment("YYYY年 M月 D日") }}</p>
             </div>
             <div class="job-area-box">
-              <div class="lang" 
-                v-for="(langage, index) in jobs.programingLanguage.slice(0,2)" 
-                :key="`langage-${index}`"
-              >
-                {{ langage.programingLanguageName }}  ,
-              </div>
-              <div class="lang" 
-                v-for="(framework, index) in jobs.programingFramework.slice(0,2)" 
-                :key="`framework-${index}`"
-              >
-                {{ framework.programingFrameworkName }}  ,
-              </div>
+              仮置き: {{ rejectUser.user.userName }}
             </div>
           </div>
         </router-link>
         </div>
     </v-card>
-    <div v-else>
-      ログインが必要です！
-    </div>
   </div>
 </template>
-
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -146,22 +191,20 @@ export default Vue.extend({
     font-size: 14px;
 
     .manage-job-area {
-      @include box-shadow-manage;
+      background-color: #606060;
       width: 33.3%;
-      // height: calc(68px - 1.6rem);
       padding: 1rem 0;
       border-radius: 20px 0 0 0;
-      background-color: $secondary-color;
       display: inline-block;
       color: $basic-white;
       font-weight: bold;
     }
 
     .apply-job-area {
+      background-color: #606060;
       width: 33.4%;
       // height: calc(68px - 1.6rem);
       padding: 1rem 0;
-      background-color: #606060;
       display: inline-block;
       color: $basic-white;
       border: 0.5px solid $basic-white;
@@ -169,12 +212,13 @@ export default Vue.extend({
       transition: .3s;
     }
 
-    .save-job-area {
+    .reject-job-area {
+      @include box-shadow-manage;
+      background-color: $secondary-color;
       width: 33.3%;
       // height: calc(68px - 1.6rem);
       padding: 1rem 0;
       border-radius: 0 20px 0 0;
-      background-color: #606060;
       display: inline-block;
       color: $basic-white;
       font-weight: bold;
@@ -307,7 +351,7 @@ export default Vue.extend({
         padding: 0.8rem 0;
       }
 
-      .save-job-area {
+      .reject-job-area {
         width: 33.1%;
         height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
@@ -392,7 +436,7 @@ export default Vue.extend({
       padding: 0.8rem 0;
     }
 
-    .save-job-area {
+    .reject-job-area {
       width: 33%;
       height: calc(68px - 1.6rem);
       padding: 0.8rem 0;

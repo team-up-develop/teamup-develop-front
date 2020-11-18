@@ -50,6 +50,12 @@ $gradation-purple-right: #AB47BC;
   background: linear-gradient(60deg, $gradation-purple-left, $gradation-purple-right);
 }
 
+// ? register cancel
+@mixin red-cancel-btn {
+  border: solid 1px #D81B60;
+  color: #D81B60;
+}
+
 
 
 // * box-shadow
