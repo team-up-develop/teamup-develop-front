@@ -157,7 +157,7 @@ export default Vue.extend({
             </div>
           </div>
         </router-link>
-        </div>
+      </div>
     </v-card>
   </div>
 </template>

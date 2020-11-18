@@ -52,9 +52,9 @@ export default Vue.extend({
   },
   created() {
     if(this.userId) {
-      this.loginFlag = true
+      this.loginFlag = true;
     } else {
-      this.$router.push('/login');
+      this.loginFlag = false;
     }
   // * ログインユーザーが応募済みか応募済みではないかを判定する
     axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
@@ -72,6 +72,10 @@ export default Vue.extend({
     })
   },
   methods: {
+    // * 非ログイン時 登録リダイレクト
+    registerRedirect() {
+      this.$router.push('/register');
+    },
     // * モーダルを開く
     openModal() {
       this.modal = true
@@ -117,12 +121,11 @@ export default Vue.extend({
 });
 </script>
 
-
 <template>
   <div class="detail-wrapper">
     <div class="back-space">
-      <router-link :to="`/manage/apply_job`">
-      <p>＜ 管理画面に戻る</p>
+      <router-link :to="`/jobs`">
+      <p>＜ 案件一覧に戻る</p>
       </router-link>
     </div>
     <section v-if="loading == false">
@@ -244,8 +247,12 @@ export default Vue.extend({
               </ApplyModal>
             </div>
           </div>
-          <div v-else>
-            ログインが必要です！
+          <!-- 非ログイン時 リダイレクトさせる -->
+          <div class="button-action-area" v-else @click="registerRedirect">
+            <button class="btn-box-apply">応募する</button>
+            <div class="favorite-btn-area">
+              <font-awesome-icon icon="heart" class="icon"/>
+            </div>
           </div>
       </div>
     </section>
@@ -253,6 +260,8 @@ export default Vue.extend({
     </Loading>
   </div>
 </template>
+
+
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -533,7 +542,7 @@ export default Vue.extend({
   }
 }
 
-//* 応募するボタン 
+/* 応募するボタン */
 .btn-box-apply {
   @include red-btn;
   @include box-shadow-btn;
@@ -559,7 +568,7 @@ export default Vue.extend({
   }
 }
 
-//* 応募済みボタン 
+/* 応募済みボタン */
 .btn-box-apply-false {
   @include grey-btn;
   @include box-shadow-btn;
@@ -579,6 +588,24 @@ export default Vue.extend({
   display: inline-block;
   cursor: pointer;
   border: none;
+}
+
+.favorite-btn-area {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 50%;
+}
+
+.icon {
+  font-size: 30px;
+  padding: 10px;
+  width: 50px;
+  height: 50px;
+  color: $basic-white;
+  cursor: pointer;
+  background-color: #d8d6d6;
+  border-radius: 5px / 5px;
 }
 
 // * モーダル内のキャンセルボタン 
@@ -601,24 +628,6 @@ export default Vue.extend({
   outline: none;
 }
 
-
-.favorite-btn-area {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 50%;
-}
-
-.icon {
-  font-size: 30px;
-  padding: 10px;
-  width: 38px;
-  height: 38px;
-  color: $basic-white;
-  cursor: pointer;
-  background-color: #d8d6d6;
-  border-radius: 5px / 5px;
-}
 @media screen and (max-width: 1200px) {
   .detail-wrapper {
 
