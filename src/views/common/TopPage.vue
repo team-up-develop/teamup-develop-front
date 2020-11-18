@@ -291,13 +291,13 @@ export default Vue.extend({
 
       .serach-freeword {
         @include input-border-color;
-        height: 52px;
+        // height: 52px;
         width: 80%;
         position: absolute;
         left: 0;
         border-radius: 32px;
         font-size: 2rem;
-        padding: 0.2rem 2rem;
+        padding: 0.65rem 2rem;
         outline: none;
       }
 

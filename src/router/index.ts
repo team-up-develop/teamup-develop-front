@@ -11,6 +11,9 @@ import RegisterStep2 from '@/views/user/register_session/RegisterStep2.vue'
 import RegisterStep3 from '@/views/user/register_session/RegisterStep3.vue'
 import TopPage from '../views/common/TopPage.vue'
 import Manage from '@/views/manage/Manage.vue'
+import Participate from '@/views/manage/Participate.vue'
+import Applicant from '@/views/manage/Applicant.vue'
+import Reject from '@/views/manage/Reject.vue'
 import Favorite from '@/views/favorite/Favorite.vue'
 import FavoriteJobDetail from '@/views/favorite/FavoriteJobDetail.vue'
 import Apply from '@/views/apply/Apply.vue'
@@ -82,6 +85,28 @@ const routes: Array<RouteConfig> = [
     path: '/manage',
     component: Manage,
     name: 'Manage'
+  },
+  // ? 案件管理詳細
+  {
+    path: '/manage/applicant/:id',
+    component: Applicant,
+    props: route => ({
+      id: Number(route.params.id),
+    })
+  },
+  {
+    path: '/manage/participate/:id',
+    component: Participate,
+    props: route => ({
+      id: Number(route.params.id),
+    })
+  },
+  {
+    path: '/manage/reject/:id',
+    component: Reject,
+    props: route => ({
+      id: Number(route.params.id),
+    })
   },
   // ? 管理 お気に入り
   {
