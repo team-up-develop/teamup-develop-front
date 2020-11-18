@@ -262,9 +262,9 @@ export default Vue.extend({
 </template>
 
 
-
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
+
 
 .router {
   text-decoration: none;
@@ -326,17 +326,55 @@ export default Vue.extend({
   }
 
   .right-user-area {
-    width: 70%;
+    width: 75%;
     position: absolute;
     right: 0;
     top: 0;
-    padding: 2rem 4rem 2rem 2rem;
+    padding: 1.8rem 2rem 0 2rem;
     text-align: left;
-
     .user-profile-area {
-      width: 65%;
-      height: 100%;
+      height: 80%;
+      width: 70%;
       display: inline-block;
+    }
+
+    .user-url-area {
+      display: inline-block;
+      width: 140px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      padding: 0.5rem 0 0 0;
+
+      .user-github {
+        cursor: pointer;
+        display: inline-block;
+        margin-right: 0.5rem;
+
+        :hover {
+          opacity: 0.8;
+        }
+      }
+
+      .user-twtter {
+        // margin-top: 2rem;
+        width: 45px;
+        height: 45px;
+        padding: 0.2rem;
+        background-color: #1DA1F2;
+        border-radius: 50%;
+        color: #FFFFFF;
+        text-align: center;
+        box-shadow: 10px 5px 5px grey;
+        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
+        font-weight: bold;
+        cursor: pointer;
+        display: inline-block;
+
+        :hover {
+          opacity: 0.8;
+        }
+      }
     }
   }
 }
@@ -353,7 +391,7 @@ export default Vue.extend({
 
     .user-name {
       margin-top: 0.2rem;
-      font-size: 14px;
+      font-size: 16px;
     }
   }
 
@@ -372,7 +410,7 @@ export default Vue.extend({
   }
 
   .user-introduce-area {
-    margin-top: 3.2rem;
+    margin-top: 2rem;
 
     .introduce-tag {
       font-weight: bold;
@@ -385,49 +423,6 @@ export default Vue.extend({
   }
 }
 
-.post-user-area .right-user-area .user-url-area {
-  display: inline-block;
-  width: 30%;
-  position: absolute;
-  top: 0;
-  padding: 2.2rem 0 0 0;
-
-  .user-github {
-    /* width: 35%;
-    padding: 0.8rem 1rem;
-    background-color: #24292e;
-    border-radius: 5px / 5px;
-    margin-right: 10px;
-    color: #FFFFFF;
-    text-align: center;
-    box-shadow: 10px 5px 5px grey;
-    box-shadow: 0 0 3px 0 rgba(122, 122, 122, 0.705), 0 2px 3px 0 rgba(156, 156, 156, 0.993);
-    font-weight: bold; */
-    cursor: pointer;
-
-    :hover {
-      opacity: 0.8;
-    }
-  }
-
-  .user-twtter {
-    margin-top: 2rem;
-    width: 68%;
-    padding: 0.8rem;
-    background-color: #1DA1F2;
-    border-radius: 5px / 5px;
-    color: #FFFFFF;
-    text-align: center;
-    box-shadow: 10px 5px 5px grey;
-    box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
-    font-weight: bold;
-    cursor: pointer;
-
-    :hover {
-      opacity: 0.8;
-    }
-  }
-}
 
 /* スキル カード */
 .detail-wrapper .detail-post-skill-area {
@@ -536,7 +531,7 @@ export default Vue.extend({
   bottom: 0;
 
   .button-action-area {
-    margin: 0em auto 4rem auto;
+    margin: 0em auto 4rem auto;  // ! ここだけプロフィールと異なる
     width: 50%;
     position: relative;
   }
@@ -547,9 +542,6 @@ export default Vue.extend({
   @include red-btn;
   @include box-shadow-btn;
   color: $basic-white;
-  position: absolute;
-  left: 0;
-  top: 0;
   width: 60%;
   padding: 1.2rem 4rem;
   transition: .3s;
@@ -643,21 +635,6 @@ export default Vue.extend({
           height: 130px;
         }
       }
-
-      .right-user-area {
-        width: 57%;
-        position: absolute;
-        right: 0;
-        top: 0;
-        padding: 2rem 4rem 2rem 2rem;
-        text-align: left;
-
-        .user-profile-area {
-          width: 65%;
-          height: 100%;
-          display: inline-block;
-        }
-      }
     }
   }
 }
@@ -679,21 +656,6 @@ export default Vue.extend({
             @include user-image;
             width: 130px;
             height: 130px;
-          }
-        }
-
-        .right-user-area {
-          width: 50%;
-          position: absolute;
-          right: 0;
-          top: 0;
-          padding: 2rem 4rem 2rem 2rem;
-          text-align: left;
-
-          .user-profile-area {
-            width: 60%;
-            height: 100%;
-            display: inline-block;
           }
         }
       }
@@ -722,17 +684,6 @@ export default Vue.extend({
           .user-image{
             width: 120px;
             height: 120px;
-          }
-        }
-        .right-user-area{
-          width: 50%;
-          position: absolute;
-          right: 0;
-          top: 0;
-          padding: 2rem;
-          text-align: left;
-          .user-url-area {
-            padding: 2.2rem 0 0 1rem;
           }
         }
       }
@@ -806,18 +757,6 @@ export default Vue.extend({
             height: 100px;
           }
         }
-        .right-user-area{
-          width: 50%;
-          position: absolute;
-          right: 0;
-          top: 0;
-          padding: 1rem 2rem;
-          text-align: left;
-          
-          .user-url-area {
-            padding: 1rem 0 0 0.5rem;
-          }
-        }
       }
     }
     /* スキル カード */
@@ -848,12 +787,6 @@ export default Vue.extend({
           }
         }
         .right-user-area{
-          width: 55%;
-          position: absolute;
-          right: 0;
-          top: 0;
-          padding: 1rem 1rem;
-          text-align: left;
           
           .user-url-area {
             padding: 1rem 0 0 0.5rem;

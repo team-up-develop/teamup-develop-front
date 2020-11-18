@@ -1,130 +1,31 @@
-<script lang="ts">
-import Vue from 'vue';
-import axios from 'axios'
-import moment from "moment";
-import Applybtn from '@/components/button/Applybtn.vue'
-import FavoriteDetailBtn from '@/components/button/FavoriteDetailBtn.vue'
-import Loading from '@/components/common/loading/Loading.vue'
-import ApplyModal from '@/components/modal/ApplyModal.vue'
-import { Job } from '@/types/job';
-
-export type DataType = {
-  job: Job;
-  userId: number;
-  selfJobPost: boolean; //? 自分の案件かを判定
-  loginFlag: boolean; //? ログインしているかを判定
-  loading: boolean;
-  applyFlug: boolean;
-  modal: boolean;
-  // jobs: [],
-}
-export default Vue.extend({ 
-  props: {
-    id: Number,
-  },
-  data(): DataType {
-    return {
-      job: {}, //! TODO: Type '{}' is missing the following properties from type 'Job':
-      userId: this.$store.state.auth.userId,
-      loginFlag: false, //? ログインしているかを判定
-      loading: true, //? ローディング
-      applyFlug: true,
-      modal: false,
-      // jobs: [],
-    }
-  },
-  filters: {
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    }
-  },
-  mounted() {
-    // * 詳細画面情報を取得
-    axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-        setTimeout(() => {
-          this.loading = false;
-          console.log(response.data)
-          this.job = response.data
-          console.log("よまれてるよ")
-        }, 1000)
-      })
-  },
-  created() {
-    if(this.userId) {
-      this.loginFlag = true
-    } else {
-      this.$router.push('/login');
-    }
-  // * ログインユーザーが応募済みか応募済みではないかを判定する
-    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
-    .then(response => {
-      const arrayApply = []
-      for(let c = 0; c < response.data.length; c++){
-        const applyData = response.data[c];
-        arrayApply.push(applyData.job.id)
-      }
-      if (arrayApply.includes(this.id)) {
-        this.applyFlug = false
-      } else {
-        console.log("まだ応募していません")
-      }
-    })
-  },
-  methods: {
-    // * モーダルを開く
-    openModal() {
-      this.modal = true
-    },
-    closeModal() {
-      this.modal = false
-    },
-    doSend() {
-        this.closeModal()
-    },
-    getJob() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-        .then(response => {
-          // this.loading = true;
-          this.job = response.data
-        })
-    },
-    // * Twitter をタブで開く
-    twitterTab() {
-      if(this.job.user.twitterAccount == null) {
-        return this.job.user.twitterAccount;
-      } else {
-        const url: string = this.job.user.twitterAccount;
-        return window.open(url);
-      }
-    },
-    // * Github をタブで開く
-    gitTab() {
-      if(this.job.user.githubAccount == null) {
-        return this.job.user.githubAccount;
-      } else {
-        const url: string = this.job.user.githubAccount;
-        return window.open(url);
-      }
-    }
-  },
-  components: {
-    Applybtn,
-    FavoriteDetailBtn,
-    Loading,
-    ApplyModal,
-  }
-});
-</script>
-
-
 <template>
   <div class="detail-wrapper">
-    <div class="back-space">
-      <router-link :to="`/manage/apply_job`">
-      <p>＜ 管理画面に戻る</p>
-      </router-link>
-    </div>
+  <!-- 編集 モーダル画面 -->
+  <div class="example-modal-window">
+    <profile-edit-modal @close="closeModal" v-if="modal">
+      <p class="label-lang">プロフィール編集</p>
+      <label for="name">名前</label>
+      <input type="text" v-model="userName">
+      <br>
+      <label for="name">学習開発開始時期</label>
+      <input type="date" v-model="learningStartDate">
+      <br>
+      <label for="name">自己紹介</label>
+      <textarea type="text" v-model="bio"></textarea>
+      <br>
+      <label for="name">GitHub</label>
+      <input type="url" v-model="githubAccount">
+      <br>
+      <label for="name">Twitter</label>
+      <input type="url" v-model="githubAccount">
+      <br>
+      <template slot="footer">
+        <div class="serach-btn" @click="profileEdit">
+          編集
+        </div>
+      </template>
+    </profile-edit-modal>
+  </div>
     <section v-if="loading == false">
       <div class="detail-post-user-area">
         <div class="detail-tag">投稿者</div>
@@ -136,16 +37,16 @@ export default Vue.extend({
             <div class="user-profile-area">
               <div class="user-name-are">
                 <div class="user-name-tag">名前</div>
-                <router-link :to="`/account/profile/${ job.userId }`"> 
+                <router-link :to="`/`"> 
                   <div class="user-name">
-                    {{ job.user.userName }}
+                    {{ userInfo.userName }}
                   </div>
                 </router-link>
               </div>
               <div class="user-introduce-area">
                 <div class="introduce-tag">学習開始</div>
                 <div class="introduce">
-                  {{ job.user.learningStartDate | moment("YYYY年 M月 D日") }}
+                  {{ userInfo.learningStartDate | moment("YYYY年 M月 D日")}}
                 </div>
               </div>
             </div>
@@ -161,29 +62,29 @@ export default Vue.extend({
         </v-card>
       </div>
       <div class="detail-post-skill-area">
-        <div class="detail-tag">開発技術</div>
+        <div class="detail-tag">経験スキル</div>
         <v-card class="skill-detail-area">
           <div class="lang-area">
             <label for="name" class="name-tag">開発言語</label>
             <div class="lang-box">
-              <div class="skill-tag"  v-for="langage in job.programingLanguage" :key="langage.id">
-                {{ langage.programingLanguageName }}
+              <div class="skill-tag">
+                JavaScript ハリボテ
               </div>
             </div>
           </div>
           <div class="lang-area">
             <label for="name" class="name-tag">フレームワーク</label>
             <div class="lang-box">
-              <div class="flame-tag" v-for="framework in job.programingFramework" :key="framework.programingFrameworkName">
-                {{ framework.programingFrameworkName }}
+              <div class="flame-tag">
+                Vue ハリボテ
               </div>
             </div>
           </div>
           <div class="lang-area">
             <label for="name" class="name-tag">その他関連スキル</label>
             <div class="lang-box">
-              <div class="other-tag" v-for="skill in job.skill" :key="skill.skillName">
-                {{ skill.skillName }}
+              <div class="other-tag">
+                Docker ハリボテ
               </div>
             </div>
           </div>
@@ -191,61 +92,32 @@ export default Vue.extend({
       </div>
       <div class="detail-post-detail-area">
         <div class="detail-area">
-          <div class="detail-tag">開発詳細</div>
+          <div class="detail-tag">自己紹介</div>
           <v-card class="dev-detail-area">
             <div class="detail-leff-area">
               <div class="detail-information">
-                <div class="tag">タイトル</div>
-                <div class="sub-area">{{ job.jobTitle }}</div>
+                <div class="tag"></div>
+                <div class="sub-area">
+                  応募の情報をここに記載する予定です”””””””応募の情報をここに記載する予定です”””””””！！！！！！
+                  ！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！
+                  応募の情報をここに記載する予定です”””””””！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！
+                  応募の情報をここに記載する予定です”””””””！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！
+                  応募の情報をここに記載する予定です”””””””！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！
+                  応募の情報をここに記載する予定です”””””””！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！
+                  応募の情報をここに記載する予定です”””””””！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！
+                  応募の情報をここに記載する予定です”””””””！！！！！！応募の情報をここに記載する予定です”””””””！！！！！！
+                  </div>
               </div>
-              <div class="detail-information">
-                <div class="tag">募集人数</div>
-                <div class="sub-area">{{ job.recruitmentNumbers }}人</div>
               </div>
-              <div class="detail-information">
-                <div class="tag">応募ケース</div>
-                <div class="sub-area">新規開発</div>
-              </div>
-              <div class="detail-information">
-                <div class="tag">開発期間</div>
-                <div class="sub-area">{{ job.devStartDate | moment("YYYY年 M月 D日") }} ~ {{ job.devEndDate  | moment("YYYY年 M月 D日")}}</div>
-              </div>
-              <div class="detail-information">
-                <div class="tag">応募ケース</div>
-                <div class="sub-area">{{ job.jobDescription }}</div>
-              </div>
-            </div>
-            <!-- <div class="detail-right-area">
-              <div class="tag">募集内容詳細</div>
-              <div class="description">
-                {{ job.jobDescription }}
-              </div>
-            </div> -->
           </v-card>
         </div>
       </div>
       <div class="button-area">
-          <div v-if="loginFlag === true" class="button-action-area">
-            <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
-            <div class="btn-box-apply-false" v-if="applyFlug == false">
-              応募済み
-            </div>
-            <div class="favorite-btn-area">
-              <favorite-detail-btn :jobId='id'></favorite-detail-btn>
-            </div>
-            <!-- 応募する モーダル画面 -->
-            <div class="example-modal-window">
-              <ApplyModal @close="closeModal" v-if="modal">
-                <p>応募を完了してよろしいですか？</p>
-                <template slot="footer">
-                  <applybtn :jobId='id'></applybtn>
-                  <button @click="doSend" class="modal-btn">キャンセル</button>
-                </template>
-              </ApplyModal>
-            </div>
+          <div v-if="myselfFlag === true" class="button-action-area">
+            <button @click="openModal" class="btn-box-apply" >編集する</button>
           </div>
-          <div v-else>
-            ログインが必要です！
+          <!-- 非ログイン時 リダイレクトさせる -->
+          <div class="button-action-area" v-else>
           </div>
       </div>
     </section>
@@ -253,6 +125,121 @@ export default Vue.extend({
     </Loading>
   </div>
 </template>
+
+<script>
+import axios from 'axios';
+import moment from "moment";
+import Loading from '@/components/common/loading/Loading.vue'
+import ProfileEditModal from '@/components/modal/ProfileEditModal'
+// import Logout from '@/components/button/Logout'
+export default {
+  props: {
+    id: Number
+  },
+  data() {
+    return {
+      myselfFlag: false,
+      userInfo: {},
+      userId: this.$store.state.auth.userId,
+      activeTab: '1', //? タブ
+      isActive: true, //? タブ
+      hasError: false,
+      modal: false,
+      userName: "",
+      learningStartDate: Date,
+      bio: "",
+      githubAccount: "",
+      twitterAccount: "",
+      messages: "Test",
+      loading: true, //? ローディング
+    }
+  },
+  filters: {
+    // * date型を文字に変換
+    moment(value, format) {
+      return moment(value).format(format);
+    },
+  },
+  created() {
+    if(this.userId == this.id) {
+      this.myselfFlag = true
+    }
+    const ws = (this.ws = new WebSocket(`ws://${location.host}/websocket`));
+    console.log(ws)
+    // * 接続が確認された時
+    ws.onopen = () => {
+      console.log("sucsess")
+    };
+    ws.onmessage = message => {
+      this.messages.push(message.data);
+    };
+
+    // * ユーザー情報取得
+      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+      .then(response => {
+        setTimeout(() => {
+          this.loading = false;
+          this.userInfo = response.data;
+          this.userName = this.userInfo.userName; //? ユーザー名前モーダル
+          this.learningStartDate = this.userInfo.learningStartDate;
+          this.bio = this.userInfo.bio;
+          this.githubAccount = this.userInfo.githubAccount;
+          this.twitterAccount = this.userInfo.twitterAccount;
+        }, 1000)
+      // .catch(error => {
+      //   console.log(error)
+      // })
+    }, 2000)
+  },
+  methods: {
+    send() {
+      console.log("aaaaaaa")
+      console.log(this.ws)
+      // * メッセージを送信する
+      this.ws.send(this.message);
+    },
+    // * 編集する
+    profileEdit() {
+      const params = {
+        userName: this.userName,
+        learningStartDate: this.learningStartDate,
+        bio: this.bio,
+        githubAccount: this.githubAccount,
+        twitterAccount: this.twitterAccount,
+      }
+      axios.put(`http://localhost:8888/api/v1/user/${this.id}`, params)
+      .then(response => {
+        console.log(response.data)
+        // this.$emit('compliteAssgin', this.message)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    // * タブの切り替え
+    change: function(num){
+      this.isActive = !this.isActive ;
+      this.activeTab = num
+    },
+    // * モーダル
+    openModal() {
+      this.modal = true
+    },
+    closeModal() {
+      this.modal = false
+    },
+    doSend() {
+        this.closeModal()
+    },
+  },
+  components: {
+    ProfileEditModal,
+    // Logout
+    Loading,
+  }
+}
+</script>
+
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
@@ -522,8 +509,8 @@ export default Vue.extend({
   bottom: 0;
 
   .button-action-area {
-    margin: 0em auto 4rem auto;  // ! ここだけプロフィールと異なる
-    width: 50%;
+    margin: 0em auto 0.5rem auto;
+    width: 60%;
     position: relative;
   }
 }
