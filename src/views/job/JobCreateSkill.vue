@@ -39,6 +39,7 @@ export default Vue.extend({
     }
   },
   computed: {
+    // * 必須が入力されていない
     isForm() {
       if(this.selectedLang && this.selectedFramwork && this.selectedSkill && this.recruitNumber) {
         return true
