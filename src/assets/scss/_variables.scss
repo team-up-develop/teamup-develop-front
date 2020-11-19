@@ -56,6 +56,12 @@ $gradation-purple-right: #AB47BC;
   color: #D81B60;
 }
 
+//? post cancel
+@mixin blue-cancel-btn {
+  border: solid 1px #1142e2;
+  color: #1142e2;
+}
+
 
 
 // * box-shadow

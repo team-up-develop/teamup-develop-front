@@ -32,6 +32,29 @@ export default Vue.extend({
       errorDevEndDates: [] //? 開発終了時期エラー格納先
     }
   },
+  computed: {
+    // * 必須が入力されていない
+    isForm() {
+      if(this.jobTitle && this.devStartDate && this.devEndDate) {
+        return true
+      } else {
+        return false
+      }
+    },
+    // * 開発開始 より 開発終了 が前
+    minStartDate() {
+      if(this.devStartDate && this.devEndDate) {
+        const a = new Date(this.devStartDate)
+        const b = new Date(this.devEndDate)
+
+        if (a > b) {
+          return true
+        }
+        return false
+      }
+      return false
+    },
+  },
   mounted() {
     setTimeout(() => {
       this.loading = false;
@@ -46,9 +69,6 @@ export default Vue.extend({
     this.devEndDate = devEndDateString;
     this.jobDescription = jobDescription;
   },
-  // computed: {
-
-  // },
   methods: {
     nextCreateBtn(e: any) { // ! Todo 明示的なanyにしているがLinterでErrorを出してくれてる。あまり良くない書き方
       //* エラーメッセージ
@@ -108,7 +128,7 @@ export default Vue.extend({
       } else {
       this.jobDescriptionLimit = this.jobDescription.length
       }
-    }
+    },
   },
   components: {
     Loading,
@@ -135,7 +155,7 @@ export default Vue.extend({
         <input type="date" v-model="devStartDate">
       </div>
       <div class="job-create-time-area">
-      <label for="name" class="label">開発終了時期</label><label for="name" class="label-required">必須</label>
+      <label for="name" class="label">開発終了時期</label><label for="name" class="label-required">必須</label><label v-if="minStartDate" class="error-message">{{ "開始日が終了日より前です。" }}</label>
         <label v-if="errorDevEndDates.length" class="error-label">
           <p v-for="errorDevEndDate in errorDevEndDates" :key="errorDevEndDate" class="error-message">{{ errorDevEndDate }}</p>
         </label>
@@ -146,11 +166,16 @@ export default Vue.extend({
         <textarea type="text" name="" @input="onTextJobDescription" v-model="jobDescription" placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" maxlength="250"></textarea>
         <!-- <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small> -->
       </div>
-      <router-link to='/job_create/2' class="job-create-btn-area">
+      <router-link to='/job_create/2' class="job-create-btn-area" v-if="isForm && !minStartDate">
         <button class="next-btn" @click="nextCreateBtn">
           次へ 1/2
         </button>
       </router-link>
+      <span class="job-create-btn-area" v-else>
+        <button class="next-btn-false">
+          次へ 1/2
+        </button>
+      </span>
     </v-card>
     <Loading v-show="loading">
     </Loading>
@@ -199,6 +224,11 @@ export default Vue.extend({
   padding: 0.25rem 0.9rem;
   text-align: center;
   margin-left: 10px;
+}
+.error-message {
+  color: $error-message-color;
+  list-style: none;
+  font-weight: bold;
 }
 
 .error-label {
@@ -322,6 +352,29 @@ export default Vue.extend({
       &:hover {
         @include box-shadow-btn;
       }
+    }
+
+    .next-btn-false {
+      @include box-shadow-btn;
+      @include grey-btn;
+      color: $basic-white;
+      text-align: left;
+      display: block;
+      padding: 1.1rem 4rem;
+      border-radius: 25px;
+      border: none;
+      font-size: .875rem;
+      font-weight: 600;
+      line-height: 1;
+      text-align: center;
+      max-width: 280px;
+      margin: auto;
+      font-size: 1rem;
+      float: right;
+      margin-top: 1.5rem;
+      cursor: pointer;
+      transition: .3s;
+      outline: none;
     }
   }
 }
