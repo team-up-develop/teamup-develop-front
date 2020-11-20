@@ -38,6 +38,16 @@ export default Vue.extend({
       selectedSkillErrors: [], //?その他スキル入力エラー
     }
   },
+  computed: {
+    // * 必須が入力されていない
+    isForm() {
+      if(this.selectedLang && this.selectedFramwork && this.selectedSkill && this.recruitNumber) {
+        return true
+      } else {
+        return false
+      }
+    },
+  },
   mounted() {
     // *開発言語
     axios.get<Language[]>('http://localhost:8888/api/v1/programing_language')
@@ -227,7 +237,14 @@ export default Vue.extend({
       </div>
       </div>
       <div class="button-are">
-        <button @click="createJob" class="post-job-btn">案件投稿する</button>
+        <section>
+          <button @click="createJob" class="post-job-btn" v-if="isForm">
+            案件投稿する
+          </button>
+          <button class="next-btn-false" v-else>
+            案件投稿する
+          </button>
+        </section>
         <router-link to='/job_create/1' class="post-job-back">
           戻る 1/2
         </router-link>
@@ -356,9 +373,34 @@ export default Vue.extend({
   }
 }
 
-.post-job-back {
+.next-btn-false {
   @include box-shadow-btn;
   @include grey-btn;
+  position: absolute;
+  right: 0;
+  top: 0;
+  text-align: left;
+  display: block;
+  padding: 1.1rem 3rem;
+  border-radius: 25px;
+  border: none;
+  font-size: .875rem;
+  font-weight: 600;
+  color: $basic-white;
+  line-height: 1;
+  text-align: center;
+  max-width: 280px;
+  margin: auto;
+  font-size: 1rem;
+  float: right;
+  cursor: pointer;
+  transition: .3s;
+  outline: none;
+}
+
+.post-job-back {
+  @include blue-cancel-btn;
+  @include box-shadow-btn;
   position: absolute;
   left: 0;
   top: 0;
@@ -366,10 +408,8 @@ export default Vue.extend({
   display: block;
   padding: 1.1rem 4rem;
   border-radius: 25px;
-  border: none;
   font-size: .875rem;
   font-weight: 600;
-  color: $basic-white;
   line-height: 1;
   text-align: center;
   max-width: 280px;

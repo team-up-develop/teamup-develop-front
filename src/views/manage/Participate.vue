@@ -78,7 +78,6 @@ export default Vue.extend({
   },
   mounted() {
     if( this.userId!== undefined) {
-      this.loginFlag = true
       axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
       .then(response => {
         this.manageJobs = response.data
