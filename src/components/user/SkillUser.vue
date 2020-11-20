@@ -1,3 +1,8 @@
+<script lang="ts">
+import Vue from 'vue';
+export default Vue.extend({});
+</script>
+
 <template>
   <section>
     <v-card class="skill-detail-area">
@@ -29,11 +34,6 @@
   </section>
 </template>
 
-<script>
-export default {
-
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
