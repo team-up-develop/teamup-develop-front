@@ -1,7 +1,13 @@
 <script lang="ts">
 import Vue from 'vue';
-export default Vue.extend({});
+
+export default Vue.extend({ 
+  props: {
+    job: Object
+  }
+});
 </script>
+
 
 <template>
   <section>
@@ -9,31 +15,30 @@ export default Vue.extend({});
       <div class="lang-area">
         <label for="name" class="name-tag">開発言語</label>
         <div class="lang-box">
-          <div class="skill-tag">
-            JavaScript ハリボテ
+          <div class="skill-tag"  v-for="langage in job.programingLanguage" :key="langage.id">
+            {{ langage.programingLanguageName }}
           </div>
         </div>
       </div>
       <div class="lang-area">
         <label for="name" class="name-tag">フレームワーク</label>
         <div class="lang-box">
-          <div class="flame-tag">
-            Vue ハリボテ
+          <div class="flame-tag" v-for="framework in job.programingFramework" :key="framework.programingFrameworkName">
+            {{ framework.programingFrameworkName }}
           </div>
         </div>
       </div>
       <div class="lang-area">
         <label for="name" class="name-tag">その他関連スキル</label>
         <div class="lang-box">
-          <div class="other-tag">
-            Docker ハリボテ
+          <div class="other-tag" v-for="skill in job.skill" :key="skill.skillName">
+            {{ skill.skillName }}
           </div>
         </div>
       </div>
     </v-card>
   </section>
 </template>
-
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -76,7 +81,7 @@ export default Vue.extend({});
   }
 }
 
-/* スマホレスポンシブ */
+//* スマホレスポンシブ 
 @media screen and (max-width: 500px) {
   .skill-detail-area {
     padding: 1.5rem 1rem;
