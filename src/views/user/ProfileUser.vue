@@ -173,6 +173,14 @@ export default {
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
+.detail-tag {
+  color: $primary-color;
+  text-align: left;
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 0.7rem;
+}
+
 .router {
   text-decoration: none;
   color: $basic-white;
@@ -197,14 +205,6 @@ export default {
     flex-direction: column;
     text-align: left;
     margin: 0 auto;
-
-    .detail-tag {
-      color: $primary-color;
-      text-align: left;
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 0.7rem;
-    }
   }
 }
 

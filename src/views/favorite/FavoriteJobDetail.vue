@@ -15,13 +15,11 @@ import { Job } from '@/types/job';
 export type DataType = {
   job: Job;
   userId: number;
-  selfJobPost: boolean; //? 自分の案件かを判定
-  loginFlag: boolean; //? ログインしているかを判定
+  selfJobPost: boolean;
+  loginFlag: boolean; 
   loading: boolean;
-  applyFlug: boolean;
   modal: boolean;
-  // jobs: [],
-  // assetsImage: GithubImage,
+  statusId: number;
 }
 
 export default Vue.extend({ 
@@ -35,10 +33,18 @@ export default Vue.extend({
       selfJobPost: false, //? 自分の案件かを判定
       loginFlag: false, //? ログインしているかを判定
       loading: true, //? ローディング
-      applyFlug: true,
       modal: false,
-      // jobs: [],
-      // assetsImage: GithubImage,
+      statusId: 0
+    }
+  },
+  computed: {
+    // *応募しているか否か
+    DoneApply() {
+      if(this.statusId == 0) {
+        return false
+      } else {
+        return true
+      }
     }
   },
   mounted() {
@@ -48,30 +54,27 @@ export default Vue.extend({
       setTimeout(() => {
         this.loading = false;
         this.job = response.data
-        console.log("よまれてるよ")
       }, 1000)
     })
   },
   created() {
+    // * ログイン判定
     if(this.userId) {
       this.loginFlag = true
     } else {
       this.$router.push('/login');
     }
-    // * ログインユーザーが応募済みか応募済みではないかを判定する
-    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
+
+    // * 応募済みか応募済みでないかを判定
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&user_id=${ this.userId }`)
     .then(response => {
-      const arrayApply = []
-      for(let c = 0; c < response.data.length; c++){
-        const applyData = response.data[c];
-        arrayApply.push(applyData.job.id)
-      }
-      if (arrayApply.includes(this.id)) {
-        this.applyFlug = false
+      if(response.data.length == 0) {
+        return 
       } else {
-        console.log("まだ応募していません")
+        this.statusId = response.data[0].applyStatusId
       }
-    })
+    });
+
     // * 自分の案件かを判定
     axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
     .then(response => {
@@ -84,6 +87,10 @@ export default Vue.extend({
     })
   },
   methods: {
+    // * エントリーが完了したら応募済みにする
+    compliteEntry() {
+      this.statusId = 1;
+    },
     // * モーダルを開く
     openModal() {
       this.modal = true
@@ -92,15 +99,7 @@ export default Vue.extend({
       this.modal = false
     },
     doSend() {
-        this.closeModal()
-    },
-    getJob() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-        .then(response => {
-          this.job = response.data
-          console.log(this.job)
-          console.log(this.id)
-        })
+      this.closeModal()
     },
   },
   components: {
@@ -127,7 +126,7 @@ export default Vue.extend({
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template slot="footer">
-          <applybtn :jobId='id'></applybtn>
+          <applybtn :jobId='id' @compliteEntry="compliteEntry"></applybtn>
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>
       </ApplyModal>
@@ -153,10 +152,10 @@ export default Vue.extend({
             自分の案件
           </div>
           <div v-else>
-            <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
-            <div class="btn-box-apply-false" v-if="applyFlug == false">
+            <div class="btn-box-apply-false" v-if="DoneApply">
               応募済み
             </div>
+            <button @click="openModal" class="btn-box-apply" v-else>応募する</button>
             <div class="favorite-btn-area">
               <favorite-detail-btn :jobId='id'></favorite-detail-btn>
             </div>

@@ -14,12 +14,11 @@ import { Job } from '@/types/job';
 export type DataType = {
   job: Job;
   userId: number;
-  selfJobPost: boolean; //? 自分の案件かを判定
-  loginFlag: boolean; //? ログインしているかを判定
+  selfJobPost: boolean;
+  loginFlag: boolean; 
   loading: boolean;
-  applyFlug: boolean;
   modal: boolean;
-  // jobs: [],
+  statusId: number;
 }
 export default Vue.extend({ 
   props: {
@@ -31,14 +30,23 @@ export default Vue.extend({
       userId: this.$store.state.auth.userId,
       loginFlag: false, //? ログインしているかを判定
       loading: true, //? ローディング
-      applyFlug: true,
       modal: false,
-      // jobs: [],
+      statusId: 0
     }
   },
   filters: {
     moment(value: string, format: string) {
       return moment(value).format(format);
+    }
+  },
+  computed: {
+    // *応募しているか否か
+    DoneApply() {
+      if(this.statusId == 0) {
+        return false
+      } else {
+        return true
+      }
     }
   },
   mounted() {
@@ -54,25 +62,22 @@ export default Vue.extend({
       })
   },
   created() {
+    // * ログイン判定
     if(this.userId) {
       this.loginFlag = true
     } else {
       this.$router.push('/login');
     }
-  // * ログインユーザーが応募済みか応募済みではないかを判定する
-    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
+
+    // * 応募済みか応募済みでないかを判定
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&user_id=${ this.userId }`)
     .then(response => {
-      const arrayApply = []
-      for(let c = 0; c < response.data.length; c++){
-        const applyData = response.data[c];
-        arrayApply.push(applyData.job.id)
-      }
-      if (arrayApply.includes(this.id)) {
-        this.applyFlug = false
+      if(response.data.length == 0) {
+        return 
       } else {
-        console.log("まだ応募していません")
+        this.statusId = response.data[0].applyStatusId
       }
-    })
+    });
   },
   methods: {
     // * モーダルを開く
@@ -84,13 +89,6 @@ export default Vue.extend({
     },
     doSend() {
         this.closeModal()
-    },
-    getJob() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-        .then(response => {
-          // this.loading = true;
-          this.job = response.data
-        })
     },
     // * Twitter をタブで開く
     twitterTab() {
@@ -148,10 +146,10 @@ export default Vue.extend({
       </div>
       <div class="button-area">
           <div v-if="loginFlag === true" class="button-action-area">
-            <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
-            <div class="btn-box-apply-false" v-if="applyFlug == false">
+            <div class="btn-box-apply-false" v-if="DoneApply">
               応募済み
             </div>
+            <button @click="openModal" class="btn-box-apply" v-else>応募する</button>
             <div class="favorite-btn-area">
               <favorite-detail-btn :jobId='id'></favorite-detail-btn>
             </div>
