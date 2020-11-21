@@ -46,6 +46,9 @@ export default {
   background: $basic-white;
   border-radius: 8px;
   overflow: hidden;
+  width: 600px;
+  height: 580px;
+  position: relative;
 }
 
 .modal-content {
@@ -55,10 +58,12 @@ export default {
 .modal-footer {
   /* background: #ccc; */
   width: 100%;
-  padding: 2rem 0 1rem 0;
+  padding: 2rem 2rem 1rem 0;
   text-align: right;
   display: inline-block;
-  position: relative;
+  position: absolute;
+  bottom: 0;
+  left :0;
   font-size: 100px;
 }
 

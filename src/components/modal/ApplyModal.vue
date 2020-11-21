@@ -3,7 +3,7 @@
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <div class="modal-top">
-          <!-- <p>✖️</p> -->
+          <p></p>
         </div>
         <div class="modal-content">
           <slot/>
@@ -49,7 +49,7 @@
   top: 0;
   margin-bottom: 2rem;
   background-color: $sub-white;
-  border-bottom: 1px solid $card-border-color;
+  border-bottom: dashed 2px $card-border-color;
 }
 
 .modal-content {

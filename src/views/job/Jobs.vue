@@ -1263,20 +1263,26 @@ label.checkbox {
 }
 
 .serach-btn {
+  @include box-shadow-btn;
   @include blue-btn;
-  display: block;
-  width: 70%;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-weight: 600;
   color: $basic-white;
+  text-align: left;
+  display: block;
+  padding: 1.1rem 4rem;
+  border-radius: 25px;
+  border: none;
+  font-size: .875rem;
+  font-weight: 600;
   line-height: 1;
   text-align: center;
+  max-width: 280px;
   margin: auto;
   font-size: 1rem;
+  float: right;
+  margin-top: 1.5rem;
   cursor: pointer;
-  box-shadow: 0 0px 5px 2px #d4d4d4;
   transition: .3s;
+  outline: none;
 }
 
 .router-1 {
