@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import TopPageRecommendJobCard from '@/components/common/topPage/TopPageRecommendJobCard.vue'
+// import TopPageRecommendJobCard from '@/components/common/topPage/TopPageRecommendJobCard.vue'
 import TopPageNewJobCard from '@/components/common/topPage/TopPageNewJobCard.vue'
 import Loading from '@/components/common/loading/Loading.vue'
 import { Language } from '@/types/index';
@@ -84,7 +84,7 @@ export default Vue.extend({
     }
   },
   components: {
-    TopPageRecommendJobCard,
+    // TopPageRecommendJobCard,
     TopPageNewJobCard,
     Loading
   },
@@ -158,10 +158,10 @@ export default Vue.extend({
             <label for="name" class="new-tag">新着案件</label>
             <top-page-new-job-card></top-page-new-job-card>
           </div>
-          <div class="card-area">
+          <!-- <div class="card-area">
             <label for="name" class="new-tag">おすすめ案件</label>
             <top-page-recommend-job-card></top-page-recommend-job-card>
-          </div>
+          </div> -->
         </div>
       </template>
       <div>
@@ -524,6 +524,48 @@ export default Vue.extend({
     .serach-freeword {
       width: 66%;
     }
+  }
+}
+
+/* スマホ */
+@media (max-width: 500px) {
+  .top-wrapper 
+  .container-top {
+
+    .top-ad-area {
+      height: 70%;
+
+      .top-ad-left 
+      .ad-subtitle-area {
+        width: 100%;
+      }
+
+      .top-ad-right 
+      .btn-area {
+        .register-btn {
+          width: 45%;
+          padding: 1rem 2rem;
+        }
+        .login-btn {
+          width: 45%;
+          padding: 1rem 1rem;
+        }
+      }
+    }
+    .center-ad-area {
+      .serach-freeword {
+        width: 65%;
+        padding: 1rem 1rem;
+        font-size: 1rem;
+      }
+      .search-freeword-btn {
+        padding: 1.1rem 1.5rem;
+      }
+    }
+  }
+  .container-center {
+    margin-top: 10rem;
+    padding: 0 1rem;
   }
 }
 </style>

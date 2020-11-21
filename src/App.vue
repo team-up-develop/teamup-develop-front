@@ -4,7 +4,7 @@
     <header-login-false v-else />
     <v-main class="container">
       <router-view/>
-        <Footer/>
+        <!-- <Footer/> -->
     </v-main>
   </v-app>
 </template>
@@ -12,7 +12,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import Header from '@/components/common/entire/Header.vue'
-import Footer from '@/components/common/entire/Footer.vue'
+// import Footer from '@/components/common/entire/Footer.vue'
 import HeaderLoginFalse from '@/components/common/entire/HeaderLoginFalse.vue'
 
 export type DataType = {
@@ -24,7 +24,7 @@ export default Vue.extend({
 
   components: {
     Header,
-    Footer,
+    // Footer,
     HeaderLoginFalse,
   },
 

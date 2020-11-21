@@ -233,7 +233,7 @@ export default {
   .job-cards {
     &__top {
       font-size: 16px;
-      padding: 1rem 0.8rem 0 0.8rem;
+      padding: 1.5rem 0.8rem 0 0.8rem;
 
       span {
         display: none;
