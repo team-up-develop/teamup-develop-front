@@ -42,12 +42,12 @@
         </div>
       </div>
       <div class="button-area">
-          <div v-if="myselfFlag === true" class="button-action-area">
-            <button @click="openModal" class="btn-box-apply" >編集する</button>
-          </div>
-          <!-- 非ログイン時 リダイレクトさせる -->
-          <div class="button-action-area" v-else>
-          </div>
+        <div v-if="myselfFlag === true" class="button-action-area">
+          <button @click="openModal" class="btn-box-apply" >編集する</button>
+        </div>
+        <!-- 非ログイン時 リダイレクトさせる -->
+        <div class="button-action-area" v-else>
+        </div>
       </div>
     </section>
     <Loading v-else>

@@ -4,7 +4,7 @@
     <header-login-false v-else />
     <v-main class="container">
       <router-view/>
-      <Footer/>
+        <Footer/>
     </v-main>
   </v-app>
 </template>
@@ -62,7 +62,9 @@ export default Vue.extend({
   width: 100%;
   display: inline-block;
   position: relative;
+  /* background-color: yellow; */
 }
+
 @media (min-width: 960px) {
 .container[data-v-7ba5bd90] {
   max-width: none;

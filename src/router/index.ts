@@ -6,6 +6,7 @@ import JobDetail from '@/views/job/JobDetail.vue'
 import JobCreate from '@/views/job/JobCreate.vue'
 import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 import ProfileUser from '@/views/user/ProfileUser.vue'
+import ManageUserProfile from '@/views/user/ManageUserProfile.vue'
 import Login from '@/views/user/Login.vue'
 import Register from '@/views/user/Register.vue'
 import RegisterStep1 from '@/views/user/register_session/RegisterStep1.vue'
@@ -66,6 +67,15 @@ const routes: Array<RouteConfig> = [
     component: ProfileUser,
     props: route => ({
       id: Number(route.params.id),
+    })
+  },
+  // * 管理案件 ユーザー
+  {
+    path: '/manage/profile/:jobId/:id/',
+    component: ManageUserProfile,
+    props: route => ({
+      id: Number(route.params.id),
+      jobId: Number(route.params.jobId)
     })
   },
   {

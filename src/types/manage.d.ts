@@ -32,3 +32,17 @@ enum StatusName {
   主宰 = '主宰'
 }
 
+// * 参加させる パラメーター
+export interface ParticipateParams {
+  jobId: number;
+  userId: number;
+  applyStatusId: 2
+}
+
+// * 拒否させる
+export interface RejectParams {
+  jobId: number;
+  userId: number;
+  applyStatusId: 3
+}
+

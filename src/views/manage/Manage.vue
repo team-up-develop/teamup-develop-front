@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import axios from 'axios'
 import moment from "moment";
-import { ManageJob } from '@/types/Manage';
+import { ManageJob } from '@/types/manage';
 
 export type DataType = {
   manageJobs: ManageJob[];
