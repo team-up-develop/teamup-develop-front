@@ -59,7 +59,17 @@ export default Vue.extend({
     } else {
       this.loginFlag = false;
     }
-  // * ログインユーザーが応募済みか応募済みではないかを判定する
+    // * 自分の案件かを判定
+    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    .then(response => {
+      for(let i = 0; i < response.data.length; i++){
+        const selfJob = response.data[i]
+        if(selfJob.id === this.id){
+          this.selfJobPost = true
+        }
+      }
+    })
+    // * ログインユーザーが応募済みか応募済みではないかを判定する
     axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
     .then(response => {
       const arrayApply = []
@@ -156,7 +166,7 @@ export default Vue.extend({
       <div class="detail-post-detail-area">
         <DetailJob :job="job"/>
       </div>
-      <div class="button-area">
+      <div class="button-area" v-if="!selfJobPost">
           <div v-if="loginFlag === true" class="button-action-area">
             <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
             <div class="btn-box-apply-false" v-if="applyFlug == false">

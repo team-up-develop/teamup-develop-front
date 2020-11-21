@@ -858,6 +858,7 @@ export default Vue.extend({
   margin: 0 auto;
   padding: 0rem 0 2rem 0;
   position: relative;
+  min-height: 800px;
 
   // * スクロール
   .scroll-area {

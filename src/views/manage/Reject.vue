@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import moment from "moment";
-import { ManageJob } from '@/types/Manage';
+import { ManageJob } from '@/types/manage';
 // import StatusChange from '@/components/manage/StatusChange'
 
 export type DataType = {
@@ -22,6 +22,7 @@ export default Vue.extend({
   props: {
     // * job.idを受け取る
     id: Number,
+    // jobTitle: String
   },
   data(): DataType {
     return {
@@ -120,45 +121,53 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div class="manage-wrapper">
-    <v-card class="job-manage-wrapper">
-      <router-link :to="`/manage/applicant/${ id }`" class="router-no-link">
-        <div class="manage-job-area">
-          <span>応募者 <font-awesome-icon icon="user" class="icon"/></span> 
-        </div>
+  <section>
+    <!-- <div class="back-space">
+      案件タイトル:
+      <router-link :to="`/jobs/${ id }`"> 
+        <span>{{ jobTitle | truncateDetailTitle }}</span>
       </router-link>
-      <router-link :to="`/manage/participate/${ id }`" class="router-link">
-        <div class="apply-job-area">
-          <span>参加者 <font-awesome-icon icon="users" class="icon"/></span>
-        </div>
-      </router-link>
-      <router-link :to="`/manage/reject/${ id }`" class="router-link">
-        <div class="reject-job-area">
-          <span>拒否者 <font-awesome-icon icon="user-alt-slash" class="icon"/></span> 
-        </div>
-      </router-link>
-      <div class="title-area">名前</div>
-      <div class="time-area">学習開始日</div>
-      <div class="skill-area">スキル</div>
-      <div class="job-wrapper-area">
-        <router-link :to="`/account/profile/${ rejectUser.userId }`" v-for="rejectUser in rejectUsers" :key="rejectUser.id" class="router">
-          <div class="job-area">
-            <div class="job-area-box">
-              <span>{{ rejectUser.user.userName }}</span>
-              <p>{{ rejectUser.user.userName }}</p>
-            </div>
-            <div class="job-area-box">
-              <span>{{ rejectUser.user.learningStartDate | moment("YYYY年 M月 D日") }}</span>
-              <p>{{ rejectUser.user.learningStartDate | moment("YYYY年 M月 D日") }}</p>
-            </div>
-            <div class="job-area-box">
-              仮置き: {{ rejectUser.user.userName }}
-            </div>
+    </div> -->
+    <div class="manage-wrapper">
+      <v-card class="job-manage-wrapper">
+        <router-link :to="`/manage/applicant/${ id }`" class="router-no-link">
+          <div class="manage-job-area">
+            <span>応募者 <font-awesome-icon icon="user" class="icon"/></span> 
           </div>
         </router-link>
-        </div>
-    </v-card>
-  </div>
+        <router-link :to="`/manage/participate/${ id }`" class="router-link">
+          <div class="apply-job-area">
+            <span>参加者 <font-awesome-icon icon="users" class="icon"/></span>
+          </div>
+        </router-link>
+        <router-link :to="`/manage/reject/${ id }`" class="router-link">
+          <div class="reject-job-area">
+            <span>拒否者 <font-awesome-icon icon="user-alt-slash" class="icon"/></span> 
+          </div>
+        </router-link>
+        <div class="title-area">名前</div>
+        <div class="time-area">学習開始日</div>
+        <div class="skill-area">スキル</div>
+        <div class="job-wrapper-area">
+          <router-link :to="`/manage/profile/${ id }/${ rejectUser.userId }`" v-for="rejectUser in rejectUsers" :key="rejectUser.id" class="router">
+            <div class="job-area">
+              <div class="job-area-box">
+                <span>{{ rejectUser.user.userName }}</span>
+                <p>{{ rejectUser.user.userName }}</p>
+              </div>
+              <div class="job-area-box">
+                <span>{{ rejectUser.user.learningStartDate | moment("YYYY年 M月 D日") }}</span>
+                <p>{{ rejectUser.user.learningStartDate | moment("YYYY年 M月 D日") }}</p>
+              </div>
+              <div class="job-area-box">
+                仮置き: {{ rejectUser.user.userName }}
+              </div>
+            </div>
+          </router-link>
+          </div>
+      </v-card>
+    </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
@@ -171,6 +180,10 @@ export default Vue.extend({
 .router-no-link, .router-link {
   text-decoration: none;
   // color: $basic-white;
+}
+
+.back-space {
+  margin-top: 1rem;
 }
 
 .manage-wrapper {
