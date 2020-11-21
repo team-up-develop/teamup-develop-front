@@ -105,7 +105,7 @@ export default {
   position: relative;
 
   .chat-wrapper-card {
-      @include card-border-color;
+    @include card-border-color;
       background-color: $basic-white;
       width: 100%;
       border-radius: 20px;
@@ -170,103 +170,103 @@ export default {
         overflow: scroll;
         display: flex;
         flex-direction: column;
-        // align-items: center;
-          .balloon {
-            margin-bottom: 2em;
-            position: relative;
-          }
-          .balloon:before,.balloon:after {
-            clear: both;
-            content: "";
-            display: block;
-          }
-          .balloon-image-left,.balloon-image-right {
-            width: 68px;
-            height: 68px;
-          }
-          .balloon-image-left {
-            float: left;
-              // margin-right: 20px;
-          }
-          .user-name {
-            width: 30%;
-            padding: 0.2rem 1rem;
-            text-align: left;
-            color: $text-sub-color;
-            font-size: 12px;
-          }
-          .balloon-image-right {
-            float: right;
-          }
-          .balloon-img {
-            @include user-image;
-            width: 70%;
-            height: 70%;
-            border-radius: 50%;
-            margin: 0;
-            background-color: #ffffff;
-          }
-          .balloon-image-description {
-            padding: 5px 0 0;
-            font-size: 10px;
-            text-align: center;
-            background-color: #ffffff;
-          }
-          .balloon-text-right,.balloon-text-left {
-            position: relative;
-            padding: 0.8rem 1.4rem;
-            // border: 1px solid #aaa;
-            border-radius: 10px;
-            max-width: -webkit-calc(100% - 120px);
-            max-width: calc(100% - 120px);
-            display: inline-block;
-            background-color: #ffffff;
-            text-align: left;
-          }
-          .balloon-text-right {
-            float: left;
-          }
-          .balloon p {
-            margin: 0 0 20px;
-          }
-          .balloon p:last-child {
-            margin-bottom: 0;
-          }
-          /* 三角部分 */
-          .balloon-text-right:before {
-            position: absolute;
-            content: '';
-            // border: 10px solid transparent;
-            border-right: 10px solid #aaa;
-            top: 15px;
-            left: -20px;
-          }
-          .balloon-text-right:after {
-            position: absolute;
-            content: '';
-            border: 10px solid transparent;
-            border-right: 10px solid #ffffff;
-            top: 15px;
-            left: -19px;
-          }
-          .balloon-text-left:before {
-            position: absolute;
-            content: '';
-            background-color: #ffffff;
-            border: 10px solid transparent;
-            border-left: 10px solid #aaa;
-            top: 15px;
-            right: -20px;
-          }
-          .balloon-text-left:after {
-            position: absolute;
-            content: '';
-            border: 10px solid transparent;
-            border-left: 10px solid #f2f2f2;
-            top: 15px;
-            right: -19px;
-            background-color: #ffffff;
-          }
+
+        .balloon {
+          margin-bottom: 2em;
+          position: relative;
+        }
+        .balloon:before,.balloon:after {
+          clear: both;
+          content: "";
+          display: block;
+        }
+        .balloon-image-left,.balloon-image-right {
+          width: 68px;
+          height: 68px;
+        }
+        .balloon-image-left {
+          float: left;
+            // margin-right: 20px;
+        }
+        .user-name {
+          width: 30%;
+          padding: 0.2rem 1rem;
+          text-align: left;
+          color: $text-sub-color;
+          font-size: 12px;
+        }
+        .balloon-image-right {
+          float: right;
+        }
+        .balloon-img {
+          @include user-image;
+          width: 70%;
+          height: 70%;
+          border-radius: 50%;
+          margin: 0;
+          background-color: #ffffff;
+        }
+        .balloon-image-description {
+          padding: 5px 0 0;
+          font-size: 10px;
+          text-align: center;
+          background-color: #ffffff;
+        }
+        .balloon-text-right,.balloon-text-left {
+          position: relative;
+          padding: 0.8rem 1.4rem;
+          // border: 1px solid #aaa;
+          border-radius: 10px;
+          max-width: -webkit-calc(100% - 120px);
+          max-width: calc(100% - 120px);
+          display: inline-block;
+          background-color: #ffffff;
+          text-align: left;
+        }
+        .balloon-text-right {
+          float: left;
+        }
+        .balloon p {
+          margin: 0 0 20px;
+        }
+        .balloon p:last-child {
+          margin-bottom: 0;
+        }
+        /* 三角部分 */
+        .balloon-text-right:before {
+          position: absolute;
+          content: '';
+          // border: 10px solid transparent;
+          border-right: 10px solid #aaa;
+          top: 15px;
+          left: -20px;
+        }
+        .balloon-text-right:after {
+          position: absolute;
+          content: '';
+          border: 10px solid transparent;
+          border-right: 10px solid #ffffff;
+          top: 15px;
+          left: -19px;
+        }
+        .balloon-text-left:before {
+          position: absolute;
+          content: '';
+          background-color: #ffffff;
+          border: 10px solid transparent;
+          border-left: 10px solid #aaa;
+          top: 15px;
+          right: -20px;
+        }
+        .balloon-text-left:after {
+          position: absolute;
+          content: '';
+          border: 10px solid transparent;
+          border-left: 10px solid #f2f2f2;
+          top: 15px;
+          right: -19px;
+          background-color: #ffffff;
+        }
       }
 
       .card-right-bottom {
@@ -295,6 +295,45 @@ export default {
           margin-top: 0.6rem;
           color: $primary-color;
         }
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 1200px) {
+  .chat-wrapper{
+    width: 90%;
+
+    .chat-wrapper-card {
+      .card-left {
+        width: 25%;
+
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .chat-wrapper{
+    width: 98%;
+
+    .chat-wrapper-card {
+      .card-left {
+        width: 31%;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-wrapper{
+    .chat-wrapper-card {
+      .card-left {
+        width: 100%;
+
+      }
+      .card-right {
+        display: none;
       }
     }
   }
