@@ -3,27 +3,29 @@
   <!-- 編集 モーダル画面 -->
   <div class="example-modal-window">
     <profile-edit-modal @close="closeModal" v-if="modal">
-      <p class="label-lang">プロフィール編集</p>
-      <label for="name">名前</label>
-      <input type="text" v-model="userName">
-      <br>
-      <label for="name">学習開発開始時期</label>
-      <input type="date" v-model="learningStartDate">
-      <br>
-      <label for="name">自己紹介</label>
-      <textarea type="text" v-model="bio"></textarea>
-      <br>
-      <label for="name">GitHub</label>
-      <input type="url" v-model="githubAccount">
-      <br>
-      <label for="name">Twitter</label>
-      <input type="url" v-model="githubAccount">
-      <br>
-      <template slot="footer">
-        <div class="serach-btn" @click="profileEdit">
-          編集
-        </div>
-      </template>
+      <section>
+        <p class="label-lang">プロフィール編集</p>
+        <label for="name" class="label">名前</label>
+        <input type="text" v-model="userName" class="edit-value">
+        <br>
+        <label for="name" class="label">学習開発開始時期</label>
+        <input type="date" v-model="learningStartDate" class="edit-value">
+        <br>
+        <label for="name" class="label">自己紹介</label>
+        <textarea type="text" v-model="bio" class="edit-text-value"></textarea>
+        <br>
+        <label for="name" class="label">GitHub</label>
+        <input type="url" v-model="githubAccount" class="edit-value">
+        <br>
+        <label for="name" class="label">Twitter</label>
+        <input type="url" v-model="githubAccount" class="edit-value">
+        <br>
+        <template>
+          <div class="serach-btn" @click="profileEdit">
+            編集する
+          </div>
+        </template>
+      </section>
     </profile-edit-modal>
   </div>
     <section v-if="loading == false">
@@ -43,7 +45,7 @@
       </div>
       <div class="button-area">
         <div v-if="myselfFlag === true" class="button-action-area">
-          <button @click="openModal" class="btn-box-apply" >編集する</button>
+          <button @click="openModal" class="btn-box-edit" >編集する</button>
         </div>
         <!-- 非ログイン時 リダイレクトさせる -->
         <div class="button-action-area" v-else>
@@ -239,18 +241,17 @@ export default {
 
   .button-action-area {
     margin: 0em auto 0.5rem auto;
-    width: 60%;
+    width: 100%;
     position: relative;
   }
 }
 
-//* 応募するボタン 
-.btn-box-apply {
-  @include red-btn;
+//* 編集するボタン 
+.btn-box-edit {
   @include box-shadow-btn;
+  @include blue-btn;
   color: $basic-white;
-  width: 60%;
-  padding: 1.2rem 4rem;
+  padding: 1.2rem 8rem;
   transition: .3s;
   border-radius: 50px;
   font-weight: 600;
@@ -263,50 +264,55 @@ export default {
   border: none;
 
   &:hover {
-    @include red-btn-hover;
+    @include btn-hover;
   }
 }
 
-//* 応募済みボタン 
-.btn-box-apply-false {
-  @include grey-btn;
-  @include box-shadow-btn;
-  color: $basic-white;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 60%;
-  padding: 1.2rem 4rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-}
-
-// * モーダル内のキャンセルボタン 
-.modal-btn {
-  @include red-cancel-btn;
-  @include box-shadow-btn;
-  padding: 1rem 2.4rem;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin-left: 1.2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 1rem;
-  outline: none;
+// * モーダル
+section {
+  .label-lang {
+    font-weight: bold;
+  }
+  .label {
+    display: block;
+    font-weight: bold;
+  }
+  .edit-value {
+    display: block;
+    width: 100%;
+    height: 48px;
+    padding: 0.5rem;
+    background-color: $sub-white;
+  }
+  .edit-text-value {
+    display: block;
+    width: 100%;
+    height: 120px;
+    padding: 0.5rem;
+    background-color: $sub-white;
+  }
+  .serach-btn {
+    @include box-shadow-btn;
+    @include blue-btn;
+    color: $basic-white;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 4rem;
+    border-radius: 25px;
+    border: none;
+    font-size: .875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: right;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: .3s;
+    outline: none;
+  }
 }
 
 /* タブレットレスポンシブ */
@@ -398,6 +404,11 @@ export default {
   .detail-post-detail-area{
     width: 100%;
   }
+  .btn-box-edit {
+    font-size: 1rem;
+    padding: 1.2rem 6rem;
+  }
+
 }
 
 @media screen and (max-width: 420px) {

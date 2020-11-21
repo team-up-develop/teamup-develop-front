@@ -6,9 +6,9 @@
           <slot/>
         </div>
         <footer class="modal-footer">
-          <slot name="footer">
+          <!-- <slot name="footer">
             <button @click="$emit('close')">Close</button>
-          </slot>
+          </slot> -->
         </footer>
       </div>
     </div>
@@ -46,10 +46,11 @@ export default {
 }
 
 .modal-content {
-  padding: 2rem 4rem;
+  padding: 2rem 2rem;
   width: 40vw;
   height: 64vh;
   text-align: left;
+  overflow: scroll;
 }
 
 .modal-footer {
