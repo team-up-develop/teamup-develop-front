@@ -939,7 +939,7 @@ export default Vue.extend({
     position: relative;
 
     .router :hover {
-      background-color: #2195f310;
+      background-color: #2195f30a;
       border: 1px solid $primary-color;
       box-shadow: 0 15px 30px -5px #2195f32d, 0 0 5px #2195f357;
       transform: translateY(-2px);

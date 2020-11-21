@@ -150,7 +150,7 @@ section {
     text-align: left;
 
     .label {
-      font-weight: bold;
+      // font-weight: bold;
     }
 
     .input {
