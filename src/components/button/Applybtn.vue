@@ -20,7 +20,7 @@ export default {
         userId: 1,
         applyStatusId: 1  
       };
-      axios.post(`${this.$baseURL}/apply_job/`, params)
+      axios.post(`http://localhost:8888/api/v1/apply_job/`, params)
       .then(response => {
         console.log(response.data)
         this.compliteModal = true
