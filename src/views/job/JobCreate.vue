@@ -379,29 +379,6 @@ export default Vue.extend({
   }
 }
 
-@media screen and (max-width: 1200px) {
-  .create-wrapper .job-create-wrapper {
-    width: calc(100% - 4rem);
-    margin: 2rem 0rem;
-    padding: 2rem;
-    position: absolute;
-    right: 0rem;
-    }
-  }
-
-/* タブレット */
-@media screen and (max-width: 900px) {
-  .create-wrapper .job-create-wrapper {
-    width: 100%;
-    border-radius: 20px;
-    margin: 2rem 0rem;
-    background-color: $basic-white;
-    padding: 1.5rem;
-    position: absolute;
-    right: 0;
-  }
-}
-
 @media (max-width: 768px) {
   .job-create-wrapper .job-create-time-area {
     input[type='date'] {
