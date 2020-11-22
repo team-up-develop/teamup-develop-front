@@ -1,32 +1,102 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios';
+import Loading from '@/components/common/loading/Loading.vue'
+import ProfileEditModal from '@/components/modal/ProfileEditModal.vue'
+import PostUser from '@/components/user/PostUser.vue'
+import SkillUser from '@/components/user/SkillUser.vue'
+import IntroduceUser from '@/components/user/IntroduceUser.vue'
+// import Logout from '@/components/button/Logout'
+
+export type DataType = {
+  myselfFlag: boolean;
+  userInfo: any;
+  userId: number;
+  modal: boolean;
+  loading: boolean;
+}
+
+export default Vue.extend({
+  props: {
+    id: Number
+  },
+  data(): DataType {
+    return {
+      myselfFlag: false,
+      userInfo: {},
+      userId: this.$store.state.auth.userId,
+      modal: false,
+      loading: true, //? ローディング
+    }
+  },
+  created() {
+    if(this.userId == this.id) {
+      this.myselfFlag = true
+    }
+    // TODO: websocket
+    // const ws = (this.ws = new WebSocket(`ws://${location.host}/websocket`));
+    // console.log(ws)
+    // // * 接続が確認された時
+    // ws.onopen = () => {
+    //   console.log("sucsess")
+    // };
+    // ws.onmessage = message => {
+    //   this.messages.push(message.data);
+    // };
+
+    // * ユーザー情報取得
+    axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+    .then(response => {
+      setTimeout(() => {
+        this.loading = false;
+        this.userInfo = response.data;
+      }, 1000)
+    })
+  },
+  methods: {
+    // * モーダル
+    openModal() {
+      this.modal = true
+    },
+    closeModal() {
+      this.modal = false
+    },
+    doSend() {
+      this.closeModal()
+    },
+    // * 編集完了 emit
+    compliteEdit() {
+      this.closeModal();
+      // * ユーザー情報取得
+      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+      .then(response => {
+        this.loading = true;
+        setTimeout(() => {
+          this.loading = false;
+          this.userInfo = response.data;
+        }, 1000)
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    }
+  },
+  components: {
+    ProfileEditModal,
+    // Logout
+    Loading,
+    PostUser,
+    SkillUser,
+    IntroduceUser
+  }
+});
+</script>
+
 <template>
   <div class="detail-wrapper">
   <!-- 編集 モーダル画面 -->
   <div class="example-modal-window">
-    <profile-edit-modal @close="closeModal" v-if="modal">
-      <section>
-        <p class="label-lang">プロフィール編集</p>
-        <label for="name" class="label">名前</label>
-        <input type="text" v-model="userName" class="edit-value">
-        <br>
-        <label for="name" class="label">学習開発開始時期</label>
-        <input type="date" v-model="learningStartDate" class="edit-value">
-        <br>
-        <label for="name" class="label">自己紹介</label>
-        <textarea type="text" v-model="bio" class="edit-text-value"></textarea>
-        <br>
-        <label for="name" class="label">GitHub</label>
-        <input type="url" v-model="githubAccount" class="edit-value">
-        <br>
-        <label for="name" class="label">Twitter</label>
-        <input type="url" v-model="githubAccount" class="edit-value">
-        <br>
-        <template>
-          <div class="serach-btn" @click="profileEdit">
-            編集する
-          </div>
-        </template>
-      </section>
-    </profile-edit-modal>
+    <ProfileEditModal :userInfo="userInfo" @close="closeModal" @compliteEdit="compliteEdit()" v-if="modal" />
   </div>
     <section v-if="loading == false">
       <div class="detail-post-user-area">
@@ -40,7 +110,7 @@
       <div class="detail-post-detail-area">
         <div class="detail-area">
           <div class="detail-tag">自己紹介</div>
-          <IntroduceUser />
+          <IntroduceUser :user="userInfo" />
         </div>
       </div>
       <div class="button-area">
@@ -57,118 +127,6 @@
   </div>
 </template>
 
-<script>
-import axios from 'axios';
-import Loading from '@/components/common/loading/Loading.vue'
-import ProfileEditModal from '@/components/modal/ProfileEditModal'
-import PostUser from '@/components/user/PostUser.vue'
-import SkillUser from '@/components/user/SkillUser.vue'
-import IntroduceUser from '@/components/user/IntroduceUser.vue'
-// import Logout from '@/components/button/Logout'
-export default {
-  props: {
-    id: Number
-  },
-  data() {
-    return {
-      myselfFlag: false,
-      userInfo: {},
-      userId: this.$store.state.auth.userId,
-      activeTab: '1', //? タブ
-      isActive: true, //? タブ
-      hasError: false,
-      modal: false,
-      userName: "",
-      learningStartDate: Date,
-      bio: "",
-      githubAccount: "",
-      twitterAccount: "",
-      messages: "Test",
-      loading: true, //? ローディング
-    }
-  },
-  created() {
-    if(this.userId == this.id) {
-      this.myselfFlag = true
-    }
-    const ws = (this.ws = new WebSocket(`ws://${location.host}/websocket`));
-    console.log(ws)
-    // * 接続が確認された時
-    ws.onopen = () => {
-      console.log("sucsess")
-    };
-    ws.onmessage = message => {
-      this.messages.push(message.data);
-    };
-
-    // * ユーザー情報取得
-      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
-      .then(response => {
-        setTimeout(() => {
-          this.loading = false;
-          this.userInfo = response.data;
-          this.userName = this.userInfo.userName; //? ユーザー名前モーダル
-          this.learningStartDate = this.userInfo.learningStartDate;
-          this.bio = this.userInfo.bio;
-          this.githubAccount = this.userInfo.githubAccount;
-          this.twitterAccount = this.userInfo.twitterAccount;
-        }, 1000)
-      // .catch(error => {
-      //   console.log(error)
-      // })
-    }, 2000)
-  },
-  methods: {
-    send() {
-      console.log("aaaaaaa")
-      console.log(this.ws)
-      // * メッセージを送信する
-      this.ws.send(this.message);
-    },
-    // * 編集する
-    profileEdit() {
-      const params = {
-        userName: this.userName,
-        learningStartDate: this.learningStartDate,
-        bio: this.bio,
-        githubAccount: this.githubAccount,
-        twitterAccount: this.twitterAccount,
-      }
-      axios.put(`http://localhost:8888/api/v1/user/${this.id}`, params)
-      .then(response => {
-        console.log(response.data)
-        // this.$emit('compliteAssgin', this.message)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    // * タブの切り替え
-    change: function(num){
-      this.isActive = !this.isActive ;
-      this.activeTab = num
-    },
-    // * モーダル
-    openModal() {
-      this.modal = true
-    },
-    closeModal() {
-      this.modal = false
-    },
-    doSend() {
-        this.closeModal()
-    },
-  },
-  components: {
-    ProfileEditModal,
-    // Logout
-    Loading,
-    PostUser,
-    SkillUser,
-    IntroduceUser
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -268,52 +226,6 @@ export default {
   }
 }
 
-// * モーダル
-section {
-  .label-lang {
-    font-weight: bold;
-  }
-  .label {
-    display: block;
-    font-weight: bold;
-  }
-  .edit-value {
-    display: block;
-    width: 100%;
-    height: 48px;
-    padding: 0.5rem;
-    background-color: $sub-white;
-  }
-  .edit-text-value {
-    display: block;
-    width: 100%;
-    height: 120px;
-    padding: 0.5rem;
-    background-color: $sub-white;
-  }
-  .serach-btn {
-    @include box-shadow-btn;
-    @include blue-btn;
-    color: $basic-white;
-    text-align: left;
-    display: block;
-    padding: 1.1rem 4rem;
-    border-radius: 25px;
-    border: none;
-    font-size: .875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    float: right;
-    margin-top: 1.5rem;
-    cursor: pointer;
-    transition: .3s;
-    outline: none;
-  }
-}
 
 /* タブレットレスポンシブ */
 @media screen and (max-width: 900px) {

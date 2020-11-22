@@ -12,6 +12,26 @@ export default Vue.extend({
       return moment(value).format(format);
     },
   },
+  methods: {
+    // * Twitter をタブで開く
+    twitterTab() {
+      if(this.user.twitterAccount == null) {
+        return this.user.twitterAccount;
+      } else {
+        const url: string = this.user.twitterAccount;
+        return window.open(url);
+      }
+    },
+    // * Github をタブで開く
+    gitTab() {
+      if(this.user.githubAccount == null) {
+        return this.user.githubAccount;
+      } else {
+        const url: string = this.user.githubAccount;
+        return window.open(url);
+      }
+    },
+  }
 });
 </script>
 
@@ -39,12 +59,14 @@ export default Vue.extend({
           </div>
         </div>
         <div class="user-url-area">
-          <div class="user-github">
-            <img class="img" src="@/assets/github.png" width="50" />
+          <section>
+            <div class="user-github">
+              <img class="img" @click="gitTab" src="@/assets/github.png" width="50" />
+              </div>
+            <div class="user-twtter">
+              <img class="img" @click="twitterTab" src="@/assets/images/twitter.png" width="52" />
             </div>
-          <div class="user-twtter">
-            Twiiter
-          </div>
+          </section>
         </div>
       </div>
     </v-card>
@@ -116,38 +138,37 @@ export default Vue.extend({
 
     .user-url-area {
       display: inline-block;
-      width: 140px;
+      width: 120px;
       position: absolute;
       top: 0;
       right: 0;
-      padding: 0.5rem 0 0 0;
+      padding: 1rem 1rem 0 0;
 
-      .user-github {
-        cursor: pointer;
-        display: inline-block;
-        margin-right: 0.5rem;
+      section {
+        position: relative;
 
-        :hover {
-          opacity: 0.8;
+        .user-github {
+          position: absolute;
+          left: 0;
+          top: 0;
+          cursor: pointer;
+
+          :hover {
+            opacity: 0.8;
+          }
         }
-      }
 
-      .user-twtter {
-        width: 45px;
-        height: 45px;
-        padding: 0.2rem;
-        background-color: #1DA1F2;
-        border-radius: 50%;
-        color: #FFFFFF;
-        text-align: center;
-        box-shadow: 10px 5px 5px grey;
-        box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
-        font-weight: bold;
-        cursor: pointer;
-        display: inline-block;
+        .user-twtter {
+          position: absolute;
+          right: 0;
+          top: 0;
+          margin-top: 0.1rem;
+          font-weight: bold;
+          cursor: pointer;
 
-        :hover {
-          opacity: 0.8;
+          :hover {
+            opacity: 0.8;
+          }
         }
       }
     }

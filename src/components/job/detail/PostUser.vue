@@ -163,16 +163,6 @@ export default Vue.extend({
           position: absolute;
           left: 0;
           top: 0;
-          /* width: 35%;
-          padding: 0.8rem 1rem;
-          background-color: #24292e;
-          border-radius: 5px / 5px;
-          margin-right: 10px;
-          color: #FFFFFF;
-          text-align: center;
-          box-shadow: 10px 5px 5px grey;
-          box-shadow: 0 0 3px 0 rgba(122, 122, 122, 0.705), 0 2px 3px 0 rgba(156, 156, 156, 0.993);
-          font-weight: bold; */
           cursor: pointer;
 
           :hover {
@@ -184,16 +174,7 @@ export default Vue.extend({
           position: absolute;
           right: 0;
           top: 0;
-          // background-color: rgba(0, 128, 0, 0.515);
           margin-top: 0.1rem;
-          // width: 45px;
-          // height: 45px;
-          // background-color: #1DA1F2;
-          // border-radius: 50px;
-          // color: #FFFFFF;
-          // text-align: center;
-          // box-shadow: 10px 5px 5px grey;
-          // box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
           font-weight: bold;
           cursor: pointer;
 
