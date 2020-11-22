@@ -164,7 +164,7 @@ export default Vue.extend({
       <div class="job-create-detail-area">
         <label for="name" class="label">概要</label>
         <textarea type="text" name="" @input="onTextJobDescription" v-model="jobDescription" placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" maxlength="250"></textarea>
-        <!-- <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small> -->
+        <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small>
       </div>
       <router-link to='/job_create/2' class="job-create-btn-area" v-if="isForm && !minStartDate">
         <button class="next-btn" @click="nextCreateBtn">
