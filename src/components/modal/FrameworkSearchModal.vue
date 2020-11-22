@@ -46,14 +46,17 @@ export default {
   background: $basic-white;
   border-radius: 8px;
   overflow: hidden;
-  width: 600px;
-  height: 570px;
+}
+
+.modal-content {
+  padding: 1rem 1rem;
+  overflow: scroll;
+  height: 500px;
 }
 
 .modal-footer {
-  /* background: #ccc; */
   width: 100%;
-  padding: 2rem 2rem 1rem 0;
+  padding: 0rem 2rem 1rem 0;
   text-align: right;
   display: inline-block;
   position: relative;
@@ -82,5 +85,9 @@ export default {
 
 span {
   font-weight: bold;
+}
+
+@media screen and (max-width: 700px) {
+
 }
 </style>

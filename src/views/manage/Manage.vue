@@ -119,6 +119,9 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
+.router {
+  text-decoration: none;
+}
 .router-link :hover {
   opacity: 0.8 ;
 }
@@ -181,7 +184,6 @@ export default Vue.extend({
 
   .title-area {
     width: 33.3%;
-    // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     background-color: $secondary-color;
     display: inline-block;
@@ -191,7 +193,6 @@ export default Vue.extend({
 
   .time-area {
     width: 33.4%;
-    // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     border-left: 1px solid $basic-white;
     border-right: 1px solid $basic-white;
@@ -203,7 +204,6 @@ export default Vue.extend({
 
   .skill-area {
     width: 33.3%;
-    // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
     background-color: $secondary-color;
     display: inline-block;
@@ -294,25 +294,21 @@ export default Vue.extend({
       .manage-job-area {
         @include box-shadow-manage;
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .apply-job-area {
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .save-job-area {
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .title-area {
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
         background-color: $secondary-color;
         display: inline-block;
@@ -322,13 +318,11 @@ export default Vue.extend({
 
       .time-area{
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
       }
 
       .skill-area {
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
       }
     }
@@ -342,6 +336,7 @@ export default Vue.extend({
     width: 100%;
     height: 89.5vh;
     margin: 0 auto;
+
     .job-manage-wrapper {
       width: calc(100% - 4rem);
       height: calc(90vh - 5rem);
@@ -350,10 +345,12 @@ export default Vue.extend({
       position: relative;
       font-size: 14px;
     }
+
     .job-wrapper-area .job-area .job-area-box{
       p{
         display: inline;
       }
+
       span{
         display: none;
         height: calc(48px - 1.6rem);
@@ -379,25 +376,21 @@ export default Vue.extend({
   .manage-job-area {
     @include box-shadow-manage;
     width: 33%;
-    height: calc(68px - 1.6rem);
     padding: 0.8rem 0;
   }
 
     .apply-job-area {
       width: 33%;
-      height: calc(68px - 1.6rem);
       padding: 0.8rem 0;
     }
 
     .save-job-area {
       width: 33%;
-      height: calc(68px - 1.6rem);
       padding: 0.8rem 0;
     }
 
     .title-area {
       width: 33%;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
       background-color: $secondary-color;
       display: inline-block;
@@ -407,15 +400,14 @@ export default Vue.extend({
 
     .time-area{
       width: 33;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
     }
 
     .skill-area {
       width: 33%;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
     }
+
     .job-wrapper-area {
       width: 100%;
       height: 81%;

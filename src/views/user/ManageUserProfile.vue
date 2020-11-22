@@ -155,12 +155,12 @@ export default Vue.extend({
       </div>
       <div class="detail-post-skill-area">
         <div class="detail-tag">経験スキル</div>
-        <SkillUser />
+        <SkillUser :user="userInfo" />
       </div>
       <div class="detail-post-detail-area">
         <div class="detail-area">
           <div class="detail-tag">自己紹介</div>
-          <IntroduceUser />
+          <IntroduceUser :user="userInfo" />
         </div>
       </div>
       <div class="button-area">

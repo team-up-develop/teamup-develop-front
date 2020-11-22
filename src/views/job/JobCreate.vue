@@ -164,7 +164,7 @@ export default Vue.extend({
       <div class="job-create-detail-area">
         <label for="name" class="label">概要</label>
         <textarea type="text" name="" @input="onTextJobDescription" v-model="jobDescription" placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" maxlength="250"></textarea>
-        <!-- <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small> -->
+        <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small>
       </div>
       <router-link to='/job_create/2' class="job-create-btn-area" v-if="isForm && !minStartDate">
         <button class="next-btn" @click="nextCreateBtn">
@@ -376,29 +376,6 @@ export default Vue.extend({
       transition: .3s;
       outline: none;
     }
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .create-wrapper .job-create-wrapper {
-    width: calc(100% - 4rem);
-    margin: 2rem 0rem;
-    padding: 2rem;
-    position: absolute;
-    right: 0rem;
-    }
-  }
-
-/* タブレット */
-@media screen and (max-width: 900px) {
-  .create-wrapper .job-create-wrapper {
-    width: 100%;
-    border-radius: 20px;
-    margin: 2rem 0rem;
-    background-color: $basic-white;
-    padding: 1.5rem;
-    position: absolute;
-    right: 0;
   }
 }
 
