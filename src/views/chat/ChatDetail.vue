@@ -388,4 +388,43 @@ export default {
   }
 }
 
+@media screen and (max-width: 1200px) {
+  .chat-wrapper{
+    width: 90%;
+
+    .chat-wrapper-card {
+      .card-left {
+        width: 25%;
+        background-color: green;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 900px) {
+  .chat-wrapper{
+    width: 98%;
+
+    .chat-wrapper-card {
+      .card-left {
+        width: 31%;
+        background-color: purple;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .chat-wrapper{
+    .chat-wrapper-card {
+      .card-left {
+        display: none;
+
+      }
+      .card-right {
+        width: 100%;
+      }
+    }
+  }
+}
 </style>

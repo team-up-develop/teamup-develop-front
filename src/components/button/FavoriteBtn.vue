@@ -1,10 +1,18 @@
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import axios from 'axios'
-export default {
+import { FavoriteParams } from '@/types/job';
+
+export type DataType = {
+  userId: number;
+  flag: boolean;
+}
+
+export default Vue.extend({
   props: {
     jobId: Number
   },
-  data() {
+  data(): DataType {
     return {
       userId: this.$store.state.auth.userId,
       flag: true,
@@ -30,9 +38,9 @@ export default {
   methods: {
     // * 案件を保存する
     saveJob(){
-      const params = {
+      const params: FavoriteParams = {
         jobId: this.jobId, 
-        userId: 1 
+        userId: this.userId
       };
       axios.post('http://localhost:8888/api/v1/favorite_job/', params)
       .then(response => {
@@ -45,9 +53,9 @@ export default {
     },
     // * 案件を削除する
     deleteJob() {
-      const params = {
+      const params: FavoriteParams = {
         jobId: this.jobId,
-        userId: 1
+        userId: this.userId
       };
       axios.delete('http://localhost:8888/api/v1/favorite_job/', {data: params })
       .then(response => {
@@ -59,7 +67,7 @@ export default {
       })
     },
   }
-}
+});
 </script>
 
 <template>

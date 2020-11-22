@@ -99,7 +99,6 @@
       <div class="job-wrapper-left-false" v-else>
         この条件での開発案件はありませんでした。<br>
         別のキーワードで検索してください。
-        <p>検索キーワード <span> {{ freeWord }}{{ selectedLang }}{{ selectedFramework }}{{ selectedSkill }}</span></p>
       </div>
       <router-link :to="`/jobs/${ job.id }`" class="router-1" v-for="job in displayJobs" :key="job.index" >
         <card-job :job="job"></card-job>
@@ -467,6 +466,11 @@ export default Vue.extend({
         axios.get(`http://localhost:8888/api/v1/job/?${result}`)
         .then(response => {
           this.jobs = response.data
+          // ? ページネーション処理
+          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
+          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+
           this.langModal = false
           this.loading = true;
           setTimeout(() => {
@@ -509,6 +513,11 @@ export default Vue.extend({
         axios.get(`http://localhost:8888/api/v1/job/?${result}`)
         .then(response => {
           this.jobs = response.data
+          // ? ページネーション処理
+          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
+          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+
           this.frameworkModal = false
           this.loading = true;
           setTimeout(() => {
@@ -552,6 +561,11 @@ export default Vue.extend({
         axios.get(`http://localhost:8888/api/v1/job/?${result}`)
         .then(response => {
           this.jobs = response.data
+          // ? ページネーション処理
+          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
+          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+
           this.skillModal = false
           this.loading = true;
           setTimeout(() => {
@@ -595,6 +609,11 @@ export default Vue.extend({
             freeWord: this.freeWord,
           })
           this.jobs = posts;
+          // ? ページネーション処理
+          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
+          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+
           this.jobsNullFlag = false; //? 案件が存在しない際のフラグをFalseに
           this.detailFlag = false; //? 右側案件詳細を閉じる
           // * もし案件が存在しなかったら処理が走る
@@ -920,7 +939,7 @@ export default Vue.extend({
     position: relative;
 
     .router :hover {
-      background-color: #2195f310;
+      background-color: #2195f30a;
       border: 1px solid $primary-color;
       box-shadow: 0 15px 30px -5px #2195f32d, 0 0 5px #2195f357;
       transform: translateY(-2px);
@@ -1209,6 +1228,7 @@ export default Vue.extend({
 }
 
 .job-wrapper-left-false {
+  margin-top: 10rem;
   width: 43%;
   flex: 1 0 auto;
   align-items: center;
@@ -1263,20 +1283,26 @@ label.checkbox {
 }
 
 .serach-btn {
+  @include box-shadow-btn;
   @include blue-btn;
-  display: block;
-  width: 70%;
-  padding: 1rem 2rem;
-  border-radius: 8px;
-  font-weight: 600;
   color: $basic-white;
+  text-align: left;
+  display: block;
+  padding: 1.1rem 4rem;
+  border-radius: 25px;
+  border: none;
+  font-size: .875rem;
+  font-weight: 600;
   line-height: 1;
   text-align: center;
+  max-width: 280px;
   margin: auto;
   font-size: 1rem;
+  float: right;
+  margin-top: 1.5rem;
   cursor: pointer;
-  box-shadow: 0 0px 5px 2px #d4d4d4;
   transition: .3s;
+  outline: none;
 }
 
 .router-1 {

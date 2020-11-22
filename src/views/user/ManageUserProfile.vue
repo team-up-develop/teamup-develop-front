@@ -63,6 +63,14 @@ export default Vue.extend({
     },
   },
   created() {
+    // * ユーザー情報取得
+      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+      .then(response => {
+        this.userInfo = response.data;
+      })
+      // .catch(error => {
+      //   console.log(error)
+      // })
     // * 表示中のユーザーのステータスを格納
     axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&user_id=${ this.id }`)
     .then(response => {
@@ -180,6 +188,14 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
+.detail-tag {
+  color: $primary-color;
+  text-align: left;
+  font-size: 17px;
+  font-weight: bold;
+  margin-bottom: 0.7rem;
+}
+
 .router {
   text-decoration: none;
   color: $basic-white;
@@ -204,14 +220,6 @@ export default Vue.extend({
     flex-direction: column;
     text-align: left;
     margin: 0 auto;
-
-    .detail-tag {
-      color: $primary-color;
-      text-align: left;
-      font-size: 17px;
-      font-weight: bold;
-      margin-bottom: 0.7rem;
-    }
   }
 }
 

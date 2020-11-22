@@ -16,13 +16,13 @@ export type DataType = {
   favoriteUsersNum: number;
   manageJobs: ManageJob[];
   userId: number;
+  jobTitle: string;
 }
 
 export default Vue.extend({
   props: {
     // * job.idを受け取る
     id: Number,
-    // jobTitle: String
   },
   data(): DataType {
     return {
@@ -35,7 +35,8 @@ export default Vue.extend({
       favoriteUsers: [], //? お気に入りしているユーザー一覧
       favoriteUsersNum: 0, //? お気に入りしているユーザー 人数
       manageJobs: [], //? 管理
-      userId: this.$store.state.auth.userId
+      userId: this.$store.state.auth.userId,
+      jobTitle: ""
     }
   },
   filters: {
@@ -83,6 +84,12 @@ export default Vue.extend({
     .then(response => {
       this.manageJobs = response.data
     })
+    // *  案件タイトル取得
+    axios.get(`http://localhost:8888/api/v1/job/${ this.id }`)
+    .then(response => {
+      console.log(response.data.jobTitle)
+      this.jobTitle = response.data.jobTitle
+    })
   },
   methods: {
     // * 参加者 リアルタイムで変更する
@@ -122,12 +129,12 @@ export default Vue.extend({
 
 <template>
   <section>
-    <!-- <div class="back-space">
-      案件タイトル:
+    <div class="back-space">
+      案件名:
       <router-link :to="`/jobs/${ id }`"> 
         <span>{{ jobTitle | truncateDetailTitle }}</span>
       </router-link>
-    </div> -->
+    </div>
     <div class="manage-wrapper">
       <v-card class="job-manage-wrapper">
         <router-link :to="`/manage/applicant/${ id }`" class="router-no-link">
@@ -184,6 +191,7 @@ export default Vue.extend({
 
 .back-space {
   margin-top: 1rem;
+  font-weight: bold;
 }
 
 .manage-wrapper {

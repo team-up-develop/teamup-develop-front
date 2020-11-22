@@ -43,3 +43,16 @@ export interface JobCreateDataComp {
   skill: {}[]; //? その他開発スキル,
   recruitmentNumbers: number; //?募集人数
 }
+
+// * 応募 parameter
+export interface ApplyParams {
+  jobId: number;
+  userId: number;
+  applyStatusId: number; 
+}
+
+// * お気に入り parameter
+export interface FavoriteParams {
+  jobId: number;
+  userId: number;
+}

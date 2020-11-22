@@ -139,9 +139,6 @@ export default Vue.extend({
     border-radius: 20px;
     margin: 2rem auto 0 auto;
     background-color: #ffffff;
-    border-bottom: solid 1px $card-border-color;
-    border-right: solid 1px $card-border-color;
-    border-left: solid 1px $card-border-color;
     position: relative;
     font-size: 14px;
 

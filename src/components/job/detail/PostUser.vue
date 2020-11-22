@@ -63,7 +63,7 @@ export default Vue.extend({
               <img class="img" src="@/assets/github.png" width="50" />
               </div>
             <div class="user-twtter" @click="twitterTab">
-              Twiiter
+              <img class="img" src="@/assets/images/twitter.png" width="52" />
             </div>
           </section>
         </div>
@@ -184,15 +184,16 @@ export default Vue.extend({
           position: absolute;
           right: 0;
           top: 0;
-          margin-top: 0.2rem;
-          width: 45px;
-          height: 45px;
-          background-color: #1DA1F2;
-          border-radius: 50px;
-          color: #FFFFFF;
-          text-align: center;
-          box-shadow: 10px 5px 5px grey;
-          box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
+          // background-color: rgba(0, 128, 0, 0.515);
+          margin-top: 0.1rem;
+          // width: 45px;
+          // height: 45px;
+          // background-color: #1DA1F2;
+          // border-radius: 50px;
+          // color: #FFFFFF;
+          // text-align: center;
+          // box-shadow: 10px 5px 5px grey;
+          // box-shadow: 0 0 3px 0 rgba(0, 0, 0, 0.12), 0 2px 3px 0 rgba(0, 0, 0, 0.22);
           font-weight: bold;
           cursor: pointer;
 
