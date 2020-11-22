@@ -51,6 +51,12 @@ export default {
   height: 690px;
 }
 
+.modal-content {
+  padding: 1rem 1rem;
+  overflow: scroll;
+  height: 500px;
+}
+
 
 .modal-footer {
   /* background: #ccc; */

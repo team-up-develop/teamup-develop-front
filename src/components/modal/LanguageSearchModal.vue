@@ -46,13 +46,13 @@ export default {
   background: $basic-white;
   border-radius: 8px;
   overflow: hidden;
-  width: 600px;
-  height: 580px;
   position: relative;
 }
 
 .modal-content {
   padding: 2rem 1rem;
+  overflow: scroll;
+  height: 550px;
 }
 
 .modal-footer {

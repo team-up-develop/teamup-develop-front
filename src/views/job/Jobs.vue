@@ -1247,6 +1247,7 @@ export default Vue.extend({
   // background-color: yellow;
   margin-top: 1rem;
 }
+
 .round-skill {
   text-align: left;
   width: 24%;
@@ -1255,6 +1256,7 @@ export default Vue.extend({
   position: relative;
   margin-bottom: 2rem;
 }
+
 .round {
   text-align: left;
   width: 20%;
@@ -1371,6 +1373,21 @@ label.checkbox {
 
   .job-wrapper .job-wrapper-center {
     width: 80%;
+  }
+
+  // * モーダル
+  .modal-content {
+    overflow: scroll;
+  }
+
+  .round {
+    width: 100%;
+    margin-bottom: 0.2rem;
+  }
+
+  .round-skill {
+    width: 100%;
+    margin-bottom: 0.2rem;
   }
 }
 

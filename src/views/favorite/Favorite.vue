@@ -121,6 +121,10 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
+.router {
+  text-decoration: none;
+}
+
 .router-link {
   :hover {
     opacity: 0.8;
@@ -291,41 +295,35 @@ export default Vue.extend({
       .manage-job-area {
         @include box-shadow-manage;
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .apply-job-area {
         @include box-shadow-manage;
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .save-job-area {
         @include box-shadow-manage;
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .title-area {
         @include box-shadow-manage;
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
       }
 
       .time-area {
         @include box-shadow-manage;
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
       }
       .skill-area {
         @include box-shadow-manage;
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
       }
     }
@@ -367,24 +365,21 @@ export default Vue.extend({
     .manage-job-area {
       @include box-shadow-manage;
       width: 33%;
-      height: calc(68px - 1.6rem);
       padding: 0.8rem 0;
     }
 
     .apply-job-area {
       width: 33%;
-      height: calc(68px - 1.6rem);
       padding: 0.8rem 0;
-      }
+    }
 
     .save-job-area {
       width: 33%;
-      height: calc(68px - 1.6rem);
       padding: 0.8rem 0;
     }
+
     .title-area {
       width: 33%;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
       background-color: $secondary-color;
       display: inline-block;
@@ -394,13 +389,11 @@ export default Vue.extend({
 
     .time-area{
       width: 33;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
     }
 
     .skill-area {
       width: 33%;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
     }
 
