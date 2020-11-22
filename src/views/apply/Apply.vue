@@ -54,7 +54,7 @@ export default Vue.extend({
         for(let i = 0; i < this.applyJobs.length; i++) {
           const applyJobCorrect: ManageJob = this.applyJobs[i];
           if(applyJobCorrect.applyStatusId === 1 || applyJobCorrect.applyStatusId === 2) {
-            console.log(applyJobCorrect);
+            // console.log(applyJobCorrect);
             this.applyJobArray.push(applyJobCorrect);
           }
         }

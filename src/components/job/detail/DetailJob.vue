@@ -1,10 +1,16 @@
 <script lang="ts">
 import Vue from 'vue';
+import moment from "moment";
 
 export default Vue.extend({ 
   props: {
     job: Object
-  }
+  },
+  filters: {
+    moment(value: string, format: string) {
+      return moment(value).format(format);
+    }
+  },
 });
 </script>
 

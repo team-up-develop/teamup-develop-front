@@ -20,6 +20,7 @@ export type DataType = {
   modal: boolean;
   statusId: number;
 }
+
 export default Vue.extend({ 
   props: {
     id: Number,

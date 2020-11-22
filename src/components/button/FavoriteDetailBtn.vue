@@ -1,20 +1,18 @@
-<template>
-  <div>
-    <font-awesome-icon icon="heart" class="icon" @click="saveJob" v-if="flag"/>
-    <font-awesome-icon icon="heart" class="save-icon" @click="deleteJob" v-if="flag == false"/>
-    <!-- <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
-      保存削除
-    </div> -->
-  </div>
-</template>
-
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import axios from 'axios'
-export default {
+import { FavoriteParams } from '@/types/job';
+
+export type DataType = {
+  userId: number;
+  flag: boolean;
+}
+
+export default Vue.extend({
   props: {
     jobId: Number
   },
-  data() {
+  data(): DataType {
     return {
       flag: true,
       userId: this.$store.state.auth.userId,
@@ -40,9 +38,9 @@ export default {
   methods: {
     // * 案件を保存する
     saveJob(){
-      const params = {
+      const params: FavoriteParams = {
         jobId: this.jobId, 
-        userId: 1 
+        userId: this.userId
       };
       axios.post('http://localhost:8888/api/v1/favorite_job/', params)
       .then(response => {
@@ -55,9 +53,9 @@ export default {
     },
     // * 案件を削除する
     deleteJob() {
-      const params = {
+      const params: FavoriteParams = {
         jobId: this.jobId,
-        userId: 1
+        userId: this.userId
       };
       axios.delete('http://localhost:8888/api/v1/favorite_job/', {data: params })
       .then(response => {
@@ -69,8 +67,19 @@ export default {
       })
     },
   }
-}
+});
 </script>
+
+
+<template>
+  <div>
+    <font-awesome-icon icon="heart" class="icon" @click="saveJob" v-if="flag"/>
+    <font-awesome-icon icon="heart" class="save-icon" @click="deleteJob" v-if="flag == false"/>
+    <!-- <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
+      保存削除
+    </div> -->
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';

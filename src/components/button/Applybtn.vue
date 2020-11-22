@@ -1,12 +1,23 @@
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import axios from 'axios'
 import CompliteModal from '@/components/modal/CompliteModal.vue'
-export default {
+import { ApplyParams } from '@/types/job';
+
+export type DataType = {
+  userId: number;
+  compliteModal: boolean;
+  applyFlag: boolean;
+  message: 'welcome';
+}
+
+export default Vue.extend({ 
   props: {
     jobId: Number,
   },
-  data() {
+  data(): DataType {
     return {
+      userId: this.$store.state.auth.userId,
       compliteModal: false,
       applyFlag: true,
       message: 'welcome'
@@ -15,14 +26,13 @@ export default {
   methods: {
     // * 応募する
     applyJob() {
-      const params = {
+      const params: ApplyParams = {
         jobId: this.jobId,
-        userId: 1,
+        userId: this.userId,
         applyStatusId: 1  
       };
       axios.post(`http://localhost:8888/api/v1/apply_job/`, params)
       .then(response => {
-        console.log(response.data)
         this.compliteModal = true
         this.applyFlag = false
         this.$emit('compliteEntry', this.message)
@@ -41,7 +51,7 @@ export default {
   components: {
     CompliteModal
   }
-}
+});
 </script>
 
 

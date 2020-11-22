@@ -9,6 +9,7 @@ import ApplyModal from '@/components/modal/ApplyModal.vue'
 import PostUser from '@/components/job/detail/PostUser.vue'
 import SkillJob from '@/components/job/detail/SkillJob.vue'
 import DetailJob from '@/components/job/detail/DetailJob.vue'
+import EditJobModal from '@/components/modal/EditJobModal.vue'
 import { Job } from '@/types/job';
 
 export type DataType = {
@@ -19,6 +20,7 @@ export type DataType = {
   loading: boolean;
   applyFlug: boolean;
   modal: boolean;
+  editModal: boolean;
   // jobs: [],
 }
 export default Vue.extend({ 
@@ -33,7 +35,7 @@ export default Vue.extend({
       loading: true, //? ローディング
       applyFlug: true,
       modal: false,
-      // jobs: [],
+      editModal: false,
     }
   },
   filters: {
@@ -47,9 +49,7 @@ export default Vue.extend({
       .then(response => {
         setTimeout(() => {
           this.loading = false;
-          console.log(response.data)
           this.job = response.data
-          console.log("よまれてるよ")
         }, 1000)
       })
   },
@@ -97,14 +97,13 @@ export default Vue.extend({
       this.modal = false
     },
     doSend() {
-        this.closeModal()
+      this.closeModal()
     },
-    getJob() {
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-        .then(response => {
-          // this.loading = true;
-          this.job = response.data
-        })
+    openEditModal() {
+      this.editModal = true
+    },
+    closeEditModal() {
+      this.editModal = false
     },
     // * Twitter をタブで開く
     twitterTab() {
@@ -132,13 +131,18 @@ export default Vue.extend({
     ApplyModal,
     PostUser,
     SkillJob,
-    DetailJob
+    DetailJob,
+    EditJobModal
   }
 });
 </script>
 
 <template>
   <div class="detail-wrapper">
+  <!-- 編集 モーダル画面 -->
+  <div class="example-modal-window">
+    <EditJobModal @close="closeEditModal" v-if="editModal" :job="job"/>
+  </div>
     <div class="back-space">
       <router-link :to="`/jobs`">
       <p>＜ 案件一覧に戻る</p>
@@ -183,6 +187,9 @@ export default Vue.extend({
               <font-awesome-icon icon="heart" class="icon"/>
             </div>
           </div>
+      </div>
+      <div class="button-area" v-else>
+        <button class="btn-box-edit" @click="openEditModal">編集する</button>
       </div>
     </section>
     <Loading v-else>
@@ -313,6 +320,29 @@ export default Vue.extend({
   display: inline-block;
   cursor: pointer;
   border: none;
+}
+
+//* 編集するボタン 
+.btn-box-edit {
+  @include box-shadow-btn;
+  @include blue-btn;
+  color: $basic-white;
+  padding: 1.2rem 8rem;
+  transition: .3s;
+  border-radius: 50px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  margin: auto;
+  font-size: 1.3rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border: none;
+
+  &:hover {
+    @include btn-hover;
+  }
 }
 
 .favorite-btn-area {
@@ -451,6 +481,11 @@ export default Vue.extend({
     //* 詳細 カード 
     .detail-post-detail-area{
       width: 100%;
+    }
+    // * 編集する
+    .btn-box-edit {
+      font-size: 1rem;
+      padding: 1.2rem 6rem;
     }
   }
 }
