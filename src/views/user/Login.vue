@@ -51,7 +51,7 @@ export default Vue.extend({
   <section>
     <div class="login-wrapper" v-show="!loading">
       <div class="login-title">LOGIN</div>
-      <div class="login-container">
+      <v-card class="login-container">
         <div class="login-box">
           <div class="error-flag" v-if="loginErrorFlag == true">
             <span>メールアドレス か パスワードが違います</span>
@@ -71,7 +71,7 @@ export default Vue.extend({
             <div @click="login" class="login-btn">ログイン</div>
           </div>
         </div>
-      </div>
+      </v-card>
     </div>
     <Loading v-show="loading">
     </Loading>
@@ -82,7 +82,7 @@ export default Vue.extend({
 @import '@/assets/scss/_variables.scss';
 
 section {
-  height: 95vh;
+  height: 87vh;
 }
 .router-link {
   text-decoration: none;
@@ -91,9 +91,11 @@ section {
 .login-wrapper {
   @include card-margin;
   width: 45%;
+  height: 100%;
 
   .login-container {
-    max-width: 500px;
+    max-width: 520px;
+    height: 90%;
     margin: 0rem auto 3rem auto;
     border: solid 1px #B9B9B9;
     border-radius: 20px;
@@ -104,17 +106,16 @@ section {
 //* 登録カード 
 .login-title {
   color: $primary-color;
-  font-size: 1.6rem;  
+  font-size: 1.8rem;  
   font-weight: bold;
   height: 50px;
-  padding: 1rem 2rem;
   margin-top: 1rem;
   margin-bottom: 0.2rem;
 }
 
 //* フォーム & ボタン ボックス 
 .login-container .login-box {
-  width: 90%;
+  width: 95%;
   height: 90%;
   margin: 0 auto;
   position: relative;
@@ -133,8 +134,10 @@ section {
   }
 
   .btn-area {
-    padding: 30% 0 0 0;
-    height: 30%;
+    margin: 0 auto;
+    width: 100%;
+    position: absolute;
+    bottom: 0;
 
     span {
       cursor: pointer;
@@ -144,7 +147,7 @@ section {
 
   .name-form {
     width: 100%;
-    height: 80px;
+    height: 100px;
     margin: 10% 0rem 14% 0;
     transition: 0.3s;
     text-align: left;
@@ -157,7 +160,7 @@ section {
       font: 16px/24px sans-serif;
       box-sizing: border-box;
       width: 100%;
-      height: 65%;
+      height: 55%;
       margin-top: 0.3rem;
       transition: 0.3s;
       color: #111111;
@@ -205,37 +208,32 @@ section {
   .login-container 
   .login-box
   .btn-area {
-    padding: 20% 0 0 0;
-    height: 30%;
+    padding: 12% 0 0 0;
+  }
+}
+
+@media (max-width: 1100px) {
+  .login-wrapper {
+    width: 56%;
   }
 }
 
 /* タブレット */
 @media (max-width: 900px) {
   .login-wrapper {
-    width: 75%;
+    width: 70%;
   }
   .login-container .login-box {
     width: 100%;
-    height: 70%;
-    margin: 0 auto;
-    position: relative;
   }
 
   .login-box {
     .btn-area {
       padding: 17% 0 0 0;
-      height: 30%;
     }
 
     span {
       cursor: pointer;
-    }
-
-    .name-form {
-      width: 100%;
-      height: 80px;
-      margin: 3rem 0;
     }
   }
 }
@@ -259,12 +257,8 @@ section {
 
   .login-box .name-form {
     width: 100%;
-    height: 80px;
+    height: 100px;
     margin: 3rem 0;
-
-    .input {
-      width: 95%;
-    }
   }
 }
 
@@ -275,7 +269,7 @@ section {
 
     .login-container {
       margin: 0 auto 2rem auto;
-      width: calc(100% - 5rem);
+      width: 98%;
     }
   }
 }
@@ -286,11 +280,6 @@ section {
   }
 
   .login-wrapper .login-container {
-    width: calc(97% - 2rem);
-    height: 70%;
-    margin: 0rem auto 3rem auto;
-    border: solid 1px $card-border-color;
-    border-radius: 20px;
     padding: 2rem 1rem;
   }
 

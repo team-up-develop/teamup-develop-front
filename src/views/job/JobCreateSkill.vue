@@ -245,9 +245,14 @@ export default Vue.extend({
           <button @click="createJob" class="post-job-btn" v-if="isForm">
             案件投稿する
           </button>
-          <button class="next-btn-false" v-else>
-            案件投稿する
-          </button>
+          <v-tooltip bottom v-else>
+          <template v-slot:activator="{ on, attrs }">
+            <button class="next-btn-false" v-on="on" v-bind="attrs">
+              案件投稿する
+            </button>
+          </template>
+          <span>必須項目が入力されていません</span>
+          </v-tooltip>
         </section>
         <router-link to='/job_create/1' class="post-job-back">
           戻る 1/2
