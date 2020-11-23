@@ -23,10 +23,16 @@ import Apply from '@/views/apply/Apply.vue'
 import ApplyJobDetail from '@/views/apply/ApplyJobDetail.vue'
 import Chat from '@/views/chat/Chat.vue'
 import ChatDetail from '@/views/chat/ChatDetail.vue'
+import NotFound from '@/views/errors/404.vue' 
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
   // * 共通
+  {
+    path: '*',
+    name: 'notFound',
+    component: NotFound
+  },
   {
     path: '/',
     component: TopPage,

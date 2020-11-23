@@ -94,11 +94,11 @@ export default Vue.extend({
   }
 
   .right-user-area {
-    width: 70%;
+    width: 75%;
     position: absolute;
     right: 0;
     top: 0;
-    padding: 2rem 1rem 2rem 2rem;
+    padding: 1.8rem 2rem 0 2rem;
     text-align: left;
 
     .user-profile-area {
@@ -135,7 +135,7 @@ export default Vue.extend({
       }
 
       .user-introduce-area {
-        margin-top: 3.2rem;
+        margin-top: 2rem;
 
         .introduce-tag {
           font-weight: bold;
