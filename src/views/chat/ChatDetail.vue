@@ -92,27 +92,23 @@ export default {
     setInterval(() => {
       axios.get(`http://localhost:8888/api/v1/chat_message/?job_id=${this.id}`)
       .then(response => {
+        this.loading = false;
         this.chats = response.data
-        console.log(this.chats)
+        console.log(this.chats.length)
+        console.log(chatLength)
         if(chatLength === this.chats.length) {
           console.log("chatLengt 一緒だよん")
         }
         else {
-          console.log("chatLengt 違うよん")
+          chatLength = this.chats.length
+          // ? GET 際に変今点があったら下にスクロールする
+          const chatLog = this.$refs.target
+          if (!chatLog) return 
+          chatLog.scrollTop = chatLog.scrollHeight
         }
-        // ! Getしたデータに変更点があったら下までスクロールするような作りにする
-        // ! 初期Getしたら下までスクロールするようにする
       })
       console.log("setInterval")
-    }, 1000)
-    setTimeout(() => {
-      this.loading = false;
-      chatLength = this.chats.length
-        // ? 一番下にスクロール
-        const chatLog = this.$refs.target
-        if (!chatLog) return 
-        chatLog.scrollTop = chatLog.scrollHeight
-    }, 1500);
+    }, 5000)
     // ! チャットのタイトルごとに案件参加者を取得できるようにする
     // * 案件参加者を取得
     axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=2`)
@@ -222,8 +218,8 @@ export default {
       .chat-group-area {
         width: 90%;
         margin: 0 auto;
-        height: 102px;
-        padding: 1rem 0;
+        // height: 102px;
+        padding: 0.7rem 0 0.5rem 0;
         margin-top: 0.2rem;
 
         p {
@@ -248,7 +244,6 @@ export default {
       border-radius: 0 20px 20px 0;
 
       .card-right-main {
-        width: calc(100% - 1rem);
         margin-top: 0.5rem;
         height: 85%;
         padding: 1rem 2rem;
@@ -274,7 +269,6 @@ export default {
               // margin-right: 20px;
           }
           .user-name {
-            width: 30%;
             padding: 0.2rem 1rem;
             text-align: left;
             color: $text-sub-color;
@@ -378,8 +372,7 @@ export default {
         }
 
         .send-btn-area {
-          font-size: 2rem;
-          margin-top: 0.6rem;
+          font-size: 2.5rem;
           color: $primary-color;
           cursor: pointer;
         }
@@ -395,7 +388,7 @@ export default {
     .chat-wrapper-card {
       .card-left {
         width: 25%;
-        background-color: green;
+        // background-color: green;
       }
     }
   }
@@ -408,7 +401,7 @@ export default {
     .chat-wrapper-card {
       .card-left {
         width: 31%;
-        background-color: purple;
+        // background-color: purple;
       }
     }
   }
@@ -423,6 +416,15 @@ export default {
       }
       .card-right {
         width: 100%;
+        
+        .card-right-main {
+          padding: 1rem 0.5rem 1rem 1rem;
+        }
+
+        .card-right-bottom 
+        .chat-form {
+          width: 75%;
+        }
       }
     }
   }
