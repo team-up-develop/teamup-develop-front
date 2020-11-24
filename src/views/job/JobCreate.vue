@@ -172,9 +172,14 @@ export default Vue.extend({
         </button>
       </router-link>
       <span class="job-create-btn-area" v-else>
-        <button class="next-btn-false">
-          次へ 1/2
-        </button>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+          <button class="next-btn-false" v-on="on" v-bind="attrs">
+            次へ 1/2
+          </button>
+          </template>
+        <span>必須項目が入力されていません</span>
+        </v-tooltip>
       </span>
     </v-card>
     <Loading v-show="loading">

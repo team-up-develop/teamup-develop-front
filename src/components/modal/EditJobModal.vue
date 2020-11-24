@@ -1,57 +1,3 @@
-<template>
-  <transition name="modal" appear>
-    <div class="modal-overlay" @click.self="$emit('close')">
-      <div class="modal-window">
-        <div class="modal-content">
-          <slot/>
-          <div class="job-create-title-area">
-            <label for="name" class="label">案件タイトル</label><label for="name" class="label-required">必須</label>
-            <input type="text" v-model="jobTitle">
-          </div>
-          <div class="job-create-time-area">
-            <label for="name" class="label">開発開始</label><label for="name" class="label-required">必須</label>
-            <input type="date" v-model="devStartDate">
-            <h5>{{devStartDate }}</h5>
-          </div>
-          <div class="job-create-time-area">
-            <label for="name" class="label">開発終了</label><label for="name" class="label-required">必須</label>
-            <input type="date" v-model="devEndDate">
-          </div>
-          <div class="job-create-detail-area">
-            <label for="name" class="label">開発詳細</label>
-            <textarea type="text" v-model="jobDescription"></textarea>
-          </div>
-          <div class="job-create-area">
-            <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須</label>
-            <!-- <label v-if="selectedLangErrors.length" class="error-label">
-              <p v-for="selectedLangError in selectedLangErrors" :key="selectedLangError" class="error-message">
-                {{ selectedLangError }}</p>
-            </label> -->
-            <v-select
-              class="input-area"
-              multiple
-              :options="languages"
-              label="programingLanguageName"
-              v-model="selectlangNumber"
-              :reduce="languages => languages.id"
-            />
-            <h3>{{ selectedLang }}</h3>
-            <h1>Selected 言語:{{ selectlangNumber }}</h1>
-          </div>
-        </div>
-        <footer class="modal-footer">
-          <div class="modal-edit-btn" @click="jobEdit">
-            編集する
-          </div>
-          <slot name="footer">
-            <button @click="$emit('close')">Close</button>
-          </slot>
-        </footer>
-      </div>
-    </div>
-  </transition>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 import moment from "moment";
@@ -155,6 +101,61 @@ export default Vue.extend({
   }
 });
 </script>
+
+<template>
+  <transition name="modal" appear>
+    <div class="modal-overlay" @click.self="$emit('close')">
+      <div class="modal-window">
+        <div class="modal-content">
+          <slot/>
+          <div class="job-create-title-area">
+            <label for="name" class="label">案件タイトル</label><label for="name" class="label-required">必須</label>
+            <input type="text" v-model="jobTitle">
+          </div>
+          <div class="job-create-time-area">
+            <label for="name" class="label">開発開始</label><label for="name" class="label-required">必須</label>
+            <input type="date" v-model="devStartDate">
+            <h5>{{devStartDate }}</h5>
+          </div>
+          <div class="job-create-time-area">
+            <label for="name" class="label">開発終了</label><label for="name" class="label-required">必須</label>
+            <input type="date" v-model="devEndDate">
+          </div>
+          <div class="job-create-detail-area">
+            <label for="name" class="label">開発詳細</label>
+            <textarea type="text" v-model="jobDescription"></textarea>
+          </div>
+          <div class="job-create-area">
+            <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須</label>
+            <!-- <label v-if="selectedLangErrors.length" class="error-label">
+              <p v-for="selectedLangError in selectedLangErrors" :key="selectedLangError" class="error-message">
+                {{ selectedLangError }}</p>
+            </label> -->
+            <v-select
+              class="input-area"
+              multiple
+              :options="languages"
+              label="programingLanguageName"
+              v-model="selectlangNumber"
+              :reduce="languages => languages.id"
+            />
+            <h3>{{ selectedLang }}</h3>
+            <h1>Selected 言語:{{ selectlangNumber }}</h1>
+          </div>
+        </div>
+        <footer class="modal-footer">
+          <div class="modal-edit-btn" @click="jobEdit">
+            編集する
+          </div>
+          <slot name="footer">
+            <button @click="$emit('close')">Close</button>
+          </slot>
+        </footer>
+      </div>
+    </div>
+  </transition>
+</template>
+
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';

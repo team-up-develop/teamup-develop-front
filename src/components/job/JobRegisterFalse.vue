@@ -90,7 +90,6 @@ export default {
     flex-direction: column;
 
     .input {
-      width: calc(100% - 2rem);
       background: #EFEFEF;
       border: none;
       border-radius: 0;
