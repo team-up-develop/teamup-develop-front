@@ -9,6 +9,7 @@ import ProfileUser from '@/views/user/ProfileUser.vue'
 import ManageUserProfile from '@/views/user/ManageUserProfile.vue'
 import Login from '@/views/user/Login.vue'
 import Register from '@/views/user/Register.vue'
+import SentMailComplete from '@/views/user/SentMailComplete.vue'
 import RegisterStep1 from '@/views/user/register_session/RegisterStep1.vue'
 import RegisterStep2 from '@/views/user/register_session/RegisterStep2.vue'
 import RegisterStep3 from '@/views/user/register_session/RegisterStep3.vue'
@@ -93,6 +94,11 @@ const routes: Array<RouteConfig> = [
     path: '/register',
     name: 'register',
     component: Register
+  },
+  {
+    path: '/register/sent_mail',
+    name: 'SentMailComplete',
+    component: SentMailComplete
   },
   // * 本登録登録 
   {
