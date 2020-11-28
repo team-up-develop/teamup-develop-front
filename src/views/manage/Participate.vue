@@ -226,7 +226,7 @@ export default Vue.extend({
 
     .apply-job-area {
       @include box-shadow-manage;
-      background-color: $secondary-color;
+      background-color: $tertiary-color;
       width: 33.4%;
       // height: calc(68px - 1.6rem);
       padding: 1rem 0;
@@ -254,7 +254,7 @@ export default Vue.extend({
     width: 33.3%;
     // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;
@@ -266,7 +266,7 @@ export default Vue.extend({
     padding: 0.8rem 0;
     border-left: 1px solid $basic-white;
     border-right: 1px solid $basic-white;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;
@@ -276,7 +276,7 @@ export default Vue.extend({
     width: 33.3%;
     // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;

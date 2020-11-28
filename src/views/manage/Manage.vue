@@ -151,7 +151,7 @@ export default Vue.extend({
       // height: calc(68px - 1.6rem);
       padding: 1rem 0;
       border-radius: 20px 0 0 0;
-      background-color: $secondary-color;
+      background-color: $tertiary-color;
       display: inline-block;
       color: $basic-white;
       font-weight: bold;
@@ -185,7 +185,7 @@ export default Vue.extend({
   .title-area {
     width: 33.3%;
     padding: 0.8rem 0;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;
@@ -196,7 +196,7 @@ export default Vue.extend({
     padding: 0.8rem 0;
     border-left: 1px solid $basic-white;
     border-right: 1px solid $basic-white;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;
@@ -205,7 +205,7 @@ export default Vue.extend({
   .skill-area {
     width: 33.3%;
     padding: 0.8rem 0;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;

@@ -172,7 +172,7 @@ export default Vue.extend({
       padding: 1rem 0;
       background-color: #606060;
       display: inline-block;
-      background-color: $secondary-color;
+      background-color: $tertiary-color;
       color: $basic-white;
       border: 0.2px solid $basic-white;
       font-weight: bold;
@@ -194,7 +194,7 @@ export default Vue.extend({
     width: 33.3%;
     // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;
@@ -206,7 +206,7 @@ export default Vue.extend({
     padding: 0.8rem 0;
     border-left: 1px solid $basic-white;
     border-right: 1px solid $basic-white;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;
@@ -216,7 +216,7 @@ export default Vue.extend({
     width: 33.3%;
     // height: calc(48px - 1.8rem);
     padding: 0.8rem 0;
-    background-color: $secondary-color;
+    background-color: $tertiary-color;
     display: inline-block;
     color: $basic-white;
     font-weight: bold;
