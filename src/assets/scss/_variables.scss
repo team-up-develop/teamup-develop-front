@@ -57,10 +57,10 @@ $gradation-purple-right: #AB47BC;
   background-color: $basic-white;
 }
 
-//? post cancel
+//? blue sub btn
 @mixin blue-cancel-btn {
-  border: solid 1px #1142e2;
-  color: #1142e2;
+  border: solid 1px $primary-color;
+  color: $primary-color;
 }
 
 
