@@ -13,7 +13,7 @@ import DetailJob from '@/components/job/detail/DetailJob.vue'
 import { Job } from '@/types/job';
 
 export type DataType = {
-  job: Job;
+  job: any; //TODO: Any
   userId: number;
   selfJobPost: boolean;
   loginFlag: boolean; 
@@ -28,7 +28,7 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      job: {}, //! TODO: Type '{}' is missing the following properties from type 'Job':
+      job: {},
       userId: this.$store.state.auth.userId,
       selfJobPost: false, //? 自分の案件かを判定
       loginFlag: false, //? ログインしているかを判定

@@ -6,19 +6,16 @@ import createPersistedState from "vuex-persistedstate" //? State の値を local
 
 Vue.use(Vuex)
 
-export default new Vuex.Store({
+// TODO: Any
+export default new Vuex.Store<any>({
   // * 状態保存
-  state: {}, //! Todo 
-
+  state: {},
   getters: {},
-
   mutations: {},
-  // * 非同期処理
   actions: {},
-
   modules: {
     auth,
-    search // ! Todo
+    search
   },
   plugins: [createPersistedState({storage: window.localStorage})] //? State の値を localStorageに保存するためのプラグイン
 })
