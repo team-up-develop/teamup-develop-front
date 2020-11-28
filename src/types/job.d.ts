@@ -3,7 +3,7 @@ import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
 // * 案件
-export interface Job  {
+export type Job = {
   createdAt: Date;
   deletedAt: null | Date;
   devEndDate: Date;

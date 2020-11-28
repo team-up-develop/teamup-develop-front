@@ -13,7 +13,7 @@ import EditJobModal from '@/components/modal/EditJobModal.vue'
 import { Job } from '@/types/job';
 
 export type DataType = {
-  job: Job;
+  job: any; //TODO: Any
   userId: number;
   selfJobPost: boolean; //? 自分の案件かを判定
   loginFlag: boolean; //? ログインしているかを判定
@@ -29,13 +29,14 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      job: {}, //! TODO: Type '{}' is missing the following properties from type 'Job':
+      job: {},
       userId: this.$store.state.auth.userId,
       loginFlag: false, //? ログインしているかを判定
       loading: true, //? ローディング
       applyFlug: true,
       modal: false,
       editModal: false,
+      selfJobPost: false
     }
   },
   filters: {
