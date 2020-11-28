@@ -8,7 +8,7 @@ interface State {
   skill: [] | null;
 }
 
-export interface SearchData {
+export type SearchData = {
   freeWord: string;
   language: [] | null;
   framwork: [] | null;
