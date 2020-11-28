@@ -62,13 +62,13 @@ export default {
     padding: 1rem 0;
     text-align: center;
     position: relative;
-    color: #AB47BC;
+    color: $primary-color;
     font-weight: bold;
     font-size: 20px;
     letter-spacing: 0.5rem;
 
     &:after {
-      @include purple-btn;
+      background-color: $primary-color;
       content: "";
       display: block;
       height: 4px;
@@ -117,14 +117,14 @@ export default {
   }
 
   .register-btn {
-    @include purple-btn;
+    @include blue-btn;
     @include box-shadow-btn;
+    color: $basic-white;
     display: block;
     padding: 1rem 2rem;
     border-radius: 25px;
     font-size: .875rem;
     font-weight: 600;
-    color: #fff;
     line-height: 1;
     text-align: center;
     max-width: 280px;

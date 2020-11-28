@@ -7,6 +7,9 @@ export type DataType = {
   LoginName: string;
   LoginPassword: string;
   loading: boolean;
+  emailRules: any[];
+  show2: boolean;
+  rules: any;
 }
 
 export default Vue.extend({ 
@@ -15,15 +18,25 @@ export default Vue.extend({
       LoginName: '',
       LoginPassword: '',
       loading: true,
+      show2: true,
+      rules: { //? パスワード 文字数
+        required: (value: any) => !!value || 'Required.',
+        min: (v: any) => v.length >= 8 || 'Min 8 characters',
+        emailMatch: () => (`The email and password you entered don't match`),
+      },
+      emailRules: [ //? メールアドレス 文字数
+        (v: string) => !!v || 'メールアドレスが入力されていません',
+        (v: string) => /.+@.+/.test(v) || '有効なメールアドレスを入力してください',
+      ],
     }
   },
   methods: {
     register() {
-      const data = {
+      const params = {
         LoginName: this.LoginName,
         LoginPassword: this.LoginPassword,
       }
-      axios.post(`http://localhost:8888/api/v1/signup`, data)
+      axios.post(`http://localhost:8888/api/v1/signup`, params)
       .then(response => {
         console.log(response);
         return this.$router.push('/register/sent_mail');
@@ -46,23 +59,61 @@ export default Vue.extend({
 <template>
   <section>
     <div class="login-wrapper" v-show="!loading">
-      <div class="login-title">REGISTER</div>
       <div class="login-container">
-        <div class="login-box">
-          <div class="name-form">
-            <label for="name" class="label">ログイン名</label>
-            <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
-          </div>
-          <div class="name-form">
-            <label for="name" class="label">パスワード</label>
-            <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
-          </div>
+        <div class="login-title">REGISTER</div>
+        <div class="name-form-mail">
+          <label for="name">メールアドレス</label>
+          <v-row
+            cols="12"
+            md="4"
+          >
+            <v-text-field
+              class="textholder"
+              v-model="LoginName"
+              :rules="emailRules"
+              label="example@teamup.com"
+              required
+              outlined
+              single-line
+              filled
+            ></v-text-field>
+          </v-row>
+        </div>
+        <div class="name-form-password">
+          <label for="name">パスワード</label>
+          <v-row
+            cols="12"
+            md="4"
+          >
+            <v-text-field
+              :type="show2 ? 'text' : 'password'"
+              :rules="[rules.required, rules.min]"
+              name="input-10-2"
+              label="password"
+              hint="At least 8 characters"
+              value="wqfasds"
+              class="input-group--focused"
+              v-model="LoginPassword"
+              outlined
+              @click:append="show2 = !show2"
+              single-line
+              filled
+            ></v-text-field>
+          </v-row>
+        </div>
+        <hr>
+          <v-row
+            cols="12"
+            md="4"
+          >
+          Twitter / Google ログイン エリア
+          </v-row>
+        <hr>
           <div class="btn-area">
             <p>登録済みの方は<router-link to="/login" class="router-link"><span>こちら</span></router-link></p>
             <div @click="register" class="login-btn">新規登録</div>
           </div>
         </div>
-      </div>
     </div>
     <Loading v-show="loading">
     </Loading>
@@ -82,203 +133,105 @@ section {
 
 .login-wrapper {
   @include card-margin;
-  width: 45%;
+  width: 100%;
   height: 100%;
 
   .login-container {
-    max-width: 520px;
-    height: 90%;
-    margin: 0rem auto 3rem auto;
+    max-width: 500px;
+    height: 620px;
+    margin: 5rem auto 3rem auto;
     border: solid 1px #B9B9B9;
     border-radius: 20px;
-    padding: 2rem;
-  }
-}
+    padding: 1rem 3rem 2rem 3rem;
+    position: relative;
 
-//* 登録カード 
-.login-title {
-  color: $secondary-color;
-  font-size: 1.8rem;  
-  font-weight: bold;
-  height: 50px;
-  margin-top: 1rem;
-  margin-bottom: 0.2rem;
-}
-
-//* フォーム & ボタン ボックス 
-.login-container .login-box {
-  width: 95%;
-  height: 90%;
-  margin: 0 auto;
-  position: relative;
-}
-
-.login-box {
-
-  // * Error
-  .error-flag {
-    text-align: left;
-
-    span {
-      color: $error-message-color;
+    //* ログインタイトル
+    .login-title {
+      color: $primary-color;
+      font-size: 1.8rem;  
       font-weight: bold;
-    }
-  }
-
-  .btn-area {
-    margin: 0 auto;
-    width: 100%;
-    position: absolute;
-    bottom: 0;
-
-    span {
-      cursor: pointer;
-      color: $secondary-color;
-    }
-  }
-
-  .name-form {
-    width: 100%;
-    height: 100px;
-    margin: 10% 0rem 14% 0;
-    transition: 0.3s;
-    text-align: left;
-
-    .label {
-      // font-weight: bold;
-    }
-
-    .input {
-      font: 16px/24px sans-serif;
-      box-sizing: border-box;
+      height: 50px;
+      margin-top: 1rem;
       width: 100%;
-      height: 55%;
-      margin-top: 0.3rem;
-      transition: 0.3s;
-      color: #111111;
-      letter-spacing: 1px;
-      border: 1px solid #A3A1A1;
-      border-radius: 4px;
-      padding: 0.5rem 0.5rem;
-      background-color: #EFEFEF;
+      border-bottom: solid 3px $primary-color;
     }
 
-    input {
-      &[type='text']:focus, &[type='password']:focus {
-        @include primary-border_color;
+    // * メールフォーム
+    .name-form-mail {
+      text-align: left;
+      margin: 1.5rem 0 0 0;
+
+      .row {
+        margin-right: 0;
+        margin-left: 0;
+      }
+
+      label {
+        font-weight: bold;
+      }
+    }
+
+    // * パスワードフォーム
+    .name-form-password {
+      text-align: left;
+      margin: 0.5rem 0 0.5rem 0;
+
+      .row {
+        margin-right: 0;
+        margin-left: 0;
+      }
+
+      label {
+        font-weight: bold;
+      }
+    }
+
+    .btn-area {
+      margin: 0 auto;
+      width: 100%;
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      padding: 2rem 0;
+      
+      p
+      span {
+        color: $primary-color;
+      }
+
+      .login-btn {
+        @include blue-btn ;
+        color: $basic-white;
+        display: block;
+        padding: 1.2rem 5rem;
+        border-radius: 50px;
+        font-size: .875rem;
+        font-weight: 600;
+        line-height: 1;
+        text-align: center;
+        max-width: 280px;
+        margin: auto;
+        font-size: 1.3rem;
+        display: inline-block;
+        cursor: pointer;
+        margin: 0 auto;
+        transition: .3s;
+        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
         outline: none;
-        box-shadow: 0 0 5px 1px #2195f348;
       }
     }
   }
-
-  .btn-area .login-btn {
-    @include purple-btn;
-    display: block;
-    padding: 1.2rem 5rem;
-    border-radius: 50px;
-    font-size: .875rem;
-    font-weight: 600;
-    color: #fff;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1.3rem;
-    display: inline-block;
-    cursor: pointer;
-    border: none;
-    margin: 0 auto;
-    transition: .3s;
-    box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
-    outline: none;
-  }
-}
-@media (max-width: 1440px) {
-  .login-wrapper 
-  .login-container 
-  .login-box
-  .btn-area {
-    padding: 12% 0 0 0;
-  }
 }
 
-@media (max-width: 1100px) {
-  .login-wrapper {
-    width: 56%;
-  }
-}
-
-/* タブレット */
-@media (max-width: 900px) {
-  .login-wrapper {
-    width: 70%;
-  }
-  .login-container .login-box {
-    width: 100%;
-  }
-
-  .login-box {
-    .btn-area {
-      padding: 17% 0 0 0;
-    }
-
-    span {
-      cursor: pointer;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .login-wrapper {
-    width: 100%;
-  }
-  .login-container 
-  .login-box {
-    width: 100%;
-    height: 70%;
-    margin: 0 auto;
-    position: relative;
-
-    .btn-area {
-      padding: 15% 0 0 0;
-      height: 20%;
-    }
-  }
-
-  .login-box .name-form {
-    width: 100%;
-    height: 100px;
-    margin: 3rem 0;
-  }
-}
-
-/* スマホではだいたいこのピクセルから */
 @media (max-width: 500px) {
   .login-wrapper {
     width: 100%;
 
     .login-container {
       margin: 0 auto 2rem auto;
-      width: 98%;
-    }
-  }
-}
-
-@media (max-width: 420px) {
-  .login-btn {
-    padding: 1.4rem 3rem;
-  }
-
-  .login-wrapper .login-container {
-    padding: 2rem 1rem;
-  }
-
-  .login-box .name-form {
-    .input {
       width: 100%;
+      padding: 1.5rem ;
     }
-    font-size: 14px;
   }
 }
 </style>
