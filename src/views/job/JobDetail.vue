@@ -45,6 +45,7 @@ export default Vue.extend({
     }
   },
   mounted() {
+    console.log(this.userId)
     // * 詳細画面情報を取得
     axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
       .then(response => {
@@ -56,6 +57,7 @@ export default Vue.extend({
   },
   created() {
     if(this.userId) {
+      console.log("!!!!!!!!!!!!!!!!!!")
       this.loginFlag = true;
     } else {
       this.loginFlag = false;
@@ -171,26 +173,28 @@ export default Vue.extend({
       <div class="detail-post-detail-area">
         <DetailJob :job="job"/>
       </div>
-      <div class="button-area" v-if="!selfJobPost">
-          <div v-if="loginFlag === true" class="button-action-area">
-            <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
-            <div class="btn-box-apply-false" v-if="applyFlug == false">
-              応募済み
-            </div>
-            <div class="favorite-btn-area">
-              <favorite-detail-btn :jobId='id'></favorite-detail-btn>
-            </div>
+      <div class="button-area" v-if="loginFlag">
+        <div v-if="!selfJobPost" class="button-action-area">
+          <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
+          <div class="btn-box-apply-false" v-if="applyFlug == false">
+            応募済み
           </div>
-          <!-- 非ログイン時 リダイレクトさせる -->
-          <div class="button-action-area" v-else @click="registerRedirect">
-            <button class="btn-box-apply">応募する</button>
-            <div class="favorite-btn-area">
-              <font-awesome-icon icon="heart" class="icon"/>
-            </div>
+          <div class="favorite-btn-area">
+            <favorite-detail-btn :jobId='id'></favorite-detail-btn>
           </div>
+        </div>
+        <div class="button-action-area-edit" v-if="selfJobPost">
+          <button class="btn-box-edit" @click="openEditModal">編集する</button>
+        </div>
       </div>
-      <div class="button-area" v-else>
-        <button class="btn-box-edit" @click="openEditModal">編集する</button>
+        <!-- 非ログイン時 リダイレクトさせる -->
+      <div class="button-area" v-if="!loginFlag">
+        <div class="button-action-area" @click="registerRedirect">
+          <button class="btn-box-apply">応募する</button>
+          <div class="favorite-btn-area">
+            <font-awesome-icon icon="heart" class="icon"/>
+          </div>
+        </div>
       </div>
     </section>
     <Loading v-else>
@@ -350,7 +354,12 @@ export default Vue.extend({
   position: absolute;
   right: 0;
   top: 0;
-  width: 50%;
+  width: 20%;
+  padding: 0.2rem 0 0 0 ;
+
+  .heart {
+    background-color: blue;
+  }
 }
 
 .icon {
@@ -422,36 +431,20 @@ export default Vue.extend({
 
     //* ボタンエリア 
     .button-area {
-      width: 90%;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: -webkit-sticky;
-      position: sticky;
-      left: 0;
-      bottom: 0;
-
       .button-action-area {
-        margin: 0em auto 4rem auto;
+        margin: 0em auto 0rem auto;
         width: 100%;
         position: relative;
 
         .btn-box-apply {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 60%;
+          width: 80%;
           padding: 1.2rem 2rem;
           font-size: 1rem;
         }
 
         //* 応募済みボタン 
         .btn-box-apply-false {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 60%;
+          width: 80%;
           padding: 1.2rem 2rem;
           font-size: 1rem;
         }
@@ -486,7 +479,6 @@ export default Vue.extend({
     // * 編集する
     .btn-box-edit {
       font-size: 1rem;
-      padding: 1.2rem 6rem;
     }
   }
 }
@@ -506,10 +498,10 @@ export default Vue.extend({
     }
     //* ボタンエリア */
     .button-area {
+      height: 125px;
+
       .button-action-area {
-        margin: 0em auto 4rem auto;
         width: 95%;
-        position: relative;
       }
     }
   }

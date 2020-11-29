@@ -64,11 +64,6 @@ export default Vue.extend({
   <v-container>
     <div class="login-wrapper" v-show="!loading">
       <div class="login-container">
-        <div class="error-flag" v-if="loginErrorFlag == true">
-          <span>メールアドレス か パスワードが違います</span>
-        </div>
-        <div v-else>
-        </div>
         <div class="login-title">LOGIN</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
@@ -109,6 +104,11 @@ export default Vue.extend({
               filled
             ></v-text-field>
           </v-row>
+        </div>
+        <div class="error-flag" v-if="loginErrorFlag == true">
+          <span>メールアドレス か パスワードが違います</span>
+        </div>
+        <div v-else>
         </div>
         <hr>
           <v-row

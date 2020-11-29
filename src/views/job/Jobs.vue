@@ -409,7 +409,7 @@ export default Vue.extend({
         if(!this.jobs.length) {
           this.jobsNullFlag = true;
         }
-      }, 2000);
+      }, 1000);
     })
     .catch(error => {
       console.log(error)

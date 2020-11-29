@@ -135,10 +135,10 @@ export default {
     outline: none;
 
     &:hover {
+      @include btn-hover;
       color: #F8FAFF;
       appearance: none;
       border: none;
-      box-shadow: 0 5px 20px -3px #AB47BC;
       transition: .3s;
     }
   }
