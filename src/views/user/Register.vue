@@ -20,8 +20,8 @@ export default Vue.extend({
       loading: true,
       show2: true,
       rules: { //? パスワード 文字数
-        required: (value: any) => !!value || 'Required.',
-        min: (v: any) => v.length >= 8 || 'Min 8 characters',
+        required: (value: any) => !!value || 'パスワードが入力されていません.',
+        min: (v: any) => v.length >= 8 || '8文字以上で入力してください',
         emailMatch: () => (`The email and password you entered don't match`),
       },
       emailRules: [ //? メールアドレス 文字数
@@ -90,7 +90,7 @@ export default Vue.extend({
               :rules="[rules.required, rules.min]"
               name="input-10-2"
               label="password"
-              hint="At least 8 characters"
+              hint="8文字以上で入力してください"
               value="wqfasds"
               class="input-group--focused"
               v-model="LoginPassword"

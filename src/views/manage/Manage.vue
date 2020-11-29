@@ -310,7 +310,7 @@ export default Vue.extend({
       .title-area {
         width: 33.1%;
         padding: 0.8rem 0;
-        background-color: $secondary-color;
+        background-color: $tertiary-color;
         display: inline-block;
         color: $basic-white;
         font-weight: bold;
@@ -392,7 +392,7 @@ export default Vue.extend({
     .title-area {
       width: 33%;
       padding: 0.8rem 0;
-      background-color: $secondary-color;
+      background-color: $tertiary-color;
       display: inline-block;
       color: $basic-white;
       font-weight: bold;

@@ -1,6 +1,6 @@
 <template>
   <div class="chat-wrapper">
-    <div class="chat-wrapper-card">
+    <v-card class="chat-wrapper-card">
       <div class="card-left">
         <v-card  
           elevation="2" 
@@ -11,11 +11,11 @@
           >
           <div class="chat-group-area">
             <p>{{ chatGroup.job.jobTitle | truncateDetailTitle }}</p>
-            <div v-for="myselfUser in myselfUser" :key="myselfUser.id" class="chat-member-name">
+            <!-- <div v-for="myselfUser in myselfUser" :key="myselfUser.id" class="chat-member-name">
             <div v-for="chatMembar in chatMembers" :key="chatMembar.id" class="chat-member-name">
               <p>{{ myselfUser.user.userName }}  {{ chatMembar.user.userName }}</p>
             </div>
-            </div>
+            </div> -->
           </div>
         </v-card>
       </div>
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </v-card>
   </div>
 </template>
 
@@ -94,8 +94,6 @@ export default {
       .then(response => {
         this.loading = false;
         this.chats = response.data
-        console.log(this.chats.length)
-        console.log(chatLength)
         if(chatLength === this.chats.length) {
           console.log("chatLengt 一緒だよん")
         }
@@ -107,19 +105,16 @@ export default {
           chatLog.scrollTop = chatLog.scrollHeight
         }
       })
-      console.log("setInterval")
-    }, 5000)
+    }, 2000)
     // ! チャットのタイトルごとに案件参加者を取得できるようにする
     // * 案件参加者を取得
     axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=2`)
     .then(response => {
-      // console.log(response.data)
       this.chatMembers = response.data
     })
     // * 投稿者を取得
     axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=4`)
     .then(response => {
-      // console.log(response.data)
       this.myselfUser= response.data
     })
       axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
@@ -182,7 +177,7 @@ export default {
   text-decoration: underline;
 }
 .chat-wrapper{
-  width: 85%;
+  width: 90%;
   height: 90vh;
   margin: 0 auto;
   position: relative;
@@ -217,6 +212,7 @@ export default {
 
       .chat-group-area {
         width: 90%;
+        height: 102px;
         margin: 0 auto;
         // height: 102px;
         padding: 0.7rem 0 0.5rem 0;

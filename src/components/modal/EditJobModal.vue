@@ -45,12 +45,7 @@ export default Vue.extend({
     axios.get('http://localhost:8888/api/v1/programing_language')
     .then(response => {
       this.languages = response.data
-      console.log(this.languages)
-      console.log("↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑↑")
     })
-
-    console.log("aaaaaaaaaaaaaaaaaa")
-    console.log(this.job)
     this.selectedLang = this.job.programingLanguage
     for(let l = 0; l < this.selectedLang.length; l++) {
       this.selectlangNumber.push(this.selectedLang[l].id) //? 開発言語 配列 [Number, Number...]

@@ -39,7 +39,7 @@ section {
   margin: 0 auto;
 
   .title {
-    color: $secondary-color;
+    color: $primary-color;
     font-size: 1.8rem;
     font-weight: bold;
     height: 50px;
@@ -66,7 +66,7 @@ section {
 
         span {
           font-weight: bold;
-          color: $secondary-color;
+          color: $primary-color;
         }
 
         .step-graph {
@@ -81,7 +81,7 @@ section {
             width: 100%;
             height: 100%;
             border-radius: 35px;
-            background-color: $secondary-color;
+            background-color: $primary-color;
           }
         }
       }
@@ -108,7 +108,7 @@ section {
 
         .job-search-btn {
           @include box-shadow-btn;
-          @include purple-btn;
+          @include blue-btn;
           color: $basic-white;
           text-align: left;
           display: block;
@@ -134,8 +134,7 @@ section {
         }
 
         .job-create-btn {
-          border: 1px solid #673AB7;
-          color: #673AB7;
+          @include blue-cancel-btn;
           text-align: left;
           display: block;
           padding: 1.1rem 1.2rem;

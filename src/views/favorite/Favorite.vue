@@ -293,36 +293,30 @@ export default Vue.extend({
   .manage-wrapper {
     .job-manage-wrapper {
       .manage-job-area {
-        @include box-shadow-manage;
         width: 33.1%;
         padding: 0.8rem 0;
       }
 
       .apply-job-area {
-        @include box-shadow-manage;
         width: 33.1%;
         padding: 0.8rem 0;
       }
 
       .save-job-area {
-        @include box-shadow-manage;
         width: 33.1%;
         padding: 0.8rem 0;
       }
 
       .title-area {
-        @include box-shadow-manage;
         width: 33.1%;
         padding: 0.8rem 0;
       }
 
       .time-area {
-        @include box-shadow-manage;
         width: 33.1%;
         padding: 0.8rem 0;
       }
       .skill-area {
-        @include box-shadow-manage;
         width: 33.1%;
         padding: 0.8rem 0;
       }
@@ -363,7 +357,6 @@ export default Vue.extend({
     margin: 0;
 
     .manage-job-area {
-      @include box-shadow-manage;
       width: 33%;
       padding: 0.8rem 0;
     }
@@ -381,7 +374,7 @@ export default Vue.extend({
     .title-area {
       width: 33%;
       padding: 0.8rem 0;
-      background-color: $secondary-color;
+      background-color: $tertiary-color;
       display: inline-block;
       color: $basic-white;
       font-weight: bold;
