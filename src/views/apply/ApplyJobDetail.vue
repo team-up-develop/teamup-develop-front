@@ -57,9 +57,7 @@ export default Vue.extend({
       .then(response => {
         setTimeout(() => {
           this.loading = false;
-          console.log(response.data)
           this.job = response.data
-          console.log("よまれてるよ")
         }, 1000)
       })
   },

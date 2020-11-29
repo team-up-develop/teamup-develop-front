@@ -36,11 +36,6 @@ export default Vue.extend({
   mounted() {
     if(this.$store.state.auth.userId) {
       this.loginFlag = true;
-      console.log(this.loginFlag)
-      console.log("ログイン中です")
-    }
-    else {
-      console.log("ログアウト中")
     }
   }
 });
@@ -61,7 +56,6 @@ export default Vue.extend({
   width: 100%;
   display: inline-block;
   position: relative;
-  /* background-color: yellow; */
 }
 
 @media (min-width: 960px) {

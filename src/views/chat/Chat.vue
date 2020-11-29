@@ -1,6 +1,6 @@
 <template>
 <div class="chat-wrapper">
-  <div class="chat-wrapper-card" v-if="loginFlag === true">
+  <v-card class="chat-wrapper-card" v-if="loginFlag === true">
     <div class="card-left">
       <v-card 
         elevation="2" 
@@ -31,7 +31,7 @@
           </div>
         </div>
       </div>
-  </div>
+  </v-card>
     <div v-else>
       ログインが必要です！
     </div>
@@ -72,7 +72,6 @@ export default {
         const array = [];
         for(let i = 0; i < response.data.length; i++){
           const applyData = response.data[i]
-          console.log(applyData)
           if(applyData.applyStatusId === 2 || applyData.applyStatusId === 4 ){
             array.push(applyData)
             this.chatGroups = array
@@ -99,7 +98,7 @@ export default {
   text-decoration: underline;
 }
 .chat-wrapper{
-  width: 85%;
+  width: 90%;
   height: 90vh;
   margin: 0 auto;
   position: relative;

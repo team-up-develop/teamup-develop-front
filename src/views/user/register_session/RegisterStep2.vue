@@ -161,7 +161,7 @@ section {
   margin: 0 auto;
 
   .title {
-    color: $secondary-color;
+    color: $primary-color;
     font-size: 1.8rem;
     font-weight: bold;
     height: 50px;
@@ -188,7 +188,7 @@ section {
 
         span {
           font-weight: bold;
-          color: $secondary-color;
+          color: $primary-color;
         }
 
         .step-graph {
@@ -203,7 +203,7 @@ section {
             width: 67%;
             height: 100%;
             border-radius: 35px;
-            background-color: $secondary-color;
+            background-color: $primary-color;
           }
         }
       }
@@ -248,7 +248,7 @@ section {
 
         .next-btn {
           @include box-shadow-btn;
-          @include purple-btn;
+          @include blue-btn;
           color: $basic-white;
           text-align: left;
           display: block;

@@ -333,7 +333,6 @@ export default Vue.extend({
     .job-manage-wrapper {
       width: 93%;
       border-radius: 20px;
-      margin: 2rem 2rem;
 
       .job-area {
         display:flex;
@@ -346,12 +345,9 @@ export default Vue.extend({
 @media screen and (max-width: 900px) {
   .manage-wrapper {
     margin: 0rem auto;
-    width: 90%;
 
     .job-manage-wrapper {
-      width: calc(100% - 3rem);
-      height: calc(90vh - 5rem);
-      margin: 2rem 1.5em;
+      width: 96%;
     }
   }
 }
@@ -360,29 +356,24 @@ export default Vue.extend({
   .manage-wrapper {
     .job-manage-wrapper{
       .manage-job-area {
-        @include box-shadow-manage;
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .apply-job-area {
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .reject-job-area {
         width: 33.1%;
-        height: calc(68px - 1.6rem);
         padding: 0.8rem 0;
       }
 
       .title-area {
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
-        background-color: $secondary-color;
+        background-color: $tertiary-color;
         display: inline-block;
         color: $basic-white;
         font-weight: bold;
@@ -390,13 +381,11 @@ export default Vue.extend({
 
       .time-area{
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
       }
 
       .skill-area {
         width: 33.1%;
-        height: calc(48px - 1.8rem);
         padding: 0.8rem 0;
       }
     }
@@ -410,11 +399,8 @@ export default Vue.extend({
     width: 100%;
     height: 89.5vh;
     margin: 0 auto;
+
     .job-manage-wrapper {
-      width: calc(100% - 4rem);
-      height: calc(90vh - 5rem);
-      margin: 2rem 2rem;
-      // float: right;
       position: relative;
       font-size: 14px;
     }
@@ -424,7 +410,6 @@ export default Vue.extend({
       }
       span{
         display: none;
-        height: calc(48px - 1.6rem);
       } 
     }
   } 
@@ -439,35 +424,29 @@ export default Vue.extend({
     .job-manage-wrapper {
       width: 97%;
       margin: 0 auto;
-      height: calc(90vh - 5rem);
       margin: 2rem auto;
       position: relative;
     }
 
   .manage-job-area {
-    @include box-shadow-manage;
     width: 33%;
-    height: calc(68px - 1.6rem);
     padding: 0.8rem 0;
   }
 
     .apply-job-area {
       width: 33%;
-      height: calc(68px - 1.6rem);
       padding: 0.8rem 0;
     }
 
     .reject-job-area {
       width: 33%;
-      height: calc(68px - 1.6rem);
       padding: 0.8rem 0;
     }
 
     .title-area {
       width: 33%;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
-      background-color: $secondary-color;
+      background-color: $tertiary-color;
       display: inline-block;
       color: $basic-white;
       font-weight: bold;
@@ -475,13 +454,11 @@ export default Vue.extend({
 
     .time-area{
       width: 33;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
     }
 
     .skill-area {
       width: 33%;
-      height: calc(48px - 1.8rem);
       padding: 0.8rem 0;
     }
     .job-wrapper-area {

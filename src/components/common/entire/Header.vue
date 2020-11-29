@@ -28,7 +28,6 @@ export default Vue.extend({
   },
   created() {
     if( this.userId !== undefined) {
-      console.log("aaaaaaaaaaa")
       // this.userId = this.$store.state.auth.userId;
       console.log(this.userId)
     }
