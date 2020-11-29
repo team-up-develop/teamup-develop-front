@@ -239,6 +239,7 @@ export default Vue.extend({
   position: sticky;
   left: 0;
   bottom: 0;
+  height: 100px;
 
   .button-action-area {
     margin: 0em auto 4rem auto;
@@ -295,11 +296,39 @@ export default Vue.extend({
   border: none;
 }
 
+//* 編集するボタン 
+.btn-box-edit {
+  @include box-shadow-btn;
+  @include blue-btn;
+  color: $basic-white;
+  padding: 1.2rem 8rem;
+  transition: .3s;
+  border-radius: 50px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  margin: auto;
+  font-size: 1.3rem;
+  display: inline-block;
+  margin-bottom: 0.5rem;
+  cursor: pointer;
+  border: none;
+
+  &:hover {
+    @include btn-hover;
+  }
+}
+
 .favorite-btn-area {
   position: absolute;
   right: 0;
   top: 0;
-  width: 50%;
+  width: 20%;
+  padding: 0.2rem 0 0 0 ;
+
+  .heart {
+    background-color: blue;
+  }
 }
 
 .icon {
@@ -371,36 +400,20 @@ export default Vue.extend({
 
     //* ボタンエリア 
     .button-area {
-      width: 90%;
-      margin: 0 auto;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      position: -webkit-sticky;
-      position: sticky;
-      left: 0;
-      bottom: 0;
-
       .button-action-area {
-        margin: 0em auto 4rem auto;
+        margin: 0em auto 0rem auto;
         width: 100%;
         position: relative;
 
         .btn-box-apply {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 60%;
+          width: 80%;
           padding: 1.2rem 2rem;
           font-size: 1rem;
         }
 
         //* 応募済みボタン 
         .btn-box-apply-false {
-          position: absolute;
-          left: 0;
-          top: 0;
-          width: 60%;
+          width: 80%;
           padding: 1.2rem 2rem;
           font-size: 1rem;
         }
@@ -432,6 +445,10 @@ export default Vue.extend({
     .detail-post-detail-area{
       width: 100%;
     }
+    // * 編集する
+    .btn-box-edit {
+      font-size: 1rem;
+    }
   }
 }
 
@@ -450,10 +467,10 @@ export default Vue.extend({
     }
     //* ボタンエリア */
     .button-area {
+      height: 125px;
+
       .button-action-area {
-        margin: 0em auto 4rem auto;
         width: 95%;
-        position: relative;
       }
     }
   }

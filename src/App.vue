@@ -34,7 +34,6 @@ export default Vue.extend({
     }
   },  
   mounted() {
-    console.log(this.$store.state.auth.userId)
     if(this.$store.state.auth.userId) {
       this.loginFlag = true;
       console.log(this.loginFlag)

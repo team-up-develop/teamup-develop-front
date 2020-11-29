@@ -72,13 +72,13 @@ export default Vue.extend({
 
 
 <template>
-  <div>
+  <section>
     <font-awesome-icon icon="heart" class="icon" @click="saveJob" v-if="flag"/>
     <font-awesome-icon icon="heart" class="save-icon" @click="deleteJob" v-if="flag == false"/>
     <!-- <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
       保存削除
     </div> -->
-  </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
@@ -145,5 +145,19 @@ export default Vue.extend({
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;
+}
+
+
+//* スマホレスポンシブ 
+@media screen and (max-width: 500px) {
+  .icon {
+    width: 48px;
+    height: 48px;
+  }
+
+  .save-icon {
+    width: 48px;
+    height: 48px;
+  }
 }
 </style>
