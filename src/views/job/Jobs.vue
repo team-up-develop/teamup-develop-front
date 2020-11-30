@@ -800,7 +800,6 @@ export default Vue.extend({
   top: 0;
   position: sticky;
   z-index: 1;
-  box-shadow: 0 2px 3px 0px rgb(197, 197, 197);
   text-align: left;
   padding: 0 3rem;
   display: inline-block;

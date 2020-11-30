@@ -147,7 +147,7 @@ section {
   .login-container {
     max-width: 500px;
     height: 620px;
-    margin: 4rem auto 3rem auto;
+    margin: 2rem auto 3rem auto;
     border: solid 1px #B9B9B9;
     border-radius: 20px;
     padding: 1rem 3rem 2rem 3rem;
@@ -203,11 +203,10 @@ section {
       padding: 2rem 0;
 
       .login-btn {
-        @include blue-btn;
-        color: $basic-white;
+        @include blue-cancel-btn;
         display: block;
         padding: 1.2rem 5rem;
-        border-radius: 50px;
+        border-radius: 45px;
         font-size: .875rem;
         font-weight: 600;
         line-height: 1;
