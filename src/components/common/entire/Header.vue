@@ -1,74 +1,20 @@
 <script lang="ts">
 import Vue from 'vue';
-// import LogoImage from '.../assets/logo.jpg'
-// import $ from 'jquery'
 export type DataType = {
   userId: number;
-  isActive: boolean;
-  hasError: boolean;
-  gnav: boolean;
 }
 
 export default Vue.extend({ 
-  // props: {
-  //   flag: Boolean
-  // },
   data(): DataType {
     return {
       userId: this.$store.state.auth.userId,
-      // assetsImage: LogoImage,
-      // assetsImage_NG: '.../assets/logo.jpg',
-      // staticImage: '.../assets/logo.jpg',
-      isActive: true,
-      hasError: false,
-      gnav: false //? ハンバーガーメニューフラグ
       // userName: null,
-      // message: ""
     }
   },
   created() {
     if( this.userId !== undefined) {
-      // this.userId = this.$store.state.auth.userId;
       console.log(this.userId)
     }
-  },
-  methods: {
-    show(e: any) {
-      const elm = e.currentTarget;
-      const className = elm.className;
-      if(className.indexOf('is-open') != -1) {
-        this.gnav = false;
-        elm.className = 'button';
-      } else {
-        this.gnav = true;
-        elm.className += " is-open";
-      }
-    },
-    // * Header を閉じる
-    closeHeader() {
-      this.gnav = false;
-    }
-  },
-  mounted() {
-    // // * Header 上下スクロール
-    // let pos = 0;
-    // $(window).on('scroll', function(){
-
-    //   if($(this).scrollTop() > 50 ){
-    //     if($(this).scrollTop() < pos ){
-    //       // ? 上スクロール時に表示
-    //       $('.header-wrapper').addClass('_show');
-    //     }else{
-    //       //? 下 スクロール時に表示
-    //       $('.header-wrapper').removeClass('_show');
-    //     }
-    //   } else {
-    //     $('.header-wrapper').addClass('_show');
-    //   }
-
-    //   //? スクロールが停止した位置を保持
-    //   pos = $(this).scrollTop();
-    // });
   }
 });
 </script>
@@ -76,73 +22,56 @@ export default Vue.extend({
 <template>
   <div class="header-wrapper">
     <div class="header-wrapper-area">
-      <div class="header-logo-area">
-        <div class="header-logo">
-      <div class="responsive-header">
-        <button class="button" type="button" name="button" @click="show">
-          <span class="top"></span>
-          <span class="middle"></span>
-          <span class="bottom"></span>
-        </button>
-        <transition>
-          <nav id="gnav" class="nav" v-if="gnav">
-            <div class="nav__body" @click="closeHeader">
-              <ul class="nav__lst">
-                <li class="nav__item"><router-link to="/jobs">案件を探す</router-link></li>
-                <li class="nav__item"><router-link to="/job_create/1">募集する</router-link></li>
-                <li class="nav__item"><router-link to="/chat">連絡する</router-link></li>
-                <li class="nav__item"><router-link to="/manage">管理する</router-link></li>
-                <li class="nav__item"><router-link :to="`/account/profile/${ this.userId }`">プロフィール</router-link></li>
-              </ul>
-            </div>
-          </nav>
-        </transition>
-      </div>
-          <!-- <div
-            class="static"
-            v-bind:class="{ active: isActive, 'text-danger': hasError }"
-          ></div> -->
-          <!-- <img class="img" src="../assets/logo.jpg" width="130" /> -->
-        </div>
-      </div>
       <div class="header-main-area">
-        <div class="header-main-left" v-bind:class="{ active: isActive, 'text-danger': hasError }">
-          <ul>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="search" class="icon"/> -->
-              </div>
-              <router-link to="/jobs" class="router-link">案件を探す</router-link>
-            </li>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="user-plus" class="icon"/> -->
-              </div>
-              <router-link to="/job_create/1" class="router-link">募集する</router-link>
-            </li>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="comments" class="icon"/> -->
-              </div>
-              <router-link to="/chat" class="router-link">連絡する</router-link>
-            </li>
-            <li class="menu-list">
-              <div class="menu-list-icon-area">
-                <!-- <font-awesome-icon icon="address-card" class="icon"/> -->
-              </div>
-              <router-link to="/manage" class="router-link">管理する</router-link>
-            </li>
-            <!-- <li class="menu-list">
-              <div class="menu-list-icon-area">
-              </div>
-              <router-link to="/manage/ManageRejectDetail" class="router-link">pagination</router-link>
-            </li> -->
-          </ul>
+        <div class="header-main-left">
+          <router-link to="/jobs" class="router-link">ロゴ</router-link>
         </div>
         <div class="header-main-right">
-          <router-link :to="`/account/profile/1`">
-            <div class="user-image"></div>
-          </router-link>
+          <v-row class="left-user-menu">
+            <v-menu
+              left
+              bottom
+            >
+              <template v-slot:activator="{ on, attrs }">
+                <v-btn
+                  icon
+                  v-bind="attrs"
+                  v-on="on"
+                >
+                  <div class="user-image"></div>
+                </v-btn>
+              </template>
+              <v-list-item-group
+                color="primary"
+              >
+                <v-list>
+                  <v-list-item>
+                    <v-list-item-title><router-link to="/account/profile/1" class="menu-list">
+                      <v-icon class="icon">mdi-card-account-details-outline</v-icon>Kazuya</router-link>
+                      <div class="boder-line"></div>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title><router-link to="/chat" class="menu-list">
+                      <v-icon class="icon">mdi-chat-plus-outline</v-icon>チャット</router-link>
+                    </v-list-item-title>
+                  </v-list-item>
+                  <v-list-item>
+                    <v-list-item-title><router-link to="/manage" class="menu-list">
+                      <v-icon class="icon">mdi-clipboard-multiple-outline</v-icon>案件管理</router-link>
+                    </v-list-item-title>
+                  </v-list-item>
+                </v-list>
+              </v-list-item-group>
+            </v-menu>
+          </v-row>
+          <v-row class="right-create-btn">
+            <router-link to="/job_create/1" class="router">
+              <v-btn class="create-btn">
+                募集する
+              </v-btn>
+            </router-link>
+          </v-row>
         </div>
       </div>
     </div>
@@ -152,271 +81,113 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
-.router-link-active {
-  border-bottom: 4px solid $primary-color;
-  font-weight: bold;
+.boder-line {
+  margin-top: 0.5rem;
+  border-bottom: 1px dashed $primary-color;
 }
 
-.header-wrapper._show {
-  position: fixed;
-  top:0;
-  left: 0;
+.icon {
+  color: $text-sub-color;
+  margin-right: 0.7rem;
+  font-size: 0.8em;
+}
+
+.router {
+  text-decoration: none;
 }
 
 .header-wrapper {
   background-color: #ffffff;
   width: 100%;
   height: 58px;
-  box-shadow: 0px 4px 3px -3px rgba(216, 216, 216, 0.6);
   margin-bottom: 2px;
   top: 0px;
-  // position: fixed;
   top: -100px;
   left: 0;
   z-index: 2;
   transition: 0.3s ease-in-out;
-}
 
-.header-wrapper-area {
-  width: 100%;
-  height: 76px;
-  position: relative;
-}
-
-.header-wrapper {
-  .header-logo-area {
-    height: 100%;
-    width: 10%;
-    padding: 0 0 0rem 2rem;
-
-    .header-logo {
-      width: 60%;
-      height: calc(100% - 2.8rem);
-      background-color: rgba(94, 94, 94, 0.226);
-      padding: 1.2rem 0;
-    }
-  }
-
-  .header-main-area {
-    height: 100%;
-    width: 86%;
-    position: absolute;
-    right: 0;
-    top: 0;
-
-    .header-main-left {
-      width: 60%;
-      height: 100%;
-    }
-  }
-}
-
-ul {
-  width: 100%;
-  padding: 0;
-  margin: 0;
-  text-align: left;
-
-  .menu-list {
-    height: 25px;
-    list-style: none;
-    width: 15%;
-    padding: 1rem 0;
-    font-size: 14px;
-    margin: 6px 0;
+  .header-wrapper-area {
+    width: 100%;
+    height: 66px;
     position: relative;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-    display: inline-block;
-    text-align: center;
-  }
 
-  li {
-    .menu-list-icon-area {
-      width: 25%;
+    .header-main-area {
       height: 100%;
-      pointer-events: none;
-
-      .icon {
-        font-size: 20px;
-        padding: 0.7rem 0;
-        color: $primary-color;
-        pointer-events: none;
-      }
-    }
-
-    .router-link {
       width: 100%;
       position: absolute;
-      top: 0;
       right: 0;
-      text-align: center;
-      padding: 0.85rem  0;
-      text-decoration: none;
-      color: $text-sub-color;
-      font-size: 14px;
-      margin: 0 auto;
-      font-weight: bold;
+      top: 0;
+
+      .header-main-left {
+        width: 180px;
+        height: 100%;
+        padding: 1rem 0 0rem 2rem;
+
+        @media screen and (max-width: 768px) {
+          width: 100px;
+        }
+
+        @media screen and (max-width: 500px) {
+          padding: 1rem 0 0rem 0rem;
+        }
+      }
+
+      .header-main-right {
+        width: 300px;
+        // background-color: grey;
+        padding: 0.7rem 4rem 0 0 ;
+        position: absolute; 
+        right: 0;
+        top: 0;
+
+        @media screen and (max-width: 768px) {
+          width: 250px;
+        }
+
+        @media screen and (max-width: 500px) {
+          width: 210px;
+        }
+
+        .left-user-menu {
+          width: 100px;
+          height: 100%;
+          margin: 0;
+          display: inline-block;
+          // background-color: green;
+
+          .user-image {
+            @include user-image;
+            width: 2.8rem;
+            height: 2.6rem;
+            border-radius: 50%;
+            cursor: pointer;
+          }
+        }
+
+        .right-create-btn {
+          width: 30%;
+          height: 100%;
+          display: inline-block;
+          font-weight: bold;
+
+          .create-btn {
+            @include blue-btn;
+            color: $basic-white;
+            font-weight: bold;
+          }
+        }
+      }
     }
   }
-
-  .menu-list-about {
-    height: 25px;
-    list-style: none;
-    width: 20%;
-    padding: 1rem 0;
-    font-size: 14px;
-    margin: 6px 0;
-    position: relative;
-    cursor: pointer;
-    transition: all 0.3s ease 0s;
-    display: inline-block;
-    text-align: center;
-    margin-left: 1rem;
-    font-weight: bold;
-  }
-
-  li .router-link-about {
-    width: 105%;
-    position: absolute;
-    top: 0;
-    right: 0;
-    padding: 1.3rem  0;
-    text-decoration: none;
-    color: $text-main-color;
-    font-size: 14px;
-    margin: 0 auto;
-  }
 }
 
-.header-wrapper .header-main-area .header-main-right {
-  width: 5%;
-  height: calc(100% - 0.4rem);
-  position: absolute;
-  right: 0;
-  top: 0;
-  padding: 0.5rem 3rem 0.4rem 3rem;
-
-  .user-image {
-    @include user-image;
-    width: 2.8rem;
-    height: 2.6rem;
-    border-radius: 50%;
-    float: right;
-    cursor: pointer;
-  }
-}
-
-.user-rooter {
+.menu-list {
+  color: $text-sub-color;
+  font-size: 14px;
   text-decoration: none;
-  color: $basic-white;
 }
 
-// * ハンバーガーメニュー
-.responsive-header {
-  display: none;
-}
-.button {
-  display: block;
-  width: 50px;
-  height: 25px;
-  background-color: transparent;
-  border: none;
-  position: relative;
-  z-index: 100;
-  appearance: none;
-  cursor: pointer;
-  outline: none;
-
-  &.is-open {
-    .top {
-      transform: rotate(45deg);
-    }
-    .middle {
-      opacity: 0;
-    }
-    .bottom {
-      transform: rotate(-45deg);
-    }
-  }
-  
-  span {
-    display: flex;
-    width: 20px;
-    height: 1px;
-    margin: auto;
-    background-color: #000;
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    transition: .5s ease;
-
-    &.top {
-      transform: translateY(-6px);
-    }
-    &.bottom {
-      transform: translateY(6px);
-    }
-  }
-}
-.nav {
-  width: 40%;
-  height: 100%;
-  position: fixed;
-  background-color: #ffffff;
-  top: 0;
-  left: 0;
-  z-index: 99;
-  
-  &__body {
-    padding: 60px 1rem;
-  }
-  
-  &__lst {
-    list-style: none;
-  }
-
-  &__item {
-    font-size: 24px;
-    line-height: 1.5;
-    font-weight: 700;
-    & ~ & {
-      margin-top: 8px;
-    }
-    a {
-      font-size: 14px;
-      color: $text-sub-color;
-      text-decoration: none;
-      padding: 2px 0;
-    }
-  }
-}
-
-.v-enter,
-.v-leave-to {
-  opacity: 0
-}
-
-.v-enter-to,
-.v-leave {
-  opacity: 1
-}
-
-.v-enter-active,
-.v-leave-active {
-  transition: opacity 1s ease
-}
-
-@media (max-width: 905px) {
-  .responsive-header {
-    display: inline;
-  }
-  .header-main-area {
-    display: none;
-  }
-}
 /* スマホ */
 @media (max-width: 500px){
   .header-wrapper .header-logo-area {
