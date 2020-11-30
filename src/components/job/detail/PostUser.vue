@@ -116,7 +116,7 @@ export default Vue.extend({
 
         .user-name {
           margin-top: 0.2rem;
-          font-size: 14px;
+          font-size: 16px;
         }
       }
 
