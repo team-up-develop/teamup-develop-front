@@ -7,21 +7,14 @@
       </div>
     </transition>
     <!-- 言語検索 モーダル画面 -->
-    <div class="modal-window">
-      <LanguageSearchModal @close="closeLangSearchModal" v-if="langModal">
-        <div class="modal-content">
-          <div class="round" v-for="lang in languages" v-bind:key="lang.id">
-          <input type="checkbox"  id="checkbox" v-model="selectedLang" v-bind:value="lang.id">
-            <label for="" class="checkbox">{{ lang.programingLanguageName }}</label>
-          </div>
-        </div>
-        <template slot="footer">
-          <div @click="searchLanguage" class="serach-btn">
-            検索する
-          </div>
-        </template>
-      </LanguageSearchModal>
-    </div>
+    <LanguageSearchModal 
+      :languages="languages" 
+      :jobs="jobs"
+      
+      @close="closeLangSearchModal"
+      v-if="langModal"
+      @compliteSearchLanguage="compliteSearchLanguage($event)"
+    />
     <!-- フレームワーク検索 モーダル画面 -->
     <div class="modal-window">
       <FrameworkSearchModal @close="closeFrameworkSearchModal" v-if="frameworkModal">
@@ -66,12 +59,36 @@
     </div>
     <!-- 検索エリアバー -->
     <div class="search-area">
-      <button v-if="selectedLang.length == 0" class="search-area__modal-btn" @click="langSearchModal">開発言語</button>
-      <button v-else class="search-area__modal-btn-active" @click="langSearchModal">開発言語++</button>
-      <button v-if="selectedFramework.length == 0" class="search-area__modal-btn" @click="frameworkSearchModal">フレームワーク</button>
-      <button v-else class="search-area__modal-btn-active" @click="frameworkSearchModal">フレームワーク++</button>
-      <button v-if="selectedSkill.length== 0" class="search-area__modal-btn" @click="skillSearchModal">その他技術</button>
-      <button v-else class="search-area__modal-btn-active" @click="skillSearchModal">その他技術++</button>
+      <button 
+        v-if="this.$store.state.search.language.length == 0" 
+        class="search-area__modal-btn" 
+        @click="langSearchModal"
+      >開発言語</button>
+      <button 
+        v-else 
+        class="search-area__modal-btn-active" 
+        @click="langSearchModal"
+        >開発言語++</button>
+      <button 
+        v-if="selectedFramework.length == 0" 
+        class="search-area__modal-btn" 
+        @click="frameworkSearchModal"
+      >フレームワーク</button>
+      <button 
+        v-else 
+        class="search-area__modal-btn-active" 
+        @click="frameworkSearchModal"
+      >フレームワーク++</button>
+      <button 
+        v-if="selectedSkill.length== 0" 
+        class="search-area__modal-btn" 
+        @click="skillSearchModal"
+      >その他技術</button>
+      <button 
+        v-else 
+        class="search-area__modal-btn-active" 
+        @click="skillSearchModal"
+      >その他技術++</button>
       <input
         type="text" 
         v-model="freeWord" 
@@ -252,7 +269,7 @@ export default Vue.extend({
     return {
       jobs: [], //? 案件一覧配列
       jobsNullFlag: false, //? 案件が存在しない場合 表示のため
-      selectedLang: [], //? 言語 v-model
+      // selectedLang: this.$store.state.search.language, //? 言語 v-model
       languages: [], //? 言語取得
       selectedFramework: [], //? フレームワーク v-model
       frameworks: [],//? フレームワーク取得
@@ -310,8 +327,6 @@ export default Vue.extend({
   created() {
     // * 投稿一覧取得
     const posts = [];
-    console.log("↓ 下が選択された言語ですよ！！！！！！！！！！！！！！！！！！")
-    console.log(this.selectedLang)
     axios.get('http://localhost:8888/api/v1/job', {
       // headers: {
       //   Authorization: `Bearer ${ localStorage.userId }`
@@ -344,14 +359,16 @@ export default Vue.extend({
           const languageNum = this.$store.state.search.language;
           for(let s = 0; s < languageNum.length; s++) {
             const languageNumParams = languageNum[s]
-            this.selectedLang.push(languageNumParams)
-            const queryParamsLanguage =  'programing_framework_id' + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
+            const queryParamsLanguage =  'programing_language_id' + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
             arrayLanguagekNum.push(queryParamsLanguage)
           }
           const LastLanguageNum = arrayLanguagekNum.join('');
           axios.get(`http://localhost:8888/api/v1/job/?${LastLanguageNum}`)
           .then(response => {
             this.jobs = response.data
+            this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
+            this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+            this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
             if(this.jobs.length == 0) {
               this.jobsNullFlag = true;
             }
@@ -446,54 +463,6 @@ export default Vue.extend({
     // * 非ログイン時 登録リダイレクト
     registerRedirect() {
       this.$router.push('/register');
-    },
-    // * 開発言語検索
-    searchLanguage() {
-      const array = [];
-      const languageState = []; //? Stateにフレームワークを複数いれるための配列
-      const params = {
-        language: this.selectedLang,
-      }
-      for(let i =0; i < params.language.length; i++) {
-        const languageParams = params.language[i];
-        languageState.push(languageParams)
-        const queryParams =  'programing_language_id' + '[' + Number(languageParams - 1) + ']' + '=' + languageParams + '&';
-        array.push(queryParams)
-      }
-      const languageStateEnd = languageState.slice(0)
-      const result = array.join('');
-      // console.log( result );
-        axios.get(`http://localhost:8888/api/v1/job/?${result}`)
-        .then(response => {
-          this.jobs = response.data
-          // ? ページネーション処理
-          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
-          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
-
-          this.langModal = false
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.jobsNullFlag = false; //? 案件が存在しない際のフラグをFalseに
-            this.detailFlag = false; //? 右側案件詳細を閉じる
-
-            // * 言語 検索語 Vuexに値を格納する
-            this.$store.dispatch('languageSearch', {
-              language: languageStateEnd,
-            })
-            // * 言語が１つも選択されていない時の処理
-            if(params.language.length == 0 ) {
-              this.$store.dispatch('languageSearch', {
-                language: null,
-              })
-            }
-            // * もし案件が存在しなかったら処理が走る
-            if(!this.jobs.length) {
-              this.jobsNullFlag = true;
-            }
-          }, 1500)
-        })
     },
     // * フレームワーク検索
     searchFramework() {
@@ -729,6 +698,22 @@ export default Vue.extend({
     },
     closeLangSearchModal() {
       this.langModal = false;
+    },
+    compliteSearchLanguage(emitLanguage) {
+      console.log("~~~~~~~~~~~ですね！！！！！！！！~~~~~~~~")
+      console.log(emitLanguage)
+      // ? ページネーション処理
+      this.jobs = emitLanguage.slice().reverse(); //? 案件を (配列) を 降順にする
+      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+
+      this.jobsNullFlag = false; //? 案件が存在しない際のフラグをFalseに
+      this.langModal = false;
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.detailFlag = false; //? 右側案件詳細を閉じる
+      }, 1500)
     },
     // ? 開発フレームワークモーダル
     frameworkSearchModal() {
