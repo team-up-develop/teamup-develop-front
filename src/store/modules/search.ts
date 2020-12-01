@@ -17,7 +17,7 @@ export type SearchData = {
 
 const state: State = {
   freeWord: "",
-  language: null,
+  language: [],
   framwork: null,
   skill: null
 }

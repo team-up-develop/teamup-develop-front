@@ -6,21 +6,79 @@
           <span>開発言語</span>
         </v-card-title>
         <v-card-text class="modal-content">
-          <slot/>
+          <div class="modal-content">
+            <div class="round" v-for="lang in languages" v-bind:key="lang.id">
+            <input type="checkbox" id="checkbox" v-model="selectedLang" v-bind:value="lang.id">
+              <label for="" class="checkbox">{{ lang.programingLanguageName }}</label>
+            </div>
+          </div>
+          <h1>{{ selectedLang }}</h1>
         </v-card-text>
-        <footer class="modal-footer">
-          <slot name="footer">
-            <button @click="$emit('close')">Close</button>
-          </slot>
-        </footer>
+        <div class="modal-footer">
+          <div @click="searchLanguage" class="serach-btn">
+            検索する
+          </div>
+        </div>
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+  props: {
+    languages: Array,
+    jobs: Array,
+    
+  },
+  data() {
+    return {
+      selectedLang: this.$store.state.search.language
+    }
+  },
+  methods: {
+    // * 開発言語検索
+    searchLanguage() {
+      console.log("検索発火")
+      const array = [];
+      const languageState = []; //? Stateにフレームワークを複数いれるための配列
+      const params = {
+        language: this.selectedLang,
+      }
+      for(let i =0; i < params.language.length; i++) {
+        const languageParams = params.language[i];
+        languageState.push(languageParams)
+        const queryParams =  'programing_language_id' + '[' + Number(languageParams - 1) + ']' + '=' + languageParams + '&';
+        array.push(queryParams)
+      }
+      const languageStateEnd = languageState.slice(0)
+      const result = array.join('');
+      // console.log( result );
+        axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+        .then(response => {
+          this.jobs = response.data
+          console.log("↓検索後のJobの中身だよ！")
+          console.log(this.jobs)
+          this.$emit('compliteSearchLanguage', this.jobs)
 
+          // * 言語 検索語 Vuexに値を格納する
+          this.$store.dispatch('languageSearch', {
+            language: languageStateEnd,
+          })
+          // * 言語が１つも選択されていない時の処理
+          if(params.language.length == 0 ) {
+            this.$store.dispatch('languageSearch', {
+              language: [],
+            })
+          }
+          // * もし案件が存在しなかったら処理が走る
+          if(!this.jobs.length) {
+            this.jobsNullFlag = true;
+          }
+        })
+    },
+  }
 }
 </script>
 
@@ -93,5 +151,12 @@ span {
 
 .v-card__text {
   width: 100%;
+}
+
+.serach-btn {
+  width: 100px;
+  height: 100px;
+  font-size: 20px;
+  background-color: yellow;
 }
 </style>
