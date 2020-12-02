@@ -29,12 +29,11 @@ export default Vue.extend({
   mounted() {
     setTimeout(() => {
       this.loading = false;
-
       // * ページ遷移知れてきたらVuexの中身を消す
       this.$store.state.search.freeWord = ""
-      this.$store.state.search.language = null
-      this.$store.state.search.framwork = null
-      this.$store.state.search.skill = null
+      this.$store.state.search.language = []
+      this.$store.state.search.framwork = []
+      this.$store.state.search.skill = []
 
       // * 開発言語 取得
       axios.get('http://localhost:8888/api/v1/programing_language')
@@ -74,6 +73,7 @@ export default Vue.extend({
         framwork: [framwork.id],
       })
       return this.$router.push('/jobs');
+
     },
     // * トップページ その他スキル検索
     skillClick(skill: Skill) {

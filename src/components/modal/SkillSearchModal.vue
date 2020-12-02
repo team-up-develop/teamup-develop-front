@@ -1,3 +1,70 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import { Skill } from '@/types/index';
+import { Job } from '@/types/job';
+
+export type DateType = {
+  skills: Skill[];
+  selectedSkill: [];
+  jobs: Job[];
+}
+
+export default Vue.extend({ 
+  props: {
+    jobsArray: Array
+  },
+  data(): DateType {
+    return {
+      selectedSkill: this.$store.state.search.skill, 
+      skills: [],
+      jobs: []
+    }
+  },
+  created() {
+    // * フレームワーク取得
+    axios.get<Skill[]>('http://localhost:8888/api/v1/skill')
+    .then(response => {
+      this.skills = response.data
+    })
+  },
+  methods: {
+    // * その他スキル 検索
+    searchSkill() {
+      const arraySkill: string[] = [];
+      const skillState: number[] = [];
+      const params = {
+        skill: this.selectedSkill,
+      }
+      for(let i = 0; i < params.skill.length; i++) {
+        const skillParams: number = params.skill[i];
+        skillState.push(skillParams)
+        const queryParams: string =  'skill_id' + '[' + Number(skillParams - 1) + ']' + '=' + skillParams + '&';
+        arraySkill.push(queryParams)
+      }
+      const skillStateEnd: number[] = skillState.slice(0)
+      const result: string = arraySkill.join('');
+      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      .then(response => {
+        this.jobs = response.data
+
+        this.$emit('compliteSearchSkill', this.jobs)
+        // * その他スキル 検索語 Vuexに値を格納する
+        this.$store.dispatch('skillSearch', {
+          skill: skillStateEnd,
+        })
+        // * その他スキルが１つも選択されていない時の処理
+        if(params.skill.length == 0 ) {
+          this.$store.dispatch('skillSearch', {
+            skill: [],
+          })
+        }
+      })
+    },
+  }
+});
+</script>
+
 <template>
   <transition name="modal" appear>
     <div class="modal-overlay" @click.self="$emit('close')">
@@ -6,23 +73,22 @@
           <span>その他スキル</span>
         </v-card-title>
         <v-card-text class="modal-content">
-          <slot/>
+          <div class="modal-content">
+            <div class="round-skill" v-for="skill in skills" v-bind:key="skill.id">
+            <input type="checkbox"  id="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
+              <label for="" class="checkbox">{{ skill.skillName }}</label>
+            </div>
+          </div>
         </v-card-text>
-        <footer class="modal-footer">
-          <slot name="footer">
-            <button @click="$emit('close')">Close</button>
-          </slot>
-        </footer>
+        <div class="footer">
+          <div @click="searchSkill" class="serach-btn">
+            検索する
+          </div>
+        </div>
       </div>
     </div>
   </transition>
 </template>
-
-<script>
-export default {
-
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
