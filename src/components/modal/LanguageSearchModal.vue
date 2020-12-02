@@ -1,12 +1,20 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
+import { Language } from '@/types/index';
+import { Job } from '@/types/job';
+
+export type DateType = {
+  languages: Language[];
+  selectedLang: [];
+  jobs: Job[];
+}
 
 export default Vue.extend({ 
   props: {
     jobsArray: Array,
   },
-  data() {
+  data(): DateType {
     return {
       languages: [],
       selectedLang: this.$store.state.search.language,
@@ -15,7 +23,7 @@ export default Vue.extend({
   },
   created() {
     // * プログラミング言語 取得
-    axios.get('http://localhost:8888/api/v1/programing_language')
+    axios.get<Language[]>('http://localhost:8888/api/v1/programing_language')
     .then(response => {
       this.languages = response.data
     })
@@ -23,39 +31,35 @@ export default Vue.extend({
   methods: {
     // * 開発言語検索
     searchLanguage() {
-      console.log("検索発火")
-      const array = [];
-      const languageState = []; //? Stateにフレームワークを複数いれるための配列
+      const array: string[] = [];
+      const languageState: number[] = [];
       const params = {
         language: this.selectedLang,
       }
-      for(let i =0; i < params.language.length; i++) {
-        const languageParams = params.language[i];
+      for(let i = 0; i < params.language.length; i++) {
+        const languageParams: number = params.language[i];
         languageState.push(languageParams)
-        const queryParams =  'programing_language_id' + '[' + Number(languageParams - 1) + ']' + '=' + languageParams + '&';
+        const queryParams: string =  'programing_language_id' + '[' + Number(languageParams - 1) + ']' + '=' + languageParams + '&';
         array.push(queryParams)
       }
-      const languageStateEnd = languageState.slice(0)
-      const result = array.join('');
-      // console.log( result );
-        axios.get(`http://localhost:8888/api/v1/job/?${result}`)
-        .then(response => {
-          this.jobs = response.data
-          console.log("↓検索後のJobの中身だよ！")
-          console.log(this.jobs)
-          this.$emit('compliteSearchLanguage', this.jobs)
+      const languageStateEnd: number[] = languageState.slice(0)
+      const result: string = array.join('');
+      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      .then(response => {
+        this.jobs = response.data
+        this.$emit('compliteSearchLanguage', this.jobs)
 
-          // * 言語 検索語 Vuexに値を格納する
-          this.$store.dispatch('languageSearch', {
-            language: languageStateEnd,
-          })
-          // * 言語が１つも選択されていない時の処理
-          if(params.language.length == 0 ) {
-            this.$store.dispatch('languageSearch', {
-              language: [],
-            })
-          }
+        // * 言語 検索語 Vuexに値を格納する
+        this.$store.dispatch('languageSearch', {
+          language: languageStateEnd,
         })
+        // * 言語が１つも選択されていない時の処理
+        if(params.language.length == 0 ) {
+          this.$store.dispatch('languageSearch', {
+            language: [],
+          })
+        }
+      })
     },
   }
 });

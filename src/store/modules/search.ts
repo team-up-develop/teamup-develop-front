@@ -1,18 +1,22 @@
 import { ActionTree } from 'vuex';
 import { GetterTree } from 'vuex';
 import { MutationTree } from 'vuex';
+import { Language } from '@/types/index';
+import { Framework } from '@/types/index';
+import { Skill } from '@/types/index';
+
 interface State {
   freeWord: string;
-  language: [] | null;
-  framwork: [] | null;
-  skill: [] | null;
+  language: Language[];
+  framwork: Framework[];
+  skill: Skill[];
 }
 
 export type SearchData = {
   freeWord: string;
-  language: [] | null;
-  framwork: [] | null;
-  skill: [] | null;
+  language: Language[];
+  framwork: Framework[];
+  skill: Skill[];
 }
 
 const state: State = {
@@ -35,15 +39,15 @@ const mutations: MutationTree<State> = {
     state.freeWord = freeWord
   },
   // * 言語 格納
-  language(state: State, language: [] | null) {
+  language(state: State, language: Language[]) {
     state.language = language
   },
   // * 言語 格納
-  framwork(state: State, framwork: [] | null) {
+  framwork(state: State, framwork: Framework[]) {
     state.framwork = framwork
   },
   // * その他スキル 格納
-  skill(state: State, skill: [] | null) {
+  skill(state: State, skill: Skill[]) {
     state.skill = skill
   }
 }

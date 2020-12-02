@@ -1,3 +1,70 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import { Skill } from '@/types/index';
+import { Job } from '@/types/job';
+
+export type DateType = {
+  skills: Skill[];
+  selectedSkill: [];
+  jobs: Job[];
+}
+
+export default Vue.extend({ 
+  props: {
+    jobsArray: Array
+  },
+  data(): DateType {
+    return {
+      selectedSkill: this.$store.state.search.skill, 
+      skills: [],
+      jobs: []
+    }
+  },
+  created() {
+    // * フレームワーク取得
+    axios.get<Skill[]>('http://localhost:8888/api/v1/skill')
+    .then(response => {
+      this.skills = response.data
+    })
+  },
+  methods: {
+    // * その他スキル 検索
+    searchSkill() {
+      const arraySkill: string[] = [];
+      const skillState: number[] = [];
+      const params = {
+        skill: this.selectedSkill,
+      }
+      for(let i = 0; i < params.skill.length; i++) {
+        const skillParams: number = params.skill[i];
+        skillState.push(skillParams)
+        const queryParams: string =  'skill_id' + '[' + Number(skillParams - 1) + ']' + '=' + skillParams + '&';
+        arraySkill.push(queryParams)
+      }
+      const skillStateEnd: number[] = skillState.slice(0)
+      const result: string = arraySkill.join('');
+      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      .then(response => {
+        this.jobs = response.data
+
+        this.$emit('compliteSearchSkill', this.jobs)
+        // * その他スキル 検索語 Vuexに値を格納する
+        this.$store.dispatch('skillSearch', {
+          skill: skillStateEnd,
+        })
+        // * その他スキルが１つも選択されていない時の処理
+        if(params.skill.length == 0 ) {
+          this.$store.dispatch('skillSearch', {
+            skill: [],
+          })
+        }
+      })
+    },
+  }
+});
+</script>
+
 <template>
   <transition name="modal" appear>
     <div class="modal-overlay" @click.self="$emit('close')">
@@ -22,63 +89,6 @@
     </div>
   </transition>
 </template>
-
-<script>
-import axios from 'axios'
-export default {
-  props: {
-    jobsArray: Array
-  },
-  data() {
-    return {
-      selectedSkill: this.$store.state.search.skill, //? その他スキル v-model
-      skills: [], //? その他スキル取得
-    }
-  },
-  created() {
-    // * フレームワーク取得
-    axios.get('http://localhost:8888/api/v1/skill')
-    .then(response => {
-      this.skills = response.data
-    })
-  },
-  methods: {
-    // * その他スキル 検索
-    searchSkill() {
-      this.loading = false;
-      const arraySkill = [];
-      const skillState = []; //? Stateにその他スキルを複数いれるための配列
-      const params = {
-        skill: this.selectedSkill,
-      }
-      for(let i =0; i < params.skill.length; i++) {
-        const skillParams = params.skill[i];
-        skillState.push(skillParams)
-        const queryParams =  'skill_id' + '[' + Number(skillParams - 1) + ']' + '=' + skillParams + '&';
-        arraySkill.push(queryParams)
-      }
-      const skillStateEnd = skillState.slice(0)
-      const result = arraySkill.join('');
-        axios.get(`http://localhost:8888/api/v1/job/?${result}`)
-        .then(response => {
-          this.jobs = response.data
-
-          this.$emit('compliteSearchSkill', this.jobs)
-          // * その他スキル 検索語 Vuexに値を格納する
-          this.$store.dispatch('skillSearch', {
-            skill: skillStateEnd,
-          })
-          // * その他スキルが１つも選択されていない時の処理
-          if(params.skill.length == 0 ) {
-            this.$store.dispatch('skillSearch', {
-              skill: [],
-            })
-          }
-        })
-    },
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';

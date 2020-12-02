@@ -1,3 +1,71 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import { Framework } from '@/types/index';
+import { Job } from '@/types/job';
+
+export type DateType = {
+  frameworks: Framework[];
+  selectedFramework: [];
+  jobs: Job[];
+}
+
+export default Vue.extend({ 
+  props: {
+    jobsArray: Array
+  },
+  data(): DateType {
+    return {
+      frameworks: [],
+      selectedFramework: this.$store.state.search.framwork,
+      jobs: []
+    }
+  },
+  created() {
+    // * フレームワーク取得
+    axios.get<Framework[]>('http://localhost:8888/api/v1/programing_framework')
+    .then(response => {
+      this.frameworks = response.data
+    })
+  },
+  methods: {
+    // * フレームワーク検索
+    searchFramework() {
+      const arrayFramework: string[] = [];
+      const frameworkState: number[] = [];
+      const params = {
+        framework: this.selectedFramework,
+      }
+      for(let i = 0; i < params.framework.length; i++) {
+        const frameworkParams: number = params.framework[i];
+        frameworkState.push(frameworkParams)
+        const queryParams: string =  'programing_framework_id' + '[' + Number(frameworkParams - 1) + ']' + '=' + frameworkParams + '&';
+        arrayFramework.push(queryParams)
+      }
+      const frameworkStateEnd: number[]  = frameworkState.slice(0)
+      const result: string = arrayFramework.join('');
+      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      .then(response => {
+        this.jobs = response.data
+        this.$emit('compliteSearchFramework', this.jobs)
+
+        // * フレームワーク 検索語 Vuexに値を格納する
+        this.$store.dispatch('framworkSearch', {
+          framwork: frameworkStateEnd,
+        })
+        // * フレームワークが１つも選択されていない時の処理
+        if(params.framework.length == 0 ) {
+          this.$store.dispatch('framworkSearch', {
+            framwork: [],
+          })
+        }
+      })
+    },
+  }
+});
+</script>
+
+
 <template>
   <transition name="modal" appear>
     <div class="modal-overlay" @click.self="$emit('close')">
@@ -24,61 +92,6 @@
   </transition>
 </template>
 
-<script>
-import axios from 'axios'
-export default {
-  props: {
-    jobsArray: Array
-  },
-  data() {
-    return {
-      frameworks: [],//? フレームワーク取得
-      selectedFramework: this.$store.state.search.framwork,
-    }
-  },
-  created() {
-    // * フレームワーク取得
-    axios.get('http://localhost:8888/api/v1/programing_framework')
-    .then(response => {
-      this.frameworks = response.data
-    })
-  },
-  methods: {
-    // * フレームワーク検索
-    searchFramework() {
-      const arrayFramework = [];
-      const frameworkState = []; //? Stateにフレームワークを複数いれるための配列
-      const params = {
-        framework: this.selectedFramework,
-      }
-      for(let i =0; i < params.framework.length; i++) {
-        const frameworkParams = params.framework[i];
-        frameworkState.push(frameworkParams)
-        const queryParams =  'programing_framework_id' + '[' + Number(frameworkParams - 1) + ']' + '=' + frameworkParams + '&';
-        arrayFramework.push(queryParams)
-      }
-      const frameworkStateEnd = frameworkState.slice(0)
-      const result = arrayFramework.join('');
-      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
-      .then(response => {
-        this.jobs = response.data
-        this.$emit('compliteSearchFramework', this.jobs)
-
-        // * フレームワーク 検索語 Vuexに値を格納する
-        this.$store.dispatch('framworkSearch', {
-          framwork: frameworkStateEnd,
-        })
-        // * フレームワークが１つも選択されていない時の処理
-        if(params.framework.length == 0 ) {
-          this.$store.dispatch('framworkSearch', {
-            framwork: [],
-          })
-        }
-      })
-    },
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
