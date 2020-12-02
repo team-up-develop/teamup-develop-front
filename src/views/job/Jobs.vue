@@ -32,7 +32,7 @@
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template slot="footer">
-          <applybtn @compliteEntry="compliteEntry" :jobId='id' ></applybtn>
+          <Applybtn @compliteEntry="compliteEntry" :jobId='id' />
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>
       </ApplyModal>
@@ -89,7 +89,7 @@
           :jobId='job'
         >
           <!-- 案件カード コンポーネント -->
-          <card-job :job="job"></card-job>
+          <CardJob :job="job" />
         </div>
       </div>
       <!-- 検索結果が無い場合 -->
@@ -97,8 +97,13 @@
         この条件での開発案件はありませんでした。<br>
         別のキーワードで検索してください。
       </div>
-      <router-link :to="`/jobs/${ job.id }`" class="router-1" v-for="job in displayJobs" :key="job.index" >
-        <card-job :job="job"></card-job>
+      <router-link 
+        :to="`/jobs/${ job.id }`" 
+        class="router-1" 
+        v-for="job in displayJobs" 
+        :key="job.index" 
+      >
+        <CardJob :job="job" />
       </router-link>
       <div class="job-wrapper-right" v-if="detailFlag === true">
         <div class="top-job-detail-area">
@@ -174,7 +179,8 @@
             その他スキル
           </div>
           <div class="post-user-area">
-            <div class="detail-skill" 
+            <div 
+              class="detail-skill" 
               v-for="skill in jobDetail.skill.slice(0,5)" 
               :key="skill.skillName"
             >
@@ -209,8 +215,8 @@
       </div>
       <div class="job-wrapper-right-false" v-else>
         <!-- 右側の登録コンポーネント -->
-        <job-register-false v-if="!userId"/>
-        <JobRightLogin v-else/>
+        <JobRegisterFalse v-if="!userId" />
+        <JobRightLogin v-else />
       </div>
       <!-- ページネーション -->
       <v-main>
@@ -245,6 +251,17 @@ import FrameworkSearchModal from '@/components/modal/FrameworkSearchModal.vue'
 import SkillSearchModal from '@/components/modal/SkillSearchModal.vue'
 
 export default Vue.extend({ 
+  components: {
+    Loading,
+    Applybtn,
+    ApplyModal,
+    JobRegisterFalse,
+    CardJob,
+    LanguageSearchModal,
+    FrameworkSearchModal,
+    SkillSearchModal,
+    JobRightLogin
+  },
   data() {
     return {
       jobs: [], //? 案件一覧配列
@@ -602,17 +619,6 @@ export default Vue.extend({
   },
   mounted() {
     window.addEventListener('scroll', this.scrollWindow) //?ボタンを表示させたい位置
-  },
-  components: {
-    Loading,
-    Applybtn,
-    ApplyModal,
-    JobRegisterFalse,
-    CardJob,
-    LanguageSearchModal,
-    FrameworkSearchModal,
-    SkillSearchModal,
-    JobRightLogin
   },
 });
 </script>
