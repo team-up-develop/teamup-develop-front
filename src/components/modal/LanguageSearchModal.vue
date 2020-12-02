@@ -1,39 +1,16 @@
-<template>
-  <transition name="modal" appear>
-    <div class="modal-overlay" @click.self="$emit('close')">
-      <div class="modal-window">
-        <v-card-title class="headline grey lighten-2">
-          <span>開発言語</span>
-        </v-card-title>
-        <v-card-text class="modal-content">
-          <div class="modal-content">
-            <div class="round" v-for="lang in languages" v-bind:key="lang.id">
-            <input type="checkbox" id="checkbox" v-model="selectedLang" v-bind:value="lang.id">
-              <label for="" class="checkbox">{{ lang.programingLanguageName }}</label>
-            </div>
-          </div>
-          <h1>{{ selectedLang }}</h1>
-        </v-card-text>
-        <div class="modal-footer">
-          <div @click="searchLanguage" class="serach-btn">
-            検索する
-          </div>
-        </div>
-      </div>
-    </div>
-  </transition>
-</template>
-
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import axios from 'axios'
-export default {
+
+export default Vue.extend({ 
   props: {
-    jobs: Array,
+    jobsArray: Array,
   },
   data() {
     return {
       languages: [],
-      selectedLang: this.$store.state.search.language
+      selectedLang: this.$store.state.search.language,
+      jobs: []
     }
   },
   created() {
@@ -78,15 +55,37 @@ export default {
               language: [],
             })
           }
-          // * もし案件が存在しなかったら処理が走る
-          if(!this.jobs.length) {
-            this.jobsNullFlag = true;
-          }
         })
     },
   }
-}
+});
 </script>
+
+<template>
+  <transition name="modal" appear>
+    <div class="modal-overlay" @click.self="$emit('close')">
+      <div class="modal-window">
+        <v-card-title class="headline grey lighten-2">
+          <span>開発言語</span>
+        </v-card-title>
+        <v-card-text class="modal-content">
+          <div class="modal-content">
+            <div class="round" v-for="lang in languages" v-bind:key="lang.id">
+            <input type="checkbox" id="checkbox" v-model="selectedLang" v-bind:value="lang.id">
+              <label for="" class="checkbox">{{ lang.programingLanguageName }}</label>
+            </div>
+          </div>
+          <h1>{{ selectedLang }}</h1>
+        </v-card-text>
+        <div class="modal-footer">
+          <div @click="searchLanguage" class="serach-btn">
+            検索する
+          </div>
+        </div>
+      </div>
+    </div>
+  </transition>
+</template>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';

@@ -18,8 +18,8 @@ export type SearchData = {
 const state: State = {
   freeWord: "",
   language: [],
-  framwork: null,
-  skill: null
+  framwork: [],
+  skill: [],
 }
 
 const getters: GetterTree<State, SearchData> = {

@@ -8,43 +8,25 @@
     </transition>
     <!-- 言語検索 モーダル画面 -->
     <LanguageSearchModal 
-      :jobs="jobs"
+      :jobsArray="jobs"
       @close="closeLangSearchModal"
       v-if="langModal"
       @compliteSearchLanguage="compliteSearchLanguage($event)"
     />
     <!-- フレームワーク検索 モーダル画面 -->
-    <div class="modal-window">
-      <FrameworkSearchModal @close="closeFrameworkSearchModal" v-if="frameworkModal">
-        <div class="modal-content">
-          <div class="round" v-for="framework in frameworks" v-bind:key="framework.id">
-          <input type="checkbox"  id="checkbox" v-model="selectedFramework" v-bind:value="framework.id">
-            <label for="" class="checkbox">{{ framework.programingFrameworkName }}</label>
-          </div>
-        </div>
-        <template slot="footer">
-          <div @click="searchFramework" class="serach-btn">
-            検索する
-          </div>
-        </template>
-      </FrameworkSearchModal>
-    </div>
+    <FrameworkSearchModal 
+      v-if="frameworkModal"
+      @close="closeFrameworkSearchModal" 
+      :jobsArray="jobs"
+      @compliteSearchFramework="compliteSearchFramework($event)"
+    />
     <!-- その他スキル検索 モーダル画面 -->
-    <div class="modal-window">
-      <SkillSearchModal @close="closeSkillSearchModal" v-if="skillModal">
-        <div class="modal-content">
-          <div class="round-skill" v-for="skill in skills" v-bind:key="skill.id">
-          <input type="checkbox"  id="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
-            <label for="" class="checkbox">{{ skill.skillName }}</label>
-          </div>
-        </div>
-        <template slot="footer">
-          <div @click="searchSkill" class="serach-btn">
-            検索する
-          </div>
-        </template>
-      </SkillSearchModal>
-    </div>
+    <SkillSearchModal 
+      @close="closeSkillSearchModal" 
+      v-if="skillModal"
+      :jobsArray="jobs"
+      @compliteSearchSkill="compliteSearchSkill($event)"
+    />
     <!-- 応募する モーダル画面 -->
     <div class="modal-window">
       <ApplyModal @close="closeModal" v-if="modal">
@@ -68,7 +50,7 @@
         @click="langSearchModal"
         >開発言語++</button>
       <button 
-        v-if="selectedFramework.length == 0" 
+        v-if="this.$store.state.search.framwork.length == 0" 
         class="search-area__modal-btn" 
         @click="frameworkSearchModal"
       >フレームワーク</button>
@@ -78,7 +60,7 @@
         @click="frameworkSearchModal"
       >フレームワーク++</button>
       <button 
-        v-if="selectedSkill.length== 0" 
+        v-if="this.$store.state.search.skill.length == 0" 
         class="search-area__modal-btn" 
         @click="skillSearchModal"
       >その他技術</button>
@@ -267,12 +249,6 @@ export default Vue.extend({
     return {
       jobs: [], //? 案件一覧配列
       jobsNullFlag: false, //? 案件が存在しない場合 表示のため
-      // selectedLang: this.$store.state.search.language, //? 言語 v-model
-      // languages: [], //? 言語取得
-      selectedFramework: [], //? フレームワーク v-model
-      frameworks: [],//? フレームワーク取得
-      selectedSkill: [], //? その他スキル v-model
-      skills: [], //? その他スキル取得
       freeWord: this.$store.state.search.freeWord, 
       loading: true, 
       jobDetail: null, //? 案件詳細 
@@ -314,13 +290,6 @@ export default Vue.extend({
 
       return "";
     },
-    // languageState() {
-    //   if(this.selectedLang.length == 0) {
-    //     return "開発言語"
-    //   } else {
-    //     return "開発言語++"
-    //   }
-    // }
   },
   created() {
     // * 投稿一覧取得
@@ -335,22 +304,18 @@ export default Vue.extend({
         this.loading = false;
         this.jobs = response.data
         //* トップページから フリーワード 検索をした際の処理
-        for(const i in response.data){
+        for(const i in response.data) {
           const jobs = response.data[i];
           if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
             posts.push(jobs)
           }
         }
         this.jobs = posts
-
-        // * ページネーション
-        this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
-        this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-        this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+        this.paginateJobs(this.jobs);
 
         // * トップページから 開発言語 検索した際の処理
-        if(!this.$store.state.search.language) {
-          console.log("language はnullです")
+        if(this.$store.state.search.language.length == 0) {
+          console.log("language is []")
         }
         else {
           const arrayLanguagekNum = [];
@@ -364,11 +329,10 @@ export default Vue.extend({
           axios.get(`http://localhost:8888/api/v1/job/?${LastLanguageNum}`)
           .then(response => {
             this.jobs = response.data
-            this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
-            this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-            this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
             if(this.jobs.length == 0) {
               this.jobsNullFlag = true;
+            } else {
+              this.paginateJobs(this.jobs);
             }
           })
           // * もし案件が存在しなかったら処理が走る
@@ -377,15 +341,14 @@ export default Vue.extend({
           }
         }
         // * トップページから フレームワーク 検索した際の処理
-        if(!this.$store.state.search.framwork) {
-          console.log("framwork はnullです")
+        if(this.$store.state.search.framwork.length == 0) {
+          console.log("framwork is []")
         }
         else {
           const arrayFrameworkNum = [];
           const framworkNum = this.$store.state.search.framwork;
           for(let k = 0; k < framworkNum.length; k++) {
             const framworkNumParams = framworkNum[k]
-            this.selectedFramework.push(framworkNumParams)
             const queryParams =  'programing_framework_id' + '[' + Number(framworkNumParams - 1) + ']' + '=' + framworkNumParams + '&';
             arrayFrameworkNum.push(queryParams)
           }
@@ -393,21 +356,21 @@ export default Vue.extend({
           axios.get(`http://localhost:8888/api/v1/job/?${LastFrameworkNum}`)
           .then(response => {
             this.jobs = response.data
+            this.paginateJobs(this.jobs);
             if(this.jobs.length == 0) {
               this.jobsNullFlag = true;
             }
           })
         }
         // * トップページから その他スキル 検索した際の処理
-        if(!this.$store.state.search.skill) {
-          console.log("skill はnullです")
+        if(this.$store.state.search.skill.length == 0) {
+          console.log("skill is []")
         }
         else {
           const arraySkillNum = [];
           const skillNum = this.$store.state.search.skill;
           for(let l = 0; l < skillNum.length; l++) {
             const skillNumParams = skillNum[l]
-            this.selectedSkill.push(skillNumParams)
             const queryParamsSkill = 'skill_id' + '[' + Number(skillNumParams - 1) + ']' + '=' + skillNumParams + '&';
             arraySkillNum.push(queryParamsSkill)
           }
@@ -415,6 +378,7 @@ export default Vue.extend({
           axios.get(`http://localhost:8888/api/v1/job/?${LastSkillNum}`)
           .then(response => {
             this.jobs = response.data
+            this.paginateJobs(this.jobs);
             if(this.jobs.length == 0) {
               this.jobsNullFlag = true;
             }
@@ -429,29 +393,40 @@ export default Vue.extend({
     .catch(error => {
       console.log(error)
     })
-    // // * プログラミング言語 取得
-    // axios.get('http://localhost:8888/api/v1/programing_language')
-    //   .then(response => {
-    //       this.languages = response.data
-    //   })
-    // * フレームワーク取得
-    axios.get('http://localhost:8888/api/v1/programing_framework')
-      .then(response => {
-          this.frameworks = response.data
-      })
-    // * フレームワーク取得
-    axios.get('http://localhost:8888/api/v1/skill')
-      .then(response => {
-          this.skills = response.data
-      })
     // * 非ログイン時は応募/いいねを押下した際にリダイレクトでログインに遷移させる
     if(!this.userId) {
       this.entryRedirect = true //* 非ログイン時表示に
     }
   },
   methods: {
+    // * ページネーション処理(検索)
+    paginateJobs(value) {
+      this.jobs = value.slice().reverse();
+      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+    },
+    // * 検索後の処理
+    searchJobPagenate(value) {
+      this.jobs = value.slice().reverse();
+      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+      this.jobsNullFlag = false;
+      this.closeLangSearchModal();
+      this.closeFrameworkSearchModal();
+      this.closeSkillSearchModal();
+      this.loading = true;
+      setTimeout(() => {
+        if(value.length == 0) {
+          this.loading = false;
+          this.jobsNullFlag = true;
+        } else {
+          this.loading = false;
+          this.detailFlag = false;
+        }
+      }, 1500)
+    },
     // * ページネーション
-    pageChange: function(pageNumber){
+    pageChange(pageNumber) {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
@@ -462,133 +437,36 @@ export default Vue.extend({
     registerRedirect() {
       this.$router.push('/register');
     },
-    // * フレームワーク検索
-    searchFramework() {
-      const arrayFramework = [];
-      const frameworkState = []; //? Stateにフレームワークを複数いれるための配列
-      const params = {
-        framework: this.selectedFramework,
-      }
-      for(let i =0; i < params.framework.length; i++) {
-        const frameworkParams = params.framework[i];
-        frameworkState.push(frameworkParams)
-        const queryParams =  'programing_framework_id' + '[' + Number(frameworkParams - 1) + ']' + '=' + frameworkParams + '&';
-        arrayFramework.push(queryParams)
-      }
-      const frameworkStateEnd = frameworkState.slice(0)
-      const result = arrayFramework.join('');
-        axios.get(`http://localhost:8888/api/v1/job/?${result}`)
-        .then(response => {
-          this.jobs = response.data
-          // ? ページネーション処理
-          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
-          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
-
-          this.frameworkModal = false
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.jobsNullFlag = false; //? 案件が存在しない際のフラグをFalseに
-            this.detailFlag = false; //? 右側案件詳細を閉じる
-
-            // * フレームワーク 検索語 Vuexに値を格納する
-            this.$store.dispatch('framworkSearch', {
-              framwork: frameworkStateEnd,
-            })
-            // * フレームワークが１つも選択されていない時の処理
-            if(params.framework.length == 0 ) {
-              this.$store.dispatch('framworkSearch', {
-                framwork: null,
-              })
-            }
-            // * もし案件が存在しなかったら処理が走る
-            if(!this.jobs.length) {
-              this.jobsNullFlag = true;
-            }
-          }, 1500)
-        })
+    // * 言語検索 emit
+    compliteSearchLanguage(emitLanguage) {
+      this.searchJobPagenate(emitLanguage);
     },
-    // * その他スキル 検索
-    searchSkill() {
-      this.loading = false;
-      const arraySkill = [];
-      const skillState = []; //? Stateにその他スキルを複数いれるための配列
-      const params = {
-        skill: this.selectedSkill,
-      }
-      for(let i =0; i < params.skill.length; i++) {
-        const skillParams = params.skill[i];
-        skillState.push(skillParams)
-        const queryParams =  'skill_id' + '[' + Number(skillParams - 1) + ']' + '=' + skillParams + '&';
-        arraySkill.push(queryParams)
-      }
-      const skillStateEnd = skillState.slice(0)
-      const result = arraySkill.join('');
-        axios.get(`http://localhost:8888/api/v1/job/?${result}`)
-        .then(response => {
-          this.jobs = response.data
-          // ? ページネーション処理
-          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
-          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
-
-          this.skillModal = false
-          this.loading = true;
-          setTimeout(() => {
-            this.loading = false;
-            this.jobsNullFlag = false; //? 案件が存在しない際のフラグをFalseに
-            this.detailFlag = false; //? 右側案件詳細を閉じる
-
-            // * その他スキル 検索語 Vuexに値を格納する
-            this.$store.dispatch('skillSearch', {
-              skill: skillStateEnd,
-            })
-            // * その他スキルが１つも選択されていない時の処理
-            if(params.skill.length == 0 ) {
-              this.$store.dispatch('skillSearch', {
-                skill: null,
-              })
-            }
-            // * もし案件が存在しなかったら処理が走る
-            if(!this.jobs.length) {
-              this.jobsNullFlag = true;
-            }
-          }, 1500)
-        })
+    // * フレームワーク検索 emit
+    compliteSearchFramework(emitFramework) {
+      this.searchJobPagenate(emitFramework);
+    },
+    // * その他スキル検索 emit
+    compliteSearchSkill(emitSkill) {
+      this.searchJobPagenate(emitSkill);
     },
     // * フリーワード 検索
     searchFreeword() {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        const posts = [];
-        axios.get('http://localhost:8888/api/v1/job')
-        .then(response => {
-          for(const i in response.data){
-            const jobs = response.data[i];
-            if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
-              posts.push(jobs)
-            }
+      const posts = [];
+      axios.get('http://localhost:8888/api/v1/job')
+      .then(response => {
+        for(const i in response.data){
+          const jobs = response.data[i];
+          if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
+            posts.push(jobs)
           }
-          // * フリーワード 検索語 Vuexに値を格納する
-          this.$store.dispatch('freeWordSearch', {
-            freeWord: this.freeWord,
-          })
-          this.jobs = posts;
-          // ? ページネーション処理
-          this.jobs = this.jobs.slice().reverse(); //? 案件を (配列) を 降順にする
-          this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-          this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
-
-          this.jobsNullFlag = false; //? 案件が存在しない際のフラグをFalseに
-          this.detailFlag = false; //? 右側案件詳細を閉じる
-          // * もし案件が存在しなかったら処理が走る
-          if(!this.jobs.length) {
-            this.jobsNullFlag = true;
-          }
+        }
+        // * フリーワード 検索語 Vuexに値を格納する
+        this.$store.dispatch('freeWordSearch', {
+          freeWord: this.freeWord,
         })
-      }, 1000);
+        this.jobs = posts;
+        this.searchJobPagenate(this.jobs);
+      })
     },
     // * 案件を保存する
     saveJob() {
@@ -667,18 +545,15 @@ export default Vue.extend({
           }
         })
       } 
-      
       // * 登録 or ログインしてない場合
       else {
         console.log("登録してからご利用いただけます")
       }
     },
-
     // * エントリーが完了したら応募済みにする
     compliteEntry() {
       this.applyFlug = false;
     },
-    
     // * モーダル
     openModal() {
       this.modal = true
@@ -690,37 +565,18 @@ export default Vue.extend({
       this.closeModal()
     },
     // *検索 モーダル
-    // ? 開発言語モーダル
     langSearchModal() {
       this.langModal = true;
     },
     closeLangSearchModal() {
       this.langModal = false;
     },
-    compliteSearchLanguage(emitLanguage) {
-      console.log("~~~~~~~~~~~ですね！！！！！！！！~~~~~~~~")
-      console.log(emitLanguage)
-      // ? ページネーション処理
-      this.jobs = emitLanguage.slice().reverse(); //? 案件を (配列) を 降順にする
-      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
-
-      this.jobsNullFlag = false; //? 案件が存在しない際のフラグをFalseに
-      this.langModal = false;
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.detailFlag = false; //? 右側案件詳細を閉じる
-      }, 1500)
-    },
-    // ? 開発フレームワークモーダル
     frameworkSearchModal() {
       this.frameworkModal = true;
     },
     closeFrameworkSearchModal() {
       this.frameworkModal = false;
     },
-    // ? その他スキルモーダル
     skillSearchModal() {
       this.skillModal = true;
     },
@@ -734,7 +590,6 @@ export default Vue.extend({
         top: 0,
       });
     },
-    // * 100 を超えたらボタンを表示
     scrollWindow() {
       const top = 100 // ? ボタンを表示させたい位置
       this.scroll = window.scrollY

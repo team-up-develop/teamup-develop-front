@@ -6,21 +6,77 @@
           <span>フレームワーク</span>
         </v-card-title>
         <v-card-text class="modal-content">
-          <slot/>
+          <div class="modal-content">
+            <div class="round" v-for="framework in frameworks" v-bind:key="framework.id">
+            <input type="checkbox"  id="checkbox" v-model="selectedFramework" v-bind:value="framework.id">
+              <label for="" class="checkbox">{{ framework.programingFrameworkName }}</label>
+            </div>
+          </div>
+          <h1>{{ selectedFramework }}</h1>
         </v-card-text>
-        <footer class="modal-footer">
-          <slot name="footer">
-            <button @click="$emit('close')">Close</button>
-          </slot>
-        </footer>
+        <div slot="modal-footer">
+          <div @click="searchFramework" class="serach-btn">
+            検索する
+          </div>
+        </div>
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+  props: {
+    jobsArray: Array
+  },
+  data() {
+    return {
+      frameworks: [],//? フレームワーク取得
+      selectedFramework: this.$store.state.search.framwork,
+    }
+  },
+  created() {
+    // * フレームワーク取得
+    axios.get('http://localhost:8888/api/v1/programing_framework')
+    .then(response => {
+      this.frameworks = response.data
+    })
+  },
+  methods: {
+    // * フレームワーク検索
+    searchFramework() {
+      const arrayFramework = [];
+      const frameworkState = []; //? Stateにフレームワークを複数いれるための配列
+      const params = {
+        framework: this.selectedFramework,
+      }
+      for(let i =0; i < params.framework.length; i++) {
+        const frameworkParams = params.framework[i];
+        frameworkState.push(frameworkParams)
+        const queryParams =  'programing_framework_id' + '[' + Number(frameworkParams - 1) + ']' + '=' + frameworkParams + '&';
+        arrayFramework.push(queryParams)
+      }
+      const frameworkStateEnd = frameworkState.slice(0)
+      const result = arrayFramework.join('');
+      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      .then(response => {
+        this.jobs = response.data
+        this.$emit('compliteSearchFramework', this.jobs)
 
+        // * フレームワーク 検索語 Vuexに値を格納する
+        this.$store.dispatch('framworkSearch', {
+          framwork: frameworkStateEnd,
+        })
+        // * フレームワークが１つも選択されていない時の処理
+        if(params.framework.length == 0 ) {
+          this.$store.dispatch('framworkSearch', {
+            framwork: [],
+          })
+        }
+      })
+    },
+  }
 }
 </script>
 

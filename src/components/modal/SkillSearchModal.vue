@@ -6,21 +6,77 @@
           <span>その他スキル</span>
         </v-card-title>
         <v-card-text class="modal-content">
-          <slot/>
+          <div class="modal-content">
+            <div class="round-skill" v-for="skill in skills" v-bind:key="skill.id">
+            <input type="checkbox"  id="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
+              <label for="" class="checkbox">{{ skill.skillName }}</label>
+            </div>
+          </div>
         </v-card-text>
-        <footer class="modal-footer">
-          <slot name="footer">
-            <button @click="$emit('close')">Close</button>
-          </slot>
-        </footer>
+        <div class="footer">
+          <div @click="searchSkill" class="serach-btn">
+            検索する
+          </div>
+        </div>
       </div>
     </div>
   </transition>
 </template>
 
 <script>
+import axios from 'axios'
 export default {
+  props: {
+    jobsArray: Array
+  },
+  data() {
+    return {
+      selectedSkill: this.$store.state.search.skill, //? その他スキル v-model
+      skills: [], //? その他スキル取得
+    }
+  },
+  created() {
+    // * フレームワーク取得
+    axios.get('http://localhost:8888/api/v1/skill')
+    .then(response => {
+      this.skills = response.data
+    })
+  },
+  methods: {
+    // * その他スキル 検索
+    searchSkill() {
+      this.loading = false;
+      const arraySkill = [];
+      const skillState = []; //? Stateにその他スキルを複数いれるための配列
+      const params = {
+        skill: this.selectedSkill,
+      }
+      for(let i =0; i < params.skill.length; i++) {
+        const skillParams = params.skill[i];
+        skillState.push(skillParams)
+        const queryParams =  'skill_id' + '[' + Number(skillParams - 1) + ']' + '=' + skillParams + '&';
+        arraySkill.push(queryParams)
+      }
+      const skillStateEnd = skillState.slice(0)
+      const result = arraySkill.join('');
+        axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+        .then(response => {
+          this.jobs = response.data
 
+          this.$emit('compliteSearchSkill', this.jobs)
+          // * その他スキル 検索語 Vuexに値を格納する
+          this.$store.dispatch('skillSearch', {
+            skill: skillStateEnd,
+          })
+          // * その他スキルが１つも選択されていない時の処理
+          if(params.skill.length == 0 ) {
+            this.$store.dispatch('skillSearch', {
+              skill: [],
+            })
+          }
+        })
+    },
+  }
 }
 </script>
 
