@@ -28,14 +28,20 @@
 import axios from 'axios'
 export default {
   props: {
-    languages: Array,
     jobs: Array,
-    
   },
   data() {
     return {
+      languages: [],
       selectedLang: this.$store.state.search.language
     }
+  },
+  created() {
+    // * プログラミング言語 取得
+    axios.get('http://localhost:8888/api/v1/programing_language')
+    .then(response => {
+      this.languages = response.data
+    })
   },
   methods: {
     // * 開発言語検索

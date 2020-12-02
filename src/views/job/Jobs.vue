@@ -8,9 +8,7 @@
     </transition>
     <!-- 言語検索 モーダル画面 -->
     <LanguageSearchModal 
-      :languages="languages" 
       :jobs="jobs"
-      
       @close="closeLangSearchModal"
       v-if="langModal"
       @compliteSearchLanguage="compliteSearchLanguage($event)"
@@ -270,7 +268,7 @@ export default Vue.extend({
       jobs: [], //? 案件一覧配列
       jobsNullFlag: false, //? 案件が存在しない場合 表示のため
       // selectedLang: this.$store.state.search.language, //? 言語 v-model
-      languages: [], //? 言語取得
+      // languages: [], //? 言語取得
       selectedFramework: [], //? フレームワーク v-model
       frameworks: [],//? フレームワーク取得
       selectedSkill: [], //? その他スキル v-model
@@ -431,11 +429,11 @@ export default Vue.extend({
     .catch(error => {
       console.log(error)
     })
-    // * プログラミング言語 取得
-    axios.get('http://localhost:8888/api/v1/programing_language')
-      .then(response => {
-          this.languages = response.data
-      })
+    // // * プログラミング言語 取得
+    // axios.get('http://localhost:8888/api/v1/programing_language')
+    //   .then(response => {
+    //       this.languages = response.data
+    //   })
     // * フレームワーク取得
     axios.get('http://localhost:8888/api/v1/programing_framework')
       .then(response => {
