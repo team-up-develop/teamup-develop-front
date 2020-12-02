@@ -179,7 +179,8 @@
             その他スキル
           </div>
           <div class="post-user-area">
-            <div class="detail-skill" 
+            <div 
+              class="detail-skill" 
               v-for="skill in jobDetail.skill.slice(0,5)" 
               :key="skill.skillName"
             >
