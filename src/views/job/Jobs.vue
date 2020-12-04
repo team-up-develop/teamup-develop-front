@@ -48,7 +48,7 @@
         v-else 
         class="search-area__modal-btn-active" 
         @click="langSearchModal"
-        >開発言語++</button>
+        >開発言語</button>
       <button 
         v-if="this.$store.state.search.framwork.length == 0" 
         class="search-area__modal-btn" 
@@ -58,7 +58,7 @@
         v-else 
         class="search-area__modal-btn-active" 
         @click="frameworkSearchModal"
-      >フレームワーク++</button>
+      >フレームワーク</button>
       <button 
         v-if="this.$store.state.search.skill.length == 0" 
         class="search-area__modal-btn" 
@@ -68,7 +68,7 @@
         v-else 
         class="search-area__modal-btn-active" 
         @click="skillSearchModal"
-      >その他技術++</button>
+      >その他技術</button>
       <input
         type="text" 
         v-model="freeWord" 
