@@ -74,13 +74,16 @@ export default Vue.extend({
         </v-card-title>
         <v-card-text class="modal-content">
           <div class="modal-content">
-            <div class="round-skill" v-for="skill in skills" v-bind:key="skill.id">
-            <input type="checkbox"  id="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
-              <label for="" class="checkbox">{{ skill.skillName }}</label>
-            </div>
+            <v-row>
+              <label v-for="skill in skills" v-bind:key="skill.id">
+                <input type="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
+                <span>{{ skill.skillName }}</span>
+              </label>
+              <h1>{{ selectedSkill }}</h1>
+            </v-row>
           </div>
         </v-card-text>
-        <div class="footer">
+        <div class="modal-footer">
           <div @click="searchSkill" class="serach-btn">
             検索する
           </div>
@@ -104,34 +107,106 @@ export default Vue.extend({
   width: 100%;
   height: 100%;
   background: $modal-background;
-
-  /* font-weight: bold; */
 }
 
 .modal-window {
-  margin-top: 2rem;
   background: $basic-white;
   border-radius: 8px;
   overflow: hidden;
-  width: 600px;
-  height: 690px;
+  position: relative;
+  width: 58%;
+
+  @media screen and (max-width: 1200px) {
+    width: 78%;
+  }
+
+  @media screen and (max-width: 768px) {
+    width: 88%;
+  }
+
+  @media screen and (max-width: 520px) {
+    width: 100%;
+  }
 }
 
 .modal-content {
-  padding: 1rem 1rem;
+  padding: 1rem 1.7rem;
   overflow: scroll;
-  height: 500px;
+  text-align: left;
+  min-height: 500px;
+  height: 550px;
+
+  label {
+    input[type=checkbox] {
+      display: none;
+    }
+
+    span {
+      background-color: #373740ba;
+      border-radius: 4px;
+      font-weight: 700;
+      color: $basic-white;
+      font-size: .85em;
+      letter-spacing: 4px;
+      text-decoration: none;
+      font-family: sans-serif;
+      text-align: center;
+      width: 180px;
+      padding: 0.5rem 0;
+      cursor: pointer;
+      display: block;
+      margin: 0 auto;
+      transition: background-color 150ms ease-in;
+      margin: 0.3rem 0.2rem;
+    }
+
+    span:hover {
+      background-color: grey;
+    }
+
+    input[type=checkbox]:checked + span {
+      background: $primary-color url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAaCAYAAACgoey0AAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAX9JREFUeNpi+P//PwMNsS4QbwBiLnQ5WlqqAsRP/0PARiBmoYfFkkB8+z8qWALEjLS0mB+IL/3HDibSymJQXB7/jx/UgNSCvU4lwAbEG4DYkwi1WUxUspQZiOcRaSkIWOAKMk0Sg3jaf+IBOIVjMyQWiH8DsR+RljaTYOkBWJ5GNwRk2R+ooh9A7ETA0jwSLL0ATfEYqRpkyVc0xR+A2AyHpdFA/I9IS0F5WhRbAWIEtQQbeAXE6lhC5jeRlj4GYgVsRaYK1HBCmmWgmuyxhAwu8BpaXjNgs/gYkYbcAGIXPCGDDkCOM8eVPkCEFhE+JhX8BGJnfAkTxgC57BOVLAXlihBC2RA9Vf+k0FJQKk8nJv+jCwQi5WNyQAWxpR02wRQS8icy6CKlmMUlUUGipfOQK3lKLAbhdhIKfWZS6258kiAfzCZg6V4gZiOn0UBIAcgn63BYehK50Ke2xQxQH+3FUoqJUtJMIlYhLxAfxVJu09xiWENuMxCrUaNhCBBgAOAVfjALa5TLAAAAAElFTkSuQmCC) no-repeat 7% center;
+      background-size: 15px 13px;
+    }
+
+    input[type=checkbox]:checked:hover + span {
+      background: $primary-color url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAS5JREFUeNq8110OgjAMAGBGvIY3VESjt9jPg95PT+LccBIZ7dYOWJPGB+g+Ymg3hLW2QeLkcu/y2pSFdvl0eQevehjI3uXbfkMh96TShFq/xhG6J4faAtxEtSBOQTm4QWpnOBWl4CZT69fuYpiCpnBDrB1xLhrjgoFO8F1oGcFslUv4bV32zFoxmOHJta0XMn65dC0UaiddA8UGiN4axeC1cUkdmWviEls/NwL1FqjPNtNvoimPdC3yRCUTiTXbt0R/oSnw2iiK10BBvBY6w2uiE3xJr8oFtcrvxy/fVcyeVdGx98yotcOxN/znHeMUIhdMOG8c4reagssF43VEoT5O4ZJwvNUUFJtcEE5BMXyGpnanf5yDxjiI+hSJj7YunEBvhbuTCh9tD+jiR4ABAJ0SrJgNr1UAAAAAAElFTkSuQmCC) no-repeat 7% center;
+      background-size: 15px 15px;
+    }
+  }
 }
 
-
 .modal-footer {
-  /* background: #ccc; */
   width: 100%;
-  padding: 2rem 2rem 1rem 0;
+  height: 80px;
+  padding: 0.5rem 2rem 1rem 0;
   text-align: right;
   display: inline-block;
-  position: relative;
-  font-size: 100px;
+  position: absolute;
+  bottom: 0;
+  left :0;
+  font-size: 1em;
+
+  // * モーダル内のキャンセルボタン 
+  .serach-btn {
+    @include blue-btn;
+    @include box-shadow-btn;
+    color: $basic-white;
+    padding: 1rem 3.4rem;
+    border-radius: 50px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin-left: 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+    outline: none;
+  }
 }
 
 .modal-enter-active, .modal-leave-active {
@@ -152,16 +227,5 @@ export default Vue.extend({
 
 .modal-enter, .modal-window {
   transform: translateY(-20px);
-}
-
-.v-card__text {
-  width: 92%;
-  // background-color: green;
-  margin: 0 auto;
-  text-align: left;
-}
-
-span {
-  font-weight: bold;
 }
 </style>
