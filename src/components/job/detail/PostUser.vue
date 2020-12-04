@@ -36,7 +36,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-card class="post-user-area">
+    <v-sheet class="post-user-area">
       <div class="left-user-area">
         <div class="user-image"></div>
       </div>
@@ -68,7 +68,7 @@ export default Vue.extend({
           </section>
         </div>
       </div>
-    </v-card>
+    </v-sheet>
   </section>
 </template>
 

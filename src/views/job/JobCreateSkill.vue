@@ -275,7 +275,6 @@ export default Vue.extend({
   .job-create-wrapper {
     @include card-border-color;
     background-color: $basic-white;
-    // width: calc(100% - 5rem);
     border-radius: 20px;
     margin: 2rem 0rem;
     padding: 2.5rem;
@@ -433,19 +432,18 @@ export default Vue.extend({
 
 @media screen and (max-width: 1200px) {
   .create-wrapper .job-create-wrapper {
-    width: calc(100% - 4rem);
     margin: 2rem 0rem;
     padding: 2rem;
     position: absolute;
     right: 0rem;
-    }
+    width: 100%;
+  }
 }
 /* タブレット */
 @media screen and (max-width: 900px) {
   .create-wrapper .job-create-wrapper {
     width: 100%;
     border-radius: 20px;
-    margin: 2rem 0rem;
     background-color: $basic-white;
     padding: 1.5rem;
     position: absolute;
@@ -453,9 +451,14 @@ export default Vue.extend({
   }
 }
 @media (max-width: 768px) {
-  .job-create-wrapper .button-are  { 
-    .post-job-btn {
-      padding: 1.1rem 3rem;
+  .create-wrapper
+  .job-create-wrapper {
+    height: 100%;
+
+    .button-are  { 
+      .post-job-btn {
+        padding: 1.1rem 3rem;
+      }
     }
   }
 }

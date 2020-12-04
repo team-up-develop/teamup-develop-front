@@ -46,20 +46,28 @@ export default Vue.extend({
               >
                 <v-list>
                   <v-list-item>
-                    <v-list-item-title><router-link to="/account/profile/1" class="menu-list">
-                      <v-icon class="icon">mdi-card-account-details-outline</v-icon>Kazuya</router-link>
-                      <div class="boder-line"></div>
+                    <router-link to="/account/profile/1" class="menu-list"><v-list-item-title>
+                      <v-icon class="icon">mdi-card-account-details-outline</v-icon>
+                      Kazuya
                     </v-list-item-title>
+                    </router-link>
+                  </v-list-item>
+                  <div class="boder-line"></div>
+                  <v-list-item>
+                    <router-link to="/chat" class="menu-list">
+                    <v-list-item-title>
+                      <v-icon class="icon">mdi-chat-plus-outline</v-icon>
+                      チャット
+                    </v-list-item-title>
+                    </router-link>
                   </v-list-item>
                   <v-list-item>
-                    <v-list-item-title><router-link to="/chat" class="menu-list">
-                      <v-icon class="icon">mdi-chat-plus-outline</v-icon>チャット</router-link>
+                    <router-link to="/manage" class="menu-list">
+                    <v-list-item-title>
+                      <v-icon class="icon">mdi-clipboard-multiple-outline</v-icon>
+                      案件管理
                     </v-list-item-title>
-                  </v-list-item>
-                  <v-list-item>
-                    <v-list-item-title><router-link to="/manage" class="menu-list">
-                      <v-icon class="icon">mdi-clipboard-multiple-outline</v-icon>案件管理</router-link>
-                    </v-list-item-title>
+                    </router-link>
                   </v-list-item>
                 </v-list>
               </v-list-item-group>
@@ -81,15 +89,25 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
+.menu-list {
+  color: $text-sub-color;
+  font-size: 14px;
+  text-decoration: none;
+}
+
 .boder-line {
-  margin-top: 0.5rem;
-  border-bottom: 1px dashed $primary-color;
+  width: 100%;
+  border-bottom: 1px solid $primary-color;
 }
 
 .icon {
   color: $text-sub-color;
-  margin-right: 0.7rem;
-  font-size: 0.8em;
+}
+
+.v-icon.v-icon {
+  margin-right: 1rem;
+  font-size: 1.5em;
+  color: $text-sub-color;
 }
 
 .router {
@@ -180,12 +198,6 @@ export default Vue.extend({
       }
     }
   }
-}
-
-.menu-list {
-  color: $text-sub-color;
-  font-size: 14px;
-  text-decoration: none;
 }
 
 /* スマホ */
