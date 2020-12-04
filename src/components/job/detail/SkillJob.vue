@@ -11,7 +11,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-card class="skill-detail-area">
+    <v-sheet class="skill-detail-area">
       <div class="lang-area">
         <label for="name" class="name-tag">開発言語</label>
         <div class="lang-box">
@@ -36,7 +36,7 @@ export default Vue.extend({
           </div>
         </div>
       </div>
-    </v-card>
+    </v-sheet>
   </section>
 </template>
 

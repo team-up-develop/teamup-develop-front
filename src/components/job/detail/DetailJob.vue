@@ -16,7 +16,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-card class="dev-detail-area">
+    <v-sheet class="dev-detail-area">
       <div class="detail-leff-area">
         <div class="detail-information">
           <div class="tag">タイトル</div>
@@ -45,7 +45,7 @@ export default Vue.extend({
           {{ job.jobDescription }}
         </div>
       </div> -->
-    </v-card>
+    </v-sheet>
   </section>
 </template>
 

@@ -209,7 +209,7 @@ export default Vue.extend({
     margin: 2rem 0rem;
     background-color: $basic-white;
     padding: 2.5rem;
-    height: 80%;
+    height: 85%;
   }
 }
 
@@ -385,9 +385,13 @@ export default Vue.extend({
 }
 
 @media (max-width: 768px) {
-  .job-create-wrapper .job-create-time-area {
-    input[type='date'] {
-    width: 60%;
+  .create-wrapper
+  .job-create-wrapper {
+    height: 100%;
+    .job-create-time-area {
+      input[type='date'] {
+      width: 60%;
+      }
     }
   }
 }
