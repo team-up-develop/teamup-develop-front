@@ -1,18 +1,7 @@
-<template>
-  <v-app class="app">
-    <Header  v-if="$store.state.auth.userId || this.loginFlag == true"/>
-    <HeaderLoginFalse v-else />
-    <v-main class="container">
-      <router-view/>
-        <!-- <Footer/> -->
-    </v-main>
-  </v-app>
-</template>
-
 <script lang="ts">
 import Vue from 'vue';
 import Header from '@/components/common/entire/Header.vue'
-// import Footer from '@/components/common/entire/Footer.vue'
+import Footer from '@/components/common/entire/Footer.vue'
 import HeaderLoginFalse from '@/components/common/entire/HeaderLoginFalse.vue'
 
 export type DataType = {
@@ -24,7 +13,7 @@ export default Vue.extend({
 
   components: {
     Header,
-    // Footer,
+    Footer,
     HeaderLoginFalse,
   },
 
@@ -40,6 +29,17 @@ export default Vue.extend({
   }
 });
 </script>
+
+<template>
+  <v-app class="app">
+    <Header  v-if="$store.state.auth.userId || this.loginFlag == true"/>
+    <HeaderLoginFalse v-else />
+    <v-main class="container">
+      <router-view/>
+      <Footer/>
+    </v-main>
+  </v-app>
+</template>
 
 <style scoped>
 .app {
