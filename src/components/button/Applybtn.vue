@@ -72,7 +72,7 @@ export default Vue.extend({
 @import '@/assets/scss/_variables.scss';
 
 .modal-apply-area {
-  width: 47%;
+  width: 160px;
 }
 
 .btn-apply {

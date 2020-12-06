@@ -19,7 +19,7 @@ export default Vue.extend({
 
   data(): DataType {
     return {
-      loginFlag: false
+      loginFlag: false,
     }
   },  
   mounted() {
