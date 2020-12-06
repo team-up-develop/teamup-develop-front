@@ -61,7 +61,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <v-container>
+  <section>
     <div class="login-wrapper" v-show="!loading">
       <div class="login-container">
         <div class="login-title">LOGIN</div>
@@ -110,14 +110,12 @@ export default Vue.extend({
         </div>
         <div v-else>
         </div>
-        <hr>
           <v-row
             cols="12"
             md="4"
           >
-          Twitter / Google ログイン エリア
+            Twitter / Google ログイン エリア
           </v-row>
-          <hr>
           <div class="btn-area">
             <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
             <div @click="login" class="login-btn">ログイン</div>
@@ -126,7 +124,7 @@ export default Vue.extend({
     </div>
     <Loading v-show="loading">
     </Loading>
-  </v-container>
+  </section>
 </template>
 
 <style lang="scss" scoped>
@@ -143,15 +141,18 @@ section {
   @include card-margin;
   width: 100%;
   height: 100%;
+  margin: 0;
+  // background-color: #EBF5FF;
 
   .login-container {
     max-width: 500px;
     height: 620px;
     margin: 2rem auto 3rem auto;
     border: solid 1px #B9B9B9;
-    border-radius: 20px;
+    border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
+    background-color: $basic-white;
 
     //* ログインタイトル
     .login-title {
@@ -196,24 +197,25 @@ section {
 
     .btn-area {
       margin: 0 auto;
-      width: 100%;
+      width: 80%;
       position: absolute;
       bottom: 0;
-      left: 0;
       padding: 2rem 0;
+      // background-color: #B9B9B9;
 
       .login-btn {
         @include blue-cancel-btn;
         display: block;
+        width: 100%;
         padding: 1.2rem 5rem;
-        border-radius: 45px;
+        border-radius: 8px;
         font-size: .875rem;
         font-weight: 600;
         line-height: 1;
         text-align: center;
-        max-width: 280px;
+        // max-width: 280px;
         margin: auto;
-        font-size: 1.3rem;
+        font-size: 1em;
         display: inline-block;
         cursor: pointer;
         margin: 0 auto;

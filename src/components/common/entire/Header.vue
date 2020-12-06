@@ -17,14 +17,16 @@ export default Vue.extend({
     }
   }
 });
-</script>
+</script> 
 
 <template>
   <div class="header-wrapper">
     <div class="header-wrapper-area">
       <div class="header-main-area">
         <div class="header-main-left">
-          <router-link to="/jobs" class="router-link">ロゴ</router-link>
+          <router-link to="/jobs" class="router-link">
+            <img src="@/assets/images/teamUp.png" alt="" width="45px">
+          </router-link>
         </div>
         <div class="header-main-right">
           <v-row class="left-user-menu">
@@ -97,7 +99,7 @@ export default Vue.extend({
 
 .boder-line {
   width: 100%;
-  border-bottom: 1px solid $primary-color;
+  border-bottom: 1px solid rgba(128, 128, 128, 0.442);
 }
 
 .icon {
@@ -140,7 +142,7 @@ export default Vue.extend({
       .header-main-left {
         width: 180px;
         height: 100%;
-        padding: 1rem 0 0rem 2rem;
+        padding: 0.5rem 0 0rem 2rem;
 
         @media screen and (max-width: 768px) {
           width: 100px;

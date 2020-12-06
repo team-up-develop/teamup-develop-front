@@ -3,9 +3,6 @@
   </div>
 </template>
 
-<script>
-</script>
-
 <style lang="scss" scoped>
 .footer-wrapper {
   width: 100%;

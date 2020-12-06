@@ -40,6 +40,14 @@
   border-radius: 8px;
   overflow: hidden;
   position: relative;
+
+  @media screen and (max-width: 500px) {
+    width: 90%;
+  }
+
+  @media screen and (max-width: 420px) {
+    width: 100%;
+  }
 }
 
 .modal-top {
@@ -64,6 +72,10 @@
   text-align: right;
   display: inline-block;
   position: relative;
+
+  @media screen and (max-width: 500px) {
+    width: 100%;
+  }
 }
 
 .modal-enter-active, .modal-leave-active {

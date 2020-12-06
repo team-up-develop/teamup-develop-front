@@ -38,8 +38,6 @@ export default {
       </div>
       <div @click="register" class="register-btn">新規登録</div>
     </div>
-    <!-- <div class="false-user-Advertisement">
-    </div> -->
   </section>
 </template>
 
@@ -49,7 +47,6 @@ export default {
   .false-user-login {
     @include card-border-color;
     width: 75%;
-    // height: calc(44vh - 4rem);
     background-color: $basic-white;
     border-radius: 8px;
     margin-top: 3.5rem;
