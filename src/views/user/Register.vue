@@ -101,14 +101,12 @@ export default Vue.extend({
             ></v-text-field>
           </v-row>
         </div>
-        <hr>
           <v-row
             cols="12"
             md="4"
           >
           Twitter / Google ログイン エリア
           </v-row>
-        <hr>
           <div class="btn-area">
             <p>登録済みの方は<router-link to="/login" class="router-link"><span>こちら</span></router-link></p>
             <div @click="register" class="login-btn">新規登録</div>
@@ -135,15 +133,18 @@ section {
   @include card-margin;
   width: 100%;
   height: 100%;
+  margin: 0;
+  // background-color: #EBF5FF;
 
   .login-container {
     max-width: 500px;
     height: 620px;
-    margin: 2.5rem auto 3rem auto;
+    margin: 2rem auto 3rem auto;
     border: solid 1px #B9B9B9;
-    border-radius: 20px;
+    border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
+    background-color: $basic-white;
 
     //* ログインタイトル
     .login-title {
@@ -188,30 +189,26 @@ section {
 
     .btn-area {
       margin: 0 auto;
-      width: 100%;
+      width: 80%;
       position: absolute;
       bottom: 0;
-      left: 0;
       padding: 2rem 0;
-      
-      p
-      span {
-        color: $primary-color;
-      }
+      // background-color: #B9B9B9;
 
       .login-btn {
-        @include blue-btn ;
+        @include blue-btn;
         color: $basic-white;
         display: block;
+        width: 100%;
         padding: 1.2rem 5rem;
-        border-radius: 45px;
+        border-radius: 8px;
         font-size: .875rem;
         font-weight: 600;
         line-height: 1;
         text-align: center;
-        max-width: 280px;
+        // max-width: 280px;
         margin: auto;
-        font-size: 1.3rem;
+        font-size: 1em;
         display: inline-block;
         cursor: pointer;
         margin: 0 auto;
