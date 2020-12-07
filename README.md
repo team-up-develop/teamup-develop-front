@@ -13,7 +13,7 @@ docker-compose exec app sh
 
 ### runserver
 ```
-npm run serve
+npm run dev
 ```
 
 ### errorが起きるはずです。
