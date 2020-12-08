@@ -21,6 +21,15 @@ export default Vue.extend({
       jobs: []
     }
   },
+  computed: {
+    isSearch() {
+      if(this.selectedFramework.length !== 0) {
+        return true;
+      } else {
+        return false;
+      }
+    }
+  },
   created() {
     // * フレームワーク取得
     axios.get<Framework[]>('http://localhost:8888/api/v1/programing_framework')
@@ -82,12 +91,21 @@ export default Vue.extend({
               </label>
             </v-row>
           </div>
-          <h1>{{ selectedFramework }}</h1>
         </v-card-text>
-        <div class="modal-footer">
+        <div class="modal-footer" v-if="isSearch">
           <div @click="searchFramework" class="serach-btn">
             検索する
           </div>
+        </div>
+        <div class="modal-footer" v-else>
+          <v-tooltip top>
+            <template v-slot:activator="{ on, attrs }">
+              <div class="serach-btn-false" v-on="on" v-bind="attrs">
+                検索する
+              </div>
+            </template>
+            <span>検索言語入力してください</span>
+          </v-tooltip>
         </div>
       </div>
     </div>
@@ -193,6 +211,26 @@ export default Vue.extend({
   .serach-btn {
     @include blue-btn;
     @include box-shadow-btn;
+    color: $basic-white;
+    padding: 1rem 3.4rem;
+    border-radius: 50px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin-left: 1.2rem;
+    font-size: 1rem;
+    cursor: pointer;
+    position: absolute;
+    top: 0;
+    right: 0;
+    margin: 1rem;
+    outline: none;
+  }
+
+  .serach-btn-false {
+    @include box-shadow-btn;
+    @include grey-btn;
     color: $basic-white;
     padding: 1rem 3.4rem;
     border-radius: 50px;
