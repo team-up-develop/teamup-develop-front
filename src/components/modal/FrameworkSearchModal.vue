@@ -104,7 +104,7 @@ export default Vue.extend({
                 検索する
               </div>
             </template>
-            <span>検索言語入力してください</span>
+            <span>検索項目入力してください</span>
           </v-tooltip>
         </div>
       </div>
