@@ -70,7 +70,7 @@ export default Vue.extend({
       // * ユーザー情報取得
       axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
       .then(response => {
-        this.loading = true;
+        // this.loading = true;
         // setTimeout(() => {
           // this.loading = false;
           this.userInfo = response.data;
@@ -79,6 +79,9 @@ export default Vue.extend({
       .catch(error => {
         console.log(error)
       })
+    },
+    editEmit() {
+      this.openModal();
     }
   },
   components: {
@@ -96,10 +99,18 @@ export default Vue.extend({
   <section>
     <div class="detail-wrapper">
       <!-- 編集 モーダル画面 -->
-      <ProfileEditModal :userInfo="userInfo" @close="closeModal" @compliteEdit="compliteEdit()" v-if="modal" />
+      <ProfileEditModal 
+        :userInfo="userInfo" 
+        @close="closeModal" 
+        @compliteEdit="compliteEdit()" 
+        v-if="modal" 
+      />
       <section class="user-area">
         <div class="user-area__post">
-          <PostUser :user="userInfo" />
+          <PostUser :user="userInfo" 
+            @editEmit="editEmit()" 
+            :myselfFlag="myselfFlag"
+          />
           <v-row class="header">
             <router-link :to="`/account/profile/${ id }`" class="router-link-active-click">
               <span>プロフィール</span>
@@ -126,7 +137,6 @@ export default Vue.extend({
           <div v-if="myselfFlag === true" class="button-action-area">
             <button @click="openModal" class="btn-box-edit" >編集する</button>
           </div>
-          <!-- 非ログイン時 リダイレクトさせる -->
           <div class="button-action-area" v-else>
           </div>
         </div>
@@ -224,6 +234,9 @@ export default Vue.extend({
   }
 }
 
+.button-area {
+  display: none;
+}
 
 /* タブレットレスポンシブ */
 @media screen and (max-width: 900px) {
@@ -242,6 +255,42 @@ export default Vue.extend({
     .pr {
       &__card {
         width: 95%;
+      }
+    }
+  }
+}
+
+@media screen and (max-width: 650px) {
+  .button-area {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: -webkit-sticky;
+    position: sticky;
+    left: 0;
+    bottom: 0;
+
+  //* 編集するボタン 
+    .btn-box-edit {
+      @include box-shadow-btn;
+      @include blue-btn;
+      color: $basic-white;
+      padding: 1.2rem 8rem;
+      transition: .3s;
+      border-radius: 50px;
+      font-weight: 600;
+      line-height: 1;
+      text-align: center;
+      margin: auto;
+      font-size: 1.3rem;
+      display: inline-block;
+      margin-bottom: 0.5rem;
+      cursor: pointer;
+      border: none;
+
+      &:hover {
+        @include btn-hover;
       }
     }
   }
