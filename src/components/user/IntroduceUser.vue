@@ -9,8 +9,10 @@ export default Vue.extend({
       bio: this.user.bio
     }
   },
-  created() {
+  mounted() {
+    console.log("aaaaaaaaaaa")
     console.log(this.user)
+    console.log("aaaaaaaaaaa")
   }
 });
 </script>
@@ -22,7 +24,7 @@ export default Vue.extend({
         <div class="detail-information">
           <div class="tag"></div>
           <div class="sub-area">
-            {{ bio }}
+            {{ user.bio }}
           </div>
         </div>
         </div>

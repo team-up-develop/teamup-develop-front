@@ -73,7 +73,7 @@ export default Vue.extend({
         // this.loading = true;
         // setTimeout(() => {
           // this.loading = false;
-          this.userInfo = response.data;
+        this.userInfo = response.data;
         // }, 1000)
       })
       .catch(error => {
@@ -123,7 +123,7 @@ export default Vue.extend({
       </section>
       <v-col class="skill">
         <div class="skill__card">
-          <div class="detail-tag">自己紹介</div>
+          <div class="detail-tag">開発スキル</div>
           <SkillUser />
         </div>
       </v-col>
