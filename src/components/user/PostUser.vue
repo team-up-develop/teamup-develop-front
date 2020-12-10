@@ -4,7 +4,16 @@ import moment from "moment";
 
 export default Vue.extend({ 
   props: {
-    user: Object
+    user: Object,
+    myselfFlag: Boolean
+  },
+  computed: {
+    enabledBtn() {
+      if(this.myselfFlag == true) {
+        return true;
+      }
+      return false;
+    }
   },
   filters: {
     // * date型を文字に変換
@@ -31,6 +40,9 @@ export default Vue.extend({
         return window.open(url);
       }
     },
+    editEmit() {
+      this.$emit('editEmit')
+    }
   }
 });
 </script>
@@ -64,7 +76,7 @@ export default Vue.extend({
         </div>
       </v-row>
       <div class="btn-area">
-        <button class="edit-btn">編集する</button>
+        <button class="edit-btn" @click="editEmit" v-if="enabledBtn">編集する</button>
       </div>
     </v-sheet>
 
@@ -123,7 +135,7 @@ export default Vue.extend({
 
     .edit-btn {
       @include box-shadow-btn;
-      @include purple-btn;
+      @include blue-btn;
       color: $basic-white;
       padding: 0.5rem 1rem;
       border-radius: 8px;

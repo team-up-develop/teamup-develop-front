@@ -135,7 +135,6 @@ section {
 
   &__center {
     height: 120px;
-    // background-color: rgba(0, 128, 0, 0.559);
     position: relative;
 
     .edit-btn {
@@ -154,7 +153,6 @@ section {
 
       .value {
         width: 33%;
-        // background-color: aliceblue;
 
         .num {
           font-size: 1.5em;

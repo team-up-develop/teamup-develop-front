@@ -192,7 +192,7 @@ export default Vue.extend({
           font-weight: bold;
 
           .create-btn {
-            @include blue-btn;
+            @include purple-btn;
             color: $basic-white;
             font-weight: bold;
           }
