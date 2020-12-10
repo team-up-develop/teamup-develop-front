@@ -37,39 +37,37 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-sheet class="post-user-area">
-      <div class="left-user-area">
-        <div class="user-image"></div>
-      </div>
-      <div class="right-user-area">
-        <div class="user-profile-area">
-          <div class="user-name-are">
-            <div class="user-name-tag">名前</div>
-            <router-link :to="`/`"> 
+    <v-sheet class="post">
+      <v-row>
+        <div class="left">
+          <div class="user-image"></div>
+        </div>
+        <div class="right">
+          <div class="profile-area">
+            <v-col class="name-are">
               <div class="user-name">
                 {{ user.userName }}
               </div>
-            </router-link>
-          </div>
-          <div class="user-introduce-area">
-            <div class="introduce-tag">学習開始</div>
-            <div class="introduce">
-              {{ user.learningStartDate | moment("YYYY年 M月 D日")}}
-            </div>
-          </div>
-        </div>
-        <div class="user-url-area">
-          <section>
-            <div class="user-github">
-              <img class="img" @click="gitTab" src="@/assets/github.png" width="50" />
+            </v-col>
+            <v-col class="introduce-area" style="padding: none">
+              <div class="introduce">
+                {{ user.learningStartDate | moment("YYYY年 M月 D日")}}
               </div>
-            <div class="user-twtter">
-              <img class="img" @click="twitterTab" src="@/assets/images/twitter.png" width="52" />
-            </div>
-          </section>
+            </v-col>
+            <v-col class="url-area">
+              <v-row>
+                <img class="img" @click="gitTab" src="@/assets/github.png" width="35" />
+                <img class="img" @click="twitterTab" src="@/assets/images/twitter.png" width="35" />
+              </v-row>
+            </v-col>
+          </div>
         </div>
+      </v-row>
+      <div class="btn-area">
+        <button class="edit-btn">編集する</button>
       </div>
     </v-sheet>
+
   </section>
 </template>
 
@@ -77,174 +75,119 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
-.post-user-area {
-  @include card-border-color;
+.post {
   border-radius: 4px;
   padding: 2rem 4rem;
   margin-bottom: 2rem;
   position: relative;
 
-  .left-user-area {
-    width: 20%;
-    height: 100%;
-
+  .left {
     .user-image {
       @include user-image;
-      width: 130px;
-      height: 130px;
+      width: 150px;
+      height: 150px;
     }
   }
 
-  .right-user-area {
-    width: 75%;
-    position: absolute;
-    right: 0;
-    top: 0;
-    padding: 1.8rem 2rem 0 2rem;
+  .right {
+    width: 50%;
     text-align: left;
 
-    .user-profile-area {
-      height: 80%;
-      width: 70%;
-      display: inline-block;
+    .profile-area {
+      width: 80%;
+      padding: 0.5rem 0 0 1rem ;
 
-      .user-name-are {
-        width: 45%;
-        display: inline-block;
-
-        .user-name-tag {
-          font-weight: bold;
-        }
-
-        .user-name {
-          margin-top: 0.2rem;
-          font-size: 16px;
-        }
+      .name-are
+      .user-name {
+        font-size: 18px;
+        font-weight: bold;
       }
 
-      .user-introduce-area {
-        margin-top: 2rem;
-
-        .introduce-tag {
-          font-weight: bold;
-        }
-
-        .introduce {
-          margin-top: 0.2rem;
-          font-size: 14px;
-        }
+      .introduce-area 
+      .introduce {
+        font-size: 12px;
       }
     }
 
-    .user-url-area {
-      display: inline-block;
-      width: 120px;
-      position: absolute;
-      top: 0;
-      right: 0;
-      padding: 1rem 1rem 0 0;
-
-      section {
-        position: relative;
-
-        .user-github {
-          position: absolute;
-          left: 0;
-          top: 0;
-          cursor: pointer;
-
-          :hover {
-            opacity: 0.8;
-          }
-        }
-
-        .user-twtter {
-          position: absolute;
-          right: 0;
-          top: 0;
-          margin-top: 0.1rem;
-          font-weight: bold;
-          cursor: pointer;
-
-          :hover {
-            opacity: 0.8;
-          }
-        }
+    .url-area {
+      padding: 0rem 0rem 0 1rem;
+      .img {
+        padding: 0 0 0 0.5rem;
       }
     }
   }
-}
-@media screen and (max-width: 1200px) {
-  .post-user-area
-  .left-user-area {
-      width: 20%;
-      height: 100%;
+  .btn-area {
+    position: absolute;
+    top: 0;
+    right: 0;
 
-    .user-image {
-      @include user-image;
-      width: 130px;
-      height: 130px;
+    .edit-btn {
+      @include box-shadow-btn;
+      @include purple-btn;
+      color: $basic-white;
+      padding: 0.5rem 1rem;
+      border-radius: 8px;
+      width: 160px;
+      height: 50px;
+      font-weight: bold;
+      font-size: 1em;
     }
   }
 }
 
-@media screen and (max-width: 900px) {
-  .post-user-area {
-    .left-user-area {
-      width: 20%;
-      height: 100%;
+@media screen and (max-width: 650px) {
+  .post {
+    padding: 2rem 2rem;
 
+    .left {
       .user-image {
         @include user-image;
-        width: 130px;
-        height: 130px;
+        width: 150px;
+        height: 150px;
       }
     }
-    .right-user-area {
-      width: 70%;
-      // background-color: yellow;
-    }
-  }
-}
 
-@media screen and (max-width: 768px) {
-  .post-user-area
-  .right-user-area {
-    width: 65%;
+    .right {
+      width: 65%;
+
+      .profile-area {
+        width: 100%;
+        padding: 0.5rem 0 0 0rem ;
+      }
+    }
+
+    .btn-area {
+      .edit-btn {
+        display: none;
+      }
+    }
   }
 }
 
 @media screen and (max-width: 500px) {
-  .post-user-area {
-    padding: 1.5rem 1rem;
+  .post {
+    padding: 1rem 1rem;
 
-    .left-user-area {
-      .user-image{
-        width: 100px;
-        height: 100px;
-      }
-    }
-
-    .right-user-area {
-      width: 75%;
-      padding: 0.5rem 0rem 0 2rem;
+    .right {
+      width: 60%;
     }
   }
 }
 
-@media screen and (max-width: 420px) {
-  .post-user-area{
-    padding: 2.5rem 1rem;
 
-    .left-user-area
-    .user-image{
-      width: 80px;
-      height: 80px;
+@media screen and (max-width: 420px) {
+  .post {
+    .left {
+      width: 100%;
+
+      .user-image {
+        margin: 0 auto;
+      }
     }
 
-    .right-user-area
-    .user-url-area {
-      padding: 1rem 0 0 0.5rem;
+    .right {
+      width: 100%;
+      text-align: center;
     }
   }
 }
