@@ -33,7 +33,7 @@ export default Vue.extend({
       this.myselfFlag = true
     }
 
-    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.id}`)
     .then(response => {
       this.manageJobs = response.data
     })
