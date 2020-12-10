@@ -8,6 +8,7 @@ import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 import ProfileUser from '@/views/user/ProfileUser.vue'
 import ProfileUserJobs from '@/views/user/ProfileUserJobs.vue'
 import ManageUserProfile from '@/views/user/ManageUserProfile.vue'
+import ManageUserProfileJobs from '@/views/user/ManageUserProfileJobs.vue'
 import Login from '@/views/user/Login.vue'
 import Register from '@/views/user/Register.vue'
 import SentMailComplete from '@/views/user/SentMailComplete.vue'
@@ -77,7 +78,6 @@ const routes: Array<RouteConfig> = [
       id: Number(route.params.id),
     })
   },
-  // * ユーザー
   {
     path: '/account/profile/:id/jobs',
     component: ProfileUserJobs,
@@ -89,6 +89,14 @@ const routes: Array<RouteConfig> = [
   {
     path: '/manage/profile/:jobId/:id/',
     component: ManageUserProfile,
+    props: route => ({
+      id: Number(route.params.id),
+      jobId: Number(route.params.jobId)
+    })
+  },
+  {
+    path: '/manage/profile/:jobId/:id/jobs',
+    component: ManageUserProfileJobs,
     props: route => ({
       id: Number(route.params.id),
       jobId: Number(route.params.jobId)

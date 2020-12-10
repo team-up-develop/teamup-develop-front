@@ -91,7 +91,8 @@ export default Vue.extend({
       />
       <section class="user-area">
         <div class="user-area__post">
-          <PostUser :user="userInfo" 
+          <PostUser 
+            :user="userInfo" 
             @editEmit="editEmit()" 
             :myselfFlag="myselfFlag" 
           />

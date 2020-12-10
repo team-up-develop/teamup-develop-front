@@ -3,9 +3,9 @@ import Vue from 'vue';
 import axios from 'axios';
 import Loading from '@/components/common/loading/Loading.vue'
 import PostUser from '@/components/user/PostUser.vue'
-import SkillUser from '@/components/user/SkillUser.vue'
-import IntroduceUser from '@/components/user/IntroduceUser.vue'
+import CardJob from '@/components/job/CardJob.vue'
 import { ParticipateParams, RejectParams } from '@/types/manage';
+import { ManageJob } from '@/types/manage';
 // import Logout from '@/components/button/Logout'
 
 export type DataType = {
@@ -16,6 +16,7 @@ export type DataType = {
   loading: boolean;
   doneStatusFlag: boolean;
   statusId: number;
+  manageJobs: ManageJob[];
 }
 
 
@@ -33,6 +34,7 @@ export default Vue.extend({
       loading: true, //? ローディング
       doneStatusFlag: false,
       statusId: 1,
+      manageJobs: []
     }
   },
   filters: {
@@ -64,26 +66,33 @@ export default Vue.extend({
   },
   created() {
     // * ユーザー情報取得
-      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
-      .then(response => {
-        this.userInfo = response.data;
-      })
-      .catch(error => {
-        console.log(error)
-      })
+    axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+    .then(response => {
+      this.userInfo = response.data;
+    })
+    .catch(error => {
+      console.log(error)
+    })
+
     // * 表示中のユーザーのステータスを格納
     axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&user_id=${ this.id }`)
     .then(response => {
       setTimeout(() => {
         this.loading = false;
         this.statusId = response.data[0].applyStatusId
-      }, 700)
+      }, 500)
     });
 
     // *  案件タイトル取得
     axios.get(`http://localhost:8888/api/v1/job/${ this.jobId }`)
     .then(response => {
       this.jobTitle = response.data.jobTitle
+    })
+
+    // *詳細を見ているユーザーの投稿案件
+    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.id}`)
+    .then(response => {
+      this.manageJobs = response.data
     })
     // TODO: WebSocket
     // const ws = (this.ws = new WebSocket(`ws://${location.host}/websocket`));
@@ -134,8 +143,7 @@ export default Vue.extend({
     // Logout
     Loading,
     PostUser,
-    SkillUser,
-    IntroduceUser
+    CardJob
   }
 });
 </script>
@@ -155,27 +163,25 @@ export default Vue.extend({
           :myselfFlag="myselfFlag"
         />
         <v-row class="header">
-          <router-link :to="`/manage/profile/${ jobId }/${ id }`"  class="router-link-active-click">
+          <router-link :to="`/manage/profile/${ jobId }/${ id }`"  class="router-link">
             <span>プロフィール</span>
           </router-link>
-          <router-link :to="`/manage/profile/${ jobId }/${ id }/jobs`" class="router-link">
+          <router-link :to="`/account/profile/${ id }/jobs`" class="router-link-active-click">
             <span>投稿案件</span> 
           </router-link>
         </v-row>
       </div>
     </section>
-    <v-col class="skill">
-      <div class="skill__card">
-        <div class="detail-tag">自己紹介</div>
-        <SkillUser />
-      </div>
-    </v-col>
-      <v-col class="pr">
-        <div class="pr__card">
-          <div class="detail-tag">自己紹介</div>
-          <IntroduceUser :user="userInfo" />
-        </div>
-      </v-col>
+      <v-row class="jobs">
+        <router-link 
+          :to="`/jobs/${ jobs.id }`" 
+          v-for="jobs in manageJobs" 
+          :key="jobs.id" 
+          class="jobs__card"
+        >
+          <CardJob :job="jobs" />
+        </router-link>
+      </v-row>
       <div class="button-area">
         <!-- 案件管理からきたら -->
         <section v-if="jobId">
@@ -253,6 +259,19 @@ export default Vue.extend({
           background-color: #F1F5F9;
         }
       }
+    }
+  }
+
+  .jobs {
+    min-height: 500px;
+    width: 100%;
+    background-color: #F1F5F9;
+    margin: 0 auto;
+
+    &__card {
+      margin-left: 1rem;
+      width: 560px;
+      margin: 0 auto;
     }
   }
 }
@@ -415,7 +434,6 @@ export default Vue.extend({
       }
     }
 
-
     //* ボタン エリア 
     .button-area 
     section 
@@ -441,4 +459,5 @@ export default Vue.extend({
       }
     }
 } 
+
 </style>
