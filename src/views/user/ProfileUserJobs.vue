@@ -1,11 +1,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
-// import Loading from '@/components/common/loading/Loading.vue'
 import ProfileEditModal from '@/components/modal/ProfileEditModal.vue'
 import PostUser from '@/components/user/PostUser.vue'
-import SkillUser from '@/components/user/SkillUser.vue'
-import IntroduceUser from '@/components/user/IntroduceUser.vue'
+import { ManageJob } from '@/types/manage';
+import CardJob from '@/components/job/CardJob.vue'
 // import Logout from '@/components/button/Logout'
 
 export type DataType = {
@@ -13,7 +12,7 @@ export type DataType = {
   userInfo: any;
   userId: number;
   modal: boolean;
-  // loading: boolean;
+  manageJobs: ManageJob[];
 }
 
 export default Vue.extend({
@@ -26,31 +25,23 @@ export default Vue.extend({
       userInfo: {},
       userId: this.$store.state.auth.userId,
       modal: false,
-      // loading: true, //? ローディング
+      manageJobs: []
     }
   },
   created() {
     if(this.userId == this.id) {
       this.myselfFlag = true
     }
-    // TODO: websocket
-    // const ws = (this.ws = new WebSocket(`ws://${location.host}/websocket`));
-    // console.log(ws)
-    // // * 接続が確認された時
-    // ws.onopen = () => {
-    //   console.log("sucsess")
-    // };
-    // ws.onmessage = message => {
-    //   this.messages.push(message.data);
-    // };
+
+    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    .then(response => {
+      this.manageJobs = response.data
+    })
 
     // * ユーザー情報取得
     axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
     .then(response => {
-      // setTimeout(() => {
-      //   this.loading = false;
-        this.userInfo = response.data;
-      // }, 1000)
+      this.userInfo = response.data;
     })
   },
   methods: {
@@ -71,10 +62,7 @@ export default Vue.extend({
       axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
       .then(response => {
         this.loading = true;
-        // setTimeout(() => {
-          // this.loading = false;
           this.userInfo = response.data;
-        // }, 1000)
       })
       .catch(error => {
         console.log(error)
@@ -83,11 +71,8 @@ export default Vue.extend({
   },
   components: {
     ProfileEditModal,
-    // Logout
-    // Loading,
     PostUser,
-    SkillUser,
-    IntroduceUser
+    CardJob
   }
 });
 </script>
@@ -101,27 +86,25 @@ export default Vue.extend({
         <div class="user-area__post">
           <PostUser :user="userInfo" />
           <v-row class="header">
-            <router-link :to="`/account/profile/${ id }`" class="router-link-active-click">
+            <router-link :to="`/account/profile/${ id }`" class="router-link">
               <span>プロフィール</span>
             </router-link>
-            <router-link :to="`/account/profile/${ id }/jobs`" class="router-link">
+            <router-link :to="`/account/profile/${ id }/jobs`" class="router-link-active-click">
               <span>投稿案件</span> 
             </router-link>
           </v-row>
         </div>
       </section>
-      <v-col class="skill">
-        <div class="skill__card">
-          <div class="detail-tag">自己紹介</div>
-          <SkillUser />
-        </div>
-      </v-col>
-      <v-col class="pr">
-        <div class="pr__card">
-          <div class="detail-tag">自己紹介</div>
-          <IntroduceUser :user="userInfo" />
-        </div>
-      </v-col>
+      <v-row class="jobs">
+        <router-link 
+          :to="`/jobs/${ jobs.id }`" 
+          v-for="jobs in manageJobs" 
+          :key="jobs.id" 
+          class="jobs__card"
+        >
+          <CardJob :job="jobs" />
+        </router-link>
+      </v-row>
         <div class="button-area">
           <div v-if="myselfFlag === true" class="button-action-area">
             <button @click="openModal" class="btn-box-edit" >編集する</button>
@@ -190,6 +173,18 @@ export default Vue.extend({
           background-color: #F1F5F9;
         }
       }
+    }
+  }
+
+  .jobs {
+    width: 100%;
+    background-color: #F1F5F9;
+    margin: 0 auto;
+
+    &__card {
+      margin-left: 1rem;
+      width: 560px;
+      margin: 0 auto;
     }
   }
 }

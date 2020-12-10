@@ -6,6 +6,7 @@ import JobDetail from '@/views/job/JobDetail.vue'
 import JobCreate from '@/views/job/JobCreate.vue'
 import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
 import ProfileUser from '@/views/user/ProfileUser.vue'
+import ProfileUserJobs from '@/views/user/ProfileUserJobs.vue'
 import ManageUserProfile from '@/views/user/ManageUserProfile.vue'
 import Login from '@/views/user/Login.vue'
 import Register from '@/views/user/Register.vue'
@@ -72,6 +73,14 @@ const routes: Array<RouteConfig> = [
   {
     path: '/account/profile/:id/',
     component: ProfileUser,
+    props: route => ({
+      id: Number(route.params.id),
+    })
+  },
+  // * ユーザー
+  {
+    path: '/account/profile/:id/jobs',
+    component: ProfileUserJobs,
     props: route => ({
       id: Number(route.params.id),
     })
