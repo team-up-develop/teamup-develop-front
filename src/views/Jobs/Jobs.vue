@@ -241,7 +241,7 @@ import Vue from 'vue';
 import axios from 'axios'
 import moment from "moment";
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import ApplyModal from '@/components/Organisms/Modals/Applys/ApplyModal.vue'
+import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
 import JobRegisterFalse from '@/components/Organisms/Jobs/JobRegisterFalse.vue'
 import JobRightLogin from '@/components/Organisms/Jobs/JobRightLogin.vue'

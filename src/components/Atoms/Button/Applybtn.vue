@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import CompliteModal from '@/components/Organisms/Modals/Applys/CompliteModal.vue'
+import CompliteModal from '@/components/Organisms/Modals/Applications/CompliteModal.vue'
 import { ApplyParams } from '@/types/job';
 
 export type DataType = {
