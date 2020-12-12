@@ -3,8 +3,8 @@ import Vue from 'vue';
 import axios from 'axios'
 import moment from "moment";
 import { ManageJob } from '@/types/manage';
-import UserCard from '@/components/manage/UserCard.vue'
-import JobsCard from '@/components/manage/JobsCard.vue'
+import UserCard from '@/components/Organisms/Manages/UserCard.vue'
+import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
 
 export type DataType = {
   manageJobs: ManageJob[];

@@ -6,7 +6,7 @@
     </div>
     <div class="job-cards__center">
       <!-- カード スキルコンポーネント -->
-      <card-job-skill :job="job"></card-job-skill>
+      <CardJobSkill :job="job" />
     </div>
     <div class="job-cards__bottom">
       <div class="product-start-end">
@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import CardJobSkill from '@/components/job/CardJobSkill.vue'
+import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
 import moment from "moment";
 export default {
   props: {

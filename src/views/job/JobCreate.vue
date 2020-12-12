@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 // import axios from 'axios'
-import Loading from '@/components/common/loading/Loading.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import { JobCreateData } from '@/types/job';
 
 export type DataType = {

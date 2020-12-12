@@ -50,7 +50,7 @@
 
 <script>
 import axios from 'axios'
-import Loading from '@/components/common/loading/Loading.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 export default {
   components: {
     Loading

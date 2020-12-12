@@ -1,8 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
-import Header from '@/components/common/entire/Header.vue'
-import Footer from '@/components/common/entire/Footer.vue'
-import HeaderLoginFalse from '@/components/common/entire/HeaderLoginFalse.vue'
+import Header from '@/components/Organisms/Commons/Entires/Header.vue'
+import Footer from '@/components/Organisms/Commons/Entires/Footer.vue'
+import HeaderLoginFalse from '@/components/Organisms/Commons/Entires/HeaderLoginFalse.vue'
 
 export type DataType = {
   loginFlag: boolean;

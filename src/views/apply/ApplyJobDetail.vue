@@ -2,13 +2,13 @@
 import Vue from 'vue';
 import axios from 'axios'
 import moment from "moment";
-import Applybtn from '@/components/button/Applybtn.vue'
-import FavoriteDetailBtn from '@/components/button/FavoriteDetailBtn.vue'
-import Loading from '@/components/common/loading/Loading.vue'
-import ApplyModal from '@/components/modal/ApplyModal.vue'
-import PostUser from '@/components/job/detail/PostUser.vue'
-import SkillJob from '@/components/job/detail/SkillJob.vue'
-import DetailJob from '@/components/job/detail/DetailJob.vue'
+import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
+import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import ApplyModal from '@/components/Organisms/Modals/Applys/ApplyModal.vue'
+import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
+import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
+import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import { Job } from '@/types/job';
 
 export type DataType = {

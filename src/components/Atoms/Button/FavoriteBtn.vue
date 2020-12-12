@@ -1,4 +1,5 @@
 <script lang="ts">
+// FIXME: 使用していない
 import Vue from 'vue';
 import axios from 'axios'
 import { FavoriteParams } from '@/types/job';
@@ -74,9 +75,9 @@ export default Vue.extend({
   <div>
     <font-awesome-icon icon="heart" class="icon" @click="saveJob" v-if="flag"/>
     <font-awesome-icon icon="heart" class="save-icon" @click="deleteJob" v-if="flag == false"/>
-    <!-- <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
+    <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
       削除する
-    </div> -->
+    </div>
   </div>
 </template>
 

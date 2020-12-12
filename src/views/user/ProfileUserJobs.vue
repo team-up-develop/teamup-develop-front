@@ -1,10 +1,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
-import ProfileEditModal from '@/components/modal/ProfileEditModal.vue'
-import PostUser from '@/components/user/PostUser.vue'
+import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
+import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import { ManageJob } from '@/types/manage';
-import CardJob from '@/components/job/CardJob.vue'
+import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 // import Logout from '@/components/button/Logout'
 
 export type DataType = {

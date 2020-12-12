@@ -1,3 +1,14 @@
+<script lang="ts">
+import { Job } from '@/types/job';
+import Vue, { PropType } from 'vue';
+
+export default Vue.extend({
+  props: {
+    job: Object as PropType<Job>
+  }
+});
+</script>
+
 <template>
   <div>
     <div class="langage" 
@@ -22,6 +33,7 @@
     :key="`framework-responsive-${index}`">
       {{ framework.programingFrameworkName }}
     </div>
+
     <div class="skill" 
     v-for="(skill, index) in job.skill.slice(0,4)" 
     :key="`skill-${index}`">
@@ -35,19 +47,6 @@
     </div>
   </div>
 </template>
-
-<script>
-export default {
-  props: {
-    job: {}
-  },
-  data() {
-    return {
-      jobs: []
-    }
-  },
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
