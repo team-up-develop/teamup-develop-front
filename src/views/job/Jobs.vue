@@ -240,15 +240,15 @@
 import Vue from 'vue';
 import axios from 'axios'
 import moment from "moment";
-import Loading from '@/components/common/loading/Loading.vue'
-import ApplyModal from '@/components/modal/ApplyModal.vue'
-import Applybtn from '@/components/button/Applybtn.vue'
-import JobRegisterFalse from '@/components/job/JobRegisterFalse.vue'
-import JobRightLogin from '@/components/job/JobRightLogin.vue'
-import CardJob from '@/components/job/CardJob.vue'
-import LanguageSearchModal from '@/components/modal/LanguageSearchModal.vue'
-import FrameworkSearchModal from '@/components/modal/FrameworkSearchModal.vue'
-import SkillSearchModal from '@/components/modal/SkillSearchModal.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import ApplyModal from '@/components/Organisms/Modals/Applys/ApplyModal.vue'
+import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
+import JobRegisterFalse from '@/components/Organisms/Jobs/JobRegisterFalse.vue'
+import JobRightLogin from '@/components/Organisms/Jobs/JobRightLogin.vue'
+import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
+import LanguageSearchModal from '@/components/Organisms/Modals/Searches/LanguageSearchModal.vue'
+import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
+import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
 
 export default Vue.extend({ 
   components: {

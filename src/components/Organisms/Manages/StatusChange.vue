@@ -1,28 +1,5 @@
-<template>
-  <div class="job-status-change-area">
-    <div class="status-change-top">
-      <router-link :to="`/manage/job/${ this.id }`" class="router">
-      {{ jobTitle | truncateDetailTitle }}
-      </router-link>
-    </div>
-    <div class="status-change-left">
-      <label for="" class="label">応募者選択</label>
-      <div class="cp_ipselect cp_sl02">
-        <select required v-model="statusChangeUser">
-          <option v-for="user in applyUsers" v-bind:value="user.user.id " v-bind:key="user.user.id">
-            {{ user.user.userName }}
-          </option>
-        </select>
-      </div>
-    </div>
-    <div class="status-change-right">
-      <button class="permit-btn" @click="applyUserPut">参加させる</button>
-      <button class="reject-btn" @click="applyUserReject">落選させる</button>
-    </div>
-  </div>
-</template>
-
 <script>
+// FIXME: 使用していない
 import axios from 'axios';
 export default {
   props: {
@@ -93,6 +70,31 @@ export default {
   },
 }
 </script>
+
+<template>
+  <div class="job-status-change-area">
+    <div class="status-change-top">
+      <router-link :to="`/manage/job/${ this.id }`" class="router">
+      {{ jobTitle | truncateDetailTitle }}
+      </router-link>
+    </div>
+    <div class="status-change-left">
+      <label for="" class="label">応募者選択</label>
+      <div class="cp_ipselect cp_sl02">
+        <select required v-model="statusChangeUser">
+          <option v-for="user in applyUsers" v-bind:value="user.user.id " v-bind:key="user.user.id">
+            {{ user.user.userName }}
+          </option>
+        </select>
+      </div>
+    </div>
+    <div class="status-change-right">
+      <button class="permit-btn" @click="applyUserPut">参加させる</button>
+      <button class="reject-btn" @click="applyUserReject">落選させる</button>
+    </div>
+  </div>
+</template>
+
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';

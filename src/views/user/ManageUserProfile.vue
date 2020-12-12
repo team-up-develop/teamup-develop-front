@@ -1,10 +1,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
-import Loading from '@/components/common/loading/Loading.vue'
-import PostUser from '@/components/user/PostUser.vue'
-import SkillUser from '@/components/user/SkillUser.vue'
-import IntroduceUser from '@/components/user/IntroduceUser.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import PostUser from '@/components/Organisms/Users/PostUser.vue'
+import SkillUser from '@/components/Organisms/Users/SkillUser.vue'
+import IntroduceUser from '@/components/Organisms/Users/IntroduceUser.vue'
 import { ParticipateParams, RejectParams } from '@/types/manage';
 // import Logout from '@/components/button/Logout'
 

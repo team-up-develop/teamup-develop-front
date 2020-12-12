@@ -1,9 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
-import Loading from '@/components/common/loading/Loading.vue'
-import PostUser from '@/components/user/PostUser.vue'
-import CardJob from '@/components/job/CardJob.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import PostUser from '@/components/Organisms/Users/PostUser.vue'
+import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 import { ParticipateParams, RejectParams } from '@/types/manage';
 import { ManageJob } from '@/types/manage';
 // import Logout from '@/components/button/Logout'

@@ -1,4 +1,5 @@
 <script lang="ts">
+// FIXME: 現状は使用していない
 import Vue from 'vue';
 import axios from 'axios'
 import moment from "moment";

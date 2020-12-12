@@ -2,8 +2,8 @@
 import Vue from 'vue';
 import axios from 'axios'
 // import TopPageRecommendJobCard from '@/components/common/topPage/TopPageRecommendJobCard.vue'
-import TopPageNewJobCard from '@/components/common/topPage/TopPageNewJobCard.vue'
-import Loading from '@/components/common/loading/Loading.vue'
+import TopPageNewJobCard from '@/components/Organisms/TopPage/TopPageNewJobCard.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';

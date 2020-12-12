@@ -1,5 +1,5 @@
 <script lang="ts">
-import Loading from '@/components/common/loading/Loading.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import Vue from 'vue';
 
 export default Vue.extend({

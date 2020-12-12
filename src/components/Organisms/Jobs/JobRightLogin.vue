@@ -17,7 +17,6 @@ export default Vue.extend({
       <div class="content">
         <img class="img"  src="@/assets/images/createJob.png" width="100%" />
         <p>自分が<span>開発したい環境</span>を設定して案件を作成しよう！</p>
-
         <div class="btn-area">
           <button class="register-btn" @click="redirectJobCreate">案件を作成する</button>
         </div>

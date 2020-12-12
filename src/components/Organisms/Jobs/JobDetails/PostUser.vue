@@ -11,6 +11,7 @@ export default Vue.extend({
       return moment(value).format(format);
     }
   },
+  // TODO: Atomsに切り分け
   methods: {
     // * Twitter をタブで開く
     twitterTab() {
