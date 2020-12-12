@@ -1,10 +1,16 @@
 <script lang="ts">
 import Vue from 'vue';
+import Logo from '@/components/Atoms/Commons/Entires/Headers/Logo.vue'
+import CreateBtn from '@/components/Atoms/Commons/Entires/Headers/CreateBtn.vue'
 export type DataType = {
   userId: number;
 }
 
 export default Vue.extend({ 
+  components: {
+    Logo,
+    CreateBtn
+  },
   data(): DataType {
     return {
       userId: this.$store.state.auth.userId,
@@ -24,9 +30,7 @@ export default Vue.extend({
     <div class="header-wrapper-area">
       <div class="header-main-area">
         <div class="header-main-left">
-          <router-link to="/jobs" class="router-link">
-            <img src="@/assets/images/teamUp.png" alt="" width="45px">
-          </router-link>
+          <Logo />
         </div>
         <div class="header-main-right">
           <v-row class="left-user-menu">
@@ -76,11 +80,7 @@ export default Vue.extend({
             </v-menu>
           </v-row>
           <v-row class="right-create-btn">
-            <router-link to="/job_create/1" class="router">
-              <v-btn class="create-btn">
-                募集する
-              </v-btn>
-            </router-link>
+            <CreateBtn />
           </v-row>
         </div>
       </div>
@@ -110,10 +110,6 @@ export default Vue.extend({
   margin-right: 1rem;
   font-size: 1.5em;
   color: $text-sub-color;
-}
-
-.router {
-  text-decoration: none;
 }
 
 .header-wrapper {
@@ -190,12 +186,7 @@ export default Vue.extend({
           height: 100%;
           display: inline-block;
           font-weight: bold;
-
-          .create-btn {
-            @include purple-btn;
-            color: $basic-white;
-            font-weight: bold;
-          }
+          color: #ffffff;
         }
       }
     }

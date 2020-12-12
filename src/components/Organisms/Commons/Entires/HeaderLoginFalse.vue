@@ -1,24 +1,17 @@
 <script lang="ts">
-import Vue from 'vue';
-// import LogoImage from '.../assets/logo.jpg'
+import Vue, { PropType } from 'vue';
+import Logo from '@/components/Atoms/Commons/Entires/Headers/Logo.vue'
+import BtnArea from '@/components/Molecules/Commons/Entires/HeaderLoginFalses/BtnArea.vue'
 // import $ from 'jquery'
-export type DataType = {
-  isActive: boolean;
-  hasError: boolean;
-  gnav: boolean;
-}
 
 export default Vue.extend({ 
+  components: {
+    Logo,
+    BtnArea
+  },
   props: {
-    flag: Boolean
-  },
-  data(): DataType {
-    return {
-      isActive: true,
-      hasError: false,
-      gnav: false //? ハンバーガーメニューフラグ
-    }
-  },
+    flag: Boolean as PropType<boolean>
+  }
 });
 </script>
 
@@ -27,26 +20,10 @@ export default Vue.extend({
     <div class="header-wrapper-area">
       <div class="header-main-area">
         <div class="header-main-left">
-          <router-link to="/" class="router-link">
-            <img src="@/assets/images/teamUp.png" alt="" width="45px">
-          </router-link>
+          <Logo />
         </div>
         <div class="header-main-right">
-          <v-row class="left-user-menu">
-            <router-link to="/jobs" class="menu-list"><v-icon class="icon">mdi-magnify</v-icon></router-link>
-            <router-link to="/login" class="router">
-              <v-btn class="login-btn">
-              ログイン
-              </v-btn>
-            </router-link>
-          </v-row>
-          <v-row class="right-create-btn">
-            <router-link to="/register" class="router">
-              <v-btn class="create-btn">
-              登録する
-              </v-btn>
-            </router-link>
-          </v-row>
+          <BtnArea />
         </div>
       </div>
     </div>
@@ -55,21 +32,6 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
-
-.boder-line {
-  margin-top: 0.5rem;
-  border-bottom: 1px dashed $primary-color;
-}
-
-.icon {
-  color: $text-sub-color;
-  margin-right: 0.7rem;
-  font-size: 2em;
-}
-
-.router {
-  text-decoration: none;
-}
 
 .header-wrapper {
   background-color: #ffffff;
@@ -122,50 +84,9 @@ export default Vue.extend({
         @media screen and (max-width: 500px) {
           width: 260px;
         }
-
-        .left-user-menu {
-          width: 38%;
-          height: 100%;
-          display: inline-block;
-          font-weight: bold;
-
-          @media screen and (max-width: 768px) {
-            width: 50%;
-            margin-right: 1rem;
-          }
-
-          @media screen and (max-width: 500px) {
-            width: 60%;
-          }
-
-          .login-btn {
-            @include blue-cancel-btn;
-            background-color: $basic-white;
-            font-weight: bold;
-          }
-        }
-
-        .right-create-btn {
-          width: 30%;
-          height: 100%;
-          display: inline-block;
-          font-weight: bold;
-
-          .create-btn {
-            @include blue-btn;
-            color: $basic-white;
-            font-weight: bold;
-          }
-        }
       }
     }
   }
-}
-
-.menu-list {
-  color: $text-sub-color;
-  font-size: 14px;
-  text-decoration: none;
 }
 
 /* スマホ */
