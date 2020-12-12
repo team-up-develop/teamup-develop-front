@@ -5,10 +5,11 @@ import moment from "moment";
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import ApplyModal from '@/components/Organisms/Modals/Applys/ApplyModal.vue'
+import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
+// import GithubImage from '@/assets/github.png'
 import { Job } from '@/types/job';
 
 export type DataType = {
@@ -29,16 +30,11 @@ export default Vue.extend({
     return {
       job: {},
       userId: this.$store.state.auth.userId,
+      selfJobPost: false, //? 自分の案件かを判定
       loginFlag: false, //? ログインしているかを判定
       loading: true, //? ローディング
       modal: false,
-      statusId: 0,
-      selfJobPost: false
-    }
-  },
-  filters: {
-    moment(value: string, format: string) {
-      return moment(value).format(format);
+      statusId: 0
     }
   },
   computed: {
@@ -54,12 +50,12 @@ export default Vue.extend({
   mounted() {
     // * 詳細画面情報を取得
     axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
-      .then(response => {
-        setTimeout(() => {
-          this.loading = false;
-          this.job = response.data
-        }, 1000)
-      })
+    .then(response => {
+      setTimeout(() => {
+        this.loading = false;
+        this.job = response.data
+      }, 1000)
+    })
   },
   created() {
     // * ログイン判定
@@ -78,8 +74,23 @@ export default Vue.extend({
         this.statusId = response.data[0].applyStatusId
       }
     });
+
+    // * 自分の案件かを判定
+    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    .then(response => {
+      for(let i = 0; i < response.data.length; i++){
+        const selfJob = response.data[i]
+        if(selfJob.id === this.id){
+          this.selfJobPost = true
+        }
+      }
+    })
   },
   methods: {
+    // * エントリーが完了したら応募済みにする
+    compliteEntry() {
+      this.statusId = 1;
+    },
     // * モーダルを開く
     openModal() {
       this.modal = true
@@ -88,26 +99,8 @@ export default Vue.extend({
       this.modal = false
     },
     doSend() {
-        this.closeModal()
+      this.closeModal()
     },
-    // * Twitter をタブで開く
-    twitterTab() {
-      if(this.job.user.twitterAccount == null) {
-        return this.job.user.twitterAccount;
-      } else {
-        const url: string = this.job.user.twitterAccount;
-        return window.open(url);
-      }
-    },
-    // * Github をタブで開く
-    gitTab() {
-      if(this.job.user.githubAccount == null) {
-        return this.job.user.githubAccount;
-      } else {
-        const url: string = this.job.user.githubAccount;
-        return window.open(url);
-      }
-    }
   },
   components: {
     Applybtn,
@@ -121,14 +114,21 @@ export default Vue.extend({
 });
 </script>
 
-
 <template>
   <div class="detail-wrapper">
     <div class="back-space">
-      <router-link :to="`/manage/apply_job`">
+      <router-link :to="`/manage/favorite_job`">
       <p>＜ 管理画面に戻る</p>
       </router-link>
     </div>
+    <!-- 応募する モーダル画面 -->
+    <ApplyModal @close="closeModal" v-if="modal">
+      <p>応募を完了してよろしいですか？</p>
+        <template slot="footer">
+          <applybtn :jobId='id' @compliteEntry="compliteEntry"></applybtn>
+          <button @click="doSend" class="modal-btn">キャンセル</button>
+        </template>
+    </ApplyModal>
     <section v-if="loading == false">
       <div class="detail-post-user-area">
         <div class="detail-tag">投稿者</div>
@@ -145,7 +145,11 @@ export default Vue.extend({
         </div>
       </div>
       <div class="button-area">
-          <div v-if="loginFlag === true" class="button-action-area">
+        <div v-if="loginFlag === true" class="button-action-area">
+          <div class="" v-if="selfJobPost">
+            自分の案件
+          </div>
+          <div v-else>
             <div class="btn-box-apply-false" v-if="DoneApply">
               応募済み
             </div>
@@ -153,27 +157,17 @@ export default Vue.extend({
             <div class="favorite-btn-area">
               <favorite-detail-btn :jobId='id'></favorite-detail-btn>
             </div>
-            <!-- 応募する モーダル画面 -->
-            <div class="example-modal-window">
-              <ApplyModal @close="closeModal" v-if="modal">
-                <p>応募を完了してよろしいですか？</p>
-                <template slot="footer">
-                  <applybtn :jobId='id'></applybtn>
-                  <button @click="doSend" class="modal-btn">キャンセル</button>
-                </template>
-              </ApplyModal>
-            </div>
           </div>
-          <div v-else>
-            ログインが必要です！
-          </div>
+        </div>
+        <div v-else>
+          ログインが必要です！
+        </div>
       </div>
     </section>
     <Loading v-else>
     </Loading>
   </div>
 </template>
-
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -384,7 +378,6 @@ export default Vue.extend({
     }
   }
 }
-
 
 @media screen and (max-width: 768px) {
   .detail-wrapper{
