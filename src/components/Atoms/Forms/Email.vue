@@ -3,45 +3,39 @@ import Vue, { PropType } from 'vue';
 
 export default Vue.extend({ 
   props: {
-    value: { type: String as PropType<string>, required: true },
     type: { type: String as PropType<string>, required: true },
-    placeholder: { type: String as PropType<string>, required: false }
+  },
+  data() {
+    return {
+      emailRules: [ //? メールアドレス 文字数
+        (v: string) => !!v || 'メールアドレスが入力されていません',
+        (v: string) => /.+@.+/.test(v) || '有効なメールアドレスを入力してください',
+      ],
+    }
   },
   methods: {
-    updateEmail(e: any) {
-      this.$emit("input", e.target.value);
+    updateEmail(e: string) {
+      this.$emit("input", e);
     }
   }
 });
 </script>
 
 <template>
-  <section>
-    <input 
-      class="input"
-      :type="type"
-      :value="value"
-      :placeholder="placeholder"
-      @input="updateEmail"
-    />
-  </section>
+  <v-text-field
+    class="input"
+    :type="type"
+    @input="updateEmail($event)"
+    :rules="emailRules"
+    label="example@teamup.com"
+    required
+    outlined
+    single-line
+    filled
+  />
 </template>
-
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
-.input {
-  width: 100%;
-  background: #EFEFEF;
-  border: none;
-  border-radius: 0;
-  outline: none;
-  -webkit-appearance: none;
-  -moz-appearance: none;
-  appearance: none;
-  padding: 1rem;
-  border-radius: 4px;
-  margin: 0 0 20px;
-}
 </style>

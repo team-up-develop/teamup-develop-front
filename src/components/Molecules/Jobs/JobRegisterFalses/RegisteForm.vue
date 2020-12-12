@@ -2,6 +2,7 @@
 import Vue, { PropType } from 'vue';
 import axios from 'axios'
 import Email from '@/components/Atoms/Forms/Email.vue'
+import Password from '@/components/Atoms/Forms/Password.vue'
 
 type DataType = {
   LoginName: string;
@@ -11,6 +12,7 @@ type DataType = {
 export default Vue.extend({ 
   components: {
     Email,
+    Password
   },
   data(): DataType {
     return {
@@ -41,10 +43,12 @@ export default Vue.extend({
       <label for="name" class="label">ログイン名</label>
       <Email
         v-model="LoginName"
-        placeholder="メールアドレス"
         type="text"
       />
-      <label for="name" class="label">パスワード</label>
+      <Password
+        v-model="LoginPassword"
+        type="password"
+      />
     </div>
     <div @click="register" class="register-btn">新規登録</div>
   </section>
