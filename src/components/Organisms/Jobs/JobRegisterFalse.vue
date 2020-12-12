@@ -1,27 +1,13 @@
-<script>
+<script lang="ts">
+import Vue from 'vue';
 import axios from 'axios'
-export default {
-  data() {
-    return {
-      LoginName: '',
-      LoginPassword: '',
-    }
+import RegisteForm from '@/components/Molecules/Jobs/JobRegisterFalses/RegisteForm.vue'
+
+export default Vue.extend({ 
+  components: {
+    RegisteForm
   },
-  methods: {
-    register() {
-      const params = {
-        LoginName: this.LoginName,
-        LoginPassword: this.LoginPassword,
-      }
-      axios.post(`${this.$baseURL}/signup`, params)
-      .then(response => {
-        console.log(response)
-      });
-      this.LoginName = "";
-      this.LoginPassword = "";
-    }
-  }
-}
+});
 </script>
 
 <template>
@@ -30,13 +16,7 @@ export default {
       <div class="top-login-title">
         簡単登録
       </div>
-      <div class="register-form-area">
-        <label for="name" class="label">ログイン名</label>
-        <input type="text" class="input" v-model="LoginName" placeholder="ログイン名">
-        <label for="name" class="label">パスワード</label>
-        <input type="password" class="input" v-model="LoginPassword" placeholder="パスワード">
-      </div>
-      <div @click="register" class="register-btn">新規登録</div>
+      <RegisteForm />
     </div>
   </section>
 </template>
@@ -79,64 +59,11 @@ export default {
     }
   }
 
-  .register-form-area {
-    width: 100%;
-    height: 65%;
-    margin-top: 0.5rem;
-    display: flex;
-    flex-direction: column;
-
-    .input {
-      background: #EFEFEF;
-      border: none;
-      border-radius: 0;
-      outline: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      appearance: none;
-      padding: 1rem;
-      border-radius: 4px;
-      margin: 0 0 20px;
-    }
-
-    .label {
-      color: #444444;
-      font-size: 14px;
-    }
-  }
-
-  .false-user-Advertisement {
-    width: 75%;
-    height: 40vh;
-    background-color: $basic-white;
-    border-radius: 8px;
-    margin-bottom: 1rem;
-  }
-
-  .register-btn {
-    @include purple-btn ;
-    @include box-shadow-btn;
-    color: $basic-white;
-    display: block;
-    padding: 1rem 2rem;
-    border-radius: 25px;
-    font-size: .875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    cursor: pointer;
-    transition: .3s;
-    outline: none;
-
-    &:hover {
-      @include btn-hover;
-      color: #F8FAFF;
-      appearance: none;
-      border: none;
-      transition: .3s;
-    }
-  }
+.false-user-Advertisement {
+  width: 75%;
+  height: 40vh;
+  background-color: $basic-white;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+}
 </style>

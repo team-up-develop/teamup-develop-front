@@ -1,0 +1,95 @@
+<script lang="ts">
+import Vue, { PropType } from 'vue';
+import axios from 'axios'
+import Email from '@/components/Atoms/Forms/Email.vue'
+
+type DataType = {
+  LoginName: string;
+  LoginPassword: string;
+}
+
+export default Vue.extend({ 
+  components: {
+    Email,
+  },
+  data(): DataType {
+    return {
+      LoginName: '',
+      LoginPassword: '',
+    }
+  },
+  methods: {
+    register() {
+      const params = {
+        LoginName: this.LoginName,
+        LoginPassword: this.LoginPassword,
+      }
+      axios.post(`http://localhost:8888/api/v1/signup`, params)
+      .then(response => {
+        console.log(response)
+      });
+      this.LoginName = "";
+      this.LoginPassword = "";
+    }
+  }
+})
+</script>
+
+<template>
+  <section>
+    <div class="register-form-area">
+      <label for="name" class="label">ログイン名</label>
+      <Email
+        v-model="LoginName"
+        placeholder="メールアドレス"
+        type="text"
+      />
+      <label for="name" class="label">パスワード</label>
+    </div>
+    <div @click="register" class="register-btn">新規登録</div>
+  </section>
+</template>
+
+<style lang="scss" scoped>
+@import '@/assets/scss/_variables.scss';
+
+.register-form-area {
+  width: 100%;
+  height: 65%;
+  margin-top: 0.5rem;
+  display: flex;
+  flex-direction: column;
+
+  .label {
+    color: #444444;
+    font-size: 14px;
+  }
+}
+
+.register-btn {
+  @include purple-btn ;
+  @include box-shadow-btn;
+  color: $basic-white;
+  display: block;
+  padding: 1rem 2rem;
+  border-radius: 25px;
+  font-size: .875rem;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  max-width: 280px;
+  margin: auto;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: .3s;
+  outline: none;
+
+  &:hover {
+    @include btn-hover;
+    color: #F8FAFF;
+    appearance: none;
+    border: none;
+    transition: .3s;
+  }
+}
+</style>
