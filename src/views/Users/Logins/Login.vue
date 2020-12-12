@@ -1,34 +1,37 @@
 <script lang="ts">
 import Vue from 'vue';
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import Email from '@/components/Atoms/Forms/Email.vue'
+import Password from '@/components/Atoms/Forms/Password.vue'
 
 export type DataType = {
   LoginName: string;
   LoginPassword: string;
   loginErrorFlag: boolean;
   loading: boolean;
-  emailRules: any[];
-  show2: boolean;
-  rules: any;
+  // emailRules: any[];
+  // show2: boolean;
+  // rules: any;
 }
 
 export default Vue.extend({ 
+  components: {
+    Loading,
+    Email,
+    Password
+  },
   data(): DataType {
     return {
       LoginName: '',
       LoginPassword: '',
       loginErrorFlag: false,
       loading: true, 
-      show2: true,
-      rules: { //? パスワード 文字数
-        required: (value: any) => !!value || 'パスワードが入力されていません',
-        min: (v: any) => v.length >= 8 || '8文字以上で入力してください',
-        emailMatch: () => (`The email and password you entered don't match`),
-      },
-      emailRules: [ //? メールアドレス 文字数
-        (v: string) => !!v || 'メールアドレスが入力されていません',
-        (v: string) => /.+@.+/.test(v) || '有効なメールアドレスを入力してください',
-      ],
+      // show2: true,
+      // rules: { //? パスワード 文字数
+      //   required: (value: any) => !!value || 'パスワードが入力されていません',
+      //   min: (v: any) => v.length >= 8 || '8文字以上で入力してください',
+      //   emailMatch: () => (`The email and password you entered don't match`),
+      // },
     }
   },
   methods: {
@@ -53,9 +56,6 @@ export default Vue.extend({
     setTimeout(() => {
       this.loading = false;
     }, 1000)
-  },
-  components: {
-    Loading
   }
 });
 </script>
@@ -71,16 +71,10 @@ export default Vue.extend({
             cols="12"
             md="4"
           >
-            <v-text-field
-              class="textholder"
+            <Email
               v-model="LoginName"
-              :rules="emailRules"
-              label="example@teamup.com"
-              required
-              outlined
-              single-line
-              filled
-            ></v-text-field>
+              type="text"
+            />
           </v-row>
         </div>
         <div class="name-form-password">
@@ -89,20 +83,10 @@ export default Vue.extend({
             cols="12"
             md="4"
           >
-            <v-text-field
-              :type="show2 ? 'text' : 'password'"
-              :rules="[rules.required, rules.min]"
-              name="input-10-2"
-              label="password"
-              hint="8文字以上で入力してください"
-              value="wqfasds"
-              class="input-group--focused"
+            <Password
               v-model="LoginPassword"
-              outlined
-              @click:append="show2 = !show2"
-              single-line
-              filled
-            ></v-text-field>
+              type="password"
+            />
           </v-row>
         </div>
         <div class="error-flag" v-if="loginErrorFlag == true">
