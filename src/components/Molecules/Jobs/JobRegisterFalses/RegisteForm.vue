@@ -40,11 +40,12 @@ export default Vue.extend({
 <template>
   <section>
     <div class="register-form-area">
-      <label for="name" class="label">ログイン名</label>
+      <label for="name" class="label">メールアドレス</label>
       <Email
         v-model="LoginName"
         type="text"
       />
+      <label for="name" class="label">パスワード</label>
       <Password
         v-model="LoginPassword"
         type="password"

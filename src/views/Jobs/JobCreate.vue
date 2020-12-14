@@ -2,6 +2,9 @@
 import Vue from 'vue';
 // import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import JobTitleInput from '@/components/Atoms/Forms/JobTitleInput.vue'
+import DatePicker from '@/components/Atoms/Forms/DatePicker.vue'
+import JobDescriptionInput from '@/components/Atoms/Forms/JobDescriptionInput.vue'
 import { JobCreateData } from '@/types/job';
 
 export type DataType = {
@@ -10,7 +13,7 @@ export type DataType = {
   jobDescription: string | null;
   devStartDate: string | null;
   devEndDate: string | null;
-  titleLimit: number | null;
+  // titleLimit: number | null;
   jobDescriptionLimit: number | null;
   errors: string[];
   errorsDevStartDates: string[];
@@ -18,6 +21,12 @@ export type DataType = {
 }
 
 export default Vue.extend({ 
+  components: {
+    Loading,
+    JobTitleInput,
+    DatePicker,
+    JobDescriptionInput
+  },
   data(): DataType {
     return {
       loading: true,
@@ -25,7 +34,7 @@ export default Vue.extend({
       jobDescription: "", //? 詳細
       devStartDate: "", //? 開始日
       devEndDate: "", //? 終了日
-      titleLimit: 0, //? タイトル文字制限
+      // titleLimit: 0, //? タイトル文字制限
       jobDescriptionLimit: 0, //? 詳細文字制限
       errors: [], //? タイトルエラー格納先
       errorsDevStartDates: [], //? 開発開始時期エラー格納先
@@ -114,13 +123,14 @@ export default Vue.extend({
       }
     },
     //* タイトル文字制限 
-    onInputTitle: function(): void  {
-      if(this.jobTitle == null) {
-        console.log("null")
-      } else {
-        this.titleLimit = this.jobTitle.length;
-      }
-    },
+    // onInputTitle: function(): void  {
+    //   if(this.jobTitle == null) {
+    //     console.log("null")
+    //   } 
+    //   else {
+    //     this.titleLimit = this.jobTitle.length;
+    //   }
+    // },
     // * 詳細文字制限
     onTextJobDescription: function(): void  {
       if(this.jobDescription == null) {
@@ -128,11 +138,8 @@ export default Vue.extend({
       } else {
       this.jobDescriptionLimit = this.jobDescription.length
       }
-    },
-  },
-  components: {
-    Loading,
-  },
+    }
+  }
 });
 </script>
 
@@ -141,30 +148,28 @@ export default Vue.extend({
     <v-card class="job-create-wrapper" v-show="!loading">
       <div class="job-create-title-area">
         <label for="name" class="label">案件タイトル</label><label for="name" class="label-required">必須</label>
-          <label v-if="errors.length" class="error-label">
-            <p v-for="error in errors" :key="error" class="error-message">{{ error }}</p>
-          </label>
-        <input type="text" v-model="jobTitle" @input="onInputTitle" placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)" maxlength="60" >
-          <small id="rem">残り{{60 - titleLimit }}文字</small>
+        <!-- <label v-if="errors.length" class="error-label">
+          <p v-for="error in errors" :key="error" class="error-message">{{ error }}</p>
+        </label> -->
+        <JobTitleInput v-model="jobTitle" type="text"/>
       </div>
       <div class="job-create-time-area">
         <label for="name" class="label">開発開始時期</label><label for="name" class="label-required">必須</label>
-          <label v-if="errorsDevStartDates.length" class="error-label">
-            <p v-for="errorsDevStartDate in errorsDevStartDates" :key="errorsDevStartDate" class="error-message">{{ errorsDevStartDate }}</p>
-          </label>
-        <input type="date" v-model="devStartDate">
+        <!-- <label v-if="errorsDevStartDates.length" class="error-label">
+          <p v-for="errorsDevStartDate in errorsDevStartDates" :key="errorsDevStartDate" class="error-message">{{ errorsDevStartDate }}</p>
+        </label> -->
+        <DatePicker v-model="devStartDate" type="text" />
       </div>
       <div class="job-create-time-area">
       <label for="name" class="label">開発終了時期</label><label for="name" class="label-required">必須</label><label v-if="minStartDate" class="error-message">{{ "開始日が終了日より前です。" }}</label>
-        <label v-if="errorDevEndDates.length" class="error-label">
+        <!-- <label v-if="errorDevEndDates.length" class="error-label">
           <p v-for="errorDevEndDate in errorDevEndDates" :key="errorDevEndDate" class="error-message">{{ errorDevEndDate }}</p>
-        </label>
-      <input type="date" v-model="devEndDate">
+        </label> -->
+        <DatePicker v-model="devEndDate" type="text" />
       </div>
       <div class="job-create-detail-area">
         <label for="name" class="label">概要</label>
-        <textarea type="text" name="" @input="onTextJobDescription" v-model="jobDescription" placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" maxlength="250"></textarea>
-        <small id="rem">残り{{250 - jobDescriptionLimit }}文字</small>
+        <JobDescriptionInput v-model="jobDescription" type="text" />
       </div>
       <router-link to='/job_create/2' class="job-create-btn-area" v-if="isForm && !minStartDate">
         <button class="next-btn" @click="nextCreateBtn">
@@ -174,9 +179,9 @@ export default Vue.extend({
       <span class="job-create-btn-area" v-else>
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-          <button class="next-btn-false" v-on="on" v-bind="attrs">
-            次へ 1/2
-          </button>
+            <button class="next-btn-false" v-on="on" v-bind="attrs">
+              次へ 1/2
+            </button>
           </template>
         <span>必須項目が入力されていません</span>
         </v-tooltip>
@@ -252,85 +257,25 @@ export default Vue.extend({
 .job-create-wrapper {
   .job-create-title-area {
     width: 100%;
-    height: 18%;
     text-align: left;
-
-    input[type='text'] {
-      @include input-border-color;
-      background-color: $sub-white;
-      color: $text-main-color;
-      font: 16px/24px sans-serif;
-      box-sizing: border-box;
-      width: 100%;
-      padding: 0.3em;
-      transition: 0.3s;
-      letter-spacing: 1px;
-      border-radius: 4px;
-      padding: 0.5rem;
-
-      &:focus {
-        @include form-hover;
-      }
-    }
   }
 
   .job-create-time-area {
     width: 100%;
-    height: 18%;
     text-align: left;
-
-    input[type='date'] {
-      @include input-border-color;
-      background-color: $sub-white;
-      color: $text-main-color;
-      font: 16px/24px sans-serif;
-      box-sizing: border-box;
-      width: 40%;
-      display: flex;
-      padding: 0.3em;
-      transition: 0.3s;
-      letter-spacing: 1px;
-      border-radius: 4px;
-      padding: 0.5rem;
-
-      &:focus {
-        @include form-hover;
-      }
-    }
   }
 
   .job-create-detail-area {
     width: 100%;
-    height: 35%;
     display: flex;
     flex-direction: column;
     text-align: left;
-
-    textarea[type='text'] {
-      @include input-border-color;
-      background-color: $sub-white;
-      color: $text-main-color;
-      font: 16px/24px sans-serif;
-      box-sizing: border-box;
-      width: 100%;
-      height: 100%;
-      padding: 0.3em;
-      transition: 0.3s;
-      letter-spacing: 1px;
-      border-radius: 4px;
-      padding: 0.5rem;
-
-      &:focus {
-        @include form-hover;
-      }
-    }
   }
 
   .job-create-btn-area {
     width: 100px;
     height: 100px;
     text-align: left;
-    margin-top: 1.5rem;
 
     .next-btn {
       @include box-shadow-btn;
@@ -349,7 +294,6 @@ export default Vue.extend({
       margin: auto;
       font-size: 1rem;
       float: right;
-      margin-top: 1.5rem;
       cursor: pointer;
       transition: .3s;
       outline: none;
@@ -376,7 +320,6 @@ export default Vue.extend({
       margin: auto;
       font-size: 1rem;
       float: right;
-      margin-top: 1.5rem;
       cursor: pointer;
       transition: .3s;
       outline: none;
@@ -387,7 +330,6 @@ export default Vue.extend({
 @media (max-width: 768px) {
   .create-wrapper
   .job-create-wrapper {
-    height: 100%;
     .job-create-time-area {
       input[type='date'] {
       width: 60%;

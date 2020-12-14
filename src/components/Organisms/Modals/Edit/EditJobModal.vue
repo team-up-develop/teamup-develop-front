@@ -81,12 +81,10 @@ export default Vue.extend({
         programingLanguage: languageArray,
       }
 
-      console.log(params.programingLanguage)
-
       axios.put(`http://localhost:8888/api/v1/job/${this.jobId}`, params)
       .then(response => {
+        console.log(response)
         console.log("Putですね！！！！！！！！")
-        console.log(response.data)
         // this.$emit('compliteAssgin', this.message)
       })
       .catch(error => {

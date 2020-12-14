@@ -166,10 +166,10 @@ export default Vue.extend({
       this.selectedFramwork = [];
       this.selectedSkill = [];
       this.recruitNumber = 0;
-    }
+    },
   },
   components: {
-    vSelect
+    vSelect,
   }
 });
 </script>
@@ -179,10 +179,10 @@ export default Vue.extend({
     <div class="job-create-wrapper">
       <div class="job-create-area">
         <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須 5つまで</label>
-        <label v-if="selectedLangErrors.length" class="error-label">
+        <!-- <label v-if="selectedLangErrors.length" class="error-label">
           <p v-for="selectedLangError in selectedLangErrors" :key="selectedLangError" class="error-message">
             {{ selectedLangError }}</p>
-        </label>
+        </label> -->
         <v-select
           class="input-area"
           multiple
