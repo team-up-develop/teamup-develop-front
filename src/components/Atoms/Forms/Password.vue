@@ -31,7 +31,7 @@ export default Vue.extend({
     name="input-10-2"
     label="password"
     hint="8文字以上で入力してください"
-    value="wqfasds"
+    value=""
     class="input-group--focused"
     outlined
     @click:append="show2 = !show2"

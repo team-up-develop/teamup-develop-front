@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+// import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import Email from '@/components/Atoms/Forms/Email.vue'
 import Password from '@/components/Atoms/Forms/Password.vue'
 
@@ -9,14 +9,11 @@ export type DataType = {
   LoginPassword: string;
   loginErrorFlag: boolean;
   loading: boolean;
-  // emailRules: any[];
-  // show2: boolean;
-  // rules: any;
 }
 
 export default Vue.extend({ 
   components: {
-    Loading,
+    // Loading,
     Email,
     Password
   },
@@ -26,12 +23,6 @@ export default Vue.extend({
       LoginPassword: '',
       loginErrorFlag: false,
       loading: true, 
-      // show2: true,
-      // rules: { //? パスワード 文字数
-      //   required: (value: any) => !!value || 'パスワードが入力されていません',
-      //   min: (v: any) => v.length >= 8 || '8文字以上で入力してください',
-      //   emailMatch: () => (`The email and password you entered don't match`),
-      // },
     }
   },
   methods: {
@@ -40,29 +31,27 @@ export default Vue.extend({
         LoginName: this.LoginName,
         LoginPassword: this.LoginPassword,
       })
-      // this.LoginName = "";
-      // this.LoginPassword = "";
       setTimeout(() => {
-        if (this.$store.state.auth.errorFlag === true) {
-          this.loginErrorFlag = true;
-        }
-      }, 1000)
+      if (this.$store.state.auth.errorFlag === true) {
+        this.loginErrorFlag = true;
+      }
+      }, 700)
     },
   },
   created() {
     this.$store.state.auth.errorFlag = false;
   },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000)
-  }
+  // mounted() {
+  //   setTimeout(() => {
+  //     this.loading = false;
+  //   }, 1000)
+  // }
 });
 </script>
 
 <template>
   <section>
-    <div class="login-wrapper" v-show="!loading">
+    <div class="login-wrapper">
       <div class="login-container">
         <div class="login-title">LOGIN</div>
         <div class="name-form-mail">
@@ -94,20 +83,18 @@ export default Vue.extend({
         </div>
         <div v-else>
         </div>
-          <v-row
-            cols="12"
-            md="4"
-          >
-            Twitter / Google ログイン エリア
-          </v-row>
-          <div class="btn-area">
-            <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
-            <div @click="login" class="login-btn">ログイン</div>
-          </div>
+        <v-row
+          cols="12"
+          md="4"
+        >
+          Twitter / Google ログイン エリア
+        </v-row>
+        <div class="btn-area">
+          <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
+          <div @click="login" class="login-btn">ログイン</div>
+        </div>
       </div>
     </div>
-    <Loading v-show="loading">
-    </Loading>
   </section>
 </template>
 
