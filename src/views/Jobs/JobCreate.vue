@@ -13,8 +13,6 @@ export type DataType = {
   jobDescription: string | null;
   devStartDate: string | null;
   devEndDate: string | null;
-  // titleLimit: number | null;
-  jobDescriptionLimit: number | null;
   errors: string[];
   errorsDevStartDates: string[];
   errorDevEndDates: string[];
@@ -34,8 +32,6 @@ export default Vue.extend({
       jobDescription: "", //? 詳細
       devStartDate: "", //? 開始日
       devEndDate: "", //? 終了日
-      // titleLimit: 0, //? タイトル文字制限
-      jobDescriptionLimit: 0, //? 詳細文字制限
       errors: [], //? タイトルエラー格納先
       errorsDevStartDates: [], //? 開発開始時期エラー格納先
       errorDevEndDates: [] //? 開発終了時期エラー格納先
@@ -70,8 +66,10 @@ export default Vue.extend({
     }, 900)
     // * セッションストレージの値をフォームに格納する
     const jobTitle = sessionStorage.getItem('jobTitle');
+    console.log(jobTitle)
     const jobDescription = sessionStorage.getItem('jobDescription');
     const devStartDateString = sessionStorage.getItem('devStartDateString');
+    console.log(devStartDateString)
     const devEndDateString = sessionStorage.getItem('devEndDateString');
     this.jobTitle = jobTitle;
     this.devStartDate = devStartDateString;
@@ -120,23 +118,6 @@ export default Vue.extend({
         }
         const jobTitle = sessionStorage.getItem('jobTitle');
         this.jobTitle = jobTitle;
-      }
-    },
-    //* タイトル文字制限 
-    // onInputTitle: function(): void  {
-    //   if(this.jobTitle == null) {
-    //     console.log("null")
-    //   } 
-    //   else {
-    //     this.titleLimit = this.jobTitle.length;
-    //   }
-    // },
-    // * 詳細文字制限
-    onTextJobDescription: function(): void  {
-      if(this.jobDescription == null) {
-        console.log("null")
-      } else {
-      this.jobDescriptionLimit = this.jobDescription.length
       }
     }
   }

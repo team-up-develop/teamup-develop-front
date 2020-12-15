@@ -57,19 +57,19 @@ export default {
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
-        .left-user-menu {
-          width: 100px;
-          height: 100px;
-          margin: 0;
-          display: inline-block;
-          background-color: rgba(26, 108, 26, 0.113);
+.left-user-menu {
+  width: 100px;
+  height: 100px;
+  margin: 0;
+  display: inline-block;
+  background-color: rgba(26, 108, 26, 0.113);
 
-          .user-image {
-            @include user-image;
-            width: 2.8rem;
-            height: 2.6rem;
-            border-radius: 50%;
-            cursor: pointer;
-          }
-        }
+  .user-image {
+    @include user-image;
+    width: 2.8rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    cursor: pointer;
+  }
+}
 </style>

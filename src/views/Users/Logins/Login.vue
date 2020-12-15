@@ -175,11 +175,12 @@ section {
       // background-color: #B9B9B9;
 
       .login-btn {
-        @include blue-cancel-btn;
+        @include blue-btn;
+        color: $basic-white;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
-        border-radius: 8px;
+        border-radius: 50px;
         font-size: .875rem;
         font-weight: 600;
         line-height: 1;

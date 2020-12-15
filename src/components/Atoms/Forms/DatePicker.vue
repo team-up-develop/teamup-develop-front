@@ -1,9 +1,11 @@
 <script>
+// FIXME: ts ファイルにすると saveが Error
 import Vue from 'vue';
 
 export default Vue.extend({ 
   props: {
     type: { type: String, required: true },
+    value: { type: String || null,  required: false },
   },
   data() {
     return {
@@ -39,7 +41,7 @@ export default Vue.extend({
       >
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
-            v-model="date"
+            :value="value"
             label="開発開始日"
             prepend-icon="mdi-calendar"
             readonly

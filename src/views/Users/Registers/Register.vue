@@ -201,7 +201,7 @@ section {
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
-        border-radius: 8px;
+        border-radius: 50px;
         font-size: .875rem;
         font-weight: 600;
         line-height: 1;

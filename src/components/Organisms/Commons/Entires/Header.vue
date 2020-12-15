@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
-import Logo from '@/components/Atoms/Commons/Entires/Headers/Logo.vue'
-import CreateBtn from '@/components/Atoms/Commons/Entires/Headers/CreateBtn.vue'
+import Logo from '@/components/Atoms/Commons/Entires/Logo.vue'
+import CreateBtn from '@/components/Atoms/Commons/Entires/CreateBtn.vue'
 export type DataType = {
   userId: number;
 }
