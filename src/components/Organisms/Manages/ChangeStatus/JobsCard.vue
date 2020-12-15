@@ -128,7 +128,9 @@ section {
       width: 100%;
       font-weight: bold;
       font-size: 0.8em;
+      border-radius: 8px;
     }
+
     .data-area {
       padding: 3.5rem 0 0 0;
 

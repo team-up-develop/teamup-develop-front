@@ -180,7 +180,6 @@ export default Vue.extend({
     pointer-events: none;
     font-size: 16px;
     text-decoration: underline;
-    // background-color: yellow;
   }
 
   &__center {

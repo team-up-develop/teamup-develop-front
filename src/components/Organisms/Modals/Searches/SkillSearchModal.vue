@@ -22,13 +22,14 @@ export default Vue.extend({
     }
   },
   computed: {
-    isSearch() {
-      if(this.selectedSkill.length !== 0) {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    // FIXME: 現状は使用していない
+    // isSearch() {
+    //   if(this.selectedSkill.length !== 0) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
   },
   created() {
     // * フレームワーク取得
@@ -91,12 +92,13 @@ export default Vue.extend({
             </v-row>
           </div>
         </v-card-text>
-        <div class="modal-footer" v-if="isSearch">
+        <div class="modal-footer">
           <div @click="searchSkill" class="serach-btn">
             検索する
           </div>
         </div>
-        <div class="modal-footer" v-else>
+         <!-- // FIXME: 現状は使用していない -->
+        <!-- <div class="modal-footer" v-else>
           <v-tooltip top>
             <template v-slot:activator="{ on, attrs }">
               <div class="serach-btn-false" v-on="on" v-bind="attrs">
@@ -105,7 +107,7 @@ export default Vue.extend({
             </template>
             <span>検索項目入力してください</span>
           </v-tooltip>
-        </div>
+        </div> -->
       </div>
     </div>
   </transition>
