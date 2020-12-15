@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import LoginBtn from '@/components/Atoms/Commons/Entires/HeaderLoginFalses/LoginBtn.vue'
-import RegisteBtn from '@/components/Atoms/Commons/Entires/HeaderLoginFalses/RegisteBtn.vue'
+import LoginBtn from '@/components/Atoms/Commons/Entires/LoginBtn.vue'
+import RegisteBtn from '@/components/Atoms/Commons/Entires/RegisteBtn.vue'
 
 export default Vue.extend({
   components: {

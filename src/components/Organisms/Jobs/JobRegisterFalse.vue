@@ -24,7 +24,7 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
-  .false-user-login {
+.false-user-login {
     @include card-border-color;
     width: 75%;
     background-color: $basic-white;
@@ -32,7 +32,6 @@ export default Vue.extend({
     margin-top: 3.5rem;
     padding: 0 2rem 2rem 2rem;
     position: sticky;
-  }
 
   .top-login-title {
     width: 100%;
@@ -58,12 +57,5 @@ export default Vue.extend({
       border-radius: 3px;
     }
   }
-
-.false-user-Advertisement {
-  width: 75%;
-  height: 40vh;
-  background-color: $basic-white;
-  border-radius: 8px;
-  margin-bottom: 1rem;
 }
 </style>
