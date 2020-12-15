@@ -2,8 +2,9 @@
 import Vue from 'vue';
 import axios from 'axios'
 // import TopPageRecommendJobCard from '@/components/common/topPage/TopPageRecommendJobCard.vue'
-import TopPageNewJobCard from '@/components/Organisms/TopPage/TopPageNewJobCard.vue'
+// import TopPageNewJobCard from '@/components/Organisms/TopPage/TopPageNewJobCard.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import HeaderArea from '@/components/Organisms/TopPage/HeaderArea.vue'
 import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
@@ -17,6 +18,12 @@ export type DataType = {
 }
 
 export default Vue.extend({ 
+  components: {
+    // TopPageRecommendJobCard,
+    // TopPageNewJobCard,
+    Loading,
+    HeaderArea
+  },
   data(): DataType {
     return {
       languages: [], //? 開発言語
@@ -82,39 +89,17 @@ export default Vue.extend({
       })
       return this.$router.push('/jobs');
     }
-  },
-  components: {
-    // TopPageRecommendJobCard,
-    TopPageNewJobCard,
-    Loading
-  },
+  }
 });
 </script>
 
 <template>
   <section>
-    <div v-show="!loading">
+    <section v-show="!loading">
       <div class="top-wrapper">
         <v-container class="container-top">
           <!-- トップ AD area -->
-          <div class="top-ad-area">
-            <div class="top-ad-left">
-              <div class="ad-title-area">
-                チーム開発をすぐに始めれる
-              </div>
-              <div class="ad-subtitle-area">
-                本気でキャリアを変えようと努力している未経験エンジニア同士が
-                オンラインでの「チーム開発」を通じて相互に成長し、
-                エンジニアとしてスタートを切る。
-              </div>
-            </div>
-            <div class="top-ad-right">
-              <div class="btn-area">
-                <button class="register-btn" @click="$router.push('/register')">登録する</button>
-                <button class="login-btn" @click="$router.push('/login')">ログインする</button>
-              </div>
-            </div>
-          </div>
+          <HeaderArea />
           <!-- 中央 フリーワード  -->
           <div class="center-ad-area">
             <input type="text" class="serach-freeword" v-model="freeWord"  placeholder="フリーワードを入力してください">
@@ -152,22 +137,16 @@ export default Vue.extend({
           </div>
         </v-container>
       </div>
-      <template>
+      <!-- <template>
         <div class="container-center">
-          <div class="card-area">
-            <label for="name" class="new-tag">新着案件</label>
-            <top-page-new-job-card></top-page-new-job-card>
-          </div>
-          <!-- <div class="card-area">
-            <label for="name" class="new-tag">おすすめ案件</label>
-            <top-page-recommend-job-card></top-page-recommend-job-card>
-          </div> -->
+          <label for="name" class="new-tag">新着案件</label>
+          <TopPageNewJobCard />
         </div>
-      </template>
+      </template> -->
       <div>
         <h1>ここは使い方説明欄</h1>
       </div>
-    </div>
+    </section>
     <Loading v-show="loading">
     </Loading>
   </section>
@@ -186,112 +165,17 @@ export default Vue.extend({
     width: 100%;
     margin: 2rem 0rem;
     padding: 2.5rem 0rem 0rem 0rem;
-    height: 100%;
     max-width: none;
-
-    // * トップ 広告エリア
-    .top-ad-area {
-      width: 100%;
-      height: 40%;
-      position: relative;
-
-      .top-ad-left {
-        width: 50%;
-        height: 100%;
-        position: absolute;
-        left: 0;
-        top: 0;
-        text-align: left;
-
-        .ad-title-area {
-          color: #1142e2;
-          background: -webkit-linear-gradient(0deg, #1142e2, #19bde6);
-          -webkit-background-clip: text;
-          -webkit-text-fill-color: transparent;
-          font-weight: bold;
-          font-size: 2.3em;
-        }
-        .ad-subtitle-area {
-          width: 80%;
-          padding: 1.5rem 0;
-          font-weight: bold;
-          line-height: 1.4;
-        }
-      }
-
-      .top-ad-right {
-        width: 50%;
-        height: 50%;
-        // background-color: #673AB7;
-        position: absolute;
-        right: 0;
-        bottom: 0;
-        margin-bottom: 2rem;
-
-        .btn-area {
-          width: 350px;
-          height: 100%;
-          float: right;
-          position: relative;
-
-          .register-btn {
-            @include purple-btn;
-            text-align: left;
-            display: block;
-            padding: 1.1rem 3rem;
-            border-radius: 8px;
-            border: none;
-            font-size: .875rem;
-            font-weight: 600;
-            color: $basic-white;
-            line-height: 1;
-            text-align: center;
-            max-width: 280px;
-            margin: auto;
-            font-size: 1rem;
-            float: right;
-            cursor: pointer;
-            transition: .3s;
-            outline: none;
-            position: absolute;
-            left: 0;
-          }
-
-          .login-btn {
-            border: solid 1px #673AB7;
-            color: #673AB7;
-            background-color: #ffffff;
-            text-align: left;
-            display: block;
-            padding: 1.1rem 2rem;
-            border-radius: 8px;
-            font-size: .875rem;
-            font-weight: 600;
-            line-height: 1;
-            text-align: center;
-            max-width: 280px;
-            margin: auto;
-            font-size: 1rem;
-            float: right;
-            cursor: pointer;
-            transition: .3s;
-            outline: none;
-            position: absolute;
-            right: 0;
-          }
-        }
-      }
-    }
 
     // * 中央 フリーワード 
     .center-ad-area {
       width: 100%;
       height: 12vh;
+      margin: 2rem 0;
       position: relative;
 
       .serach-freeword {
         @include input-border-color;
-        // height: 52px;
         width: 80%;
         position: absolute;
         left: 0;
@@ -331,6 +215,7 @@ export default Vue.extend({
       text-align: left;
       display: flex;
       flex-direction: column;
+
 
       .keyword-tag {
         font-size: 1.1em;
@@ -453,7 +338,7 @@ export default Vue.extend({
 .container-center {
   width: 99%;
   padding: 0 2.5rem;
-  height: 82%;
+  // height: 82%;
   margin: 0 auto;
 
   .card-area {
@@ -489,37 +374,6 @@ export default Vue.extend({
   .top-wrapper 
   .container-top {
 
-    .top-ad-area {
-      display: flex;
-      align-items: center;
-
-      .top-ad-left {
-        display: block;
-        height: 40%;
-        width: 100%;
-      }
-
-      .top-ad-right {
-        width: 100%;
-        position: none;
-        display: block;
-        margin-bottom: 0rem;
-        padding: 2rem 0 0 0 ;
-
-        .btn-area {
-          float: none;
-          width: 100%;
-
-          .register-btn {
-            width: 35%;
-          }
-          .login-btn {
-            width: 35%;
-          }
-        }
-      }
-    }
-
     .center-ad-area 
     .serach-freeword {
       width: 66%;
@@ -532,26 +386,6 @@ export default Vue.extend({
   .top-wrapper 
   .container-top {
 
-    .top-ad-area {
-      height: 70%;
-
-      .top-ad-left 
-      .ad-subtitle-area {
-        width: 100%;
-      }
-
-      .top-ad-right 
-      .btn-area {
-        .register-btn {
-          width: 45%;
-          padding: 1rem 2rem;
-        }
-        .login-btn {
-          width: 45%;
-          padding: 1rem 1rem;
-        }
-      }
-    }
     .center-ad-area {
       .serach-freeword {
         width: 65%;

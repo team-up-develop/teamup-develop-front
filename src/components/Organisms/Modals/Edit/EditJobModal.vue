@@ -140,9 +140,6 @@ export default Vue.extend({
           <div class="modal-edit-btn" @click="jobEdit">
             編集する
           </div>
-          <slot name="footer">
-            <button @click="$emit('close')">Close</button>
-          </slot>
         </footer>
       </div>
     </div>
@@ -303,7 +300,7 @@ export default Vue.extend({
 
 // * モーダル内 編集するボタン
 .modal-edit-btn {
-  @include blue-btn ;
+  @include purple-btn;
   display: block;
   padding: 1.4rem 5rem;
   box-shadow: 0 0px 5px 2px #d4d4d4;
@@ -318,11 +315,17 @@ export default Vue.extend({
   display: inline-block;
   cursor: pointer;
   border: none;
-  margin: 0.5rem;
+  margin-bottom: 2rem;
   outline: none;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin-right: 1rem;
 }
 
 .modal-footer {
+  position: relative;
+  height: 10%;
   // width: 100%;
   // padding: 2rem 0 1rem 0;
   // text-align: right;

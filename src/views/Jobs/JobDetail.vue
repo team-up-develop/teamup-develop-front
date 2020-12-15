@@ -330,7 +330,7 @@ export default Vue.extend({
 //* 編集するボタン 
 .btn-box-edit {
   @include box-shadow-btn;
-  @include blue-btn;
+  @include purple-btn;
   color: $basic-white;
   padding: 1.2rem 8rem;
   transition: .3s;
