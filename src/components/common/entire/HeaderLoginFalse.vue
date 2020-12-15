@@ -28,7 +28,7 @@ export default Vue.extend({
       <div class="header-main-area">
         <div class="header-main-left">
           <router-link to="/" class="router-link">
-            <img src="@/assets/images/teamUp.png" alt="" width="45px">
+            <img src="@/assets/images/heder_logo1.png" alt="" width="150px">
           </router-link>
         </div>
         <div class="header-main-right">
