@@ -1,12 +1,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 
 export type DataType = {
   LoginName: string;
   LoginPassword: string;
-  loading: boolean;
   emailRules: any[];
   show2: boolean;
   rules: any;
@@ -17,7 +15,6 @@ export default Vue.extend({
     return {
       LoginName: '',
       LoginPassword: '',
-      loading: true,
       show2: true,
       rules: { //? パスワード 文字数
         required: (value: any) => !!value || 'パスワードが入力されていません.',
@@ -44,14 +41,6 @@ export default Vue.extend({
       this.LoginName = "";
       this.LoginPassword = "";
     },
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1000)
-  },
-  components: {
-    Loading
   }
 });
 </script>
@@ -101,20 +90,12 @@ export default Vue.extend({
             ></v-text-field>
           </v-row>
         </div>
-          <v-row
-            cols="12"
-            md="4"
-          >
-          Twitter / Google ログイン エリア
-          </v-row>
           <div class="btn-area">
             <p>登録済みの方は<router-link to="/login" class="router-link"><span>こちら</span></router-link></p>
             <div @click="register" class="login-btn">新規登録</div>
           </div>
         </div>
     </div>
-    <Loading v-show="loading">
-    </Loading>
   </section>
 </template>
 
@@ -127,6 +108,10 @@ section {
 }
 .router-link {
   text-decoration: none;
+
+  span {
+    color: $secondary-color;
+  }
 }
 
 .login-wrapper {
@@ -148,13 +133,13 @@ section {
 
     //* ログインタイトル
     .login-title {
-      color: $primary-color;
+      color: $secondary-color;
       font-size: 1.8rem;  
       font-weight: bold;
       height: 50px;
       margin-top: 1rem;
       width: 100%;
-      border-bottom: solid 3px $primary-color;
+      border-bottom: solid 3px $secondary-color;
     }
 
     // * メールフォーム
@@ -196,12 +181,12 @@ section {
       // background-color: #B9B9B9;
 
       .login-btn {
-        @include blue-btn;
+        @include purple-btn;
         color: $basic-white;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
-        border-radius: 8px;
+        border-radius: 50px;
         font-size: .875rem;
         font-weight: 600;
         line-height: 1;
@@ -225,9 +210,12 @@ section {
     width: 100%;
 
     .login-container {
-      margin: 0 auto 2rem auto;
-      width: 100%;
-      padding: 1.5rem ;
+      width: 98%;
+      padding: 1rem ;
+
+      .btn-area {
+        width: 90%;
+      }
     }
   }
 }

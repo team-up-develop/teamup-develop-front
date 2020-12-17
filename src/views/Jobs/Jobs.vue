@@ -428,7 +428,7 @@ export default Vue.extend({
       this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
       this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
       this.jobsNullFlag = false;
-      this.closeLangSearchModal();
+      this.closeLangSearchModal(value);
       this.closeFrameworkSearchModal();
       this.closeSkillSearchModal();
       this.loading = true;
@@ -585,7 +585,7 @@ export default Vue.extend({
     langSearchModal() {
       this.langModal = true;
     },
-    closeLangSearchModal() {
+    closeLangSearchModal(value) {
       this.langModal = false;
     },
     frameworkSearchModal() {

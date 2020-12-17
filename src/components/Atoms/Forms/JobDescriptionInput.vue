@@ -3,16 +3,12 @@ import Vue, { PropType } from 'vue';
 
 export default Vue.extend({ 
   props: {
-    type: { type: String, required: true },
-    value: { type: String || null, required: false, default: null },
+    type: { type: String as PropType<string>, required: true },
+    value: { type: String as PropType<string>, required: false, default: null },
   },
   data() {
     return {
       jobDescriptionLimit: 0,
-      date: new Date().toISOString().substr(0, 10),
-      menu: false,
-      modal: false,
-      menu2: false,
     }
   },
   methods: {

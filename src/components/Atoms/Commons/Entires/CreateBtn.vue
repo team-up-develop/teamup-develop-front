@@ -16,7 +16,7 @@
 }
 
 .create-btn {
-  @include purple-btn;
+  @include blue-btn;
   @include box-shadow-btn;
   font-size: 0.9em;
   color: $basic-white;
@@ -28,7 +28,6 @@
   border-radius: 4px;
   display: inline-flex;
   flex: 0 0 auto;
-  font-weight: 500;
   letter-spacing: 0.0892857143em;
   justify-content: center;
   outline: 0;

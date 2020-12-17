@@ -135,7 +135,7 @@ export default Vue.extend({
 
     .edit-btn {
       @include box-shadow-btn;
-      @include blue-btn;
+      @include purple-btn;
       color: $basic-white;
       padding: 0.5rem 1rem;
       border-radius: 8px;

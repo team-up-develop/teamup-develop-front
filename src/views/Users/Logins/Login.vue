@@ -83,12 +83,6 @@ export default Vue.extend({
         </div>
         <div v-else>
         </div>
-        <v-row
-          cols="12"
-          md="4"
-        >
-          Twitter / Google ログイン エリア
-        </v-row>
         <div class="btn-area">
           <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
           <div @click="login" class="login-btn">ログイン</div>
@@ -175,11 +169,12 @@ section {
       // background-color: #B9B9B9;
 
       .login-btn {
-        @include blue-cancel-btn;
+        @include blue-btn;
+        color: $basic-white;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
-        border-radius: 8px;
+        border-radius: 50px;
         font-size: .875rem;
         font-weight: 600;
         line-height: 1;
@@ -203,9 +198,12 @@ section {
     width: 100%;
 
     .login-container {
-      margin: 0 auto 2rem auto;
-      width: 100%;
-      padding: 1.5rem ;
+      width: 98%;
+      padding: 1rem;
+
+      .btn-area {
+        width: 90%;
+      }
     }
   }
 }

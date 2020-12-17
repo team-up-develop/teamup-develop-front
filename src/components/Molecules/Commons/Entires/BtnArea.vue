@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import LoginBtn from '@/components/Atoms/Commons/Entires/HeaderLoginFalses/LoginBtn.vue'
-import RegisteBtn from '@/components/Atoms/Commons/Entires/HeaderLoginFalses/RegisteBtn.vue'
+import LoginBtn from '@/components/Atoms/Commons/Entires/LoginBtn.vue'
+import RegisteBtn from '@/components/Atoms/Commons/Entires/RegisteBtn.vue'
 
 export default Vue.extend({
   components: {
@@ -15,7 +15,7 @@ export default Vue.extend({
   <section>
     <v-row class="left-user-menu">
       <router-link to="/jobs" class="menu-list">
-        <v-icon class="icon">mdi-magnify</v-icon>
+        <!-- <v-icon class="icon">mdi-magnify</v-icon> -->
       </router-link>
       <LoginBtn/>
     </v-row>
@@ -45,18 +45,14 @@ export default Vue.extend({
 }
 
 .left-user-menu {
-  width: 40%;
+  width: 35%;
   height: 100%;
   display: inline-block;
   font-weight: bold;
 
   @media screen and (max-width: 768px) {
-    width: 50%;
+    width: 45%;
     margin-right: 1rem;
-  }
-
-  @media screen and (max-width: 500px) {
-    width: 60%;
   }
 }
 
