@@ -1,30 +1,32 @@
 import Vue from 'vue'
 import VueRouter, { RouteConfig } from 'vue-router'
-import About from '../views/common/About.vue'
-import Jobs from '@/views/job/Jobs.vue'
-import JobDetail from '@/views/job/JobDetail.vue'
-import JobCreate from '@/views/job/JobCreate.vue'
-import JobCreateSkill from '@/views/job/JobCreateSkill.vue'
-import ProfileUser from '@/views/user/ProfileUser.vue'
-import ManageUserProfile from '@/views/user/ManageUserProfile.vue'
-import Login from '@/views/user/Login.vue'
-import Register from '@/views/user/Register.vue'
-import SentMailComplete from '@/views/user/SentMailComplete.vue'
-import RegisterStep1 from '@/views/user/register_session/RegisterStep1.vue'
-import RegisterStep2 from '@/views/user/register_session/RegisterStep2.vue'
-import RegisterStep3 from '@/views/user/register_session/RegisterStep3.vue'
-import TopPage from '../views/common/TopPage.vue'
-import Manage from '@/views/manage/Manage.vue'
-import Participate from '@/views/manage/Participate.vue'
-import Applicant from '@/views/manage/Applicant.vue'
-import Reject from '@/views/manage/Reject.vue'
-import Favorite from '@/views/favorite/Favorite.vue'
-import FavoriteJobDetail from '@/views/favorite/FavoriteJobDetail.vue'
-import Apply from '@/views/apply/Apply.vue'
-import ApplyJobDetail from '@/views/apply/ApplyJobDetail.vue'
-import Chat from '@/views/chat/Chat.vue'
-import ChatDetail from '@/views/chat/ChatDetail.vue'
-import NotFound from '@/views/errors/404.vue' 
+import About from '../views/Commons/About.vue'
+import TopPage from '../views/Commons/TopPage.vue'
+import Jobs from '@/views/Jobs/Jobs.vue'
+import JobDetail from '@/views/Jobs/JobDetail.vue'
+import JobCreate from '@/views/Jobs/JobCreate.vue'
+import JobCreateSkill from '@/views/Jobs/JobCreateSkill.vue'
+import ProfileUser from '@/views/Users/Profiles/ProfileUser.vue'
+import ProfileUserJobs from '@/views/Users/Profiles/ProfileUserJobs.vue'
+import ManageUserProfile from '@/views/Users/Manages/ManageUserProfile.vue'
+import ManageUserProfileJobs from '@/views/Users/Manages/ManageUserProfileJobs.vue'
+import Login from '@/views/Users/Logins/Login.vue'
+import Register from '@/views/Users/Registers/Register.vue'
+import SentMailComplete from '@/views/Users/Registers/SentMailComplete.vue'
+import RegisterStep1 from '@/views/Users/Registers/RegisterStep1.vue'
+import RegisterStep2 from '@/views/Users/Registers/RegisterStep2.vue'
+import RegisterStep3 from '@/views/Users/Registers/RegisterStep3.vue'
+import Manage from '@/views/Manages/Manage.vue'
+import Participate from '@/views/Manages/StatusChanges/Participate.vue'
+import Applicant from '@/views/Manages/StatusChanges/Applicant.vue'
+import Reject from '@/views/Manages/StatusChanges/Reject.vue'
+import Favorite from '@/views/Manages/Favorites/Favorite.vue'
+import FavoriteJobDetail from '@/views/Manages/Favorites/FavoriteJobDetail.vue'
+import Apply from '@/views/Manages/Applications/Apply.vue'
+import ApplyJobDetail from '@/views/Manages/Applications/ApplyJobDetail.vue'
+import Chat from '@/views/Chats/Chat.vue'
+import ChatDetail from '@/views/Chats/ChatDetail.vue'
+import NotFound from '@/views/Errors/404.vue'
 Vue.use(VueRouter)
 
 const routes: Array<RouteConfig> = [
@@ -76,10 +78,25 @@ const routes: Array<RouteConfig> = [
       id: Number(route.params.id),
     })
   },
+  {
+    path: '/account/profile/:id/jobs',
+    component: ProfileUserJobs,
+    props: route => ({
+      id: Number(route.params.id),
+    })
+  },
   // * 管理案件 ユーザー
   {
     path: '/manage/profile/:jobId/:id/',
     component: ManageUserProfile,
+    props: route => ({
+      id: Number(route.params.id),
+      jobId: Number(route.params.jobId)
+    })
+  },
+  {
+    path: '/manage/profile/:jobId/:id/jobs',
+    component: ManageUserProfileJobs,
     props: route => ({
       id: Number(route.params.id),
       jobId: Number(route.params.jobId)
