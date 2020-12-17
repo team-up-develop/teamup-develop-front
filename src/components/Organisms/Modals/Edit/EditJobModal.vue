@@ -326,12 +326,6 @@ export default Vue.extend({
 .modal-footer {
   position: relative;
   height: 10%;
-  // width: 100%;
-  // padding: 2rem 0 1rem 0;
-  // text-align: right;
-  // display: inline-block;
-  // position: relative;
-  // font-size: 100px;
 }
 
 .modal-enter-active, .modal-leave-active {
