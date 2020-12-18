@@ -129,6 +129,10 @@ section {
       font-weight: bold;
       font-size: 0.8em;
       border-radius: 8px;
+      appearance: none;
+      border: none;
+      transition: .3s;
+      outline: none;
     }
 
     .data-area {

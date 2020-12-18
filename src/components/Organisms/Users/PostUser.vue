@@ -143,6 +143,10 @@ export default Vue.extend({
       height: 50px;
       font-weight: bold;
       font-size: 1em;
+      appearance: none;
+      border: none;
+      transition: .3s;
+      outline: none;
     }
   }
 }
