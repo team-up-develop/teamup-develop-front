@@ -344,6 +344,10 @@ export default Vue.extend({
   margin-bottom: 0.5rem;
   cursor: pointer;
   border: none;
+  appearance: none;
+  border: none;
+  transition: .3s;
+  outline: none;
 
   &:hover {
     @include btn-hover;
