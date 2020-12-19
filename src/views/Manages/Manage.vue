@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
 import { ManageJob } from '@/types/manage';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
@@ -23,30 +22,6 @@ export default Vue.extend({
       loginFlag: false,
       userId: this.$store.state.auth.userId
     }
-  },
-  filters: {
-    // * date型を文字に変換
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    },
-    //* 案件タイトル 文字制限
-    truncateTitle: function(value: string) {
-      const length = 25;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-    //* 案件タイトル レスポンシブ 文字制限
-    truncateResponsiveTitle: function(value: string) {
-      const length = 15;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
   },
   mounted() {
     // * 管理案件を取得

@@ -1,3 +1,5 @@
+import moment from "moment";
+
 //* 応募のステータス
 // 1: 応募
 // 2: 参加
@@ -15,3 +17,6 @@ export const m = {
   APPLY_STATUS_SELF
 }
 
+export const timeChange = (value: string, format: string) => {
+  return moment(value).format(format);
+}

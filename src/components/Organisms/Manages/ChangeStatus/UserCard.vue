@@ -1,16 +1,15 @@
 <script lang="ts">
 import Vue from 'vue';
-import moment from "moment";
+import { timeChange } from '@/master';
 
 export default Vue.extend({
   props: {
     user: { type: Object, default: null }
   },
-  filters: {
-    // * date型を文字に変換
+  methods: {
     moment(value: string, format: string) {
-      return moment(value).format(format);
-    },
+      return timeChange(value, format)
+    }
   }
 });
 
@@ -39,14 +38,14 @@ export default Vue.extend({
               {{ user.user.userName }}
             </div>
             <div class="card__user__study">
-              {{ user.user.learningStartDate | moment("YYYY年 M月 D日") }}
+              {{ moment(user.user.learningStartDate, "YYYY年 M月 D日") }}
             </div>
           </v-col>
         </v-row>
       </div>
       <div class="card__bottom">
         <span>
-          {{ user.createdAt | moment("YYYY年 M月 D日") }}
+          {{ moment(user.createdAt, "YYYY年 M月 D日") }}
         </span>
       </div>
     </v-sheet>

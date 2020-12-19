@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
@@ -39,11 +38,6 @@ export default Vue.extend({
       selfJobPost: false
     }
   },
-  filters: {
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    }
-  },
   mounted() {
     console.log(this.userId)
     // * 詳細画面情報を取得
@@ -57,7 +51,6 @@ export default Vue.extend({
   },
   created() {
     if(this.userId) {
-      console.log("!!!!!!!!!!!!!!!!!!")
       this.loginFlag = true;
     } else {
       this.loginFlag = false;

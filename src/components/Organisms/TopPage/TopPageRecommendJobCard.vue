@@ -2,7 +2,8 @@
 // FIXME: 現状は使用していない
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
+import { timeChange } from '@/master';
+
 export default Vue.extend({ 
   data() {
     return {
@@ -19,10 +20,6 @@ export default Vue.extend({
     })
   },
   filters: {
-    // * date型を文字に変換
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    },
     //* 案件タイトル 文字制限
     truncateTitle: function(value: string) {
       const length = 40;
@@ -42,6 +39,11 @@ export default Vue.extend({
       return value.substring(0, length) + ommision;
     },
   },
+  methods: {
+    moment(value: string, format: string) {
+      return timeChange(value, format)
+    }
+  }
 });
 </script>
 
@@ -81,7 +83,7 @@ export default Vue.extend({
             開発期間:
           </div>
           <div class="product-start-end-time">
-            {{ newJob.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ newJob.devEndDate | moment("YYYY年 M月 D日")}}
+            {{ moment(newJob.devStartDate, "YYYY年 M月 D日") }}  ~  {{ moment(newJob.devEndDate, "YYYY年 M月 D日")}}
           </div>
         </div>
         <div class="post-user-area">
