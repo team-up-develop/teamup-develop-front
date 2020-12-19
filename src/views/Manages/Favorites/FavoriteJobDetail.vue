@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'

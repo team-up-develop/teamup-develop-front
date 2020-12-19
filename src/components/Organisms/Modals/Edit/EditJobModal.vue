@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from 'vue';
-import moment from "moment";
 import axios from 'axios'
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
@@ -33,11 +32,6 @@ export default Vue.extend({
       selectedLang: [], //? プログラミング言語
       selectlangNumber: [], //? 開発言語 編集用 array[Number, Number...]
       languages: [], //? プログラミング言語全て
-    }
-  },
-  filters: {
-    moment(value: string, format: string) {
-      return moment(value).format(format);
     }
   },
   created() {
@@ -108,7 +102,7 @@ export default Vue.extend({
           <div class="job-create-time-area">
             <label for="name" class="label">開発開始</label><label for="name" class="label-required">必須</label>
             <input type="date" v-model="devStartDate">
-            <h5>{{devStartDate }}</h5>
+            <h5>{{ devStartDate }}</h5>
           </div>
           <div class="job-create-time-area">
             <label for="name" class="label">開発終了</label><label for="name" class="label-required">必須</label>

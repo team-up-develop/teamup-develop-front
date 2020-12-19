@@ -192,7 +192,7 @@
             開発期間
           </div>
           <div class="post-user-area">
-            {{ jobDetail.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ jobDetail.devEndDate | moment("YYYY年 M月 D日")}}
+            {{ moment(jobDetail.devStartDate , "YYYY年 M月 D日") }}  ~  {{ moment(jobDetail.devEndDate, "YYYY年 M月 D日")}}
           </div>
           <div class="tag-area">
             <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
@@ -209,7 +209,7 @@
             {{ jobDetail.jobDescription }}
           </div>
           <div class="jobDetail-time-area">
-            投稿期日   {{ jobDetail.createdAt | moment("YYYY年 M月 D日") }}
+            投稿期日   {{ moment(jobDetail.createdAt, "YYYY年 M月 D日") }}
           </div>
         </div>
       </div>
@@ -239,7 +239,7 @@
 // import $ from 'jquery';
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
+
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -249,6 +249,7 @@ import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 import LanguageSearchModal from '@/components/Organisms/Modals/Searches/LanguageSearchModal.vue'
 import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
 import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
+import { timeChange } from '@/master';
 
 export default Vue.extend({ 
   components: {
@@ -288,12 +289,6 @@ export default Vue.extend({
       jobsPageSize: 5, //? ページに表示する案件の数
       paginationLength: 0, //? ページネーション番号
     }
-  },
-  filters: {
-    // * date型を文字に変換
-    moment(value, format) {
-      return moment(value).format(format);
-    },
   },
   computed: {
     //* 案件タイトル 詳細 文字制限
@@ -416,6 +411,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    moment(value, format) {
+      return timeChange(value, format)
+    },
     // * ページネーション処理(検索)
     paginateJobs(value) {
       this.jobs = value.slice().reverse();

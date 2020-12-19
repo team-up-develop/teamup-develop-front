@@ -1,9 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
 import { Job } from '@/types/job';
-import { m } from '@/master'
+import { m, timeChange } from '@/master'
 
 type DataType = {
   chatGroups: Job[];
@@ -36,9 +35,6 @@ export default Vue.extend({
       }
       return value.substring(0, length) + ommision;
     },
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    }
   },
   mounted() {
     // * 参加案件のみを取得する
@@ -60,6 +56,11 @@ export default Vue.extend({
       })
     }
   },
+  methods: {
+    moment(value: string, format: string) {
+      return timeChange(value, format)
+    }
+  }
 });
 </script>
 
@@ -90,7 +91,7 @@ export default Vue.extend({
                 class="post" 
                 v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
               >参加案件</label>
-              <section>{{ chatGroup.createdAt  | moment("YYYY年 M月 D日") }}</section>
+              <section>{{ moment(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
             </v-row>
           </div>
         </v-card>

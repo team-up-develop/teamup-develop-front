@@ -1,6 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
+import { m } from '@/master'
 
 type DataType = {
   applyNum: number;
@@ -32,15 +33,15 @@ export default Vue.extend({
     },
   },
   created() {
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=1`)
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
     .then(response => {
       this.applyNum = response.data.length
     })
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=3`)
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
     .then(response => {
       this.rejectNum = response.data.length
     })
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=2`)
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
     .then(response => {
       this.assginNum = response.data.length
     })

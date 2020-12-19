@@ -1,11 +1,10 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
 import axios from 'axios'
-import moment from "moment";
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import { Message } from '@/types/chat'
 import { Job } from '@/types/job';
-import { m } from '@/master'
+import { m, timeChange } from '@/master'
 
 type DataType = {
   chatGroups: Job[];
@@ -56,9 +55,6 @@ export default Vue.extend({
       }
       return value.substring(0, length) + ommision;
     },
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    }
   },
   created() {
     let chatLength = 0;
@@ -107,6 +103,9 @@ export default Vue.extend({
       })
   },
   methods: {
+    moment(value: string, format: string) {
+      return timeChange(value, format)
+    },
     // * メッセージの送信
     chatCreate() {
       const params = {
@@ -166,7 +165,7 @@ export default Vue.extend({
                 class="post" 
                 v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
               >参加案件</label>
-              <section>{{ chatGroup.createdAt  | moment("YYYY年 M月 D日") }}</section>
+              <section>{{ moment(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
             </v-row>
             <!-- <div v-for="myselfUser in myselfUser" :key="myselfUser.id" class="chat-member-name">
             <div v-for="chatMembar in chatMembers" :key="chatMembar.id" class="chat-member-name">
