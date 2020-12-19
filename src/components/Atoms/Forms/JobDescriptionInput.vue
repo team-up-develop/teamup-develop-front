@@ -38,7 +38,7 @@ export default Vue.extend({
 
 textarea[type='text'] {
   @include input-border-color;
-  background-color: $sub-white;
+  background-color: $dark-white;
   color: $text-main-color;
   font: 16px/24px sans-serif;
   box-sizing: border-box;

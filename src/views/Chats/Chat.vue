@@ -1,3 +1,68 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import moment from "moment";
+import { Job } from '@/types/job';
+import { m } from '@/master'
+
+type DataType = {
+  chatGroups: Job[];
+  loginFlag: boolean;
+  userId: number;
+  isActive: boolean;
+  hasError: boolean;
+}
+
+export default Vue.extend({ 
+  data(): DataType {
+    return {
+      chatGroups: [],
+      loginFlag: false,
+      userId: this.$store.state.auth.userId,
+      isActive: true,
+      hasError: false,
+    }
+  },
+  computed: {
+    m: () => m,
+  },
+  filters: {
+    //* 案件タイトル 詳細 文字制限
+    truncateDetailTitle: function(value: string) {
+      const length = 36;
+      const ommision = "...";
+      if (value.length <= length) {
+        return value;
+      }
+      return value.substring(0, length) + ommision;
+    },
+    moment(value: string, format: string) {
+      return moment(value).format(format);
+    }
+  },
+  mounted() {
+    // * 参加案件のみを取得する
+    if(this.$store.state.auth.userId !== undefined) {
+      this.loginFlag = true
+      axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
+      .then(response => {
+        const array = [];
+        for(let i = 0; i < response.data.length; i++){
+          const applyData = response.data[i]
+          if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || m.APPLY_STATUS_SELF ){
+            array.push(applyData)
+            this.chatGroups = array
+          }
+          else {
+            console.log("Not Found")
+          }
+        }
+      })
+    }
+  },
+});
+</script>
+
 <template>
   <div class="wrapper">
     <v-sheet class="chat-card" v-if="loginFlag === true">
@@ -15,8 +80,17 @@
           <div class="group__area">
             <p>{{ chatGroup.job.jobTitle | truncateDetailTitle }}</p>
             <v-row class="row">
-              <label for="name">投稿案件</label>
-              <section>12月12日</section>
+              <label 
+                for="name" 
+                class="selfPost" 
+                v-if="chatGroup.applyStatusId === m.APPLY_STATUS_SELF"
+              >投稿案件</label>
+              <label 
+                for="name" 
+                class="post" 
+                v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
+              >参加案件</label>
+              <section>{{ chatGroup.createdAt  | moment("YYYY年 M月 D日") }}</section>
             </v-row>
           </div>
         </v-card>
@@ -40,53 +114,6 @@
     </div>
 </template>
 
-<script>
-import axios from 'axios'
-export default {
-  data() {
-    return {
-      chatGroups: [],
-      loginFlag: false,
-      userId: this.$store.state.auth.userId,
-      isActive: true,
-      hasError: false,
-      chatMembers: [],
-      myselfUser: {},
-    }
-  },
-  filters: {
-    //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value) {
-      const length = 36;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
-  mounted() {
-    // * 参加案件のみを取得する
-    if(this.$store.state.auth.userId !== undefined) {
-      this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
-      .then(response => {
-        const array = [];
-        for(let i = 0; i < response.data.length; i++){
-          const applyData = response.data[i]
-          if(applyData.applyStatusId === 2 || applyData.applyStatusId === 4 ){
-            array.push(applyData)
-            this.chatGroups = array
-          }
-          else {
-            console.log("Not Found")
-          }
-        }
-      })
-    }
-  },
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -107,7 +134,7 @@ export default {
 
   .chat-card {
     @include card-border-color;
-    background-color: $basic-white;
+    background-color: $white;
     width: 980px;
     border-radius: 8px;
     margin: 2rem auto;
@@ -124,7 +151,7 @@ export default {
       box-shadow: 5px 0 3px #00000011;
       border-radius: 8px 0 0px 8px;
       font-size: 14px;
-      background-color: $basic-white;
+      background-color: $white;
       overflow: scroll;
       z-index: 10;
       position: relative;
@@ -136,6 +163,14 @@ export default {
         font-size: 0.5em;
         text-align: left;
         border-bottom: $card-border-color 1px solid;
+        background-color: $white;
+        z-index: 10;
+        position: -webkit-sticky;
+        position: sticky;
+        top: 0;
+        left: 0;
+        display: flex;
+        font-weight: bold;
       }
 
       .group {
@@ -156,10 +191,10 @@ export default {
             bottom: 0;
             width: 100%;
 
-            label {
+            .selfPost {
               @include box-shadow-btn;
-              @include blue-btn;
-              color: $basic-white;
+              background-color: $third-dark;
+              color: $white;
               padding: 0.25rem 1.5rem;
               width: 102px;
               font-weight: bold;
@@ -167,6 +202,20 @@ export default {
               border-radius: 8px;
               appearance: none;
               border: none;
+              transition: .3s;
+              outline: none;
+            }
+
+            .post {
+              border: $third-dark 1px solid;
+              color: $third-dark;
+              background-color: $white;
+              padding: 0.25rem 1.5rem;
+              width: 102px;
+              font-weight: bold;
+              font-size: 0.8em;
+              border-radius: 8px;
+              appearance: none;
               transition: .3s;
               outline: none;
             }
@@ -213,7 +262,7 @@ export default {
         overflow: scroll;
         display: flex;
         flex-direction: column;
-        background-color: $basic-white;
+        background-color: $white;
       }
 
       .bottom {
@@ -242,7 +291,7 @@ export default {
           .send {
             @include box-shadow-btn;
             @include blue-btn;
-            color: $basic-white;
+            color: $white;
             padding: 1rem 1rem;
             font-weight: bold;
             font-size: 14px;

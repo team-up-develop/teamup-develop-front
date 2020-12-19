@@ -81,7 +81,7 @@ export default {
   width: 97%;
   margin: 10px 0.5%;
   border: solid 1px $card-border-color;
-  background-color: $basic-white;
+  background-color: $white;
   border-radius: 8px;
   transition: .3s;
   color: $text-main-color;

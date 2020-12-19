@@ -19,7 +19,7 @@
   @include blue-btn;
   @include box-shadow-btn;
   font-size: 0.9em;
-  color: $basic-white;
+  color: $white;
   font-weight: bold;
   height: 36px;
   min-width: 64px;

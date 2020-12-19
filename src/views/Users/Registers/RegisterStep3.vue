@@ -74,7 +74,7 @@ section {
           height: 8px;
           margin: 0 auto;
           border-radius: 35px;
-          background-color: $basic-white;
+          background-color: $white;
           border: solid 1px $text-sub-color;
 
           &__line {
@@ -109,7 +109,7 @@ section {
         .job-search-btn {
           @include box-shadow-btn;
           @include blue-btn;
-          color: $basic-white;
+          color: $white;
           text-align: left;
           display: block;
           padding: 1.1rem 1.7rem;

@@ -1,18 +1,24 @@
-// * color
-// ? basic
-$basic-white: #ffffff;
-$sub-white: #EFEFEF;
+// * カラー
+$dark-white: #EFEFEF;
+$white: #ffffff;
 $light-grey: #f5f5f5;
+$primary-dark: #113bc8;
 $primary-color: #2196F3;
-$secondary-color:#673AB7;
-$tertiary-color: #113bc8;
+$primary-light: #64B5F6;
+$secondary-dark: #4527A0;
+$secondary-color: #651FFF;
+$secondary-light: #9575CD;
+$third-dark: #0097A7;
+$third-color: #00BCD4;
+$third-light: #80DEEA;
+// ? テキスト
+$text-main-color: #111111;
+$text-sub-color: #666666;
+// ? その他
 $error-message-color: #f44336;
 $modal-background: rgba(0, 0, 0, 0.637);
 
-// ? text
-$text-main-color: #111111;
-$text-sub-color: #666666;
-// *user-image 
+// * ユーザー画像
 @mixin user-image {
   -moz-border-radius: 60px;
   -webkit-border-radius: 60px;
@@ -22,76 +28,61 @@ $text-sub-color: #666666;
   border-radius: 50%;
 }
 
-// * button
-// ? basic
+// * ボタン グラデーション
+// ? 青(基本)
 $gradation-blue-left: #1142e2;
 $gradation-blue-right: #19bde6;
 @mixin blue-btn {
   background: linear-gradient(60deg, $gradation-blue-left, $gradation-blue-right);
 }
-
-// ? apply & important
-$gradation-red-left: #D81B60;
-$gradation-red-right: #EC407A;
-@mixin red-btn {
-  background: linear-gradient(60deg, $gradation-red-left, $gradation-red-right);
-}
-
-// ? done
-$gradation-grey-left: #424242;
-$gradation-grey-right: #9E9E9E;
-@mixin grey-btn {
-  background: linear-gradient(60deg, $gradation-grey-left, $gradation-grey-right);
-}
-
-// ? register & important
+// ? 紫(サブ)
 $gradation-purple-left: #673AB7;
 $gradation-purple-right: #AB47BC;
 @mixin purple-btn {
   background: linear-gradient(60deg, $gradation-purple-left, $gradation-purple-right);
 }
-
-// ? register cancel
+// ? 赤(重要箇所)
+$gradation-red-left: #D81B60;
+$gradation-red-right: #EC407A;
+@mixin red-btn {
+  background: linear-gradient(60deg, $gradation-red-left, $gradation-red-right);
+}
+// ? 黒(終了)
+$gradation-grey-left: #424242;
+$gradation-grey-right: #9E9E9E;
+@mixin grey-btn {
+  background: linear-gradient(60deg, $gradation-grey-left, $gradation-grey-right);
+}
+// ? 赤 白余白
 @mixin red-cancel-btn {
   border: solid 1px #D81B60;
   color: #D81B60;
-  background-color: $basic-white;
+  background-color: $white;
 }
-
-//? blue sub btn
+//? 青 白余白
 @mixin blue-cancel-btn {
   border: solid 1px $primary-color;
   color: $primary-color;
 }
 
-
-
-// * box-shadow
-// ? button
+// * 影
+// ? 基本
 $box-shadow-btn: rgba(0,0,0,0.26);
 @mixin box-shadow-btn {
   box-shadow: 0px 5px 10px $box-shadow-btn;
 }
-// ? manage
-$box-shadow-manage: #02020278;
-@mixin box-shadow-manage {
-  box-shadow: 0 0px 5px 2px $box-shadow-manage;
-}
 
-
-// * border
-// ? basic
+// * ボーダー
+// ? 基本
 $card-border-color: #B9B9B9;
 @mixin card-border-color {
   border: solid 1px $card-border-color;
 }
-
 // ? input
 $input-border-color: #A3A1A1;
 @mixin input-border-color {
   border: solid 1px $input-border-color;
 }
-
 // ? primary-color-border
 $primary-border-color: #2196F3;
 @mixin primary-border_color {
@@ -99,18 +90,18 @@ $primary-border-color: #2196F3;
 }
 
 
-// * hover 
-// ? form
+// * ホバー
+// ? フォーム
 @mixin form-hover {
   @include primary-border_color;
   outline: none;
   box-shadow: 0 0 5px 1px #2195f348;
 }
-// ? button
+// ? ボタン
 @mixin btn-hover {
   box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
 }
-// ? red-button-hover
+// ? 赤ボタン 
 @mixin red-btn-hover {
   @include red-btn;
   color: #F8FAFF;
@@ -119,8 +110,6 @@ $primary-border-color: #2196F3;
   box-shadow: 0 5px 20px -3px #CD106E;
   transition: .3s;
 }
-// ? manage-hover
-$manage-hover-color: rgba(199, 199, 199, 0.281);
 
 // * skill-color 
 //? language

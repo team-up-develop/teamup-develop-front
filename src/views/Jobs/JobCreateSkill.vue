@@ -274,7 +274,7 @@ export default Vue.extend({
 
   .job-create-wrapper {
     @include card-border-color;
-    background-color: $basic-white;
+    background-color: $white;
     border-radius: 20px;
     margin: 2rem 0rem;
     padding: 2.5rem;
@@ -299,7 +299,7 @@ export default Vue.extend({
 }
 
 .label-required {
-  color: $basic-white;
+  color: $white;
   background-color: $error-message-color;
   font-size: 12px;
   font-weight: bold;
@@ -336,8 +336,8 @@ export default Vue.extend({
   letter-spacing: 1px;
   color: $text-main-color;
   border-radius: 4px;
-  background-color: $basic-white;
-  background-color: $sub-white;
+  background-color: $white;
+  background-color: $dark-white;
 }
 
 .radio-btn {
@@ -365,7 +365,7 @@ export default Vue.extend({
   border: none;
   font-size: .875rem;
   font-weight: 600;
-  color: $basic-white;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -394,7 +394,7 @@ export default Vue.extend({
   border: none;
   font-size: .875rem;
   font-weight: 600;
-  color: $basic-white;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -444,7 +444,7 @@ export default Vue.extend({
   .create-wrapper .job-create-wrapper {
     width: 100%;
     border-radius: 20px;
-    background-color: $basic-white;
+    background-color: $white;
     padding: 1.5rem;
     position: absolute;
     right: 0;

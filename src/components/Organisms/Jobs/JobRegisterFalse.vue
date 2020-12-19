@@ -27,7 +27,7 @@ export default Vue.extend({
 .false-user-login {
     @include card-border-color;
     width: 75%;
-    background-color: $basic-white;
+    background-color: $white;
     border-radius: 8px;
     margin-top: 3.5rem;
     padding: 0 2rem 2rem 2rem;

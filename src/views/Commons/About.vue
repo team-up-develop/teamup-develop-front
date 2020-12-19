@@ -158,7 +158,7 @@ export default Vue.extend({
             border: none;
             font-size: .875rem;
             font-weight: 600;
-            color: $basic-white;
+            color: $white;
             line-height: 1;
             text-align: center;
             max-width: 280px;

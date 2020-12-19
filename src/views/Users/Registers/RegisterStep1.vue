@@ -135,7 +135,7 @@ export default Vue.extend({
 @import '@/assets/scss/_variables.scss';
 // * Vutify
 .user-dialog-title-text {
-  color: $basic-white;
+  color: $white;
   font-weight: bold;
 }
 .text {
@@ -188,7 +188,7 @@ section {
           height: 8px;
           margin: 0 auto;
           border-radius: 35px;
-          background-color: $basic-white;
+          background-color: $white;
           border: solid 1px $text-sub-color;
 
           &__line {
@@ -225,7 +225,7 @@ section {
           }
 
           .label-required {
-            color: $basic-white;
+            color: $white;
             background-color: $error-message-color;
             font-size: 12px;
             font-weight: bold;
@@ -237,7 +237,7 @@ section {
 
           input[type='text'] {
             @include input-border-color;
-            background-color: $sub-white;
+            background-color: $dark-white;
             color: $text-main-color;
             font: 16px/24px sans-serif;
             box-sizing: border-box;
@@ -256,7 +256,7 @@ section {
 
           input[type='date'] {
             @include input-border-color;
-            background-color: $sub-white;
+            background-color: $dark-white;
             color: $text-main-color;
             font: 16px/24px sans-serif;
             box-sizing: border-box;
@@ -285,7 +285,7 @@ section {
         .next-btn {
           @include box-shadow-btn;
           @include blue-btn;
-          color: $basic-white;
+          color: $white;
           text-align: left;
           display: block;
           padding: 1.1rem 4rem;

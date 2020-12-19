@@ -129,7 +129,7 @@ section {
     border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
-    background-color: $basic-white;
+    background-color: $white;
 
     //* ログインタイトル
     .login-title {
@@ -182,7 +182,7 @@ section {
 
       .login-btn {
         @include purple-btn;
-        color: $basic-white;
+        color: $white;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
