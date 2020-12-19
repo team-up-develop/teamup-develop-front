@@ -1,4 +1,4 @@
-# team-devlop-fornt (ver 2)
+# team-devlop-fornt
 Typescript導入後
 
 ## Docker setup
@@ -150,5 +150,5 @@ $primary-color: #2196F3;
 ### ・ComponentあたりでStyleを適用すること
 
 ## Color
-<img width="560" alt="スクリーンショット 2020-09-26 22 03 02" src="https://user-images.githubusercontent.com/56709557/94341417-1bda4e80-0044-11eb-9901-7d2f82dd5486.png">
+<img width="612" alt="スクリーンショット 2020-12-19 10 59 58" src="https://user-images.githubusercontent.com/56709557/102679879-7673e880-41f6-11eb-8889-27143779a070.png">
 
