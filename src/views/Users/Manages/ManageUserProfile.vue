@@ -210,7 +210,7 @@ export default Vue.extend({
 
 .router {
   text-decoration: none;
-  color: $basic-white;
+  color: $white;
 }
 
 .detail-wrapper {
@@ -309,7 +309,7 @@ export default Vue.extend({
       .btn-applicant {
         @include red-btn;
         @include box-shadow-btn;
-        color: $basic-white;
+        color: $white;
         padding: 1.2rem 5rem;
         transition: .3s;
         border-radius: 50px;
@@ -345,7 +345,7 @@ export default Vue.extend({
       .btn-done {
         @include grey-btn;
         @include box-shadow-btn;
-        color: $basic-white;
+        color: $white;
         margin-left: 1rem;
         padding: 1.2rem 5.5rem;
         transition: .3s;

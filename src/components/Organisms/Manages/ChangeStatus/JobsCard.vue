@@ -120,8 +120,9 @@ section {
 
     .detail-btn {
       @include box-shadow-btn;
-      @include purple-btn;
-      color: $basic-white;
+      // @include purple-btn;
+      background-color: $secondary-color;
+      color: $white;
       padding: 0.5rem 4rem;
       position: absolute;
       left: 0;

@@ -12,7 +12,7 @@
 
 .create-btn {
   @include blue-btn;
-  color: $basic-white;
+  color: $white;
   font-weight: bold;
 }
 </style>

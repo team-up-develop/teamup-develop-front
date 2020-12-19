@@ -196,7 +196,7 @@ section {
           height: 8px;
           margin: 0 auto;
           border-radius: 35px;
-          background-color: $basic-white;
+          background-color: $white;
           border: solid 1px $text-sub-color;
 
           &__line {
@@ -234,8 +234,8 @@ section {
             transition: 0.3s;
             letter-spacing: 1px;
             border-radius: 4px;
-            background-color: $basic-white;
-            background-color: $sub-white;
+            background-color: $white;
+            background-color: $dark-white;
           }
         }
       }
@@ -249,7 +249,7 @@ section {
         .next-btn {
           @include box-shadow-btn;
           @include blue-btn;
-          color: $basic-white;
+          color: $white;
           text-align: left;
           display: block;
           padding: 1.1rem 4rem;

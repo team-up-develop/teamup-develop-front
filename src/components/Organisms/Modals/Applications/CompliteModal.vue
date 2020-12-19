@@ -30,11 +30,11 @@
   height: 100%;
   background: $modal-background;
   font-weight: bold;
-  background-color: $basic-white;
+  background-color: $white;
 }
 
 .modal-window {
-  background: $basic-white;
+  background: $white;
   border-radius: 8px;
   overflow: hidden;
 }

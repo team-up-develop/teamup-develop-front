@@ -194,7 +194,7 @@ export default Vue.extend({
         border: none;
         font-size: .875rem;
         font-weight: 600;
-        color: $basic-white;
+        color: $white;
         line-height: 1;
         text-align: center;
         max-width: 280px;
@@ -238,7 +238,7 @@ export default Vue.extend({
           // display: flex;
         
           .language-box {
-            background-color: $basic-white;
+            background-color: $white;
             color: $language-color;
             border: 1px solid $language-color;
             padding: 0.5rem 1rem;
@@ -274,7 +274,7 @@ export default Vue.extend({
           white-space: nowrap;
 
           .framework-box {
-            background-color: $basic-white;
+            background-color: $white;
             color: $framework-color;
             border: 1px solid $framework-color;
             padding: 0.5rem 1rem;
@@ -310,7 +310,7 @@ export default Vue.extend({
           white-space: nowrap;
 
           .skill-box {
-            background-color: $basic-white;
+            background-color: $white;
             color: $skill-color;
             border: 1px solid $skill-color;
             padding: 0.5rem 1rem;

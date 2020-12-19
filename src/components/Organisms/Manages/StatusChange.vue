@@ -101,7 +101,7 @@ export default {
 
 .router {
   text-decoration: none;
-  color: $basic-white;
+  color: $white;
 }
 
 /* ステータス変更 */
@@ -112,7 +112,7 @@ export default {
   height: 20%;
   border-radius: 20px;
   margin: 2rem 2rem 2rem 2rem;
-  background-color: $basic-white;
+  background-color: $white;
   float: right;
   position: relative;
 }
@@ -124,7 +124,7 @@ export default {
   padding: 0.8rem 0;
   border-radius: 15px 15px 0px 0;
   background-color: $secondary-color;
-  color: $basic-white;
+  color: $white;
   font-weight: bold;
   text-decoration: underline;
   cursor: pointer;
@@ -157,7 +157,7 @@ export default {
   padding: 1rem 2.4rem;
   border-radius: 50px;
   font-weight: 600;
-  color: $basic-white;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -174,7 +174,7 @@ export default {
   padding: 1rem 2.4rem;
   border-radius: 50px;
   font-weight: 600;
-  color: $basic-white;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;

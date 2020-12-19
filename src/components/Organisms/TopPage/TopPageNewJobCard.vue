@@ -165,7 +165,7 @@ export default Vue.extend({
   height: 252px;
   margin: 1rem 0.5%;
   border: solid 1px $card-border-color;
-  background-color: $basic-white;
+  background-color: $white;
   border-radius: 8px;
   transition: .3s;
   color: $text-main-color;
@@ -308,7 +308,7 @@ export default Vue.extend({
     // height: 252px;
     margin: 1rem 0.5%;
     border: solid 1px $card-border-color;
-    background-color: $basic-white;
+    background-color: $white;
     border-radius: 8px;
     transition: .3s;
     color: $text-main-color;

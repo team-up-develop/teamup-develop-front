@@ -12,7 +12,7 @@
 
 .login-btn {
   @include blue-cancel-btn;
-  background-color: $basic-white;
+  background-color: $white;
   font-weight: bold;
 }
 </style>
