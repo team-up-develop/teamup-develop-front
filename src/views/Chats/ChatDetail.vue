@@ -7,16 +7,18 @@ import { Job } from '@/types/job';
 import { m, timeChange } from '@/master'
 
 type DataType = {
-  chatGroups: Job[];
+  chatGroups: Job[]; //? 今使ってない
   chats: Message[] | [];
   chatMessage: string;
-  chatMembers: [];
-  myselfUser: {};
+  chatMembers: []; //? 今使ってない
+  myselfUser: {}; //? 今使ってない
   postUser: null;
   userId: number;
   isActive: boolean;
   hasError: boolean;
   loading: boolean;
+  jobTitle: string;
+  clickJobId: number;
 }
 
 export default Vue.extend({ 
@@ -39,7 +41,9 @@ export default Vue.extend({
       userId: this.$store.state.auth.userId,
       isActive: true,
       hasError: false,
-      loading: true
+      loading: true,
+      jobTitle: "",
+      clickJobId: 0
     }
   },
   computed: {
@@ -49,6 +53,14 @@ export default Vue.extend({
     //* 案件タイトル 詳細 文字制限
     truncateDetailTitle: function(value: string) {
       const length = 36;
+      const ommision = "...";
+      if (value.length <= length) {
+        return value;
+      }
+      return value.substring(0, length) + ommision;
+    },
+    truncateDetailTitleChat: function(value: string) {
+      const length = 60;
       const ommision = "...";
       if (value.length <= length) {
         return value;
@@ -75,32 +87,37 @@ export default Vue.extend({
           chatLog.scrollTop = chatLog.scrollHeight
         }
       })
+      axios.get(`http://localhost:8888/api/v1/job/${this.id}`)
+      .then(response => {
+        this.jobTitle = response.data.jobTitle
+        this.clickJobId = response.data.id
+      })
     }, 1000)
     // ! チャットのタイトルごとに案件参加者を取得できるようにする
-    // * 案件参加者を取得
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=2`)
+    // // * 案件参加者を取得
+    // axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=2`)
+    // .then(response => {
+    //   this.chatMembers = response.data
+    // })
+    // // * 投稿者を取得
+    // axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=4`)
+    // .then(response => {
+    //   this.myselfUser= response.data
+    // })
+    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
     .then(response => {
-      this.chatMembers = response.data
-    })
-    // * 投稿者を取得
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=4`)
-    .then(response => {
-      this.myselfUser= response.data
-    })
-      axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
-      .then(response => {
-        const array = [];
-        for(let i = 0; i < response.data.length; i++){
-          const applyData = response.data[i]
-          if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || m.APPLY_STATUS_SELF ){
-            array.push(applyData)
-            this.chatGroups = array
-          }
-          else {
-            console.log("Not Found")
-          }
+      const array = [];
+      for(let i = 0; i < response.data.length; i++){
+        const applyData = response.data[i]
+        if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || m.APPLY_STATUS_SELF ){
+          array.push(applyData)
+          this.chatGroups = array
         }
-      })
+        else {
+          console.log("Not Found")
+        }
+      }
+    })
   },
   methods: {
     moment(value: string, format: string) {
@@ -177,17 +194,22 @@ export default Vue.extend({
       </div>
       <div class="chat-card__right">
         <div class="main" ref="target" v-show="!loading">
-          <div class="balloon" v-for="chat in chats" :key="chat.id">
-            <div class="balloon-image-left">
-              <div class="balloon-img"></div>
+          <router-link :to="`/jobs/${ clickJobId }`" class="router">
+            <header class="header">{{ jobTitle | truncateDetailTitleChat }}</header>
+          </router-link>
+          <section class="room">
+            <div class="balloon" v-for="chat in chats" :key="chat.id">
+              <div class="balloon-image-left">
+                <div class="balloon-img"></div>
+              </div>
+              <div class="user-name">
+                {{ chat.user.userName }}
+              </div>
+              <div class="balloon-text-right">
+                <p>{{ chat.message }}</p>
+              </div>
             </div>
-            <div class="user-name">
-              {{ chat.user.userName }}
-            </div>
-            <div class="balloon-text-right">
-              <p>{{ chat.message }}</p>
-            </div>
-          </div>
+          </section>
         </div>
       <Loading v-show="loading">
       </Loading>
@@ -211,11 +233,21 @@ export default Vue.extend({
 .active {
   text-decoration: none;
 }
+
 .router-link-exact-active.router-link-active.active {
-  color: $primary-color;
   font-weight: bold;
   text-decoration: underline;
 }
+
+.router {
+  text-decoration: none;
+  color: $text-main-color;
+}
+.router:hover {
+  color: $primary-color;
+}
+
+
 .wrapper{
   width: 90%;
   height: 90vh;
@@ -346,13 +378,30 @@ export default Vue.extend({
       border-radius: 0 20px 20px 0;
 
       .main {
-        margin-top: 0.5rem;
         height: 85%;
-        padding: 1rem 2rem;
-        overflow: scroll;
         display: flex;
         flex-direction: column;
-        background-color: $white;
+
+        header {
+          background-color: $white;
+          z-index: 10;
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          left: 0;
+          display: flex;
+          font-weight: bold;
+          text-align: left;
+          padding: 0.4rem 2rem;
+          border-bottom: $card-border-color 1px solid;
+          margin-left: 0.2rem;
+          border-radius: 0 20px 0 0;
+        }
+
+        .room {
+          padding: 1rem 2rem;
+          overflow: scroll;
+        }
       }
 
       .bottom {
@@ -378,20 +427,20 @@ export default Vue.extend({
           margin-left: 1rem
         }
 
-          .send {
-            @include box-shadow-btn;
-            @include blue-btn;
-            color: $white;
-            padding: 1rem 1rem;
-            font-weight: bold;
-            font-size: 14px;
-            border-radius: 8px;
-            appearance: none;
-            border: none;
-            transition: .3s;
-            outline: none;
-            margin-left: 0.5rem;
-          }
+        .send {
+          @include box-shadow-btn;
+          @include blue-btn;
+          color: $white;
+          padding: 1rem 1rem;
+          font-weight: bold;
+          font-size: 14px;
+          border-radius: 8px;
+          appearance: none;
+          border: none;
+          transition: .3s;
+          outline: none;
+          margin-left: 0.5rem;
+        }
       }
     }
   }
@@ -518,7 +567,7 @@ export default Vue.extend({
       &__right {
         width: 100%;
         
-        .main {
+        .room {
           padding: 1rem 0.5rem 1rem 1rem;
         }
 
