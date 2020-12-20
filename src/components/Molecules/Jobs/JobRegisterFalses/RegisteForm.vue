@@ -1,5 +1,6 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import Email from '@/components/Atoms/Forms/Email.vue'
 import Password from '@/components/Atoms/Forms/Password.vue'
@@ -26,7 +27,7 @@ export default Vue.extend({
         LoginName: this.LoginName,
         LoginPassword: this.LoginPassword,
       }
-      axios.post(`http://localhost:8888/api/v1/signup`, params)
+      axios.post(`${API_URL}/signup`, params)
       .then(response => {
         console.log(response)
       });

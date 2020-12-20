@@ -1,25 +1,17 @@
 <script lang="ts">
 import Vue from 'vue';
-import { timeChange } from '@/master'
+import { timeChange, truncate } from '@/master'
 
 export default Vue.extend({ 
   props: {
     job: Object
   },
-  filters: {
-    //* 案件タイトル 文字制限
-    truncateTitle: function(value: string) {
-      const length = 55;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   methods: {
     moment(value: string, format: string) {
       return timeChange(value, format)
+    },
+    limit(value: string, num: number) {
+      return truncate(value, num)
     }
   }
 });
@@ -49,7 +41,7 @@ export default Vue.extend({
         </div>
       </v-row>
       <div class="card__title">
-        <span>{{ job.jobTitle | truncateTitle }}</span>
+        <span>{{ limit(job.jobTitle, 55) }}</span>
       </div>
       <div class="card__bottom">
         <span>{{ moment(job.devStartDate, "YYYY年 M月 D日") }}  ~  {{ moment(job.devEndDate , "YYYY年 M月 D日")}}</span>

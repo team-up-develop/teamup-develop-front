@@ -1,3 +1,17 @@
+<script>
+export default {
+  data() {
+    return {
+    }
+  },
+  methods: {
+    topRedirect() {
+      return this.$router.push('/');
+    }
+  }
+}
+</script>
+
 <template>
   <section>
     <div class="wrapper">
@@ -20,20 +34,6 @@
     </div>
   </section>
 </template>
-
-<script>
-export default {
-  data() {
-    return {
-    }
-  },
-  methods: {
-    topRedirect() {
-      return this.$router.push('/');
-    }
-  }
-}
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';

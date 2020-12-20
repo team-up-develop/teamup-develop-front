@@ -2,7 +2,6 @@
 import Vue, { PropType } from 'vue';
 import Logo from '@/components/Atoms/Commons/Entires/Logo.vue'
 import BtnArea from '@/components/Molecules/Commons/Entires/BtnArea.vue'
-// import $ from 'jquery'
 
 export default Vue.extend({ 
   components: {

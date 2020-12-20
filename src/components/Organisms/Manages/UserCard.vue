@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/manage';
 import { User } from '@/types/user';
@@ -26,24 +27,24 @@ export default Vue.extend({
   },
   created() {
     // * user 取得
-    axios.get(`http://localhost:8888/api/v1/user/${this.userId}`)
+    axios.get(`${API_URL}/user/${this.userId}`)
     .then(response => {
       this.user = response.data
     })
 
     // * 管理案件数
-    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    axios.get(`${API_URL}/job/?user_id=${this.userId}`)
     .then(response => {
       this.manageNum = response.data.length
     })
 
     // * 保存案件数
-    axios.get(`http://localhost:8888/api/v1/favorite_job/?user_id=${this.userId}`)
+    axios.get(`${API_URL}/favorite_job/?user_id=${this.userId}`)
     .then(response => {
       this.favoriteNum = response.data.length
     })
 
-    axios.get(`http://localhost:8888/api/v1//apply_job/?user_id=${this.userId}`)
+    axios.get(`${API_URL}/apply_job/?user_id=${this.userId}`)
     .then(response => {
       for(let i = 0; i < response.data.length; i++) {
         const applyJobCorrect: ManageJob = response.data[i];

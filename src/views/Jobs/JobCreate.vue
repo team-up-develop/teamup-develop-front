@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from 'vue';
-// import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import JobTitleInput from '@/components/Atoms/Forms/JobTitleInput.vue'
 import DatePicker from '@/components/Atoms/Forms/DatePicker.vue'

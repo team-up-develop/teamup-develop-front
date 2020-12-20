@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import axios from 'axios';
 import { ManageJob } from '@/types/manage';
-import { m } from '@/master'
+import { m, API_URL } from '@/master'
 import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
 import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'
 
@@ -29,14 +29,14 @@ export default Vue.extend({
     }
   },
   created() {
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
+    axios.get(`${API_URL}/apply_job/?job_id=${ this.id }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
     .then(response => {
       this.rejectUsers = response.data
     })
   },
   mounted() {
     // *  案件タイトル取得
-    axios.get(`http://localhost:8888/api/v1/job/${ this.id }`)
+    axios.get(`${API_URL}/job/${ this.id }`)
     .then(response => {
       this.jobTitle = response.data.jobTitle
     })

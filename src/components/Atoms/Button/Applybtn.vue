@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import CompliteModal from '@/components/Organisms/Modals/Applications/CompliteModal.vue'
 import { ApplyParams } from '@/types/job';
@@ -31,7 +32,7 @@ export default Vue.extend({
         userId: this.userId,
         applyStatusId: 1  
       };
-      axios.post(`http://localhost:8888/api/v1/apply_job/`, params)
+      axios.post(`${API_URL}/apply_job/`, params)
       .then(response => {
         this.compliteModal = true
         this.applyFlag = false

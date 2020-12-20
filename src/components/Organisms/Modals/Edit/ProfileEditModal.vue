@@ -1,8 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios';
 
-export type DataType = {
+type DataType = {
   id: number;
   userName: string;
   learningStartDate: string;
@@ -11,7 +12,7 @@ export type DataType = {
   twitterAccount: string | null;
 }
 
-export type EditParams = {
+type EditParams = {
   userName: string;
   learningStartDate: Date;
   bio: string | null;
@@ -41,7 +42,6 @@ export default Vue.extend({
         const arr = str.split(delim)
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
-
       // //* 開始日
       const learningStart = this.learningStartDate
       const learningStartDate = toDate(learningStart, '-');
@@ -53,8 +53,7 @@ export default Vue.extend({
         githubAccount: this.githubAccount,
         twitterAccount: this.twitterAccount,
       }
-
-      axios.put(`http://localhost:8888/api/v1/user/${this.id}`, params)
+      axios.put(`${API_URL}/user/${this.id}`, params)
       .then(response => {
         this.$emit('compliteEdit')
       })

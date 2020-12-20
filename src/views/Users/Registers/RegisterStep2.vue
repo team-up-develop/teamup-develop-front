@@ -1,8 +1,10 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios, { AxiosResponse } from 'axios'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+
 export type DataType = {
   selectedLang: []; 
   languages: {}[];
@@ -13,6 +15,9 @@ export type DataType = {
 }
 
 export default Vue.extend({ 
+  components: {
+    vSelect
+  },
   data(): DataType {
     return {
       selectedLang: [], //? プログラミング言語
@@ -25,43 +30,36 @@ export default Vue.extend({
   },
   mounted() {
     // *開発言語
-    axios.get<AxiosResponse[]>('http://localhost:8888/api/v1/programing_language')
-      .then(response => {
-          // const array = [];
-          this.languages = response.data
-          console.log(this.languages)
-      })
+    axios.get<AxiosResponse[]>(`${API_URL}/programing_language`)
+    .then(response => {
+      this.languages = response.data
+    })
     // * フレームワーク
-    axios.get<AxiosResponse[]>('http://localhost:8888/api/v1/programing_framework')
-      .then(response => {
-          this.framworks = response.data
-          // console.log(this.framworks)
-      })
+    axios.get<AxiosResponse[]>(`${API_URL}/programing_framework`)
+    .then(response => {
+      this.framworks = response.data
+    })
     // * その他スキル
-    axios.get<AxiosResponse[]>('http://localhost:8888/api/v1/skill')
-      .then(response => {
-          this.skills = response.data
-          // console.log(this.skills)
-      })
+    axios.get<AxiosResponse[]>(`${API_URL}/skill`)
+    .then(response => {
+      this.skills = response.data
+    })
   },
   methods: {
     nextStep3() {
       // * 言語を {id: Number}に変換
       const languageArray: {}[] = [];
       for(let i = 0; i < this.selectedLang.length; i++) {
-        // console.log({id: this.selectedLang[i]})
         languageArray.push({id: this.selectedLang[i]})
       }
       // * フレームワークを{id: Number}に変換
       const framworksArray: {}[] = [];
       for(let c = 0; c < this.selectedFramwork.length; c++) {
-        // console.log({id: this.selectedLang[i]})
         framworksArray.push({id: this.selectedFramwork[c]})
       }
       // * その他スキルを {id: Number}に変換
       const skillArray: {}[] = [];
       for(let d = 0; d < this.selectedSkill.length; d++) {
-        // console.log({id: this.selectedLang[i]})
         skillArray.push({id: this.selectedSkill[d]})
       }
 
@@ -70,18 +68,11 @@ export default Vue.extend({
         programingFramework: framworksArray , //? フレームワーク
         skill: skillArray, //? その他開発スキル,
       };
-
-      console.log(params.programingLanguage)
-
       sessionStorage.setItem('programingLanguage', JSON.stringify(params.programingLanguage));
       sessionStorage.setItem('programingFramework', JSON.stringify(params.programingFramework));
       sessionStorage.setItem('skill', JSON.stringify(params.skill));
-
       return this.$router.push('/step/3');
     }
-  },
-  components: {
-    vSelect
   }
 });
 </script>
