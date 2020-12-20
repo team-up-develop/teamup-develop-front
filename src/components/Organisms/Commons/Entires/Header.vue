@@ -30,9 +30,7 @@ export default Vue.extend({
     <div class="header-wrapper-area">
       <div class="header-main-area">
         <div class="header-main-left">
-          <router-link to="/jobs" class="router-link">
-            <img src="@/assets/images/heder_logo1.png" alt="" width="150px">
-          </router-link>
+          <Logo />
         </div>
         <div class="header-main-right">
           <v-row class="left-user-menu">
