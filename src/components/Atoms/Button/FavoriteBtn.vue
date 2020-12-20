@@ -88,7 +88,7 @@ export default Vue.extend({
   padding: 10px;
   width: 50px;
   height: 50px;
-  color: $basic-white;
+  color: $white;
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;

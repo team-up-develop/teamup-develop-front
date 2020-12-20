@@ -82,7 +82,7 @@ export default Vue.extend({
   padding: 1rem 3rem;
   border-radius: 50px;
   font-weight: 600;
-  color: $basic-white;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;

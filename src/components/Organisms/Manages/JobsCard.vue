@@ -1,15 +1,12 @@
 <script lang="ts">
 import Vue from 'vue';
-import moment from "moment";
+import { timeChange } from '@/master'
+
 export default Vue.extend({ 
   props: {
     job: Object
   },
   filters: {
-    // * date型を文字に変換
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    },
     //* 案件タイトル 文字制限
     truncateTitle: function(value: string) {
       const length = 55;
@@ -19,6 +16,11 @@ export default Vue.extend({
       }
       return value.substring(0, length) + ommision;
     },
+  },
+  methods: {
+    moment(value: string, format: string) {
+      return timeChange(value, format)
+    }
   }
 });
 </script>
@@ -50,7 +52,7 @@ export default Vue.extend({
         <span>{{ job.jobTitle | truncateTitle }}</span>
       </div>
       <div class="card__bottom">
-        <span>{{ job.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ job.devEndDate | moment("YYYY年 M月 D日")}}</span>
+        <span>{{ moment(job.devStartDate, "YYYY年 M月 D日") }}  ~  {{ moment(job.devEndDate , "YYYY年 M月 D日")}}</span>
       </div>
     </v-sheet>
   </section>

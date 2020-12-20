@@ -132,7 +132,7 @@ export default Vue.extend({
 }
 
 .modal-window {
-  background: $basic-white;
+  background: $white;
   border-radius: 8px;
   overflow: hidden;
   position: relative;
@@ -167,7 +167,7 @@ export default Vue.extend({
       background-color: #373740ba;
       border-radius: 4px;
       font-weight: 700;
-      color: $basic-white;
+      color: $white;
       font-size: .85em;
       letter-spacing: 4px;
       text-decoration: none;
@@ -213,7 +213,7 @@ export default Vue.extend({
   .serach-btn {
     @include blue-btn;
     @include box-shadow-btn;
-    color: $basic-white;
+    color: $white;
     padding: 1rem 3.4rem;
     border-radius: 50px;
     font-weight: 600;
@@ -233,7 +233,7 @@ export default Vue.extend({
   .serach-btn-false {
     @include box-shadow-btn;
     @include grey-btn;
-    color: $basic-white;
+    color: $white;
     padding: 1rem 3.4rem;
     border-radius: 50px;
     font-weight: 600;

@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from 'vue';
-import moment from "moment";
 import axios from 'axios'
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
@@ -33,11 +32,6 @@ export default Vue.extend({
       selectedLang: [], //? プログラミング言語
       selectlangNumber: [], //? 開発言語 編集用 array[Number, Number...]
       languages: [], //? プログラミング言語全て
-    }
-  },
-  filters: {
-    moment(value: string, format: string) {
-      return moment(value).format(format);
     }
   },
   created() {
@@ -108,7 +102,7 @@ export default Vue.extend({
           <div class="job-create-time-area">
             <label for="name" class="label">開発開始</label><label for="name" class="label-required">必須</label>
             <input type="date" v-model="devStartDate">
-            <h5>{{devStartDate }}</h5>
+            <h5>{{ devStartDate }}</h5>
           </div>
           <div class="job-create-time-area">
             <label for="name" class="label">開発終了</label><label for="name" class="label-required">必須</label>
@@ -165,7 +159,7 @@ export default Vue.extend({
 }
 
 .modal-window {
-  background: $basic-white;
+  background: $white;
   width: 70%;
   height: 90%;
   border-radius: 8px;
@@ -182,7 +176,7 @@ export default Vue.extend({
 }
 // *必須タグ
 .label-required {
-  color: $basic-white;
+  color: $white;
   background-color: $error-message-color;
   font-size: 12px;
   font-weight: bold;
@@ -204,7 +198,7 @@ export default Vue.extend({
 
     input[type='text'] {
       @include input-border-color;
-      background-color: $sub-white;
+      background-color: $dark-white;
       color: $text-main-color;
       font: 16px/24px sans-serif;
       box-sizing: border-box;
@@ -228,7 +222,7 @@ export default Vue.extend({
 
     input[type='date'] {
       @include input-border-color;
-      background-color: $sub-white;
+      background-color: $dark-white;
       color: $text-main-color;
       font: 16px/24px sans-serif;
       box-sizing: border-box;
@@ -255,7 +249,7 @@ export default Vue.extend({
 
     textarea[type='text'] {
       @include input-border-color;
-      background-color: $sub-white;
+      background-color: $dark-white;
       color: $text-main-color;
       font: 16px/24px sans-serif;
       box-sizing: border-box;
@@ -287,8 +281,8 @@ export default Vue.extend({
       letter-spacing: 1px;
       color: $text-main-color;
       border-radius: 4px;
-      background-color: $basic-white;
-      background-color: $sub-white;
+      background-color: $white;
+      background-color: $dark-white;
     }
 
     .radio-btn {
@@ -300,7 +294,7 @@ export default Vue.extend({
 
 // * モーダル内 編集するボタン
 .modal-edit-btn {
-  @include purple-btn;
+  background-color: $secondary-color;
   display: block;
   padding: 1.4rem 5rem;
   box-shadow: 0 0px 5px 2px #d4d4d4;

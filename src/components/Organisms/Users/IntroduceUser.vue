@@ -9,11 +9,6 @@ export default Vue.extend({
       bio: this.user.bio
     }
   },
-  mounted() {
-    console.log("aaaaaaaaaaa")
-    console.log(this.user)
-    console.log("aaaaaaaaaaa")
-  }
 });
 </script>
 

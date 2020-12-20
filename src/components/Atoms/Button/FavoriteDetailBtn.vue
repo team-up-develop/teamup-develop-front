@@ -92,7 +92,7 @@ export default Vue.extend({
   box-shadow: 0 0px 5px 2px #d4d4d4;
   border-radius: 50px;
   font-weight: 600;
-  // color: $basic-white;
+  // color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -115,7 +115,7 @@ export default Vue.extend({
   box-shadow: 0 0px 10px 5px #d4d4d4;
   border-radius: 50px;
   font-weight: 600;
-  // color: $basic-white;
+  // color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -130,7 +130,7 @@ export default Vue.extend({
   padding: 10px;
   width: 58px;
   height: 58px;
-  color: $basic-white;
+  color: $white;
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;

@@ -67,7 +67,7 @@ export default Vue.extend({
 
   .register-btn {
     @include purple-btn;
-    color: $basic-white;
+    color: $white;
     padding: 1.1rem 3rem;
     border-radius: 8px;
   }
@@ -75,7 +75,7 @@ export default Vue.extend({
   .login-btn {
     border: solid 1px #673AB7;
     color: #673AB7;
-    background-color: $basic-white;
+    background-color: $white;
     padding: 1.1rem 2rem;
     border-radius: 8px;
     margin-left: 1rem;

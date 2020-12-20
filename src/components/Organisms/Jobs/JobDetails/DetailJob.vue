@@ -1,16 +1,16 @@
 <script lang="ts">
 import Vue from 'vue';
-import moment from "moment";
+import { timeChange } from '@/master'
 
 export default Vue.extend({ 
   props: {
     job: Object
   },
-  filters: {
+  methods: {
     moment(value: string, format: string) {
-      return moment(value).format(format);
+      return timeChange(value, format)
     }
-  },
+  }
 });
 </script>
 
@@ -26,16 +26,16 @@ export default Vue.extend({
           <div class="tag">募集人数</div>
           <div class="sub-area">{{ job.recruitmentNumbers }}人</div>
         </div>
-        <div class="detail-information">
+        <!-- <div class="detail-information">
           <div class="tag">応募ケース</div>
           <div class="sub-area">新規開発</div>
-        </div>
+        </div> -->
         <div class="detail-information">
           <div class="tag">開発期間</div>
-          <div class="sub-area">{{ job.devStartDate | moment("YYYY年 M月 D日") }} ~ {{ job.devEndDate  | moment("YYYY年 M月 D日")}}</div>
+          <div class="sub-area">{{ moment(job.devStartDate, "YYYY年 M月 D日") }} ~ {{ moment(job.devEndDate, "YYYY年 M月 D日")}}</div>
         </div>
         <div class="detail-information">
-          <div class="tag">応募ケース</div>
+          <div class="tag">詳細</div>
           <div class="sub-area">{{ job.jobDescription }}</div>
         </div>
       </div>

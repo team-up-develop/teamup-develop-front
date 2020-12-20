@@ -192,7 +192,7 @@
             開発期間
           </div>
           <div class="post-user-area">
-            {{ jobDetail.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ jobDetail.devEndDate | moment("YYYY年 M月 D日")}}
+            {{ moment(jobDetail.devStartDate , "YYYY年 M月 D日") }}  ~  {{ moment(jobDetail.devEndDate, "YYYY年 M月 D日")}}
           </div>
           <div class="tag-area">
             <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
@@ -209,7 +209,7 @@
             {{ jobDetail.jobDescription }}
           </div>
           <div class="jobDetail-time-area">
-            投稿期日   {{ jobDetail.createdAt | moment("YYYY年 M月 D日") }}
+            投稿期日   {{ moment(jobDetail.createdAt, "YYYY年 M月 D日") }}
           </div>
         </div>
       </div>
@@ -239,7 +239,7 @@
 // import $ from 'jquery';
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
+
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -249,6 +249,7 @@ import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 import LanguageSearchModal from '@/components/Organisms/Modals/Searches/LanguageSearchModal.vue'
 import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
 import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
+import { timeChange } from '@/master';
 
 export default Vue.extend({ 
   components: {
@@ -288,12 +289,6 @@ export default Vue.extend({
       jobsPageSize: 5, //? ページに表示する案件の数
       paginationLength: 0, //? ページネーション番号
     }
-  },
-  filters: {
-    // * date型を文字に変換
-    moment(value, format) {
-      return moment(value).format(format);
-    },
   },
   computed: {
     //* 案件タイトル 詳細 文字制限
@@ -416,6 +411,9 @@ export default Vue.extend({
     }
   },
   methods: {
+    moment(value, format) {
+      return timeChange(value, format)
+    },
     // * ページネーション処理(検索)
     paginateJobs(value) {
       this.jobs = value.slice().reverse();
@@ -639,7 +637,7 @@ export default Vue.extend({
 .search-area {
   width: 100%;
   height: 48px;
-  background-color: $basic-white;
+  background-color: $white;
   position: absolute;
   top: 0;
   position: sticky;
@@ -651,7 +649,7 @@ export default Vue.extend({
   &__modal-btn {
     @include card-border-color;
     color: $text-sub-color;
-    background-color: $basic-white;
+    background-color: $white;
     margin-top: 0.4rem;
     padding: 0.5rem 1.5rem;
     border-radius: 50rem;
@@ -671,7 +669,7 @@ export default Vue.extend({
   &__modal-btn-active {
     @include primary-border_color;
     color: $primary-color;
-    background-color: $basic-white;
+    background-color: $white;
     margin-top: 0.4rem;
     padding: 0.5rem 1.5rem;
     border-radius: 50rem;
@@ -797,7 +795,7 @@ export default Vue.extend({
   height: 88vh;
   margin-left: 2rem;
   margin-top: 1rem;
-  background-color: $basic-white;
+  background-color: $white;
   position: sticky;
   display: inline-block;
   margin-bottom: 0.2rem;
@@ -866,7 +864,7 @@ export default Vue.extend({
 /* スクロールのつまみ部分の設定 */
 .job-wrapper-right .main-job-detail-area::-webkit-scrollbar-thumb {
   border-radius: 5px;
-  background: $sub-white;
+  background: $dark-white;
 }
 
 .post-user-area {
@@ -991,7 +989,7 @@ export default Vue.extend({
   padding: 0.75rem 3rem;
   border-radius: 8px;
   font-weight: 600;
-  color: $basic-white;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -1027,7 +1025,7 @@ export default Vue.extend({
   width: 42px;
   height: 42px;
   padding: 0.5rem;
-  color: $basic-white;
+  color: $white;
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;
@@ -1110,7 +1108,7 @@ export default Vue.extend({
 }
 
 input[type="checkbox"] {
-  background-color: $basic-white;
+  background-color: $white;
   border: 1px solid #ccc;
   border-radius: 80%;
   cursor: pointer;
@@ -1130,7 +1128,7 @@ label.checkbox {
 .serach-btn {
   @include box-shadow-btn;
   @include blue-btn;
-  color: $basic-white;
+  color: $white;
   text-align: left;
   display: block;
   padding: 1.1rem 4rem;

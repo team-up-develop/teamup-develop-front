@@ -127,7 +127,7 @@ export default Vue.extend({
 }
 
 .modal-window {
-  background: $basic-white;
+  background: $white;
   border-radius: 8px;
   overflow: hidden;
 }
@@ -153,19 +153,19 @@ export default Vue.extend({
       width: 100%;
       height: 48px;
       padding: 0.5rem;
-      background-color: $sub-white;
+      background-color: $dark-white;
     }
     .edit-text-value {
       display: block;
       width: 100%;
       height: 120px;
       padding: 0.5rem;
-      background-color: $sub-white;
+      background-color: $dark-white;
     }
     .serach-btn {
       @include box-shadow-btn;
-      @include purple-btn;
-      color: $basic-white;
+      background-color: $secondary-color;
+      color: $white;
       text-align: left;
       display: block;
       padding: 1.1rem 4rem;
@@ -190,8 +190,8 @@ export default Vue.extend({
 //* 編集するボタン 
 .btn-box-edit {
   @include box-shadow-btn;
-  @include blue-btn;
-  color: $basic-white;
+  background-color: $secondary-color;
+  color: $white;
   padding: 1.2rem 8rem;
   transition: .3s;
   border-radius: 50px;

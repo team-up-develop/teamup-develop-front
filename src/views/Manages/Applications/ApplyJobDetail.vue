@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import moment from "moment";
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
@@ -34,11 +33,6 @@ export default Vue.extend({
       modal: false,
       statusId: 0,
       selfJobPost: false
-    }
-  },
-  filters: {
-    moment(value: string, format: string) {
-      return moment(value).format(format);
     }
   },
   computed: {
@@ -180,7 +174,7 @@ export default Vue.extend({
 
 .router {
   text-decoration: none;
-  color: $basic-white;
+  color: $white;
 }
 
 .detail-wrapper {
@@ -256,7 +250,7 @@ export default Vue.extend({
 .btn-box-apply {
   @include red-btn;
   @include box-shadow-btn;
-  color: $basic-white;
+  color: $white;
   position: absolute;
   left: 0;
   top: 0;
@@ -282,7 +276,7 @@ export default Vue.extend({
 .btn-box-apply-false {
   @include grey-btn;
   @include box-shadow-btn;
-  color: $basic-white;
+  color: $white;
   position: absolute;
   left: 0;
   top: 0;
@@ -303,8 +297,8 @@ export default Vue.extend({
 //* 編集するボタン 
 .btn-box-edit {
   @include box-shadow-btn;
-  @include blue-btn;
-  color: $basic-white;
+  background-color: $secondary-color;
+  color: $white;
   padding: 1.2rem 8rem;
   transition: .3s;
   border-radius: 50px;
@@ -340,7 +334,7 @@ export default Vue.extend({
   padding: 10px;
   width: 38px;
   height: 38px;
-  color: $basic-white;
+  color: $white;
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;

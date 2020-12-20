@@ -139,8 +139,8 @@ section {
 
     .edit-btn {
       @include box-shadow-btn;
-      @include purple-btn;
-      color: $basic-white;
+      background-color: $secondary-color;
+      color: $white;
       padding: 0.5rem 4rem;
       position: absolute;
       left: 0;
@@ -148,6 +148,10 @@ section {
       font-weight: bold;
       font-size: 0.8em;
       border-radius: 8px;
+      appearance: none;
+      border: none;
+      transition: .3s;
+      outline: none;
     }
     .data-area {
       padding: 3.5rem 0 0 0;

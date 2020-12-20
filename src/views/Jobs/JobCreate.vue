@@ -193,7 +193,7 @@ export default Vue.extend({
     @include card-border-color;
     border-radius: 20px;
     margin: 2rem 0rem;
-    background-color: $basic-white;
+    background-color: $white;
     padding: 2.5rem;
     height: 85%;
   }
@@ -207,7 +207,7 @@ export default Vue.extend({
 }
 
 .label-required {
-  color: $basic-white;
+  color: $white;
   background-color: $error-message-color;
   font-size: 12px;
   font-weight: bold;
@@ -261,7 +261,7 @@ export default Vue.extend({
     .next-btn {
       @include box-shadow-btn;
       @include blue-btn;
-      color: $basic-white;
+      color: $white;
       text-align: left;
       display: block;
       padding: 1.1rem 4rem;
@@ -287,7 +287,7 @@ export default Vue.extend({
     .next-btn-false {
       @include box-shadow-btn;
       @include grey-btn;
-      color: $basic-white;
+      color: $white;
       text-align: left;
       display: block;
       padding: 1.1rem 4rem;

@@ -74,7 +74,7 @@ export default Vue.extend({
 .register-btn {
   @include purple-btn ;
   @include box-shadow-btn;
-  color: $basic-white;
+  color: $white;
   display: block;
   padding: 1rem 2rem;
   border-radius: 25px;

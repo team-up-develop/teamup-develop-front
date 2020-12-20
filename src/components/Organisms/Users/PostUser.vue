@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import moment from "moment";
+import { timeChange } from '@/master';
 
 export default Vue.extend({ 
   props: {
@@ -15,13 +15,10 @@ export default Vue.extend({
       return false;
     }
   },
-  filters: {
-    // * date型を文字に変換
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    },
-  },
   methods: {
+    moment(value: string, format: string) {
+      return timeChange(value, format)
+    },
     // * Twitter をタブで開く
     twitterTab() {
       if(this.user.twitterAccount == null) {
@@ -63,7 +60,7 @@ export default Vue.extend({
             </v-col>
             <v-col class="introduce-area" style="padding: none">
               <div class="introduce">
-                {{ user.learningStartDate | moment("YYYY年 M月 D日")}}
+                {{ moment(user.learningStartDate, "YYYY年 M月 D日")}}
               </div>
             </v-col>
             <v-col class="url-area">
@@ -135,14 +132,18 @@ export default Vue.extend({
 
     .edit-btn {
       @include box-shadow-btn;
-      @include purple-btn;
-      color: $basic-white;
+      background-color: $secondary-color;
+      color: $white;
       padding: 0.5rem 1rem;
       border-radius: 8px;
       width: 160px;
       height: 50px;
       font-weight: bold;
       font-size: 1em;
+      appearance: none;
+      border: none;
+      transition: .3s;
+      outline: none;
     }
   }
 }

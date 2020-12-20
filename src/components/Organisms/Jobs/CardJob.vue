@@ -1,38 +1,9 @@
-<template>
-  <div class="job-cards">
-    <div class="job-cards__top">
-      <span>{{ jobTitle }}</span>
-      <p>{{ jobTitleResponsive }}</p>
-    </div>
-    <div class="job-cards__center">
-      <!-- カード スキルコンポーネント -->
-      <CardJobSkill :job="job" />
-    </div>
-    <div class="job-cards__bottom">
-      <div class="product-start-end">
-        <div class="product-start-end-tag">
-          開発期間:
-        </div>
-        <div class="product-start-end-time">
-          {{ job.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ job.devEndDate | moment("YYYY年 M月 D日")}}
-        </div>
-      </div>
-      <div class="post-user-area">
-        <div class="post-user-image"></div>
-        <div class="post-user-name-area">
-          <div class="post-user-name">
-            {{ job.user.userName }}
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script>
+import Vue from 'vue';
 import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
-import moment from "moment";
-export default {
+import { timeChange } from '@/master'
+
+export default Vue.extend({ 
   props: {
     job: {}
   },
@@ -40,12 +11,6 @@ export default {
     return {
       jobs: [] 
     }
-  },
-  filters: {
-    // * date型を文字に変換
-    moment(value, format) {
-      return moment(value).format(format);
-    },
   },
   computed: {
     //* 案件タイトル 文字制限
@@ -69,11 +34,48 @@ export default {
       return "";
     },
   },
+  methods: {
+    moment(value, format) {
+      return timeChange(value, format)
+    },
+  },
   components: {
     CardJobSkill
   }
-}
+});
 </script>
+
+<template>
+  <div class="job-cards">
+    <div class="job-cards__top">
+      <span>{{ jobTitle }}</span>
+      <p>{{ jobTitleResponsive }}</p>
+    </div>
+    <div class="job-cards__center">
+      <!-- カード スキルコンポーネント -->
+      <CardJobSkill :job="job" />
+    </div>
+    <div class="job-cards__bottom">
+      <div class="product-start-end">
+        <div class="product-start-end-tag">
+          開発期間:
+        </div>
+        <div class="product-start-end-time">
+          {{ moment(job.devStartDate , "YYYY年 M月 D日") }}  ~  {{ moment(job.devEndDate , "YYYY年 M月 D日")}}
+        </div>
+      </div>
+      <div class="post-user-area">
+        <div class="post-user-image"></div>
+        <div class="post-user-name-area">
+          <div class="post-user-name">
+            {{ job.user.userName }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -81,7 +83,7 @@ export default {
   width: 97%;
   margin: 10px 0.5%;
   border: solid 1px $card-border-color;
-  background-color: $basic-white;
+  background-color: $white;
   border-radius: 8px;
   transition: .3s;
   color: $text-main-color;

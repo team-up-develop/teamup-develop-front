@@ -1,18 +1,16 @@
 <script lang="ts">
 import Vue from 'vue';
-import moment from "moment";
+import { timeChange } from '@/master'
 
 export default Vue.extend({ 
   props: {
     job: Object
   },
-  filters: {
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    }
-  },
   // TODO: Atomsに切り分け
   methods: {
+    moment(value: string, format: string) {
+      return timeChange(value, format)
+    },
     // * Twitter をタブで開く
     twitterTab() {
       if(this.job.user.twitterAccount == null) {
@@ -54,7 +52,7 @@ export default Vue.extend({
           <div class="user-introduce-area">
             <div class="introduce-tag">学習開始</div>
             <div class="introduce">
-              {{ job.user.learningStartDate | moment("YYYY年 M月 D日") }}
+              {{ moment(job.user.learningStartDate, "YYYY年 M月 D日") }}
             </div>
           </div>
         </div>

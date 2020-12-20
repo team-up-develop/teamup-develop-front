@@ -1,8 +1,8 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
-import moment from "moment";
 import { ManageJob } from '@/types/manage';
+import { m } from '@/master'
 import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
 import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'
 
@@ -28,23 +28,8 @@ export default Vue.extend({
       jobTitle: ""
     }
   },
-  filters: {
-    // * date型を文字に変換
-    moment(value: string, format: string) {
-      return moment(value).format(format);
-    },
-    //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value: string) {
-      const length = 60;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   created() {
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=3`)
+    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
     .then(response => {
       this.rejectUsers = response.data
     })

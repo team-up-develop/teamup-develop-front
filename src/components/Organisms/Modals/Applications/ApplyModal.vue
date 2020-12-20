@@ -36,7 +36,7 @@
 }
 
 .modal-window {
-  background: $basic-white;
+  background: $white;
   border-radius: 8px;
   overflow: hidden;
   position: relative;
@@ -56,7 +56,7 @@
   position: absolute;
   top: 0;
   margin-bottom: 2rem;
-  background-color: $sub-white;
+  background-color: $dark-white;
   border-bottom: dashed 2px $card-border-color;
 }
 

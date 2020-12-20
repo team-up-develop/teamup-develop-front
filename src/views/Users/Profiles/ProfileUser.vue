@@ -156,7 +156,7 @@ export default Vue.extend({
 
 .router {
   text-decoration: none;
-  color: $basic-white;
+  color: $white;
 }
 
 .detail-wrapper {
@@ -273,8 +273,8 @@ export default Vue.extend({
   //* 編集するボタン 
     .btn-box-edit {
       @include box-shadow-btn;
-      @include blue-btn;
-      color: $basic-white;
+      background-color: $secondary-color;
+      color: $white;
       padding: 1.2rem 8rem;
       transition: .3s;
       border-radius: 50px;

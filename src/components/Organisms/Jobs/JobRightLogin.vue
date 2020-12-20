@@ -32,7 +32,7 @@ export default Vue.extend({
   @include card-border-color;
   width: 72%;
   // height: calc(44vh - 4rem);
-  background-color: $basic-white;
+  background-color: $white;
   border-radius: 8px;
   margin-top: 3.5rem;
   margin-bottom: 3rem;
