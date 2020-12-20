@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios';
 import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
@@ -32,14 +33,13 @@ export default Vue.extend({
     if(this.userId == this.id) {
       this.myselfFlag = true
     }
-
-    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.id}`)
+    // * 投稿案件取得
+    axios.get(`${API_URL}/job/?user_id=${this.id}`)
     .then(response => {
       this.manageJobs = response.data
     })
-
     // * ユーザー情報取得
-    axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+    axios.get(`${API_URL}/user/${this.id}`)
     .then(response => {
       this.userInfo = response.data;
     })
@@ -52,14 +52,11 @@ export default Vue.extend({
     closeModal() {
       this.modal = false
     },
-    doSend() {
-      this.closeModal()
-    },
     // * 編集完了 emit
     compliteEdit() {
       this.closeModal();
       // * ユーザー情報取得
-      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+      axios.get(`${API_URL}/user/${this.id}`)
       .then(response => {
         this.userInfo = response.data;
       })

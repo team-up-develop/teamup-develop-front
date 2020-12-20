@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import axios from 'axios'
 import { Job } from '@/types/job';
-import { m, timeChange } from '@/master'
+import { m, timeChange, API_URL, truncate } from '@/master'
 
 type DataType = {
   chatGroups: Job[];
@@ -25,22 +25,11 @@ export default Vue.extend({
   computed: {
     m: () => m,
   },
-  filters: {
-    //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value: string) {
-      const length = 36;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   mounted() {
     // * 参加案件のみを取得する
     if(this.$store.state.auth.userId !== undefined) {
       this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
+      axios.get(`${API_URL}/apply_job/?user_id=${ this.userId }`)
       .then(response => {
         const array = [];
         for(let i = 0; i < response.data.length; i++){
@@ -59,6 +48,9 @@ export default Vue.extend({
   methods: {
     moment(value: string, format: string) {
       return timeChange(value, format)
+    },
+    limit(value: string, num: number) {
+      return truncate(value, num)
     }
   }
 });
@@ -79,7 +71,7 @@ export default Vue.extend({
           class="group"
           >
           <div class="group__area">
-            <p>{{ chatGroup.job.jobTitle | truncateDetailTitle }}</p>
+            <p>{{ limit(chatGroup.job.jobTitle, 36) }}</p>
             <v-row class="row">
               <label 
                 for="name" 

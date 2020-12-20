@@ -2,7 +2,7 @@
 // FIXME: 現状は使用していない
 import Vue from 'vue';
 import axios from 'axios'
-import { timeChange } from '@/master';
+import { timeChange, API_URL, truncate } from '@/master';
 
 export default Vue.extend({ 
   data() {
@@ -12,36 +12,19 @@ export default Vue.extend({
     }
   },
   created() {
-    axios.get('http://localhost:8888/api/v1/job')
+    axios.get(`${API_URL}/job`)
     .then(response => {
       this.newJobsDesktop = response.data.slice(0, 4)
       this.newJobs = response.data.slice().reverse(); //? 最新にする
       this.newJobs = this.newJobs.slice(0, 3)
     })
   },
-  filters: {
-    //* 案件タイトル 文字制限
-    truncateTitle: function(value: string) {
-      const length = 40;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-    //* 案件タイトル レスポンシブ文字制限
-    truncateTitleResponsive: function(value: string) {
-      const length = 35;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   methods: {
     moment(value: string, format: string) {
       return timeChange(value, format)
+    },
+    limit(value: string, num: number) {
+      return truncate(value, num)
     }
   }
 });
@@ -53,7 +36,7 @@ export default Vue.extend({
     <!-- 案件カード デスクトップ -->
     <router-link :to="`/jobs/${ newJob.id }`" class="job-card-desktop" v-for="newJob in newJobsDesktop" :key="newJob.id">
       <div class="job-card-desktop__top">
-        <span>{{ newJob.jobTitle | truncateTitle }}</span>
+        <span>{{ limit(newJob.jobTitle, 40) }}</span>
       </div>
       <div class="job-card-desktop__center">
         <div class="langage" 
@@ -109,7 +92,7 @@ export default Vue.extend({
       :key="newJob.id"
     >
       <div class="job-card__top">
-        <span>{{ newJob.jobTitle | truncateTitle }}</span>
+        <span>{{ limit(newJob.jobTitle, 35) }}</span>
       </div>
       <div class="job-card__center">
         <div class="langage" 

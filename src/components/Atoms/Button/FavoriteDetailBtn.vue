@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import { FavoriteParams } from '@/types/job';
 
@@ -20,7 +21,7 @@ export default Vue.extend({
   },
   mounted() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
-    axios.get(`http://localhost:8888/api/v1/favorite_job/?user_id=${this.userId}`)
+    axios.get(`${API_URL}/favorite_job/?user_id=${this.userId}`)
     .then(response => {
       const array = []
       for(let i = 0; i < response.data.length; i++){
@@ -42,7 +43,7 @@ export default Vue.extend({
         jobId: this.jobId, 
         userId: this.userId
       };
-      axios.post('http://localhost:8888/api/v1/favorite_job/', params)
+      axios.post(`${API_URL}/favorite_job/`, params)
       .then(response => {
         this.flag = false
         console.log(response)
@@ -57,7 +58,7 @@ export default Vue.extend({
         jobId: this.jobId,
         userId: this.userId
       };
-      axios.delete('http://localhost:8888/api/v1/favorite_job/', {data: params })
+      axios.delete(`${API_URL}/favorite_job/`, {data: params })
       .then(response => {
         this.flag = true
         console.log(response.data)

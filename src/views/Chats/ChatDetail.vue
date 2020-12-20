@@ -4,7 +4,7 @@ import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import { Message } from '@/types/chat'
 import { Job } from '@/types/job';
-import { m, timeChange } from '@/master'
+import { m, timeChange, API_URL, truncate } from '@/master'
 
 type DataType = {
   chatGroups: Job[]; //? 今使ってない
@@ -49,37 +49,17 @@ export default Vue.extend({
   computed: {
     m: () => m,
   },
-  filters: {
-    //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value: string) {
-      const length = 36;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-    truncateDetailTitleChat: function(value: string) {
-      const length = 60;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   created() {
     let chatLength = 0;
     // * チャット詳細画面実装
     setInterval(() => {
-      axios.get(`http://localhost:8888/api/v1/chat_message/?job_id=${this.id}`)
+      axios.get(`${API_URL}/chat_message/?job_id=${this.id}`)
       .then(response => {
         this.loading = false;
         this.chats = response.data
         if(chatLength === this.chats.length) {
           console.log("chatLengt 一緒だよん")
-        }
-        else {
+        } else {
           chatLength = this.chats.length
           // ? GET 際に変今点があったら下にスクロールする
           const chatLog: any = this.$refs.target
@@ -87,7 +67,7 @@ export default Vue.extend({
           chatLog.scrollTop = chatLog.scrollHeight
         }
       })
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}`)
+      axios.get(`${API_URL}/job/${this.id}`)
       .then(response => {
         this.jobTitle = response.data.jobTitle
         this.clickJobId = response.data.id
@@ -104,7 +84,7 @@ export default Vue.extend({
     // .then(response => {
     //   this.myselfUser= response.data
     // })
-    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
+    axios.get(`${API_URL}/apply_job/?user_id=${ this.userId }`)
     .then(response => {
       const array = [];
       for(let i = 0; i < response.data.length; i++){
@@ -123,6 +103,9 @@ export default Vue.extend({
     moment(value: string, format: string) {
       return timeChange(value, format)
     },
+    limit(value: string, num: number) {
+      return truncate(value, num)
+    },
     // * メッセージの送信
     chatCreate() {
       const params = {
@@ -136,10 +119,10 @@ export default Vue.extend({
         return
       }
       // ? 投稿
-      axios.post(`http://localhost:8888/api/v1/chat_message`, params)
+      axios.post(`${API_URL}/chat_message`, params)
       .then(response => {
         console.log(response.data)
-        axios.get(`http://localhost:8888/api/v1/chat_message/?job_id=${this.id}`)
+        axios.get(`${API_URL}/chat_message/?job_id=${this.id}`)
         .then(response => {
           this.chats = response.data
           // ! Postされた内容がDOMに反映される前にスクロールされるため、最新投稿までスクロールされていない
@@ -170,7 +153,7 @@ export default Vue.extend({
           class="group"
           >
           <div class="group__area">
-            <p>{{ chatGroup.job.jobTitle | truncateDetailTitle }}</p>
+            <p>{{ limit(chatGroup.job.jobTitle, 36) }}</p>
             <v-row class="row">
               <label 
                 for="name" 
@@ -195,7 +178,7 @@ export default Vue.extend({
       <div class="chat-card__right">
         <div class="main" ref="target" v-show="!loading">
           <router-link :to="`/jobs/${ clickJobId }`" class="router">
-            <header class="header">{{ jobTitle | truncateDetailTitleChat }}</header>
+            <header class="header">{{ limit(jobTitle, 60) }}</header>
           </router-link>
           <section class="room">
             <div class="balloon" v-for="chat in chats" :key="chat.id">

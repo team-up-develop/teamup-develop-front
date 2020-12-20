@@ -1,41 +1,18 @@
-<script>
+<script lang="ts">
 import Vue from 'vue';
 import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
-import { timeChange } from '@/master'
+import { timeChange, truncate } from '@/master'
+import { Job } from '@/types/job';
 
 export default Vue.extend({ 
   props: {
     job: {}
   },
-  data() {
-    return {
-      jobs: [] 
-    }
-  },
-  computed: {
-    //* 案件タイトル 文字制限
-    jobTitle: function() {
-      if(this.job) {
-        if(this.job.jobTitle.length > 40) {
-          return this.job.jobTitle.substring(0,40) + '...';
-        }
-        return this.job.jobTitle;
-      }
-      return "";
-    },
-    //* 案件タイトル レスポンシブ文字制限
-    jobTitleResponsive: function() {
-      if(this.job) {
-        if(this.job.jobTitle.length > 30) {
-          return this.job.jobTitle.substring(0,30) + '...';
-        }
-        return this.job.jobTitle;
-      }
-      return "";
-    },
-  },
   methods: {
-    moment(value, format) {
+    limit(value: string, num: number) {
+      return truncate(value, num)
+    },
+    moment(value: string, format: string) {
       return timeChange(value, format)
     },
   },
@@ -48,8 +25,8 @@ export default Vue.extend({
 <template>
   <div class="job-cards">
     <div class="job-cards__top">
-      <span>{{ jobTitle }}</span>
-      <p>{{ jobTitleResponsive }}</p>
+      <span>{{ limit(job.jobTitle, 40) }}</span>
+      <p>{{ limit(job.jobTitle, 30) }}</p>
     </div>
     <div class="job-cards__center">
       <!-- カード スキルコンポーネント -->

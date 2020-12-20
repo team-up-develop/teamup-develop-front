@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from 'vue';
-// import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import Email from '@/components/Atoms/Forms/Email.vue'
 import Password from '@/components/Atoms/Forms/Password.vue'
 
@@ -13,7 +12,6 @@ export type DataType = {
 
 export default Vue.extend({ 
   components: {
-    // Loading,
     Email,
     Password
   },
@@ -41,11 +39,6 @@ export default Vue.extend({
   created() {
     this.$store.state.auth.errorFlag = false;
   },
-  // mounted() {
-  //   setTimeout(() => {
-  //     this.loading = false;
-  //   }, 1000)
-  // }
 });
 </script>
 

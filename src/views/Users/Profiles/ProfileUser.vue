@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios';
 import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
@@ -16,6 +17,14 @@ export type DataType = {
 }
 
 export default Vue.extend({
+  components: {
+    ProfileEditModal,
+    // Logout
+    // Loading,
+    PostUser,
+    SkillUser,
+    IntroduceUser
+  },
   props: {
     id: Number
   },
@@ -32,19 +41,8 @@ export default Vue.extend({
     if(this.userId == this.id) {
       this.myselfFlag = true
     }
-    // TODO: websocket
-    // const ws = (this.ws = new WebSocket(`ws://${location.host}/websocket`));
-    // console.log(ws)
-    // // * 接続が確認された時
-    // ws.onopen = () => {
-    //   console.log("sucsess")
-    // };
-    // ws.onmessage = message => {
-    //   this.messages.push(message.data);
-    // };
-
     // * ユーザー情報取得
-    axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+    axios.get(`${API_URL}/user/${this.id}`)
     .then(response => {
       // setTimeout(() => {
       //   this.loading = false;
@@ -67,7 +65,7 @@ export default Vue.extend({
     compliteEdit() {
       this.closeModal();
       // * ユーザー情報取得
-      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+      axios.get(`${API_URL}/user/${this.id}`)
       .then(response => {
         // this.loading = true;
         // setTimeout(() => {
@@ -82,14 +80,6 @@ export default Vue.extend({
     editEmit() {
       this.openModal();
     }
-  },
-  components: {
-    ProfileEditModal,
-    // Logout
-    // Loading,
-    PostUser,
-    SkillUser,
-    IntroduceUser
   }
 });
 </script>
@@ -132,13 +122,13 @@ export default Vue.extend({
           <IntroduceUser :user="userInfo" />
         </div>
       </v-col>
-        <div class="button-area">
-          <div v-if="myselfFlag === true" class="button-action-area">
-            <button @click="openModal" class="btn-box-edit" >編集する</button>
-          </div>
-          <div class="button-action-area" v-else>
-          </div>
+      <div class="button-area">
+        <div v-if="myselfFlag === true" class="button-action-area">
+          <button @click="openModal" class="btn-box-edit" >編集する</button>
         </div>
+        <div class="button-action-area" v-else>
+        </div>
+      </div>
     </div>
   </section>
 </template>

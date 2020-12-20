@@ -16,7 +16,16 @@ export const m = {
   APPLY_STATUS_REJECT,
   APPLY_STATUS_SELF
 }
+export const API_URL = 'http://localhost:8888/api/v1';
 
 export const timeChange = (value: string, format: string) => {
   return moment(value).format(format);
+}
+
+export const truncate = (value: string, num: number) => {
+  const over = "...";
+  if (value.length <= num) {
+    return value;
+  }
+  return value.substring(0, num) + over;
 }

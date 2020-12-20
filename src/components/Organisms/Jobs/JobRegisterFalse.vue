@@ -1,6 +1,5 @@
 <script lang="ts">
 import Vue from 'vue';
-import axios from 'axios'
 import RegisteForm from '@/components/Molecules/Jobs/JobRegisterFalses/RegisteForm.vue'
 
 export default Vue.extend({ 

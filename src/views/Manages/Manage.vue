@@ -1,11 +1,12 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/manage';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
 
-export type DataType = {
+type DataType = {
   manageJobs: ManageJob[];
   loginFlag: boolean;
   userId: number;
@@ -27,7 +28,7 @@ export default Vue.extend({
     // * 管理案件を取得
     if(this.userId) {
       this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+      axios.get(`${API_URL}/job/?user_id=${this.userId}`)
       .then(response => {
         this.manageJobs = response.data
       })

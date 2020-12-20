@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
-import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
 import { JobCreateDataComp } from '@/types/job';
 import { Language } from '@/types/index';
@@ -54,28 +54,29 @@ export default Vue.extend({
   },
   mounted() {
     // *開発言語
-    axios.get<Language[]>('http://localhost:8888/api/v1/programing_language')
+    axios.get<Language[]>(`${API_URL}/programing_language`)
       .then(response => {
         this.languages = response.data;
       })
     // * フレームワーク
-    axios.get<Framework[]>('http://localhost:8888/api/v1/programing_framework')
+    axios.get<Framework[]>(`${API_URL}/programing_framework`)
       .then(response => {
           this.framworks = response.data;
-          // console.log(this.framworks)
       })
     // * その他スキル
-    axios.get<Skill[]>('http://localhost:8888/api/v1/skill')
+    axios.get<Skill[]>(`${API_URL}/skill`)
       .then(response => {
           this.skills = response.data;
-          // console.log(this.skills)
       })
   },
   methods: {
     // * 案件投稿
     createJob(error: any) {
       //* エラーメッセージ
-      if(this.selectedLang.length == 0 || this.selectedFramwork.length == 0 || this.selectedSkill.length == 0) {
+      if(this.selectedLang.length == 0 || 
+        this.selectedFramwork.length == 0 || 
+        this.selectedSkill.length == 0
+      ) {
         console.log('入力必須項目を入力してください')
         this.selectedLangErrors = [];
         this.selectedFramworkErrors = [];
@@ -102,19 +103,16 @@ export default Vue.extend({
       // * 言語を {id: Number}に変換
       const languageArray: {}[] = [];
       for(let i = 0; i < this.selectedLang.length; i++) {
-        // console.log({id: this.selectedLang[i]})
         languageArray.push({id: this.selectedLang[i]})
       }
       // * フレームワークを{id: Number}に変換
       const framworksArray: {}[] = [];
       for(let c = 0; c < this.selectedFramwork.length; c++) {
-        // console.log({id: this.selectedLang[i]})
         framworksArray.push({id: this.selectedFramwork[c]})
       }
       // * その他スキルを {id: Number}に変換
       const skillArray: {}[] = [];
       for(let d = 0; d < this.selectedSkill.length; d++) {
-        // console.log({id: this.selectedLang[i]})
         skillArray.push({id: this.selectedSkill[d]})
       }
       // * settion 1のデータを変数に格納する
@@ -149,7 +147,7 @@ export default Vue.extend({
         recruitmentNumbers: recruitNum //?募集人数
       };
       console.log(params)
-      axios.post('http://localhost:8888/api/v1/job', params)
+      axios.post(`${API_URL}/job`, params)
       .then(response => {
         console.log(response);
         sessionStorage.removeItem('jobTitle');
@@ -167,9 +165,6 @@ export default Vue.extend({
       this.selectedSkill = [];
       this.recruitNumber = 0;
     },
-  },
-  components: {
-    vSelect,
   }
 });
 </script>
