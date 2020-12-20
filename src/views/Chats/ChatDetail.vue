@@ -396,6 +396,7 @@ export default Vue.extend({
           border-bottom: $card-border-color 1px solid;
           margin-left: 0.2rem;
           border-radius: 0 20px 0 0;
+          height: 60px;
         }
 
         .room {
