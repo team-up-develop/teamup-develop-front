@@ -12,6 +12,7 @@ import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 import LanguageSearchModal from '@/components/Organisms/Modals/Searches/LanguageSearchModal.vue'
 import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
 import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
+import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
 import { timeChange } from '@/master';
 
 export default Vue.extend({ 
@@ -24,7 +25,8 @@ export default Vue.extend({
     LanguageSearchModal,
     FrameworkSearchModal,
     SkillSearchModal,
-    JobRightLogin
+    JobRightLogin,
+    FavoriteBtn
   },
   data() {
     return {
@@ -237,36 +239,6 @@ export default Vue.extend({
         })
         this.jobs = posts;
         this.searchJobPagenate(this.jobs);
-      })
-    },
-    // * 案件を保存する
-    saveJob() {
-      const params = {
-        jobId: this.jobDetail.id, 
-        userId: 1 
-      };
-      axios.post(`${API_URL}/favorite_job/`, params)
-      .then(response => {
-        this.saveFlag = false
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    // * 案件保存を削除する
-    deleteJob() {
-      const params = {
-        jobId: this.jobDetail.id,
-        userId: 1
-      };
-      axios.delete(`${API_URL}/favorite_job/`,{data: params})
-      .then(response => {
-        this.saveFlag = true
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.log(error)
       })
     },
     // * click して案件を取得 === 詳細
@@ -492,8 +464,7 @@ export default Vue.extend({
                 応募済み
               </div>
               <div class="btn-box-save">
-                <font-awesome-icon icon="heart" class="save-icon" @click="saveJob" v-if="saveFlag"/>
-                <font-awesome-icon icon="heart" class="save-end-icon" @click="deleteJob" v-if="saveFlag == false"/>
+                <FavoriteBtn :jobId="jobDetail.id"/>
               </div>
             </div>
             <div v-else>
@@ -711,8 +682,8 @@ export default Vue.extend({
 
   // * スクロール
   .scroll-area {
-    width: 50px;
-    height: 50px;
+    // width: 50px;
+    // height: 50px;
     position: fixed;
     right: 0;
     bottom: 0;
@@ -1015,17 +986,6 @@ export default Vue.extend({
   height: 42px;
   padding: 0.5rem;
   color: $white;
-  cursor: pointer;
-  background-color: #d8d6d6;
-  border-radius: 5px / 5px;
-}
-
-.save-end-icon {
-  font-size: 20px;
-  width: 42px;
-  height: 42px;
-  padding: 0.5rem;
-  color: red;
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;
