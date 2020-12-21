@@ -2,19 +2,20 @@
 import Vue from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
+import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import { JobCreateDataComp } from '@/types/job';
 import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
 
-export type DataType = {
-  selectedLang: [];
-  languages: {}[];
-  selectedFramwork: [];
-  framworks: {}[];
-  selectedSkill: [];
-  skills: {}[];
+type DataType = {
+  selectedLang: number[];
+  languages: Language[];
+  selectedFramwork: number[];
+  framworks: Framework[];
+  selectedSkill: number[];
+  skills: Skill[];
   selectedCommunication: number;
   recruitNumber: number;
   selectedLangErrors: string[];
@@ -23,6 +24,9 @@ export type DataType = {
 }
 
 export default Vue.extend({
+  components: {
+    vSelect
+  },
   data(): DataType {
     return {
       selectedLang: [], //? プログラミング言語
@@ -55,23 +59,33 @@ export default Vue.extend({
   mounted() {
     // *開発言語
     axios.get<Language[]>(`${API_URL}/programing_language`)
-      .then(response => {
-        this.languages = response.data;
-      })
+    .then(response => {
+      this.languages = response.data;
+    })
+    .catch(error =>{
+      console.log(error)
+    })
     // * フレームワーク
     axios.get<Framework[]>(`${API_URL}/programing_framework`)
-      .then(response => {
-          this.framworks = response.data;
-      })
+    .then(response => {
+      this.framworks = response.data;
+    })
+    .catch(error =>{
+      console.log(error)
+    })
     // * その他スキル
     axios.get<Skill[]>(`${API_URL}/skill`)
-      .then(response => {
-          this.skills = response.data;
-      })
+    .then(response => {
+      this.skills = response.data;
+    })
+    .catch(error =>{
+      console.log(error)
+    })
   },
   methods: {
     // * 案件投稿
     createJob(error: any) {
+      // FIXME: いずれ消す
       //* エラーメッセージ
       if(this.selectedLang.length == 0 || 
         this.selectedFramwork.length == 0 || 
@@ -127,7 +141,6 @@ export default Vue.extend({
         const arr = str.split(delim)
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
-
       // //* 開始日
       const devStart = devStartDateString
       const devStartDate = toDate(devStart, '-');
@@ -146,7 +159,6 @@ export default Vue.extend({
         skill: skillArray, //? その他開発スキル,
         recruitmentNumbers: recruitNum //?募集人数
       };
-      console.log(params)
       axios.post(`${API_URL}/job`, params)
       .then(response => {
         console.log(response);

@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import { VueLoading } from 'vue-loading-template'
 
-export type DataType = {
+type DataType = {
   loading: boolean;
 }
 export default Vue.extend({ 

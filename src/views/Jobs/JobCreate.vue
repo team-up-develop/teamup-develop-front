@@ -6,7 +6,7 @@ import DatePicker from '@/components/Atoms/Forms/DatePicker.vue'
 import JobDescriptionInput from '@/components/Atoms/Forms/JobDescriptionInput.vue'
 import { JobCreateData } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   loading: boolean;
   jobTitle: string | null;
   jobDescription: string | null;
@@ -65,10 +65,8 @@ export default Vue.extend({
     }, 900)
     // * セッションストレージの値をフォームに格納する
     const jobTitle = sessionStorage.getItem('jobTitle');
-    console.log(jobTitle)
     const jobDescription = sessionStorage.getItem('jobDescription');
     const devStartDateString = sessionStorage.getItem('devStartDateString');
-    console.log(devStartDateString)
     const devEndDateString = sessionStorage.getItem('devEndDateString');
     this.jobTitle = jobTitle;
     this.devStartDate = devStartDateString;
@@ -96,22 +94,22 @@ export default Vue.extend({
           devEndDate: this.devEndDate, //? 開発終了
         };
         if(params.jobTitle == null) {
-          console.log("null")
+          return null
         } else {
           sessionStorage.setItem('jobTitle', params.jobTitle);
         }
         if(params.jobDescription == null) {
-          console.log("null")
+          return null
         } else {
           sessionStorage.setItem('jobDescription', params.jobDescription);
         }
         if(params.devStartDate == null) {
-          console.log("null")
+          return null
         } else {
           sessionStorage.setItem('devStartDateString', params.devStartDate);
         }
         if(params.devEndDate == null) {
-          console.log("null")
+          return null
         } else {
           sessionStorage.setItem('devEndDateString', params.devEndDate);
         }

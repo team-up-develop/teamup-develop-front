@@ -3,9 +3,9 @@
 import Vue from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { FavoriteParams } from '@/types/job';
+import { FavoriteParams, Job } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   userId: number;
   flag: boolean;
 }
@@ -44,10 +44,10 @@ export default Vue.extend({
         jobId: this.jobId, 
         userId: this.userId
       };
-      axios.post(`${API_URL}/favorite_job/`, params)
+      axios.post<FavoriteParams>(`${API_URL}/favorite_job/`, params)
       .then(response => {
         this.flag = false
-        console.log(response)
+        return response.data
       })
       .catch(error => {
         console.log(error)
@@ -59,10 +59,10 @@ export default Vue.extend({
         jobId: this.jobId,
         userId: this.userId
       };
-      axios.delete(`${API_URL}/favorite_job/`, {data: params })
+      axios.delete<FavoriteParams>(`${API_URL}/favorite_job/`, {data: params })
       .then(response => {
         this.flag = true
-        console.log(response.data)
+        return response.data
       })
       .catch(error => {
         console.log(error)

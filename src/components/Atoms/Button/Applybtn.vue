@@ -1,27 +1,25 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import CompliteModal from '@/components/Organisms/Modals/Applications/CompliteModal.vue'
 import { ApplyParams } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   userId: number;
   compliteModal: boolean;
   applyFlag: boolean;
-  message: 'welcome';
 }
 
 export default Vue.extend({ 
   props: {
-    jobId: Number,
+    jobId: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
       userId: this.$store.state.auth.userId,
       compliteModal: false,
       applyFlag: true,
-      message: 'welcome'
     }
   },
   methods: {
@@ -36,7 +34,7 @@ export default Vue.extend({
       .then(response => {
         this.compliteModal = true
         this.applyFlag = false
-        this.$emit('compliteEntry', this.message)
+        this.$emit('compliteEntry')
       })
       .catch(error =>{
         console.log(error)

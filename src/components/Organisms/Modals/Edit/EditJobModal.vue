@@ -4,8 +4,9 @@ import { API_URL } from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import { Language } from '@/types/index';
 
-export type DataType = {
+type DataType = {
   jobId: number;
   jobTitle: string;
   devStartDate: string;
@@ -13,7 +14,7 @@ export type DataType = {
   jobDescription: string;
   selectedLang: any;
   selectlangNumber: any;
-  languages: any;
+  languages: Language[];
 }
 
 export default Vue.extend({ 
@@ -37,7 +38,7 @@ export default Vue.extend({
   },
   created() {
     // * 開発言語
-    axios.get(`${API_URL}/programing_language`)
+    axios.get<Language[]>(`${API_URL}/programing_language`)
     .then(response => {
       this.languages = response.data
     })

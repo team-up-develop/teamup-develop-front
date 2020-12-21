@@ -3,7 +3,7 @@ import Vue from 'vue';
 import Email from '@/components/Atoms/Forms/Email.vue'
 import Password from '@/components/Atoms/Forms/Password.vue'
 
-export type DataType = {
+type DataType = {
   LoginName: string;
   LoginPassword: string;
   loginErrorFlag: boolean;

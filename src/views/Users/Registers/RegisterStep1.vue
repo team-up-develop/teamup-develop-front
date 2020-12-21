@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import { RegisterSessionParams } from '@/types/user';
 
-export type DataType = {
+type DataType = {
   userName: string;
   nickName: string;
   userBirthday: string;

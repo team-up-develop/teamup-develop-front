@@ -28,9 +28,12 @@ export default Vue.extend({
     // * 管理案件を取得
     if(this.userId) {
       this.loginFlag = true
-      axios.get(`${API_URL}/job/?user_id=${this.userId}`)
+      axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${this.userId}`)
       .then(response => {
         this.manageJobs = response.data
+      })
+      .catch(error =>{
+        console.log(error)
       })
     }
     else {
