@@ -21,7 +21,7 @@ export type Job = {
   useMenter?: boolean;
   user: User;
   userId: number;
-}
+} | {};
 
 // * 案件作成時 session1 
 export interface JobCreateData {

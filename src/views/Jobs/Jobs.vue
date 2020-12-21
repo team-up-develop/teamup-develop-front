@@ -1,5 +1,4 @@
-<script>
-// import $ from 'jquery';
+<script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
 import { API_URL } from '@/master'
@@ -13,7 +12,35 @@ import LanguageSearchModal from '@/components/Organisms/Modals/Searches/Language
 import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
 import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
 import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
-import { timeChange } from '@/master';
+import { timeChange, truncate } from '@/master';
+import { Job } from '@/types/job';
+
+type DataType = {
+  jobs: Job[]; //? 案件一覧配列
+  jobsNullFlag: boolean; //? 案件が存在しない場合 表示のため
+  freeWord: string;
+  loading: boolean; 
+  jobDetail: any; //? 案件詳細 
+  detailFlag: boolean; //? 案件詳細を表示するためのフラグ
+  selfJobPost: boolean; //? 自分の案件かを判定
+  selfJob: any;  //FIXME: Any //? 自分の案件を格納する 
+  applyFlug: boolean; //?応募済みかの判定フラグ
+  id: number; //? clickした案件のIdを取得
+  modal: boolean; //?モーダルを開いてるか否か
+  saveFlag: boolean; //? 案件保存しているかを判定
+  limitationList: number;
+  userId: number;
+  entryRedirect: boolean; //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
+  langModal: boolean; //? 言語モーダル
+  frameworkModal: boolean; //? フレームワークモーダル
+  skillModal: boolean; //? その他スキルモーダル
+  buttonActive: boolean; //? 右側浮いてるボタン
+  page: number; //? 現在のページ
+  displayJobs: Job[]; //? 表示する案件
+  jobsPageSize: number; //? ページに表示する案件の数
+  paginationLength: number; //? ページネーション番号
+  scroll: any;
+}
 
 export default Vue.extend({ 
   components: {
@@ -28,7 +55,7 @@ export default Vue.extend({
     JobRightLogin,
     FavoriteBtn
   },
-  data() {
+  data(): DataType {
     return {
       jobs: [], //? 案件一覧配列
       jobsNullFlag: false, //? 案件が存在しない場合 表示のため
@@ -39,7 +66,7 @@ export default Vue.extend({
       selfJobPost: false, //? 自分の案件かを判定
       selfJob: null,  //? 自分の案件を格納する
       applyFlug: true, //?応募済みかの判定フラグ
-      id: Number, //? clickした案件のIdを取得
+      id: 0, //? clickした案件のIdを取得
       modal: false, //?モーダルを開いてるか否か
       saveFlag: true, //? 案件保存しているかを判定
       limitationList:1,
@@ -53,32 +80,20 @@ export default Vue.extend({
       displayJobs: [], //? 表示する案件
       jobsPageSize: 5, //? ページに表示する案件の数
       paginationLength: 0, //? ページネーション番号
+      scroll: null
     }
-  },
-  computed: {
-    //* 案件タイトル 詳細 文字制限
-    detailJobTitle: function () {
-      if(this.jobDetail) {
-        if(this.jobDetail.jobTitle.length > 60) {
-          return this.jobDetail.jobTitle.substring(0,60) + '...';
-        }
-        return this.jobDetail.jobTitle;
-      }
-
-      return "";
-    },
   },
   created() {
     // * 投稿一覧取得
-    const posts = [];
-    axios.get(`${API_URL}/job`)
+    const posts: Job[] = [];
+    axios.get<Job[]>(`${API_URL}/job`)
     .then(response => {
       setTimeout(() => {
         this.loading = false;
         this.jobs = response.data
         //* トップページから フリーワード 検索をした際の処理
         for(const i in response.data) {
-          const jobs = response.data[i];
+          const jobs: any = response.data[i]; //FIXME: any
           if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
             posts.push(jobs)
           }
@@ -88,17 +103,17 @@ export default Vue.extend({
 
         // * トップページから 開発言語 検索した際の処理
         if(this.$store.state.search.language.length == 0) {
-          console.log("language is []")
+          return 
         } else {
-          const arrayLanguagekNum = [];
-          const languageNum = this.$store.state.search.language;
+          const arrayLanguage: string[] = [];
+          const languageNum: number[] = this.$store.state.search.language;
           for(let s = 0; s < languageNum.length; s++) {
             const languageNumParams = languageNum[s]
             const queryParamsLanguage =  'programing_language_id' + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
-            arrayLanguagekNum.push(queryParamsLanguage)
+            arrayLanguage.push(queryParamsLanguage)
           }
-          const LastLanguageNum = arrayLanguagekNum.join('');
-          axios.get(`${API_URL}/job/?${LastLanguageNum}`)
+          const LastLanguageURL: string = arrayLanguage.join('');
+          axios.get<Job[]>(`${API_URL}/job/?${LastLanguageURL}`)
           .then(response => {
             this.jobs = response.data
             if(this.jobs.length == 0) {
@@ -114,17 +129,17 @@ export default Vue.extend({
         }
         // * トップページから フレームワーク 検索した際の処理
         if(this.$store.state.search.framwork.length == 0) {
-          console.log("framwork is []")
+          return
         } else {
-          const arrayFrameworkNum = [];
-          const framworkNum = this.$store.state.search.framwork;
+          const arrayFramework: string[] = [];
+          const framworkNum: number[] = this.$store.state.search.framwork;
           for(let k = 0; k < framworkNum.length; k++) {
             const framworkNumParams = framworkNum[k]
             const queryParams =  'programing_framework_id' + '[' + Number(framworkNumParams - 1) + ']' + '=' + framworkNumParams + '&';
-            arrayFrameworkNum.push(queryParams)
+            arrayFramework.push(queryParams)
           }
-          const LastFrameworkNum = arrayFrameworkNum.join('');
-          axios.get(`${API_URL}/job/?${LastFrameworkNum}`)
+          const LastFrameworkURL: string = arrayFramework.join('');
+          axios.get<Job[]>(`${API_URL}/job/?${LastFrameworkURL}`)
           .then(response => {
             this.jobs = response.data
             this.paginateJobs(this.jobs);
@@ -135,17 +150,17 @@ export default Vue.extend({
         }
         // * トップページから その他スキル 検索した際の処理
         if(this.$store.state.search.skill.length == 0) {
-          console.log("skill is []")
+          return
         } else {
-          const arraySkillNum = [];
-          const skillNum = this.$store.state.search.skill;
+          const arraySkill: string[] = [];
+          const skillNum: number[] = this.$store.state.search.skill;
           for(let l = 0; l < skillNum.length; l++) {
             const skillNumParams = skillNum[l]
             const queryParamsSkill = 'skill_id' + '[' + Number(skillNumParams - 1) + ']' + '=' + skillNumParams + '&';
-            arraySkillNum.push(queryParamsSkill)
+            arraySkill.push(queryParamsSkill)
           }
-          const LastSkillNum = arraySkillNum.join('');
-          axios.get(`${API_URL}/job/?${LastSkillNum}`)
+          const LastSkillURL: string = arraySkill.join('');
+          axios.get<Job[]>(`${API_URL}/job/?${LastSkillURL}`)
           .then(response => {
             this.jobs = response.data
             this.paginateJobs(this.jobs);
@@ -169,17 +184,20 @@ export default Vue.extend({
     }
   },
   methods: {
-    moment(value, format) {
+    moment(value: string, format: string) {
       return timeChange(value, format)
     },
+    limit(value: string, num: number) {
+      return truncate(value, num)
+    },
     // * ページネーション処理(検索)
-    paginateJobs(value) {
+    paginateJobs(value: Job[]) {
       this.jobs = value.slice().reverse();
       this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
       this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
     },
     // * 検索後の処理
-    searchJobPagenate(value) {
+    searchJobPagenate(value: Job[]) {
       this.jobs = value.slice().reverse();
       this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
       this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
@@ -199,7 +217,7 @@ export default Vue.extend({
       }, 1500)
     },
     // * ページネーション
-    pageChange(pageNumber) {
+    pageChange(pageNumber: number) {
       this.loading = true;
       setTimeout(() => {
         this.loading = false;
@@ -211,24 +229,24 @@ export default Vue.extend({
       this.$router.push('/register');
     },
     // * 言語検索 emit
-    compliteSearchLanguage(emitLanguage) {
+    compliteSearchLanguage(emitLanguage: Job[]) {
       this.searchJobPagenate(emitLanguage);
     },
     // * フレームワーク検索 emit
-    compliteSearchFramework(emitFramework) {
+    compliteSearchFramework(emitFramework: Job[]) {
       this.searchJobPagenate(emitFramework);
     },
     // * その他スキル検索 emit
-    compliteSearchSkill(emitSkill) {
+    compliteSearchSkill(emitSkill: Job[]) {
       this.searchJobPagenate(emitSkill);
     },
     // * フリーワード 検索
     searchFreeword() {
-      const posts = [];
+      const posts: Job[] = [];
       axios.get(`${API_URL}/job`)
       .then(response => {
         for(const i in response.data){
-          const jobs = response.data[i];
+          const jobs: any = response.data[i]; //FIXME: any
           if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
             posts.push(jobs)
           }
@@ -240,9 +258,12 @@ export default Vue.extend({
         this.jobs = posts;
         this.searchJobPagenate(this.jobs);
       })
+      .catch(error => {
+        console.log(error)
+      })
     },
     // * click して案件を取得 === 詳細
-    getJob(job) {
+    getJob(job: any) { // FIXME: any
       this.jobDetail = job; //? clickした案件を取得
       this.detailFlag = true; //? 詳細画面を表示するか否かを判定する
       this.id = job.id;  //? clickしたIdを this.idに格納する
@@ -251,7 +272,7 @@ export default Vue.extend({
       // * ログインしていれば以下の処理が走る
       if(this.userId) {
         // * 自分の案件かを判定
-        axios.get(`${API_URL}/job/?user_id=${ this.userId }`)
+        axios.get<Job[]>(`${API_URL}/job/?user_id=${ this.userId }`)
         .then(response => {
           for(let i = 0; i < response.data.length; i++) {
             this.selfJob = response.data[i]
@@ -260,24 +281,30 @@ export default Vue.extend({
             }
           }
         })
+        .catch(error => {
+          console.log(error)
+        })
         // * 応募済みか応募済みでないかを判断
-        axios.get(`${API_URL}/apply_job/?user_id=${ this.userId }`)
+        axios.get<Job[]>(`${API_URL}/apply_job/?user_id=${ this.userId }`)
         .then(response => {
-          const arrayApply = []
+          const arrayApply: number[] = []
           for(let c = 0; c < response.data.length; c++){
-            const applyData = response.data[c];
+            const applyData: any = response.data[c]; // FIXME: any
             arrayApply.push(applyData.job.id)
           }
           if(arrayApply.includes(this.jobDetail.id)) {
             this.applyFlug = false
           } 
         })
-          // * 保存済みか保存済みではないかを判定する
-        axios.get(`${API_URL}/favorite_job/?user_id=${ this.userId }`)
+        .catch(error => {
+          console.log(error)
+        })
+        // * 保存済みか保存済みではないかを判定する
+        axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${ this.userId }`)
         .then(response => {
-          const array = []
+          const array: number[] = []
           for(let i = 0; i < response.data.length; i++){
-            const likeData = response.data[i]
+            const likeData: any = response.data[i] //FIXME: any
             array.push(likeData.job.id)
           }
           if(array.includes(this.jobDetail.id)){
@@ -286,6 +313,9 @@ export default Vue.extend({
           else{
             this.saveFlag = true
           }
+        })
+        .catch(error => {
+          console.log(error)
         })
       } 
       // * 登録 or ログインしてない場合
@@ -311,7 +341,7 @@ export default Vue.extend({
     langSearchModal() {
       this.langModal = true;
     },
-    closeLangSearchModal(value) {
+    closeLangSearchModal(value: Job[] | undefined) {
       this.langModal = false;
     },
     frameworkSearchModal() {
@@ -334,7 +364,7 @@ export default Vue.extend({
       });
     },
     scrollWindow() {
-      const top = 100 // ? ボタンを表示させたい位置
+      const top: 100 = 100 // ? ボタンを表示させたい位置
       this.scroll = window.scrollY
       if (top <= this.scroll) {
         this.buttonActive = true
@@ -353,7 +383,7 @@ export default Vue.extend({
   <div class="job-wrapper">
     <transition name="button">
       <div class="scroll-area" v-show="buttonActive">
-        <a href="#"><font-awesome-icon icon="arrow-up" class="icon"/></a>
+        <a href="#"><v-icon class="icon">↑</v-icon></a>
       </div>
     </transition>
     <LanguageSearchModal 
@@ -454,7 +484,7 @@ export default Vue.extend({
       <div class="job-wrapper-right" v-if="detailFlag === true">
         <div class="top-job-detail-area">
           <div class="top-job-detail-area__title">
-            {{ detailJobTitle }}
+            {{ limit(jobDetail.jobTitle, 60) }}
           </div>
           <!-- ログイン時 -->
           <div v-if="entryRedirect == false">
@@ -702,6 +732,7 @@ export default Vue.extend({
       text-decoration: none;
 
       .icon {
+        font-weight: bold;
         color: #ffffff;
         margin-top: 0.7rem;
         font-size: 1.6em;

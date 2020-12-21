@@ -75,7 +75,7 @@ export default Vue.extend({
       .catch(error =>{
         console.log(error)
       })
-      axios.get<Job>(`${API_URL}/job/${this.id}`)
+      axios.get(`${API_URL}/job/${this.id}`)
       .then(response => {
         this.jobTitle = response.data.jobTitle
         this.clickJobId = response.data.id
