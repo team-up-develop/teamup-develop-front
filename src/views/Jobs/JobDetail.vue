@@ -68,7 +68,7 @@ export default Vue.extend({
       this.loginFlag = false;
     }
     // * 自分の案件かを判定
-    axios.get<Job[]>(`${API_URL}/job/?user_id=${this.userId}`)
+    axios.get(`${API_URL}/job/?user_id=${this.userId}`)
     .then(response => {
       for(let i = 0; i < response.data.length; i++){
         const selfJob = response.data[i]
