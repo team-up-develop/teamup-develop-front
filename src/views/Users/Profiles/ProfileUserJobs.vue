@@ -6,11 +6,12 @@ import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModa
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import { ManageJob } from '@/types/manage';
 import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
+import { User } from '@/types/user';
 // import Logout from '@/components/button/Logout'
 
-export type DataType = {
+type DataType = {
   myselfFlag: boolean;
-  userInfo: any;
+  userInfo: User;
   userId: number;
   modal: boolean;
   manageJobs: ManageJob[];
@@ -38,10 +39,16 @@ export default Vue.extend({
     .then(response => {
       this.manageJobs = response.data
     })
+    .catch(error => {
+      console.log(error)
+    })
     // * ユーザー情報取得
     axios.get(`${API_URL}/user/${this.id}`)
     .then(response => {
       this.userInfo = response.data;
+    })
+    .catch(error => {
+      console.log(error)
     })
   },
   methods: {

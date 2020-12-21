@@ -4,9 +4,10 @@ import { API_URL } from '@/master'
 import axios from 'axios'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
+import { Job } from '@/types/job';
 
-export type DataType = {
-  favoriteJobs: [];
+type DataType = {
+  favoriteJobs: Job[];
   loginFlag: boolean;
   userId: number;
 }
@@ -20,7 +21,6 @@ export default Vue.extend({
     return {
       favoriteJobs: [],
       loginFlag: false,
-      // loading: true
       userId: this.$store.state.auth.userId
     }
   },

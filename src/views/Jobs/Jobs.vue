@@ -3,7 +3,6 @@
 import Vue from 'vue';
 import axios from 'axios'
 import { API_URL } from '@/master'
-
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -380,34 +379,29 @@ export default Vue.extend({
 
 <template>
   <div class="job-wrapper">
-    <!-- 右側浮いてるボタン -->
     <transition name="button">
       <div class="scroll-area" v-show="buttonActive">
         <a href="#"><font-awesome-icon icon="arrow-up" class="icon"/></a>
       </div>
     </transition>
-    <!-- 言語検索 モーダル画面 -->
     <LanguageSearchModal 
       :jobsArray="jobs"
       @close="closeLangSearchModal"
       v-if="langModal"
       @compliteSearchLanguage="compliteSearchLanguage($event)"
     />
-    <!-- フレームワーク検索 モーダル画面 -->
     <FrameworkSearchModal 
       v-if="frameworkModal"
       @close="closeFrameworkSearchModal" 
       :jobsArray="jobs"
       @compliteSearchFramework="compliteSearchFramework($event)"
     />
-    <!-- その他スキル検索 モーダル画面 -->
     <SkillSearchModal 
       @close="closeSkillSearchModal" 
       v-if="skillModal"
       :jobsArray="jobs"
       @compliteSearchSkill="compliteSearchSkill($event)"
     />
-    <!-- 応募する モーダル画面 -->
     <div class="modal-window">
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>

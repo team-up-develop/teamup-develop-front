@@ -1,17 +1,18 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import axios from 'axios';
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 import { ParticipateParams, RejectParams } from '@/types/manage';
 import { ManageJob } from '@/types/manage';
-import { API_URL, truncate } from '@/master'
+import { User } from '@/types/user';
+import { m, API_URL, truncate } from '@/master'
 // import Logout from '@/components/button/Logout'
 
-export type DataType = {
+type DataType = {
   myselfFlag: boolean;
-  userInfo: {};
+  userInfo: User;
   jobTitle: string;
   userId: number;
   loading: boolean;
@@ -27,8 +28,8 @@ export default Vue.extend({
     CardJob
   },
   props: {
-    id: Number, //? 詳細を見るユーザーのID
-    jobId: Number
+    id: { type: Number as PropType<number>, default: 0 }, //? 詳細を見るユーザーのID
+    jobId: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -45,14 +46,14 @@ export default Vue.extend({
   computed: {
     // * 参加
     doneParticipate() { 
-      if(this.statusId == 2) {
+      if(this.statusId == m.APPLY_STATUS_PARTICIPATE) {
         return true
       }
       return false
     },
     // * 拒否
     doneReject() {
-      if(this.statusId == 3) {
+      if(this.statusId == m.APPLY_STATUS_REJECT) {
         return true
       }
       return false
@@ -75,6 +76,9 @@ export default Vue.extend({
         this.loading = false;
         this.statusId = response.data[0].applyStatusId
       }, 500)
+    })
+    .catch(error => {
+      console.log(error)
     });
 
     // *  案件タイトル取得
@@ -82,11 +86,17 @@ export default Vue.extend({
     .then(response => {
       this.jobTitle = response.data.jobTitle
     })
+    .catch(error => {
+      console.log(error)
+    })
 
     // *詳細を見ているユーザーの投稿案件
     axios.get(`${API_URL}/job/?user_id=${this.id}`)
     .then(response => {
       this.manageJobs = response.data
+    })
+    .catch(error => {
+      console.log(error)
     })
   },
   methods: {
@@ -98,11 +108,11 @@ export default Vue.extend({
       const params: ParticipateParams = {
         jobId: this.jobId,
         userId: this.id,
-        applyStatusId: 2
+        applyStatusId: m.APPLY_STATUS_PARTICIPATE
       };
       axios.put(`${API_URL}/apply_job/`, params)
       .then(response => {
-        this.statusId = 2;
+        this.statusId = m.APPLY_STATUS_PARTICIPATE;
         console.log(response.data)
       })
       .catch(error => {
@@ -114,12 +124,12 @@ export default Vue.extend({
       const params: RejectParams = {
         jobId: this.jobId,
         userId: this.id,
-        applyStatusId: 3
+        applyStatusId: m.APPLY_STATUS_REJECT
       };
       axios.put(`${API_URL}/apply_job/`, params)
       .then(response => {
         console.log(response.data)
-        this.statusId = 3;
+        this.statusId = m.APPLY_STATUS_REJECT;
       })
       .catch(error => {
         console.log(error)

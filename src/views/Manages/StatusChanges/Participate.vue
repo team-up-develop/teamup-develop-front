@@ -1,12 +1,12 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import axios from 'axios';
 import { ManageJob } from '@/types/manage';
 import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
 import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'
 import { m, API_URL } from '@/master'
 
-export type DataType = {
+type DataType = {
   assginUsers: ManageJob[];
   userId: number;
   jobTitle: string;
@@ -19,7 +19,7 @@ export default Vue.extend({
   },
   props: {
     // * job.idを受け取る
-    id: Number,
+    id: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {

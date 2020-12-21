@@ -1,5 +1,5 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -12,7 +12,7 @@ import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 // import GithubImage from '@/assets/github.png'
 import { Job } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   job: any; //TODO: Any
   userId: number;
   selfJobPost: boolean;
@@ -33,7 +33,7 @@ export default Vue.extend({
     DetailJob
   },
   props: {
-    id: Number,
+    id: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {

@@ -1,5 +1,5 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -12,7 +12,7 @@ import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import EditJobModal from '@/components/Organisms/Modals/Edit/EditJobModal.vue'
 import { Job } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   job: any; //TODO: Any
   userId: number;
   selfJobPost: boolean; //? 自分の案件かを判定
@@ -21,7 +21,6 @@ export type DataType = {
   applyFlug: boolean;
   modal: boolean;
   editModal: boolean;
-  // jobs: [],
 }
 export default Vue.extend({ 
   components: {
@@ -35,7 +34,7 @@ export default Vue.extend({
     EditJobModal
   },
   props: {
-    id: Number,
+    id: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -50,14 +49,16 @@ export default Vue.extend({
     }
   },
   mounted() {
-    console.log(this.userId)
     // * 詳細画面情報を取得
-    axios.get(`${API_URL}/job/${this.id}/`)
+    axios.get<Job>(`${API_URL}/job/${this.id}/`)
       .then(response => {
         setTimeout(() => {
           this.loading = false;
           this.job = response.data
         }, 1000)
+      })
+      .catch(error =>{
+        console.log(error)
       })
   },
   created() {
@@ -67,7 +68,7 @@ export default Vue.extend({
       this.loginFlag = false;
     }
     // * 自分の案件かを判定
-    axios.get(`${API_URL}/job/?user_id=${this.userId}`)
+    axios.get<Job[]>(`${API_URL}/job/?user_id=${this.userId}`)
     .then(response => {
       for(let i = 0; i < response.data.length; i++){
         const selfJob = response.data[i]
@@ -75,6 +76,9 @@ export default Vue.extend({
           this.selfJobPost = true
         }
       }
+    })
+    .catch(error =>{
+      console.log(error)
     })
     // * ログインユーザーが応募済みか応募済みではないかを判定する
     axios.get(`${API_URL}/apply_job/?user_id=${this.userId}`)
@@ -89,6 +93,9 @@ export default Vue.extend({
       } else {
         console.log("まだ応募していません")
       }
+    })
+    .catch(error =>{
+      console.log(error)
     })
   },
   methods: {

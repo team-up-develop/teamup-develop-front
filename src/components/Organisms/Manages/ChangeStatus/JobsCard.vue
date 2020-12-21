@@ -1,7 +1,8 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import axios from 'axios';
 import { m, API_URL, truncate } from '@/master'
+import { ManageJob } from '@/types/manage';
 
 type DataType = {
   applyNum: number;
@@ -11,8 +12,8 @@ type DataType = {
 
 export default Vue.extend({
   props: {
-    jobTitle: { type: String, default: "" },
-    jobId: { type: Number, default: 0 }
+    jobTitle: { type: String as PropType<string>, default: "" },
+    jobId: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -22,17 +23,26 @@ export default Vue.extend({
     }
   },
   created() {
-    axios.get(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
+    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
     .then(response => {
       this.applyNum = response.data.length
     })
-    axios.get(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
+    .catch(error =>{
+      console.log(error)
+    })
+    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
     .then(response => {
       this.rejectNum = response.data.length
     })
-    axios.get(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
+    .catch(error =>{
+      console.log(error)
+    })
+    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
     .then(response => {
       this.assginNum = response.data.length
+    })
+    .catch(error =>{
+      console.log(error)
     })
   },
   methods: {

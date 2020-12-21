@@ -4,14 +4,15 @@ import { API_URL } from '@/master'
 import axios, { AxiosResponse } from 'axios'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
+import { Language, Framework, Skill } from '@/types/index';
 
-export type DataType = {
+type DataType = {
   selectedLang: []; 
-  languages: {}[];
+  languages: Language[];
   selectedFramwork: [];
-  framworks: {}[];
+  framworks: Framework[];
   selectedSkill: [];
-  skills: {}[];
+  skills: Skill[];
 }
 
 export default Vue.extend({ 
@@ -30,19 +31,28 @@ export default Vue.extend({
   },
   mounted() {
     // *開発言語
-    axios.get<AxiosResponse[]>(`${API_URL}/programing_language`)
+    axios.get<Language[]>(`${API_URL}/programing_language`)
     .then(response => {
       this.languages = response.data
     })
+    .catch(error =>{
+      console.log(error)
+    })
     // * フレームワーク
-    axios.get<AxiosResponse[]>(`${API_URL}/programing_framework`)
+    axios.get<Framework[]>(`${API_URL}/programing_framework`)
     .then(response => {
       this.framworks = response.data
     })
+    .catch(error =>{
+      console.log(error)
+    })
     // * その他スキル
-    axios.get<AxiosResponse[]>(`${API_URL}/skill`)
+    axios.get<Skill[]>(`${API_URL}/skill`)
     .then(response => {
       this.skills = response.data
+    })
+    .catch(error =>{
+      console.log(error)
     })
   },
   methods: {

@@ -1,5 +1,5 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -11,7 +11,7 @@ import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import { Job } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   job: any; //TODO: Any
   userId: number;
   selfJobPost: boolean;
@@ -32,7 +32,7 @@ export default Vue.extend({
     DetailJob
   },
   props: {
-    id: Number,
+    id: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -57,7 +57,7 @@ export default Vue.extend({
   },
   mounted() {
     // * 詳細画面情報を取得
-    axios.get(`${API_URL}/job/${this.id}/`)
+    axios.get<Job>(`${API_URL}/job/${this.id}/`)
       .then(response => {
         setTimeout(() => {
           this.loading = false;

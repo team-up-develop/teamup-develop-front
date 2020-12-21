@@ -5,7 +5,7 @@ import axios from 'axios'
 import { Skill } from '@/types/index';
 import { Job } from '@/types/job';
 
-export type DateType = {
+type DateType = {
   skills: Skill[];
   selectedSkill: [];
   jobs: Job[];

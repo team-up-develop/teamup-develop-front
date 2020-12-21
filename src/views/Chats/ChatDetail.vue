@@ -2,17 +2,22 @@
 import Vue, { PropType } from 'vue';
 import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import { Message } from '@/types/chat'
+import { Message, messageParams } from '@/types/chat'
 import { Job } from '@/types/job';
-import { m, timeChange, API_URL, truncate } from '@/master'
+import {
+  m, 
+  timeChange,
+  API_URL, 
+  truncate 
+} from '@/master'
 
 type DataType = {
   chatGroups: Job[]; //? 今使ってない
-  chats: Message[] | [];
+  chats: Message[];
   chatMessage: string;
   chatMembers: []; //? 今使ってない
   myselfUser: {}; //? 今使ってない
-  postUser: null;
+  postUser: null; //? 今使ってない
   userId: number;
   isActive: boolean;
   hasError: boolean;
@@ -53,7 +58,7 @@ export default Vue.extend({
     let chatLength = 0;
     // * チャット詳細画面実装
     setInterval(() => {
-      axios.get(`${API_URL}/chat_message/?job_id=${this.id}`)
+      axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${this.id}`)
       .then(response => {
         this.loading = false;
         this.chats = response.data
@@ -67,10 +72,16 @@ export default Vue.extend({
           chatLog.scrollTop = chatLog.scrollHeight
         }
       })
-      axios.get(`${API_URL}/job/${this.id}`)
+      .catch(error =>{
+        console.log(error)
+      })
+      axios.get<Job>(`${API_URL}/job/${this.id}`)
       .then(response => {
         this.jobTitle = response.data.jobTitle
         this.clickJobId = response.data.id
+      })
+      .catch(error =>{
+        console.log(error)
       })
     }, 1000)
     // ! チャットのタイトルごとに案件参加者を取得できるようにする
@@ -98,6 +109,9 @@ export default Vue.extend({
         }
       }
     })
+    .catch(error =>{
+      console.log(error)
+    })
   },
   methods: {
     moment(value: string, format: string) {
@@ -108,10 +122,10 @@ export default Vue.extend({
     },
     // * メッセージの送信
     chatCreate() {
-      const params = {
-          message: this.chatMessage,
-          userID: this.userId,
-          jobID: this.id
+      const params: messageParams = {
+        message: this.chatMessage,
+        userID: this.userId,
+        jobID: this.id
       }
       // ? 空のメッセージは送信させない
       if(params.message == "") {
@@ -119,10 +133,9 @@ export default Vue.extend({
         return
       }
       // ? 投稿
-      axios.post(`${API_URL}/chat_message`, params)
+      axios.post<messageParams>(`${API_URL}/chat_message`, params)
       .then(response => {
-        console.log(response.data)
-        axios.get(`${API_URL}/chat_message/?job_id=${this.id}`)
+        axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${this.id}`)
         .then(response => {
           this.chats = response.data
           // ! Postされた内容がDOMに反映される前にスクロールされるため、最新投稿までスクロールされていない
@@ -131,6 +144,12 @@ export default Vue.extend({
           if (!chatLog) return 
           chatLog.scrollTop = chatLog.scrollHeight
         })
+        .catch(error =>{
+          console.log(error)
+        })
+      })
+      .catch(error =>{
+        console.log(error)
       })
       this.chatMessage = "";
     },
