@@ -100,7 +100,7 @@ export default Vue.extend({
       const array = [];
       for(let i = 0; i < response.data.length; i++){
         const applyData = response.data[i]
-        if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || m.APPLY_STATUS_SELF ){
+        if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ){
           array.push(applyData)
           this.chatGroups = array
         }
@@ -313,13 +313,14 @@ export default Vue.extend({
             padding: 0rem 0 0.5rem 1rem;
             position: absolute;
             bottom: 0;
+            height: 30px;
             width: 100%;
 
             .selfPost {
               @include box-shadow-btn;
               background-color: $third-dark;
               color: $white;
-              padding: 0.25rem 1.5rem;
+              padding: 0.2rem 1.5rem;
               width: 102px;
               font-weight: bold;
               font-size: 0.8em;
@@ -334,7 +335,7 @@ export default Vue.extend({
               border: $third-dark 1px solid;
               color: $third-dark;
               background-color: $white;
-              padding: 0.25rem 1.5rem;
+              padding: 0.2rem 1.5rem;
               width: 102px;
               font-weight: bold;
               font-size: 0.8em;
