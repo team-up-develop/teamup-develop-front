@@ -6,6 +6,7 @@ import Jobs from '@/views/Jobs/Jobs.vue'
 import JobDetail from '@/views/Jobs/JobDetail.vue'
 import JobCreate from '@/views/Jobs/JobCreate.vue'
 import JobCreateSkill from '@/views/Jobs/JobCreateSkill.vue'
+import JobCreateComplete from '@/views/Jobs/JobCreateComplete.vue'
 import ProfileUser from '@/views/Users/Profiles/ProfileUser.vue'
 import ProfileUserJobs from '@/views/Users/Profiles/ProfileUserJobs.vue'
 import ManageUserProfile from '@/views/Users/Manages/ManageUserProfile.vue'
@@ -69,6 +70,11 @@ const routes: Array<RouteConfig> = [
     path: '/job_create/2',
     name: 'JobCreateSkill',
     component: JobCreateSkill
+  },
+  {
+    path: '/job_create/3',
+    name: 'JobCreateComplete',
+    component: JobCreateComplete
   },
   // * ユーザー
   {
