@@ -10,7 +10,7 @@ export type Job = {
   devStartDate: Date;
   id: number;
   jobDescription: string | null;
-  jobStatusId: 1;
+  jobStatusId: number; //TODO: あってる？
   jobTitle: string;
   programingFramework: Framework[];
   programingLanguage: Language[];
