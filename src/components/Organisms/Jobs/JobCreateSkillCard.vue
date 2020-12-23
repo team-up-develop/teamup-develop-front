@@ -216,18 +216,21 @@ export default Vue.extend({
           </v-row>
         </div>
       </section>
-      <div class="btn-are">
-          <button @click="createJob" class="post-job-btn" v-if="isForm">
+      <br />
+      <br />
+      <br />
+      <div class="btn-area">
+        <button @click="createJob" class="post-job-btn" v-if="isForm">
+          案件投稿する
+        </button>
+        <v-tooltip bottom v-else>
+        <template v-slot:activator="{ on, attrs }">
+          <button class="next-btn-false" v-on="on" v-bind="attrs">
             案件投稿する
           </button>
-          <v-tooltip bottom v-else>
-          <template v-slot:activator="{ on, attrs }">
-            <button class="next-btn-false" v-on="on" v-bind="attrs">
-              案件投稿する
-            </button>
-          </template>
-          <span>必須項目が入力されていません</span>
-          </v-tooltip>
+        </template>
+        <span>必須項目が入力されていません</span>
+        </v-tooltip>
         <router-link to='/job_create/1' class="post-job-back">
           戻る 1/2
         </router-link>
@@ -288,7 +291,7 @@ export default Vue.extend({
   margin-left: 0.5rem;
 }
 
-.btn-are {
+.btn-area {
   .post-job-btn {
     @include box-shadow-btn;
     @include blue-btn;
@@ -361,7 +364,7 @@ export default Vue.extend({
 
 /* スマホ */
 @media (max-width: 500px){
-  .btn-are {
+  .btn-area {
     display: flex;
     flex-direction: column;
 

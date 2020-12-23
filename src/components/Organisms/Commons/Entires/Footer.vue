@@ -15,11 +15,12 @@
   <v-footer
     dark
     padless
+    class="mt-12"
   >
     <v-card
       flat
       tile
-      class="blue lighten-2 white--text text-center"
+      class="grey darken-1 white--text text-center"
     >
       <v-card-text>
         <v-btn
@@ -48,9 +49,4 @@
 </template>
 <style lang="scss" scoped>
 
-.footer-wrapper {
-  width: 100%;
-  height: 260px;
-  background-color: #f5f5f5;
-}
 </style>
