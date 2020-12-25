@@ -3,7 +3,9 @@ import App from './App.vue'
 import router from './router'
 import store from './store'
 import 'normalize.css'
+import VueCompositionApi from '@vue/composition-api';
 import { library } from '@fortawesome/fontawesome-svg-core'
+// FIXME: FontAwesome Package削除
 import 
   { 
     faLaptop,
@@ -31,7 +33,7 @@ import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome'
 import vuetify from './plugins/vuetify';
 
 Vue.config.productionTip = false
-
+Vue.use(VueCompositionApi);
 Vue.component('font-awesome-icon', FontAwesomeIcon)
 
 new Vue({
