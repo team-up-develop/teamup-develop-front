@@ -293,7 +293,7 @@ export default Vue.extend({
 
 .btn-area {
   .post-job-btn {
-    @include box-shadow-btn;
+    @include neumorphism;
     @include blue-btn;
     width: 191px;
     color: $white;
@@ -311,12 +311,6 @@ export default Vue.extend({
     font-size: 1rem;
     float: right;
     cursor: pointer;
-    transition: .3s;
-    outline: none;
-
-    &:hover {
-      @include btn-hover;
-    }
   }
 
   .next-btn-false {
@@ -342,7 +336,9 @@ export default Vue.extend({
   }
 
   .post-job-back {
-    @include blue-cancel-btn;
+    @include neumorphismGrey;
+    color: $primary-color;
+    font-weight: 600;
     width: 191px;
     text-align: left;
     display: block;

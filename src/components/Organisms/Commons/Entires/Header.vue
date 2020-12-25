@@ -51,7 +51,7 @@ export default Vue.extend({
               <v-list-item-group
                 color="primary"
               >
-                <v-list>
+                <v-list style="z-index: 100;">
                   <v-list-item>
                     <router-link to="/account/profile/1" class="menu-list"><v-list-item-title>
                       <v-icon class="icon">mdi-card-account-details-outline</v-icon>
@@ -152,7 +152,6 @@ export default Vue.extend({
 
       .header-main-right {
         width: 300px;
-        // background-color: grey;
         padding: 0.7rem 4rem 0 0 ;
         position: absolute; 
         right: 0;
@@ -171,7 +170,6 @@ export default Vue.extend({
           height: 100%;
           margin: 0;
           display: inline-block;
-          // background-color: green;
 
           .user-image {
             @include user-image;

@@ -191,7 +191,7 @@ section {
 
 .btn-area {
   .next-btn {
-    @include box-shadow-btn;
+    @include neumorphism;
     @include blue-btn;
     color: $white;
     text-align: left;
@@ -208,12 +208,7 @@ section {
     font-size: 1rem;
     float: right;
     cursor: pointer;
-    transition: .3s;
     outline: none;
-
-    &:hover {
-      @include box-shadow-btn;
-    }
   }
 
   .next-btn-false {

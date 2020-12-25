@@ -209,10 +209,9 @@ export default Vue.extend({
   left :0;
   font-size: 1em;
 
-  // * モーダル内のキャンセルボタン 
   .serach-btn {
     @include blue-btn;
-    @include box-shadow-btn;
+    @include neumorphism;
     color: $white;
     padding: 1rem 3.4rem;
     border-radius: 50px;

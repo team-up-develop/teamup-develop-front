@@ -2,21 +2,58 @@
 $dark-white: #EFEFEF;
 $white: #ffffff;
 $light-grey: #f5f5f5;
+$dark-grey: #BDBDBD;
 $primary-dark: #113bc8;
 $primary-color: #2196F3;
 $primary-light: #64B5F6;
-$secondary-dark: #4527A0;
+$secondary-dark: #673AB7;
 $secondary-color: #651FFF;
 $secondary-light: #9575CD;
 $third-dark: #0097A7;
 $third-color: #00BCD4;
 $third-light: #80DEEA;
+$red: #D81B60;
 // ? テキスト
 $text-main-color: #111111;
 $text-sub-color: #666666;
 // ? その他
 $error-message-color: #f44336;
 $modal-background: rgba(0, 0, 0, 0.637);
+
+// * ニューモフィズムボタン
+@mixin neumorphism {
+  outline: none;
+  text-decoration: none;
+  border: 0;
+  box-shadow: -5px -5px 20px $white,  5px 5px 20px rgba(0, 0, 0, 0.419);
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  font-weight: 600;
+  &:hover {
+    box-shadow: -2px -2px 5px $white, 2px 2px 5px rgba(0,0,0,0.26),;
+  }
+  &:active {
+    box-shadow: inset 1px 1px 3px rgba(2, 2, 2, 0.603), inset -1px -1px 2px $white;
+  }
+}
+
+@mixin neumorphismGrey {
+  outline: none;
+  text-decoration: none;
+  border: 0;
+  background-color:#EBECF0;
+  text-shadow: 1px 1px 0 $white;
+  box-shadow: -5px -5px 20px $white,  5px 5px 20px #BABECC;
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  font-weight: 600;
+  &:hover {
+    box-shadow: -2px -2px 5px $white, 2px 2px 5px #BABECC;
+  }
+  &:active {
+    box-shadow: inset 1px 1px 2px #BABECC, inset -1px -1px 2px $white;
+  }
+}
 
 // * ユーザー画像
 @mixin user-image {
@@ -91,6 +128,11 @@ $primary-border-color: #2196F3;
 
 
 // * ホバー
+// タブ
+@mixin tab-hover {
+  background-color: $dark-grey;
+  transition: .3s;
+}
 // ? フォーム
 @mixin form-hover {
   @include primary-border_color;

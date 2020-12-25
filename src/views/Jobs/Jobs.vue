@@ -57,29 +57,29 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      jobs: [], //? 案件一覧配列
-      jobsNullFlag: false, //? 案件が存在しない場合 表示のため
-      freeWord: this.$store.state.search.freeWord, 
-      loading: true, 
-      jobDetail: null, //? 案件詳細 
-      detailFlag: false, //? 案件詳細を表示するためのフラグ
-      selfJobPost: false, //? 自分の案件かを判定
-      selfJob: null,  //? 自分の案件を格納する
-      applyFlug: true, //?応募済みかの判定フラグ
-      id: 0, //? clickした案件のIdを取得
-      modal: false, //?モーダルを開いてるか否か
-      saveFlag: true, //? 案件保存しているかを判定
+      jobs: [], 
+      jobsNullFlag: false,
+      freeWord: this.$store.state.search.freeWord,
+      loading: true,
+      jobDetail: null,
+      detailFlag: false,
+      selfJobPost: false,
+      selfJob: null,
+      applyFlug: true,
+      id: 0,
+      modal: false,
+      saveFlag: true,
       limitationList:1,
       userId: this.$store.state.auth.userId, 
-      entryRedirect: false, //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
-      langModal: false, //? 言語モーダル
-      frameworkModal: false, //? フレームワークモーダル
-      skillModal: false, //? その他スキルモーダル
-      buttonActive: false, //? 右側浮いてるボタン
-      page: 1, //? 現在のページ
-      displayJobs: [], //? 表示する案件
-      jobsPageSize: 5, //? ページに表示する案件の数
-      paginationLength: 0, //? ページネーション番号
+      entryRedirect: false,
+      langModal: false,
+      frameworkModal: false,
+      skillModal: false,
+      buttonActive: false,
+      page: 1,
+      displayJobs: [],
+      jobsPageSize: 8,
+      paginationLength: 0,
       scroll: null
     }
   },
@@ -771,9 +771,7 @@ export default Vue.extend({
     position: relative;
 
     .router :hover {
-      background-color: #2195f30a;
-      border: 1px solid $primary-color;
-      box-shadow: 0 15px 30px -5px #2195f32d, 0 0 5px #2195f357;
+      box-shadow: 0 15px 30px -5px #0000002d, 0 0 5px #0000002d;
       transform: translateY(-2px);
       cursor: pointer;
     }
@@ -925,12 +923,11 @@ export default Vue.extend({
 
 // * 管理画面遷移ボタン
 .btn-box-manage {
-  @include blue-btn;
-  @include box-shadow-btn;
+  @include neumorphismGrey;
   padding: 0.75rem 3rem;
   border-radius: 8px;
   font-weight: 600;
-  color: #fff;
+  color: $primary-color;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -940,7 +937,6 @@ export default Vue.extend({
   cursor: pointer;
   border: none;
   margin-top: 4px;
-  color: #F8FAFF;
   appearance: none;
   border: none;
   outline: none;
@@ -949,11 +945,11 @@ export default Vue.extend({
 // * 応募するボタン 
 .btn-box-apply {
   @include red-btn;
-  @include box-shadow-btn;
+  @include neumorphism;
   padding: 0.75rem 3rem;
   border-radius: 8px;
   font-weight: 600;
-  color: #fff;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;
@@ -967,10 +963,6 @@ export default Vue.extend({
   border: none;
   transition: .3s;
   outline: none;
-
-  &:hover {
-    @include red-btn-hover;
-  }
 }
 
 // * 応募済みボタン 
@@ -992,8 +984,8 @@ export default Vue.extend({
 
 // * モーダル内のキャンセルボタン 
 .modal-btn {
-  @include red-cancel-btn;
-  @include box-shadow-btn;
+  @include neumorphismGrey;
+  color: $red;
   padding: 1rem 2.4rem;
   border-radius: 50px;
   font-weight: 600;
@@ -1218,7 +1210,7 @@ label.checkbox {
   }
 
   .job-wrapper .job-wrapper-center {
-    width: 95%;
+    width: 98%;
   }
 
   .search-area {

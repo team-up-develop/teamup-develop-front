@@ -250,7 +250,7 @@ export default Vue.extend({
 //* 応募するボタン 
 .btn-box-apply {
   @include red-btn;
-  @include box-shadow-btn;
+  @include neumorphism;
   color: $white;
   position: absolute;
   left: 0;
@@ -267,10 +267,6 @@ export default Vue.extend({
   display: inline-block;
   cursor: pointer;
   border: none;
-
-  &:hover {
-    @include red-btn-hover;
-  }
 }
 
 //* 応募済みボタン */
@@ -291,7 +287,6 @@ export default Vue.extend({
   margin: auto;
   font-size: 1.3rem;
   display: inline-block;
-  cursor: pointer;
   border: none;
 }
 
@@ -343,8 +338,8 @@ export default Vue.extend({
 
 // * モーダル内のキャンセルボタン 
 .modal-btn {
-  @include red-cancel-btn;
-  @include box-shadow-btn;
+  @include neumorphismGrey;
+  color: $red;
   padding: 1rem 2.4rem;
   border-radius: 50px;
   font-weight: 600;

@@ -131,7 +131,7 @@ export default Vue.extend({
     right: 0;
 
     .edit-btn {
-      @include box-shadow-btn;
+      @include neumorphism;
       background-color: $secondary-color;
       color: $white;
       padding: 0.5rem 1rem;

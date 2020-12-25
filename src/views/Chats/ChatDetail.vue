@@ -387,7 +387,6 @@ export default Vue.extend({
 
         header {
           background-color: $white;
-          z-index: 10;
           position: -webkit-sticky;
           position: sticky;
           top: 0;
@@ -432,7 +431,7 @@ export default Vue.extend({
         }
 
         .send {
-          @include box-shadow-btn;
+          @include neumorphism;
           @include blue-btn;
           color: $white;
           padding: 1rem 1rem;

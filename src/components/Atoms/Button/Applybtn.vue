@@ -75,7 +75,7 @@ export default Vue.extend({
 }
 
 .btn-apply {
-  @include box-shadow-btn ;
+  @include neumorphism ;
   @include red-btn ;
   display: block;
   padding: 1rem 3rem;
@@ -90,9 +90,5 @@ export default Vue.extend({
   display: inline-block;
   cursor: pointer;
   outline: none;
-}
-
-.btn-box-apply :hover {
-  font-size: 100px;
 }
 </style>
