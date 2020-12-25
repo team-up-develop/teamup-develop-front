@@ -74,7 +74,7 @@ const routes: Array<RouteConfig> = [
   {
     path: '/job_create/3',
     name: 'JobCreateComplete',
-    component: JobCreateComplete
+    component: JobCreateComplete,
   },
   // * ユーザー
   {

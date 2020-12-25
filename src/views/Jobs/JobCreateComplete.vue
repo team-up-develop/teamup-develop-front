@@ -8,7 +8,7 @@ type DataType = {
   loading: boolean;
 }
 
-export default Vue.extend({ 
+export default Vue.extend({
   components: {
     Loading,
     UserCard,

@@ -6,7 +6,7 @@ import JobDescriptionInput from '@/components/Atoms/Forms/JobDescriptionInput.vu
 import Session from '@/components/Atoms/Commons/Session.vue'
 import { JobCreateData } from '@/types/job';
 
-type DataType = {
+export type JobCreateSession1 = {
   jobTitle: string | null;
   jobDescription: string | null;
   devStartDate: string | null;
@@ -20,7 +20,7 @@ export default Vue.extend({
     JobDescriptionInput,
     Session
   },
-  data(): DataType {
+  data(): JobCreateSession1 {
     return {
       jobTitle: "",
       devStartDate: "",
@@ -54,8 +54,8 @@ export default Vue.extend({
     // * セッションストレージの値をフォームに格納する
     const jobTitle = sessionStorage.getItem('jobTitle');
     const jobDescription = sessionStorage.getItem('jobDescription');
-    const devStartDateString = sessionStorage.getItem('devStartDateString');
-    const devEndDateString = sessionStorage.getItem('devEndDateString');
+    const devStartDateString = sessionStorage.getItem('devStartDate');
+    const devEndDateString = sessionStorage.getItem('devEndDate');
     this.jobTitle = jobTitle;
     this.devStartDate = devStartDateString;
     this.devEndDate = devEndDateString;
@@ -70,25 +70,18 @@ export default Vue.extend({
           devStartDate: this.devStartDate, //? 開発開始
           devEndDate: this.devEndDate, //? 開発終了
         };
-        if(params.jobTitle == null) {
-          return null
-        } else {
+        console.log(params)
+        if(params.jobTitle) {
           sessionStorage.setItem('jobTitle', params.jobTitle);
-        }
-        if(params.jobDescription == null) {
-          return null
-        } else {
+        } 
+        if(params.jobDescription) {
           sessionStorage.setItem('jobDescription', params.jobDescription);
         }
-        if(params.devStartDate == null) {
-          return null
-        } else {
-          sessionStorage.setItem('devStartDateString', params.devStartDate);
+        if(params.devStartDate) {
+          sessionStorage.setItem('devStartDate', params.devStartDate);
         }
-        if(params.devEndDate == null) {
-          return null
-        } else {
-          sessionStorage.setItem('devEndDateString', params.devEndDate);
+        if(params.devEndDate) {
+          sessionStorage.setItem('devEndDate', params.devEndDate);
         }
       }
     }

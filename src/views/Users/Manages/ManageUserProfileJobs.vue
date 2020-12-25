@@ -262,6 +262,10 @@ export default Vue.extend({
     width: 80%;
     margin: 0 auto;
 
+    @media screen and (max-width: 480px) {
+      width: 98%;
+    }
+
     &__card {
       margin-left: 1rem;
       width: 500px;
