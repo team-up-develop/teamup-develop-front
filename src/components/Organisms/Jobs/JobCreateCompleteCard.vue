@@ -20,7 +20,7 @@ export default Vue.extend({
         </div>
         <div class="text">
           <p><span>案件投稿が完了しました</span></p>
-          <p>案件は複数作成することで応募者が多く集まります！</p>
+          <p>案件は複数作成することで応募者が多く集まりやすくなります。</p>
           <p>勉強したい技術や、やってみたい技術をどんどん投稿してみよう！</p>
         </div>
         <div class="btn-area">
@@ -69,10 +69,27 @@ export default Vue.extend({
   margin: 2.5rem 0 0 0;
 
   .create-link {
-    @include box-shadow-btn;
     @include blue-btn;
-    width: 191px;
+    @include neumorphism;
     color: $white;
+    width: 191px;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 1rem;
+    border-radius: 8px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: right;
+  }
+
+  .manage-link {
+    @include neumorphismGrey;
+    width: 191px;
+    color: $primary-color;
     width: 191px;
     text-align: left;
     display: block;
@@ -86,27 +103,6 @@ export default Vue.extend({
     margin: auto;
     font-size: 1rem;
     float: left;
-    transition: .3s;
-    outline: none;
-    text-decoration: none;
-  }
-
-  .manage-link {
-    @include blue-cancel-btn;
-    width: 191px;
-    text-align: left;
-    display: block;
-    padding: 1.1rem 1rem;
-    border-radius: 8px;
-    font-size: .875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    float: right;
-    cursor: pointer;
     transition: .3s;
     outline: none;
     text-decoration: none;

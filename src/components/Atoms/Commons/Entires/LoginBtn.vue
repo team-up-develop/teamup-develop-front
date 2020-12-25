@@ -11,8 +11,8 @@
 @import '@/assets/scss/_variables.scss';
 
 .login-btn {
-  @include blue-cancel-btn;
-  background-color: $white;
+  @include neumorphism;
+  color: $primary-color;
   font-weight: bold;
 }
 </style>

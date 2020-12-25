@@ -115,7 +115,7 @@ section {
   text-decoration: none;
 
   span {
-    color: $secondary-color;
+    color: $primary-color;
   }
 }
 
@@ -138,13 +138,13 @@ section {
 
     //* ログインタイトル
     .login-title {
-      color: $secondary-color;
+      color: $primary-color;
       font-size: 1.8rem;  
       font-weight: bold;
       height: 50px;
       margin-top: 1rem;
       width: 100%;
-      border-bottom: solid 3px $secondary-color;
+      border-bottom: solid 3px $primary-color;
     }
 
     // * メールフォーム
@@ -186,7 +186,8 @@ section {
       // background-color: #B9B9B9;
 
       .login-btn {
-        @include purple-btn;
+        @include blue-btn;
+        @include neumorphism;
         color: $white;
         display: block;
         width: 100%;

@@ -124,7 +124,10 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
+      border-bottom: $dark-grey 1px solid;
+    }
+    .router-link:hover {
+      @include tab-hover;
     }
 
     .router-link-active-click {
@@ -133,8 +136,8 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
-      background-color: silver;
+      border-bottom: $dark-grey 1px solid;
+      background-color: $dark-grey;
     }
   }
 }

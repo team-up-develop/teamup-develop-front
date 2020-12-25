@@ -6,7 +6,7 @@ import { Job } from '@/types/job';
 
 export default Vue.extend({ 
   props: {
-    job: {}
+    job: { type: Object }
   },
   methods: {
     limit(value: string, num: number) {
@@ -56,6 +56,7 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
+
 .job-cards {
   width: 97%;
   margin: 10px 0.5%;
@@ -65,32 +66,58 @@ export default Vue.extend({
   transition: .3s;
   color: $text-main-color;
   cursor: pointer;
-  // min-height: 292px; //? 最低限の高さ Card
+
+  @media screen and (max-width: 999px) {
+    width: 100%;
+  }
 
   &__top {
-    min-height: 86px; //? テスト
+    min-height: 86px;
     text-align: left;
     padding: 2rem 2rem 0 1.5rem;
     font-weight: bold;
     pointer-events: none;
     font-size: 18px;
     text-decoration: underline;
+
+    @media screen and (max-width: 420px) {
+      padding: 2rem 0.5rem 0rem 1.5rem;
+      min-height: none;
+    }
+
     p {
       display: none;
+
+      @media screen and (max-width: 420px) {
+        display: block;
+      }
+    }
+    @media screen and (max-width: 420px) {
+      span {
+        display: none;
+      }
     }
   }
 
   &__center {
-    min-height: 88px; //? テスト
+    min-height: 88px;
     padding: 10px 1.5rem 0 1.5rem;
     text-align: left;
     pointer-events: none;
+
+    @media screen and (max-width: 420px) {
+      padding: 0 0.5rem 0 1.1rem;
+    }
   }
 
   &__bottom {
     padding: 1rem 0px 1.5rem 0 ;
     pointer-events: none;
     margin-top: 0.2rem;
+
+    @media screen and (max-width: 420px) {
+      padding: 0.5rem 0px 1.1rem 0 ;
+    }
 
     .product-start-end {
       padding: 0rem 0px 0 2rem;
@@ -99,10 +126,18 @@ export default Vue.extend({
       text-align: left;
       pointer-events: none;
 
+      @media screen and (max-width: 420px) {
+        padding: 0rem 0px 0 1.1rem;
+      }
+
       .product-start-end-tag {
         display: inline-block;
         pointer-events: none;
         font-size: 14px;
+
+        @media screen and (max-width: 420px) {
+          display: none;
+        }
       }
 
       .product-start-end-time {
@@ -159,90 +194,4 @@ export default Vue.extend({
   }
 }
 
-@media screen and (max-width: 999px) {
-  .job-cards {
-    width: 100%;
-  }
-}
-
-@media screen and (max-width: 500px) {
-
-  .job-cards-top-responsive {
-    width: 95%;
-    height: calc(30% - 60px);
-    text-align: left;
-    padding: 2rem 1rem 1rem 1rem;
-    font-weight: bold;
-    pointer-events: none;
-    font-size: 18px;
-    text-decoration: underline;
-    display: block;
-  }
-  .job-cards 
-  .job-cards-bottom 
-  .product-start-end 
-  .product-start-end-tag {
-    display: none;
-  }
-  .job-cards 
-  .job-cards-bottom 
-  .product-start-end 
-  .product-start-end-time {
-    padding: 0;
-  }
-
-  .job-cards-center {
-    padding: 10px 1rem 0 1rem;
-  }
-
-  .job-cards__bottom {
-    padding: 10px 1rem;
-
-    .product-start-end {
-      padding: 0 0 0 0.5rem;
-
-      .product-start-end-time {
-        padding: 0 10px;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .job-cards {
-    &__top {
-      font-size: 16px;
-      padding: 1.5rem 0.8rem 0 0.8rem;
-
-      span {
-        display: none;
-      }
-      
-      p {
-        display: block;
-      }
-    }
-  }
-
-  .job-cards  {
-    &__center {
-      height: 30%;
-      padding: 0rem 0.5rem;
-    }
-  }
-
-  .job-cards  {
-    &__bottom {
-      padding: 0.5rem 0 0.5rem 0;
-
-      .post-user-area {
-        padding: 0.5rem 0px 0.5rem 1rem;
-      }
-
-      .product-start-end .product-start-end-tag {
-        display: none;
-      }
-    }
-  }
-}
 </style>

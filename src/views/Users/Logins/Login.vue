@@ -162,8 +162,9 @@ section {
       // background-color: #B9B9B9;
 
       .login-btn {
-        @include blue-btn;
-        color: $white;
+        // @include blue-btn;
+        @include neumorphismGrey;
+        color: $primary-color;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
