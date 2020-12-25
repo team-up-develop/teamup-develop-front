@@ -1,34 +1,52 @@
 <script lang="ts">
 import Vue from 'vue';
-import JobCreateCard from '@/components/Organisms/Jobs/JobCreateCard.vue'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
+import JobCreateCompleteCard from '@/components/Organisms/Jobs/JobCreateCompleteCard.vue'
 
+type DataType = {
+  loading: boolean;
+}
 
 export default Vue.extend({ 
   components: {
-    JobCreateCard,
+    Loading,
     UserCard,
+    JobCreateCompleteCard
+  },
+  data(): DataType {
+    return {
+      loading: true,
+    }
+  },
+  mounted() {
+    setTimeout(() => {
+      this.loading = false;
+    }, 1500)
   },
 });
 </script>
 
 <template>
   <section>
-    <v-container class="wrapper">
+    <v-container class="wrapper" v-show="!loading">
       <v-row>
         <UserCard />
         <v-sheet class="create">
           <v-col>
-            <JobCreateCard />
+            <JobCreateCompleteCard />
           </v-col>
         </v-sheet>
       </v-row>
     </v-container>
+    <Loading v-show="loading">
+    </Loading>
   </section>
 </template>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
+
 
 .wrapper {
   width: 90%;
@@ -73,3 +91,5 @@ export default Vue.extend({
   text-decoration: none;
 }
 </style>
+
+

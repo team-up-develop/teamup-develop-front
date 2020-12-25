@@ -1,16 +1,17 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
-import { FavoriteParams } from '@/types/job';
+import { FavoriteParams, Job } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   userId: number;
   flag: boolean;
 }
 
 export default Vue.extend({
   props: {
-    jobId: Number
+    jobId: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -20,7 +21,7 @@ export default Vue.extend({
   },
   mounted() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
-    axios.get(`http://localhost:8888/api/v1/favorite_job/?user_id=${this.userId}`)
+    axios.get(`${API_URL}/favorite_job/?user_id=${this.userId}`)
     .then(response => {
       const array = []
       for(let i = 0; i < response.data.length; i++){
@@ -42,10 +43,10 @@ export default Vue.extend({
         jobId: this.jobId, 
         userId: this.userId
       };
-      axios.post('http://localhost:8888/api/v1/favorite_job/', params)
+      axios.post<FavoriteParams>(`${API_URL}/favorite_job/`, params)
       .then(response => {
         this.flag = false
-        console.log(response)
+        return response.data
       })
       .catch(error => {
         console.log(error)
@@ -57,10 +58,10 @@ export default Vue.extend({
         jobId: this.jobId,
         userId: this.userId
       };
-      axios.delete('http://localhost:8888/api/v1/favorite_job/', {data: params })
+      axios.delete<FavoriteParams>(`${API_URL}/favorite_job/`, {data: params })
       .then(response => {
         this.flag = true
-        console.log(response.data)
+        return response.data
       })
       .catch(error => {
         console.log(error)

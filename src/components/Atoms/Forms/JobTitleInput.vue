@@ -57,5 +57,6 @@ input[type='text'] {
 #rem {
   color: #7c7c7c;
   margin-top: 2px;
+  font-size: 12px;
 }
 </style>

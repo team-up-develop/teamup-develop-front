@@ -1,11 +1,13 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
+import { Job } from '@/types/job';
 
-export type DataType = {
-  favoriteJobs: [];
+type DataType = {
+  favoriteJobs: Job[];
   loginFlag: boolean;
   userId: number;
 }
@@ -19,7 +21,6 @@ export default Vue.extend({
     return {
       favoriteJobs: [],
       loginFlag: false,
-      // loading: true
       userId: this.$store.state.auth.userId
     }
   },
@@ -27,7 +28,7 @@ export default Vue.extend({
     // * 保存している案件を取得
     if(this.userId) {
       this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/favorite_job/?user_id=${this.userId}`)
+      axios.get(`${API_URL}/favorite_job/?user_id=${this.userId}`)
       .then(response => {
         this.favoriteJobs = response.data
       })

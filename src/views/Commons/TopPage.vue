@@ -1,5 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 // import TopPageRecommendJobCard from '@/components/common/topPage/TopPageRecommendJobCard.vue'
 // import TopPageNewJobCard from '@/components/Organisms/TopPage/TopPageNewJobCard.vue'
@@ -9,7 +10,7 @@ import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
 
-export type DataType = {
+type DataType = {
   languages: Language[];
   framworks: Framework[];
   skills: Skill[];
@@ -41,22 +42,30 @@ export default Vue.extend({
       this.$store.state.search.language = []
       this.$store.state.search.framwork = []
       this.$store.state.search.skill = []
-
       // * 開発言語 取得
-      axios.get('http://localhost:8888/api/v1/programing_language')
+      axios.get<Language[]>(`${API_URL}/programing_language`)
       .then(response => {
         this.languages = response.data.slice(8)
       })
+      .catch(error =>{
+        console.log(error)
+      })
       // * フレームワーク
-      axios.get('http://localhost:8888/api/v1/programing_framework')
-        .then(response => {
-          this.framworks = response.data.slice(10)
-        })
+      axios.get<Framework[]>(`${API_URL}/programing_framework`)
+      .then(response => {
+        this.framworks = response.data.slice(10)
+      })
+      .catch(error =>{
+        console.log(error)
+      })
       // * その他スキル
-      axios.get('http://localhost:8888/api/v1/skill')
-        .then(response => {
-          this.skills = response.data.slice(18)
-        })
+      axios.get<Skill[]>(`${API_URL}/skill`)
+      .then(response => {
+        this.skills = response.data.slice(18)
+      })
+      .catch(error =>{
+        console.log(error)
+      })
     }, 3000)
   },
   methods: {
@@ -80,7 +89,6 @@ export default Vue.extend({
         framwork: [framwork.id],
       })
       return this.$router.push('/jobs');
-
     },
     // * トップページ その他スキル検索
     skillClick(skill: Skill) {

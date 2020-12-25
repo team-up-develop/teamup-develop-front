@@ -1,7 +1,8 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import axios from 'axios';
-import { m } from '@/master'
+import { m, API_URL, truncate } from '@/master'
+import { ManageJob } from '@/types/manage';
 
 type DataType = {
   applyNum: number;
@@ -11,8 +12,8 @@ type DataType = {
 
 export default Vue.extend({
   props: {
-    jobTitle: { type: String, default: "" },
-    jobId: { type: Number, default: 0 }
+    jobTitle: { type: String as PropType<string>, default: "" },
+    jobId: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -21,30 +22,33 @@ export default Vue.extend({
       assginNum: 0
     }
   },
-  filters: {
-    //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value: string) {
-      const length = 60;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   created() {
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
+    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
     .then(response => {
       this.applyNum = response.data.length
     })
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
+    .catch(error =>{
+      console.log(error)
+    })
+    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
     .then(response => {
       this.rejectNum = response.data.length
     })
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
+    .catch(error =>{
+      console.log(error)
+    })
+    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
     .then(response => {
       this.assginNum = response.data.length
     })
+    .catch(error =>{
+      console.log(error)
+    })
+  },
+  methods: {
+    limit(value: string, num: number) {
+      return truncate(value, num)
+    }
   }
 })
 </script>
@@ -53,7 +57,7 @@ export default Vue.extend({
     <v-sheet class="card">
       <v-col>
         <v-row class="card__top">
-          {{ jobTitle | truncateDetailTitle }}
+          {{ limit(jobTitle, 60) }}
         </v-row>
         <v-row class="card__center">
           <router-link :to="`/jobs/${ jobId }`"> 

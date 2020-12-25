@@ -1,10 +1,12 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select';
 import 'vue-select/dist/vue-select.css';
+import { Language } from '@/types/index';
 
-export type DataType = {
+type DataType = {
   jobId: number;
   jobTitle: string;
   devStartDate: string;
@@ -12,7 +14,7 @@ export type DataType = {
   jobDescription: string;
   selectedLang: any;
   selectlangNumber: any;
-  languages: any;
+  languages: Language[];
 }
 
 export default Vue.extend({ 
@@ -36,7 +38,7 @@ export default Vue.extend({
   },
   created() {
     // * 開発言語
-    axios.get('http://localhost:8888/api/v1/programing_language')
+    axios.get<Language[]>(`${API_URL}/programing_language`)
     .then(response => {
       this.languages = response.data
     })
@@ -52,14 +54,12 @@ export default Vue.extend({
         const arr = str.split(delim)
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
-
       // //* 開始日
       const devStart = this.devStartDate
       const devStartDate = toDate(devStart, '-');
       // *終了日
       const devEnd = this.devEndDate
       const devEndDate = toDate(devEnd, '-');
-
       // * 言語を {id: Number}に変換
       const languageArray = [];
       for(let i = 0; i < this.selectlangNumber.length; i++) {
@@ -74,11 +74,9 @@ export default Vue.extend({
         jobDescription: this.jobDescription,
         programingLanguage: languageArray,
       }
-
-      axios.put(`http://localhost:8888/api/v1/job/${this.jobId}`, params)
+      axios.put(`${API_URL}/job/${this.jobId}`, params)
       .then(response => {
         console.log(response)
-        console.log("Putですね！！！！！！！！")
         // this.$emit('compliteAssgin', this.message)
       })
       .catch(error => {

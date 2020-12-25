@@ -10,7 +10,7 @@ export type Job = {
   devStartDate: Date;
   id: number;
   jobDescription: string | null;
-  jobStatusId: 1;
+  jobStatusId: number; //TODO: あってる？
   jobTitle: string;
   programingFramework: Framework[];
   programingLanguage: Language[];
@@ -21,7 +21,7 @@ export type Job = {
   useMenter?: boolean;
   user: User;
   userId: number;
-}
+} | {};
 
 // * 案件作成時 session1 
 export interface JobCreateData {

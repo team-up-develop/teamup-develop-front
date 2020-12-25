@@ -1,10 +1,11 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import { Language } from '@/types/index';
 import { Job } from '@/types/job';
 
-export type DateType = {
+type DateType = {
   languages: Language[];
   selectedLang: [];
   jobs: Job[];
@@ -33,7 +34,7 @@ export default Vue.extend({
   },
   created() {
     // * プログラミング言語 取得
-    axios.get<Language[]>('http://localhost:8888/api/v1/programing_language')
+    axios.get<Language[]>(`${API_URL}/programing_language`)
     .then(response => {
       this.languages = response.data
     })
@@ -54,7 +55,7 @@ export default Vue.extend({
       }
       const languageStateEnd: number[] = languageState.slice(0)
       const result: string = array.join('');
-      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      axios.get(`${API_URL}/job/?${result}`)
       .then(response => {
         this.jobs = response.data
         this.$emit('compliteSearchLanguage', this.jobs)

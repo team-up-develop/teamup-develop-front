@@ -1,5 +1,6 @@
 import { Job } from '@/types/job';
 import { User } from '@/types/user';
+import { m } from '@/master'
 
 // * 管理案件
 export interface ManageJob {
@@ -36,13 +37,13 @@ enum StatusName {
 export interface ParticipateParams {
   jobId: number;
   userId: number;
-  applyStatusId: 2
+  applyStatusId: 2;
 }
 
 // * 拒否させる
 export interface RejectParams {
   jobId: number;
   userId: number;
-  applyStatusId: 3
+  applyStatusId: 3;
 }
 

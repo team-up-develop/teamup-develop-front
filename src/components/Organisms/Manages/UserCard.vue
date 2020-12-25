@@ -1,16 +1,18 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL, m } from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/manage';
 import { User } from '@/types/user';
+import { Job } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   userId: number;
   user: User | {};
   manageNum: number;
   favoriteNum: number;
   applyNum: number;
-  applyJob: {}[];
+  applyJob: ManageJob[];
 }
 
 export default Vue.extend({ 
@@ -26,32 +28,44 @@ export default Vue.extend({
   },
   created() {
     // * user 取得
-    axios.get(`http://localhost:8888/api/v1/user/${this.userId}`)
+    axios.get<User>(`${API_URL}/user/${this.userId}`)
     .then(response => {
       this.user = response.data
     })
-
+    .catch(error =>{
+      console.log(error)
+    })
     // * 管理案件数
-    axios.get(`http://localhost:8888/api/v1/job/?user_id=${this.userId}`)
+    axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${this.userId}`)
     .then(response => {
       this.manageNum = response.data.length
     })
-
+    .catch(error =>{
+      console.log(error)
+    })
     // * 保存案件数
-    axios.get(`http://localhost:8888/api/v1/favorite_job/?user_id=${this.userId}`)
+    axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${this.userId}`)
     .then(response => {
       this.favoriteNum = response.data.length
     })
-
-    axios.get(`http://localhost:8888/api/v1//apply_job/?user_id=${this.userId}`)
+    .catch(error =>{
+      console.log(error)
+    })
+    axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${this.userId}`)
     .then(response => {
       for(let i = 0; i < response.data.length; i++) {
         const applyJobCorrect: ManageJob = response.data[i];
-        if(applyJobCorrect.applyStatusId === 1 || applyJobCorrect.applyStatusId === 2) {
+        if(
+          applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || 
+          applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE
+        ) {
           this.applyJob.push(applyJobCorrect);
         }
       }
       this.applyNum = this.applyJob.length
+    })
+    .catch(error =>{
+      console.log(error)
     })
   }
 });

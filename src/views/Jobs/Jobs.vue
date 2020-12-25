@@ -1,33 +1,409 @@
+<script lang="ts">
+import Vue from 'vue';
+import axios from 'axios'
+import { API_URL } from '@/master'
+import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
+import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
+import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
+import JobRegisterFalse from '@/components/Organisms/Jobs/JobRegisterFalse.vue'
+import JobRightLogin from '@/components/Organisms/Jobs/JobRightLogin.vue'
+import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
+import LanguageSearchModal from '@/components/Organisms/Modals/Searches/LanguageSearchModal.vue'
+import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
+import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
+import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
+import { timeChange, truncate } from '@/master';
+import { Job } from '@/types/job';
+
+type DataType = {
+  jobs: Job[]; //? 案件一覧配列
+  jobsNullFlag: boolean; //? 案件が存在しない場合 表示のため
+  freeWord: string;
+  loading: boolean; 
+  jobDetail: any; //? 案件詳細 
+  detailFlag: boolean; //? 案件詳細を表示するためのフラグ
+  selfJobPost: boolean; //? 自分の案件かを判定
+  selfJob: any;  //FIXME: Any //? 自分の案件を格納する 
+  applyFlug: boolean; //?応募済みかの判定フラグ
+  id: number; //? clickした案件のIdを取得
+  modal: boolean; //?モーダルを開いてるか否か
+  saveFlag: boolean; //? 案件保存しているかを判定
+  limitationList: number;
+  userId: number;
+  entryRedirect: boolean; //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
+  langModal: boolean; //? 言語モーダル
+  frameworkModal: boolean; //? フレームワークモーダル
+  skillModal: boolean; //? その他スキルモーダル
+  buttonActive: boolean; //? 右側浮いてるボタン
+  page: number; //? 現在のページ
+  displayJobs: Job[]; //? 表示する案件
+  jobsPageSize: number; //? ページに表示する案件の数
+  paginationLength: number; //? ページネーション番号
+  scroll: any;
+}
+
+export default Vue.extend({ 
+  components: {
+    Loading,
+    Applybtn,
+    ApplyModal,
+    JobRegisterFalse,
+    CardJob,
+    LanguageSearchModal,
+    FrameworkSearchModal,
+    SkillSearchModal,
+    JobRightLogin,
+    FavoriteBtn
+  },
+  data(): DataType {
+    return {
+      jobs: [], //? 案件一覧配列
+      jobsNullFlag: false, //? 案件が存在しない場合 表示のため
+      freeWord: this.$store.state.search.freeWord, 
+      loading: true, 
+      jobDetail: null, //? 案件詳細 
+      detailFlag: false, //? 案件詳細を表示するためのフラグ
+      selfJobPost: false, //? 自分の案件かを判定
+      selfJob: null,  //? 自分の案件を格納する
+      applyFlug: true, //?応募済みかの判定フラグ
+      id: 0, //? clickした案件のIdを取得
+      modal: false, //?モーダルを開いてるか否か
+      saveFlag: true, //? 案件保存しているかを判定
+      limitationList:1,
+      userId: this.$store.state.auth.userId, 
+      entryRedirect: false, //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
+      langModal: false, //? 言語モーダル
+      frameworkModal: false, //? フレームワークモーダル
+      skillModal: false, //? その他スキルモーダル
+      buttonActive: false, //? 右側浮いてるボタン
+      page: 1, //? 現在のページ
+      displayJobs: [], //? 表示する案件
+      jobsPageSize: 5, //? ページに表示する案件の数
+      paginationLength: 0, //? ページネーション番号
+      scroll: null
+    }
+  },
+  created() {
+    // * 投稿一覧取得
+    const posts: Job[] = [];
+    axios.get<Job[]>(`${API_URL}/job`)
+    .then(response => {
+      setTimeout(() => {
+        this.loading = false;
+        this.jobs = response.data
+        //* トップページから フリーワード 検索をした際の処理
+        for(const i in response.data) {
+          const jobs: any = response.data[i]; //FIXME: any
+          if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
+            posts.push(jobs)
+          }
+        }
+        this.jobs = posts
+        this.paginateJobs(this.jobs);
+
+        // * トップページから 開発言語 検索した際の処理
+        if(this.$store.state.search.language.length == 0) {
+          return 
+        } else {
+          const arrayLanguage: string[] = [];
+          const languageNum: number[] = this.$store.state.search.language;
+          for(let s = 0; s < languageNum.length; s++) {
+            const languageNumParams = languageNum[s]
+            const queryParamsLanguage =  'programing_language_id' + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
+            arrayLanguage.push(queryParamsLanguage)
+          }
+          const LastLanguageURL: string = arrayLanguage.join('');
+          axios.get<Job[]>(`${API_URL}/job/?${LastLanguageURL}`)
+          .then(response => {
+            this.jobs = response.data
+            if(this.jobs.length == 0) {
+              this.jobsNullFlag = true;
+            } else {
+              this.paginateJobs(this.jobs);
+            }
+          })
+          // * もし案件が存在しなかったら処理が走る
+          if(!this.jobs.length) {
+            this.jobsNullFlag = true;
+          }
+        }
+        // * トップページから フレームワーク 検索した際の処理
+        if(this.$store.state.search.framwork.length == 0) {
+          return
+        } else {
+          const arrayFramework: string[] = [];
+          const framworkNum: number[] = this.$store.state.search.framwork;
+          for(let k = 0; k < framworkNum.length; k++) {
+            const framworkNumParams = framworkNum[k]
+            const queryParams =  'programing_framework_id' + '[' + Number(framworkNumParams - 1) + ']' + '=' + framworkNumParams + '&';
+            arrayFramework.push(queryParams)
+          }
+          const LastFrameworkURL: string = arrayFramework.join('');
+          axios.get<Job[]>(`${API_URL}/job/?${LastFrameworkURL}`)
+          .then(response => {
+            this.jobs = response.data
+            this.paginateJobs(this.jobs);
+            if(this.jobs.length == 0) {
+              this.jobsNullFlag = true;
+            }
+          })
+        }
+        // * トップページから その他スキル 検索した際の処理
+        if(this.$store.state.search.skill.length == 0) {
+          return
+        } else {
+          const arraySkill: string[] = [];
+          const skillNum: number[] = this.$store.state.search.skill;
+          for(let l = 0; l < skillNum.length; l++) {
+            const skillNumParams = skillNum[l]
+            const queryParamsSkill = 'skill_id' + '[' + Number(skillNumParams - 1) + ']' + '=' + skillNumParams + '&';
+            arraySkill.push(queryParamsSkill)
+          }
+          const LastSkillURL: string = arraySkill.join('');
+          axios.get<Job[]>(`${API_URL}/job/?${LastSkillURL}`)
+          .then(response => {
+            this.jobs = response.data
+            this.paginateJobs(this.jobs);
+            if(this.jobs.length == 0) {
+              this.jobsNullFlag = true;
+            }
+          })
+        }
+        // * もし案件が存在しなかったら処理が走る
+        if(!this.jobs.length) {
+          this.jobsNullFlag = true;
+        }
+      }, 1000);
+    })
+    .catch(error => {
+      console.log(error)
+    })
+    // * 非ログイン時は応募/いいねを押下した際にリダイレクトでログインに遷移させる
+    if(!this.userId) {
+      this.entryRedirect = true //* 非ログイン時表示に
+    }
+  },
+  methods: {
+    moment(value: string, format: string) {
+      return timeChange(value, format)
+    },
+    limit(value: string, num: number) {
+      return truncate(value, num)
+    },
+    // * ページネーション処理(検索)
+    paginateJobs(value: Job[]) {
+      this.jobs = value.slice().reverse();
+      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+    },
+    // * 検索後の処理
+    searchJobPagenate(value: Job[]) {
+      this.jobs = value.slice().reverse();
+      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
+      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
+      this.jobsNullFlag = false;
+      this.closeLangSearchModal(value);
+      this.closeFrameworkSearchModal();
+      this.closeSkillSearchModal();
+      this.loading = true;
+      setTimeout(() => {
+        if(value.length == 0) {
+          this.loading = false;
+          this.jobsNullFlag = true;
+        } else {
+          this.loading = false;
+          this.detailFlag = false;
+        }
+      }, 1500)
+    },
+    // * ページネーション
+    pageChange(pageNumber: number) {
+      this.loading = true;
+      setTimeout(() => {
+        this.loading = false;
+        this.displayJobs = this.jobs.slice(this.jobsPageSize*(pageNumber -1), this.jobsPageSize*(pageNumber));
+      }, 1000);
+    },
+    // * 非ログイン時 登録リダイレクト
+    registerRedirect() {
+      this.$router.push('/register');
+    },
+    // * 言語検索 emit
+    compliteSearchLanguage(emitLanguage: Job[]) {
+      this.searchJobPagenate(emitLanguage);
+    },
+    // * フレームワーク検索 emit
+    compliteSearchFramework(emitFramework: Job[]) {
+      this.searchJobPagenate(emitFramework);
+    },
+    // * その他スキル検索 emit
+    compliteSearchSkill(emitSkill: Job[]) {
+      this.searchJobPagenate(emitSkill);
+    },
+    // * フリーワード 検索
+    searchFreeword() {
+      const posts: Job[] = [];
+      axios.get(`${API_URL}/job`)
+      .then(response => {
+        for(const i in response.data){
+          const jobs: any = response.data[i]; //FIXME: any
+          if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
+            posts.push(jobs)
+          }
+        }
+        // * フリーワード 検索語 Vuexに値を格納する
+        this.$store.dispatch('freeWordSearch', {
+          freeWord: this.freeWord,
+        })
+        this.jobs = posts;
+        this.searchJobPagenate(this.jobs);
+      })
+      .catch(error => {
+        console.log(error)
+      })
+    },
+    // * click して案件を取得 === 詳細
+    getJob(job: any) { // FIXME: any
+      this.jobDetail = job; //? clickした案件を取得
+      this.detailFlag = true; //? 詳細画面を表示するか否かを判定する
+      this.id = job.id;  //? clickしたIdを this.idに格納する
+      this.selfJobPost = false; //? clickする度に 自分の案件では無くする
+      this.applyFlug = true; //? clickする度に 応募済み案件にする
+      // * ログインしていれば以下の処理が走る
+      if(this.userId) {
+        // * 自分の案件かを判定
+        axios.get<Job[]>(`${API_URL}/job/?user_id=${ this.userId }`)
+        .then(response => {
+          for(let i = 0; i < response.data.length; i++) {
+            this.selfJob = response.data[i]
+            if(this.selfJob.id === this.id) {
+              this.selfJobPost = true
+            }
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        // * 応募済みか応募済みでないかを判断
+        axios.get<Job[]>(`${API_URL}/apply_job/?user_id=${ this.userId }`)
+        .then(response => {
+          const arrayApply: number[] = []
+          for(let c = 0; c < response.data.length; c++){
+            const applyData: any = response.data[c]; // FIXME: any
+            arrayApply.push(applyData.job.id)
+          }
+          if(arrayApply.includes(this.jobDetail.id)) {
+            this.applyFlug = false
+          } 
+        })
+        .catch(error => {
+          console.log(error)
+        })
+        // * 保存済みか保存済みではないかを判定する
+        axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${ this.userId }`)
+        .then(response => {
+          const array: number[] = []
+          for(let i = 0; i < response.data.length; i++){
+            const likeData: any = response.data[i] //FIXME: any
+            array.push(likeData.job.id)
+          }
+          if(array.includes(this.jobDetail.id)){
+            this.saveFlag = false
+          }
+          else{
+            this.saveFlag = true
+          }
+        })
+        .catch(error => {
+          console.log(error)
+        })
+      } 
+      // * 登録 or ログインしてない場合
+      else {
+        console.log("登録してからご利用いただけます")
+      }
+    },
+    // * エントリーが完了したら応募済みにする
+    compliteEntry() {
+      this.applyFlug = false;
+    },
+    // * モーダル
+    openModal() {
+      this.modal = true
+    },
+    closeModal() {
+      this.modal = false
+    },
+    doSend() {
+      this.closeModal()
+    },
+    // *検索 モーダル
+    langSearchModal() {
+      this.langModal = true;
+    },
+    closeLangSearchModal(value: Job[] | undefined) {
+      this.langModal = false;
+    },
+    frameworkSearchModal() {
+      this.frameworkModal = true;
+    },
+    closeFrameworkSearchModal() {
+      this.frameworkModal = false;
+    },
+    skillSearchModal() {
+      this.skillModal = true;
+    },
+    closeSkillSearchModal() {
+      this.skillModal = false;
+    },
+    // * トップに行く
+    scrollTop() {
+      window.scrollTo({
+        behavior: 'smooth',
+        top: 0,
+      });
+    },
+    scrollWindow() {
+      const top: 100 = 100 // ? ボタンを表示させたい位置
+      this.scroll = window.scrollY
+      if (top <= this.scroll) {
+        this.buttonActive = true
+      } else {
+        this.buttonActive = false
+      }
+    }
+  },
+  mounted() {
+    window.addEventListener('scroll', this.scrollWindow) //?ボタンを表示させたい位置
+  },
+});
+</script>
+
 <template>
   <div class="job-wrapper">
-    <!-- 右側浮いてるボタン -->
     <transition name="button">
       <div class="scroll-area" v-show="buttonActive">
-        <a href="#"><font-awesome-icon icon="arrow-up" class="icon"/></a>
+        <a href="#"><v-icon class="icon">↑</v-icon></a>
       </div>
     </transition>
-    <!-- 言語検索 モーダル画面 -->
     <LanguageSearchModal 
       :jobsArray="jobs"
       @close="closeLangSearchModal"
       v-if="langModal"
       @compliteSearchLanguage="compliteSearchLanguage($event)"
     />
-    <!-- フレームワーク検索 モーダル画面 -->
     <FrameworkSearchModal 
       v-if="frameworkModal"
       @close="closeFrameworkSearchModal" 
       :jobsArray="jobs"
       @compliteSearchFramework="compliteSearchFramework($event)"
     />
-    <!-- その他スキル検索 モーダル画面 -->
     <SkillSearchModal 
       @close="closeSkillSearchModal" 
       v-if="skillModal"
       :jobsArray="jobs"
       @compliteSearchSkill="compliteSearchSkill($event)"
     />
-    <!-- 応募する モーダル画面 -->
     <div class="modal-window">
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
@@ -108,7 +484,7 @@
       <div class="job-wrapper-right" v-if="detailFlag === true">
         <div class="top-job-detail-area">
           <div class="top-job-detail-area__title">
-            {{ detailJobTitle }}
+            {{ limit(jobDetail.jobTitle, 60) }}
           </div>
           <!-- ログイン時 -->
           <div v-if="entryRedirect == false">
@@ -118,8 +494,7 @@
                 応募済み
               </div>
               <div class="btn-box-save">
-                <font-awesome-icon icon="heart" class="save-icon" @click="saveJob" v-if="saveFlag"/>
-                <font-awesome-icon icon="heart" class="save-end-icon" @click="deleteJob" v-if="saveFlag == false"/>
+                <FavoriteBtn :jobId="jobDetail.id"/>
               </div>
             </div>
             <div v-else>
@@ -235,391 +610,6 @@
   </div>
 </template>
 
-<script>
-// import $ from 'jquery';
-import Vue from 'vue';
-import axios from 'axios'
-
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
-import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
-import JobRegisterFalse from '@/components/Organisms/Jobs/JobRegisterFalse.vue'
-import JobRightLogin from '@/components/Organisms/Jobs/JobRightLogin.vue'
-import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
-import LanguageSearchModal from '@/components/Organisms/Modals/Searches/LanguageSearchModal.vue'
-import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
-import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
-import { timeChange } from '@/master';
-
-export default Vue.extend({ 
-  components: {
-    Loading,
-    Applybtn,
-    ApplyModal,
-    JobRegisterFalse,
-    CardJob,
-    LanguageSearchModal,
-    FrameworkSearchModal,
-    SkillSearchModal,
-    JobRightLogin
-  },
-  data() {
-    return {
-      jobs: [], //? 案件一覧配列
-      jobsNullFlag: false, //? 案件が存在しない場合 表示のため
-      freeWord: this.$store.state.search.freeWord, 
-      loading: true, 
-      jobDetail: null, //? 案件詳細 
-      detailFlag: false, //? 案件詳細を表示するためのフラグ
-      selfJobPost: false, //? 自分の案件かを判定
-      selfJob: null,  //? 自分の案件を格納する
-      applyFlug: true, //?応募済みかの判定フラグ
-      id: Number, //? clickした案件のIdを取得
-      modal: false, //?モーダルを開いてるか否か
-      saveFlag: true, //? 案件保存しているかを判定
-      limitationList:1,
-      userId: this.$store.state.auth.userId, 
-      entryRedirect: false, //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
-      langModal: false, //? 言語モーダル
-      frameworkModal: false, //? フレームワークモーダル
-      skillModal: false, //? その他スキルモーダル
-      buttonActive: false, //? 右側浮いてるボタン
-      page: 1, //? 現在のページ
-      displayJobs: [], //? 表示する案件
-      jobsPageSize: 5, //? ページに表示する案件の数
-      paginationLength: 0, //? ページネーション番号
-    }
-  },
-  computed: {
-    //* 案件タイトル 詳細 文字制限
-    detailJobTitle: function () {
-      if(this.jobDetail) {
-        if(this.jobDetail.jobTitle.length > 60) {
-          return this.jobDetail.jobTitle.substring(0,60) + '...';
-        }
-        return this.jobDetail.jobTitle;
-      }
-
-      return "";
-    },
-  },
-  created() {
-    // * 投稿一覧取得
-    const posts = [];
-    axios.get('http://localhost:8888/api/v1/job', {
-      // headers: {
-      //   Authorization: `Bearer ${ localStorage.userId }`
-      // }
-    })
-    .then(response => {
-      setTimeout(() => {
-        this.loading = false;
-        this.jobs = response.data
-        //* トップページから フリーワード 検索をした際の処理
-        for(const i in response.data) {
-          const jobs = response.data[i];
-          if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
-            posts.push(jobs)
-          }
-        }
-        this.jobs = posts
-        this.paginateJobs(this.jobs);
-
-        // * トップページから 開発言語 検索した際の処理
-        if(this.$store.state.search.language.length == 0) {
-          console.log("language is []")
-        }
-        else {
-          const arrayLanguagekNum = [];
-          const languageNum = this.$store.state.search.language;
-          for(let s = 0; s < languageNum.length; s++) {
-            const languageNumParams = languageNum[s]
-            const queryParamsLanguage =  'programing_language_id' + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
-            arrayLanguagekNum.push(queryParamsLanguage)
-          }
-          const LastLanguageNum = arrayLanguagekNum.join('');
-          axios.get(`http://localhost:8888/api/v1/job/?${LastLanguageNum}`)
-          .then(response => {
-            this.jobs = response.data
-            if(this.jobs.length == 0) {
-              this.jobsNullFlag = true;
-            } else {
-              this.paginateJobs(this.jobs);
-            }
-          })
-          // * もし案件が存在しなかったら処理が走る
-          if(!this.jobs.length) {
-            this.jobsNullFlag = true;
-          }
-        }
-        // * トップページから フレームワーク 検索した際の処理
-        if(this.$store.state.search.framwork.length == 0) {
-          console.log("framwork is []")
-        }
-        else {
-          const arrayFrameworkNum = [];
-          const framworkNum = this.$store.state.search.framwork;
-          for(let k = 0; k < framworkNum.length; k++) {
-            const framworkNumParams = framworkNum[k]
-            const queryParams =  'programing_framework_id' + '[' + Number(framworkNumParams - 1) + ']' + '=' + framworkNumParams + '&';
-            arrayFrameworkNum.push(queryParams)
-          }
-          const LastFrameworkNum = arrayFrameworkNum.join('');
-          axios.get(`http://localhost:8888/api/v1/job/?${LastFrameworkNum}`)
-          .then(response => {
-            this.jobs = response.data
-            this.paginateJobs(this.jobs);
-            if(this.jobs.length == 0) {
-              this.jobsNullFlag = true;
-            }
-          })
-        }
-        // * トップページから その他スキル 検索した際の処理
-        if(this.$store.state.search.skill.length == 0) {
-          console.log("skill is []")
-        }
-        else {
-          const arraySkillNum = [];
-          const skillNum = this.$store.state.search.skill;
-          for(let l = 0; l < skillNum.length; l++) {
-            const skillNumParams = skillNum[l]
-            const queryParamsSkill = 'skill_id' + '[' + Number(skillNumParams - 1) + ']' + '=' + skillNumParams + '&';
-            arraySkillNum.push(queryParamsSkill)
-          }
-          const LastSkillNum = arraySkillNum.join('');
-          axios.get(`http://localhost:8888/api/v1/job/?${LastSkillNum}`)
-          .then(response => {
-            this.jobs = response.data
-            this.paginateJobs(this.jobs);
-            if(this.jobs.length == 0) {
-              this.jobsNullFlag = true;
-            }
-          })
-        }
-        // * もし案件が存在しなかったら処理が走る
-        if(!this.jobs.length) {
-          this.jobsNullFlag = true;
-        }
-      }, 1000);
-    })
-    .catch(error => {
-      console.log(error)
-    })
-    // * 非ログイン時は応募/いいねを押下した際にリダイレクトでログインに遷移させる
-    if(!this.userId) {
-      this.entryRedirect = true //* 非ログイン時表示に
-    }
-  },
-  methods: {
-    moment(value, format) {
-      return timeChange(value, format)
-    },
-    // * ページネーション処理(検索)
-    paginateJobs(value) {
-      this.jobs = value.slice().reverse();
-      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
-    },
-    // * 検索後の処理
-    searchJobPagenate(value) {
-      this.jobs = value.slice().reverse();
-      this.paginationLength = Math.ceil(this.jobs.length/this.jobsPageSize);
-      this.displayJobs = this.jobs.slice(this.jobsPageSize*(this.page -1), this.jobsPageSize*(this.page));
-      this.jobsNullFlag = false;
-      this.closeLangSearchModal(value);
-      this.closeFrameworkSearchModal();
-      this.closeSkillSearchModal();
-      this.loading = true;
-      setTimeout(() => {
-        if(value.length == 0) {
-          this.loading = false;
-          this.jobsNullFlag = true;
-        } else {
-          this.loading = false;
-          this.detailFlag = false;
-        }
-      }, 1500)
-    },
-    // * ページネーション
-    pageChange(pageNumber) {
-      this.loading = true;
-      setTimeout(() => {
-        this.loading = false;
-        this.displayJobs = this.jobs.slice(this.jobsPageSize*(pageNumber -1), this.jobsPageSize*(pageNumber));
-      }, 1000);
-    },
-    // * 非ログイン時 登録リダイレクト
-    registerRedirect() {
-      this.$router.push('/register');
-    },
-    // * 言語検索 emit
-    compliteSearchLanguage(emitLanguage) {
-      this.searchJobPagenate(emitLanguage);
-    },
-    // * フレームワーク検索 emit
-    compliteSearchFramework(emitFramework) {
-      this.searchJobPagenate(emitFramework);
-    },
-    // * その他スキル検索 emit
-    compliteSearchSkill(emitSkill) {
-      this.searchJobPagenate(emitSkill);
-    },
-    // * フリーワード 検索
-    searchFreeword() {
-      const posts = [];
-      axios.get('http://localhost:8888/api/v1/job')
-      .then(response => {
-        for(const i in response.data){
-          const jobs = response.data[i];
-          if(jobs.jobDescription.indexOf(this.freeWord) !== -1){
-            posts.push(jobs)
-          }
-        }
-        // * フリーワード 検索語 Vuexに値を格納する
-        this.$store.dispatch('freeWordSearch', {
-          freeWord: this.freeWord,
-        })
-        this.jobs = posts;
-        this.searchJobPagenate(this.jobs);
-      })
-    },
-    // * 案件を保存する
-    saveJob() {
-      const params = {
-        jobId: this.jobDetail.id, 
-        userId: 1 
-      };
-      axios.post(`http://localhost:8888/api/v1/favorite_job/`, params)
-      .then(response => {
-        this.saveFlag = false
-        console.log(response)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    // * 案件保存を削除する
-    deleteJob() {
-      const params = {
-        jobId: this.jobDetail.id,
-        userId: 1
-      };
-      axios.delete(`http://localhost:8888/api/v1/favorite_job/`,{data: params})
-      .then(response => {
-        this.saveFlag = true
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    // * click して案件を取得 === 詳細
-    getJob(job) {
-      this.jobDetail = job; //? clickした案件を取得
-      this.detailFlag = true; //? 詳細画面を表示するか否かを判定する
-      this.id = job.id;  //? clickしたIdを this.idに格納する
-      this.selfJobPost = false; //? clickする度に 自分の案件では無くする
-      this.applyFlug = true; //? clickする度に 応募済み案件にする
-      // * ログインしていれば以下の処理が走る
-      if(this.userId) {
-        // * 自分の案件かを判定
-        axios.get(`http://localhost:8888/api/v1//job/?user_id=${ this.userId }`)
-        .then(response => {
-          for(let i = 0; i < response.data.length; i++) {
-            this.selfJob = response.data[i]
-            if(this.selfJob.id === this.id) {
-              this.selfJobPost = true
-            }
-          }
-        })
-          // * 応募済みか応募済みでないかを判断
-        axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
-        .then(response => {
-          const arrayApply = []
-          for(let c = 0; c < response.data.length; c++){
-            const applyData = response.data[c];
-            arrayApply.push(applyData.job.id)
-          }
-          if(arrayApply.includes(this.jobDetail.id)) {
-            this.applyFlug = false
-          } 
-        })
-          // * 保存済みか保存済みではないかを判定する
-        axios.get(`http://localhost:8888/api/v1/favorite_job/?user_id=${ this.userId }`)
-        .then(response => {
-          const array = []
-          for(let i = 0; i < response.data.length; i++){
-            const likeData = response.data[i]
-            array.push(likeData.job.id)
-          }
-          if(array.includes(this.jobDetail.id)){
-            this.saveFlag = false
-          }
-          else{
-            this.saveFlag = true
-          }
-        })
-      } 
-      // * 登録 or ログインしてない場合
-      else {
-        console.log("登録してからご利用いただけます")
-      }
-    },
-    // * エントリーが完了したら応募済みにする
-    compliteEntry() {
-      this.applyFlug = false;
-    },
-    // * モーダル
-    openModal() {
-      this.modal = true
-    },
-    closeModal() {
-      this.modal = false
-    },
-    doSend() {
-      this.closeModal()
-    },
-    // *検索 モーダル
-    langSearchModal() {
-      this.langModal = true;
-    },
-    closeLangSearchModal(value) {
-      this.langModal = false;
-    },
-    frameworkSearchModal() {
-      this.frameworkModal = true;
-    },
-    closeFrameworkSearchModal() {
-      this.frameworkModal = false;
-    },
-    skillSearchModal() {
-      this.skillModal = true;
-    },
-    closeSkillSearchModal() {
-      this.skillModal = false;
-    },
-    // * トップに行く
-    scrollTop() {
-      window.scrollTo({
-        behavior: 'smooth',
-        top: 0,
-      });
-    },
-    scrollWindow() {
-      const top = 100 // ? ボタンを表示させたい位置
-      this.scroll = window.scrollY
-      if (top <= this.scroll) {
-        this.buttonActive = true
-      } else {
-        this.buttonActive = false
-      }
-    }
-  },
-  mounted() {
-    window.addEventListener('scroll', this.scrollWindow) //?ボタンを表示させたい位置
-  },
-});
-</script>
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
@@ -722,8 +712,8 @@ export default Vue.extend({
 
   // * スクロール
   .scroll-area {
-    width: 50px;
-    height: 50px;
+    // width: 50px;
+    // height: 50px;
     position: fixed;
     right: 0;
     bottom: 0;
@@ -742,6 +732,7 @@ export default Vue.extend({
       text-decoration: none;
 
       .icon {
+        font-weight: bold;
         color: #ffffff;
         margin-top: 0.7rem;
         font-size: 1.6em;
@@ -1026,17 +1017,6 @@ export default Vue.extend({
   height: 42px;
   padding: 0.5rem;
   color: $white;
-  cursor: pointer;
-  background-color: #d8d6d6;
-  border-radius: 5px / 5px;
-}
-
-.save-end-icon {
-  font-size: 20px;
-  width: 42px;
-  height: 42px;
-  padding: 0.5rem;
-  color: red;
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;

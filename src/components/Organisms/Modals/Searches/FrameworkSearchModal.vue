@@ -1,10 +1,11 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import { Framework } from '@/types/index';
 import { Job } from '@/types/job';
 
-export type DateType = {
+type DateType = {
   frameworks: Framework[];
   selectedFramework: [];
   jobs: Job[];
@@ -33,7 +34,7 @@ export default Vue.extend({
   },
   created() {
     // * フレームワーク取得
-    axios.get<Framework[]>('http://localhost:8888/api/v1/programing_framework')
+    axios.get<Framework[]>(`${API_URL}/programing_framework`)
     .then(response => {
       this.frameworks = response.data
     })
@@ -54,11 +55,10 @@ export default Vue.extend({
       }
       const frameworkStateEnd: number[]  = frameworkState.slice(0)
       const result: string = arrayFramework.join('');
-      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      axios.get(`${API_URL}/job/?${result}`)
       .then(response => {
         this.jobs = response.data
         this.$emit('compliteSearchFramework', this.jobs)
-
         // * フレームワーク 検索語 Vuexに値を格納する
         this.$store.dispatch('framworkSearch', {
           framwork: frameworkStateEnd,

@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import axios from 'axios'
 import { Job } from '@/types/job';
-import { m, timeChange } from '@/master'
+import { m, timeChange, API_URL, truncate } from '@/master'
 
 type DataType = {
   chatGroups: Job[];
@@ -25,27 +25,16 @@ export default Vue.extend({
   computed: {
     m: () => m,
   },
-  filters: {
-    //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value: string) {
-      const length = 36;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   mounted() {
     // * 参加案件のみを取得する
     if(this.$store.state.auth.userId !== undefined) {
       this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
+      axios.get(`${API_URL}/apply_job/?user_id=${ this.userId }`)
       .then(response => {
         const array = [];
         for(let i = 0; i < response.data.length; i++){
           const applyData = response.data[i]
-          if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || m.APPLY_STATUS_SELF ){
+          if(applyData.applyStatusId == m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ) {
             array.push(applyData)
             this.chatGroups = array
           }
@@ -59,6 +48,9 @@ export default Vue.extend({
   methods: {
     moment(value: string, format: string) {
       return timeChange(value, format)
+    },
+    limit(value: string, num: number) {
+      return truncate(value, num)
     }
   }
 });
@@ -79,7 +71,7 @@ export default Vue.extend({
           class="group"
           >
           <div class="group__area">
-            <p>{{ chatGroup.job.jobTitle | truncateDetailTitle }}</p>
+            <p>{{ limit(chatGroup.job.jobTitle, 36) }}</p>
             <v-row class="row">
               <label 
                 for="name" 
@@ -147,7 +139,6 @@ export default Vue.extend({
 
     &__left {
       width: 285px;
-      background-color: sandybrown;
       height: 100%;
       box-shadow: 5px 0 3px #00000011;
       border-radius: 8px 0 0px 8px;
@@ -190,13 +181,14 @@ export default Vue.extend({
             padding: 0rem 0 0.5rem 1rem;
             position: absolute;
             bottom: 0;
+            height: 30px;
             width: 100%;
 
             .selfPost {
               @include box-shadow-btn;
               background-color: $third-dark;
               color: $white;
-              padding: 0.25rem 1.5rem;
+              padding: 0.2rem 1.5rem;
               width: 102px;
               font-weight: bold;
               font-size: 0.8em;
@@ -211,7 +203,7 @@ export default Vue.extend({
               border: $third-dark 1px solid;
               color: $third-dark;
               background-color: $white;
-              padding: 0.25rem 1.5rem;
+              padding: 0.2rem 1.5rem;
               width: 102px;
               font-weight: bold;
               font-size: 0.8em;

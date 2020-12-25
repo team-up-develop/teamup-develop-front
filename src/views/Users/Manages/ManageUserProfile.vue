@@ -1,16 +1,18 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
 import axios from 'axios';
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import SkillUser from '@/components/Organisms/Users/SkillUser.vue'
 import IntroduceUser from '@/components/Organisms/Users/IntroduceUser.vue'
 import { ParticipateParams, RejectParams } from '@/types/manage';
+import { User } from '@/types/user';
+import { m, API_URL, truncate } from '@/master'
 // import Logout from '@/components/button/Logout'
 
-export type DataType = {
+type DataType = {
   myselfFlag: boolean;
-  userInfo: {};
+  userInfo: User;
   jobTitle: string;
   userId: number;
   loading: boolean;
@@ -20,9 +22,15 @@ export type DataType = {
 
 
 export default Vue.extend({
+  components: {
+    Loading,
+    PostUser,
+    SkillUser,
+    IntroduceUser
+  },
   props: {
-    id: Number, //? 詳細を見るユーザーのID
-    jobId: Number
+    id: { type: Number as PropType<number>, default: 0 }, //? 詳細を見るユーザーのID
+    jobId: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -35,28 +43,17 @@ export default Vue.extend({
       statusId: 1,
     }
   },
-  filters: {
-    //* 案件タイトル 文字制限
-    truncateTitle: function(value: string) {
-      const length = 40;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   computed: {
     // * 参加
     doneParticipate() { 
-      if(this.statusId == 2) {
+      if(this.statusId == m.APPLY_STATUS_PARTICIPATE) {
         return true
       }
       return false
     },
     // * 拒否
     doneReject() {
-      if(this.statusId == 3) {
+      if(this.statusId == m.APPLY_STATUS_REJECT) {
         return true
       }
       return false
@@ -64,7 +61,7 @@ export default Vue.extend({
   },
   created() {
     // * ユーザー情報取得
-      axios.get(`http://localhost:8888/api/v1/user/${this.id}`)
+      axios.get(`${API_URL}/user/${this.id}`)
       .then(response => {
         this.userInfo = response.data;
       })
@@ -72,7 +69,7 @@ export default Vue.extend({
         console.log(error)
       })
     // * 表示中のユーザーのステータスを格納
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.jobId }&user_id=${ this.id }`)
+    axios.get(`${API_URL}/apply_job/?job_id=${ this.jobId }&user_id=${ this.id }`)
     .then(response => {
       setTimeout(() => {
         this.loading = false;
@@ -81,32 +78,25 @@ export default Vue.extend({
     });
 
     // *  案件タイトル取得
-    axios.get(`http://localhost:8888/api/v1/job/${ this.jobId }`)
+    axios.get(`${API_URL}/job/${ this.jobId }`)
     .then(response => {
       this.jobTitle = response.data.jobTitle
     })
-    // TODO: WebSocket
-    // const ws = (this.ws = new WebSocket(`ws://${location.host}/websocket`));
-    // console.log(ws)
-    // // * 接続が確認された時
-    // ws.onopen = () => {
-    //   console.log("sucsess")
-    // };
-    // ws.onmessage = message => {
-    //   this.messages.push(message.data);
-    // };
   },
   methods: {
+    limit(value: string, num: number) {
+      return truncate(value, num)
+    },
     // * 参加させる
     applyUserPut() {
       const params: ParticipateParams = {
         jobId: this.jobId,
         userId: this.id,
-        applyStatusId: 2
+        applyStatusId: m.APPLY_STATUS_PARTICIPATE
       };
-      axios.put(`http://localhost:8888/api/v1/apply_job/`, params)
+      axios.put(`${API_URL}/apply_job/`, params)
       .then(response => {
-        this.statusId = 2;
+        this.statusId = m.APPLY_STATUS_PARTICIPATE;
         console.log(response.data)
       })
       .catch(error => {
@@ -118,24 +108,17 @@ export default Vue.extend({
       const params: RejectParams = {
         jobId: this.jobId,
         userId: this.id,
-        applyStatusId: 3
+        applyStatusId: m.APPLY_STATUS_REJECT
       };
-      axios.put(`http://localhost:8888/api/v1/apply_job/`, params)
+      axios.put(`${API_URL}/apply_job/`, params)
       .then(response => {
         console.log(response.data)
-        this.statusId = 3;
+        this.statusId = m.APPLY_STATUS_REJECT;
       })
       .catch(error => {
         console.log(error)
       })
     },
-  },
-  components: {
-    // Logout
-    Loading,
-    PostUser,
-    SkillUser,
-    IntroduceUser
   }
 });
 </script>
@@ -145,7 +128,7 @@ export default Vue.extend({
     <div class="detail-wrapper" v-if="loading == false">
     <div class="back-space">
       <router-link :to="`/manage/applicant/${ jobId }`">
-      <p>＜ {{ jobTitle | truncateTitle }}に戻る</p>
+      <p>＜ {{ limit(jobTitle, 40) }}に戻る</p>
       </router-link>
     </div>
     <section class="user-area">

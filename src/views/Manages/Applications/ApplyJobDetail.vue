@@ -1,5 +1,6 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType } from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
@@ -10,7 +11,7 @@ import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import { Job } from '@/types/job';
 
-export type DataType = {
+type DataType = {
   job: any; //TODO: Any
   userId: number;
   selfJobPost: boolean;
@@ -21,8 +22,17 @@ export type DataType = {
 }
 
 export default Vue.extend({ 
+  components: {
+    Applybtn,
+    FavoriteDetailBtn,
+    Loading,
+    ApplyModal,
+    PostUser,
+    SkillJob,
+    DetailJob
+  },
   props: {
-    id: Number,
+    id: { type: Number as PropType<number>, default: 0 }
   },
   data(): DataType {
     return {
@@ -47,7 +57,7 @@ export default Vue.extend({
   },
   mounted() {
     // * 詳細画面情報を取得
-    axios.get(`http://localhost:8888/api/v1/job/${this.id}/`)
+    axios.get<Job>(`${API_URL}/job/${this.id}/`)
       .then(response => {
         setTimeout(() => {
           this.loading = false;
@@ -64,7 +74,7 @@ export default Vue.extend({
     }
 
     // * 応募済みか応募済みでないかを判定
-    axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&user_id=${ this.userId }`)
+    axios.get(`${API_URL}/apply_job/?job_id=${ this.id }&user_id=${ this.userId }`)
     .then(response => {
       if(response.data.length == 0) {
         return 
@@ -102,15 +112,6 @@ export default Vue.extend({
         return window.open(url);
       }
     }
-  },
-  components: {
-    Applybtn,
-    FavoriteDetailBtn,
-    Loading,
-    ApplyModal,
-    PostUser,
-    SkillJob,
-    DetailJob
   }
 });
 </script>

@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import { RegisterSessionParams } from '@/types/user';
 
-export type DataType = {
+type DataType = {
   userName: string;
   nickName: string;
   userBirthday: string;
@@ -41,12 +41,6 @@ export default Vue.extend({
         console.log("必須が入力されていません")
       }
     },
-    // mouseOverAction() {
-    //   this.hoverFlag = true
-    // },
-    // mouseLeaveAction(){
-    //   this.hoverFlag = false
-    // }
   }
 });
 </script>

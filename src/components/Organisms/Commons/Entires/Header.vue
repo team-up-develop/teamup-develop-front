@@ -2,7 +2,8 @@
 import Vue from 'vue';
 import Logo from '@/components/Atoms/Commons/Entires/Logo.vue'
 import CreateBtn from '@/components/Atoms/Commons/Entires/CreateBtn.vue'
-export type DataType = {
+
+type DataType = {
   userId: number;
 }
 

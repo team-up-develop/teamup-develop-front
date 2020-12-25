@@ -12,3 +12,9 @@ export type Message = {
   user: User;
   userId: number;
 }
+
+export type messageParams = {
+  message: string;
+  userID: number;
+  jobID: number;
+}

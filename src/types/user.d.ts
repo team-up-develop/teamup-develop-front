@@ -1,5 +1,5 @@
 // * ユーザー情報
-export interface User {
+export type User = {
   bio: string;
   createdAt: Date;
   deletedAt: Date | null;
@@ -11,7 +11,7 @@ export interface User {
   updatedAt: Date;
   userBirthday: Date;
   userName: string;
-}
+} | {};
 
 // * 登録
 export interface RegisterSessionParams {

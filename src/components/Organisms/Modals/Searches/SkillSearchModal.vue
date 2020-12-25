@@ -1,10 +1,11 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL } from '@/master'
 import axios from 'axios'
 import { Skill } from '@/types/index';
 import { Job } from '@/types/job';
 
-export type DateType = {
+type DateType = {
   skills: Skill[];
   selectedSkill: [];
   jobs: Job[];
@@ -33,7 +34,7 @@ export default Vue.extend({
   },
   created() {
     // * フレームワーク取得
-    axios.get<Skill[]>('http://localhost:8888/api/v1/skill')
+    axios.get<Skill[]>(`${API_URL}/skill`)
     .then(response => {
       this.skills = response.data
     })
@@ -54,7 +55,7 @@ export default Vue.extend({
       }
       const skillStateEnd: number[] = skillState.slice(0)
       const result: string = arraySkill.join('');
-      axios.get(`http://localhost:8888/api/v1/job/?${result}`)
+      axios.get(`${API_URL}/job/?${result}`)
       .then(response => {
         this.jobs = response.data
 

@@ -2,17 +2,22 @@
 import Vue, { PropType } from 'vue';
 import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import { Message } from '@/types/chat'
+import { Message, messageParams } from '@/types/chat'
 import { Job } from '@/types/job';
-import { m, timeChange } from '@/master'
+import {
+  m, 
+  timeChange,
+  API_URL, 
+  truncate 
+} from '@/master'
 
 type DataType = {
   chatGroups: Job[]; //? 今使ってない
-  chats: Message[] | [];
+  chats: Message[];
   chatMessage: string;
   chatMembers: []; //? 今使ってない
   myselfUser: {}; //? 今使ってない
-  postUser: null;
+  postUser: null; //? 今使ってない
   userId: number;
   isActive: boolean;
   hasError: boolean;
@@ -49,37 +54,17 @@ export default Vue.extend({
   computed: {
     m: () => m,
   },
-  filters: {
-    //* 案件タイトル 詳細 文字制限
-    truncateDetailTitle: function(value: string) {
-      const length = 36;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-    truncateDetailTitleChat: function(value: string) {
-      const length = 60;
-      const ommision = "...";
-      if (value.length <= length) {
-        return value;
-      }
-      return value.substring(0, length) + ommision;
-    },
-  },
   created() {
     let chatLength = 0;
     // * チャット詳細画面実装
     setInterval(() => {
-      axios.get(`http://localhost:8888/api/v1/chat_message/?job_id=${this.id}`)
+      axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${this.id}`)
       .then(response => {
         this.loading = false;
         this.chats = response.data
         if(chatLength === this.chats.length) {
           console.log("chatLengt 一緒だよん")
-        }
-        else {
+        } else {
           chatLength = this.chats.length
           // ? GET 際に変今点があったら下にスクロールする
           const chatLog: any = this.$refs.target
@@ -87,10 +72,16 @@ export default Vue.extend({
           chatLog.scrollTop = chatLog.scrollHeight
         }
       })
-      axios.get(`http://localhost:8888/api/v1/job/${this.id}`)
+      .catch(error =>{
+        console.log(error)
+      })
+      axios.get(`${API_URL}/job/${this.id}`)
       .then(response => {
         this.jobTitle = response.data.jobTitle
         this.clickJobId = response.data.id
+      })
+      .catch(error =>{
+        console.log(error)
       })
     }, 1000)
     // ! チャットのタイトルごとに案件参加者を取得できるようにする
@@ -104,12 +95,12 @@ export default Vue.extend({
     // .then(response => {
     //   this.myselfUser= response.data
     // })
-    axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${ this.userId }`)
+    axios.get(`${API_URL}/apply_job/?user_id=${ this.userId }`)
     .then(response => {
       const array = [];
       for(let i = 0; i < response.data.length; i++){
         const applyData = response.data[i]
-        if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || m.APPLY_STATUS_SELF ){
+        if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ){
           array.push(applyData)
           this.chatGroups = array
         }
@@ -118,17 +109,23 @@ export default Vue.extend({
         }
       }
     })
+    .catch(error =>{
+      console.log(error)
+    })
   },
   methods: {
     moment(value: string, format: string) {
       return timeChange(value, format)
     },
+    limit(value: string, num: number) {
+      return truncate(value, num)
+    },
     // * メッセージの送信
     chatCreate() {
-      const params = {
-          message: this.chatMessage,
-          userID: this.userId,
-          jobID: this.id
+      const params: messageParams = {
+        message: this.chatMessage,
+        userID: this.userId,
+        jobID: this.id
       }
       // ? 空のメッセージは送信させない
       if(params.message == "") {
@@ -136,10 +133,9 @@ export default Vue.extend({
         return
       }
       // ? 投稿
-      axios.post(`http://localhost:8888/api/v1/chat_message`, params)
+      axios.post<messageParams>(`${API_URL}/chat_message`, params)
       .then(response => {
-        console.log(response.data)
-        axios.get(`http://localhost:8888/api/v1/chat_message/?job_id=${this.id}`)
+        axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${this.id}`)
         .then(response => {
           this.chats = response.data
           // ! Postされた内容がDOMに反映される前にスクロールされるため、最新投稿までスクロールされていない
@@ -148,6 +144,12 @@ export default Vue.extend({
           if (!chatLog) return 
           chatLog.scrollTop = chatLog.scrollHeight
         })
+        .catch(error =>{
+          console.log(error)
+        })
+      })
+      .catch(error =>{
+        console.log(error)
       })
       this.chatMessage = "";
     },
@@ -170,7 +172,7 @@ export default Vue.extend({
           class="group"
           >
           <div class="group__area">
-            <p>{{ chatGroup.job.jobTitle | truncateDetailTitle }}</p>
+            <p>{{ limit(chatGroup.job.jobTitle, 36) }}</p>
             <v-row class="row">
               <label 
                 for="name" 
@@ -195,7 +197,7 @@ export default Vue.extend({
       <div class="chat-card__right">
         <div class="main" ref="target" v-show="!loading">
           <router-link :to="`/jobs/${ clickJobId }`" class="router">
-            <header class="header">{{ jobTitle | truncateDetailTitleChat }}</header>
+            <header class="header">{{ limit(jobTitle, 60) }}</header>
           </router-link>
           <section class="room">
             <div class="balloon" v-for="chat in chats" :key="chat.id">
@@ -311,13 +313,14 @@ export default Vue.extend({
             padding: 0rem 0 0.5rem 1rem;
             position: absolute;
             bottom: 0;
+            height: 30px;
             width: 100%;
 
             .selfPost {
               @include box-shadow-btn;
               background-color: $third-dark;
               color: $white;
-              padding: 0.25rem 1.5rem;
+              padding: 0.2rem 1.5rem;
               width: 102px;
               font-weight: bold;
               font-size: 0.8em;
@@ -332,7 +335,7 @@ export default Vue.extend({
               border: $third-dark 1px solid;
               color: $third-dark;
               background-color: $white;
-              padding: 0.25rem 1.5rem;
+              padding: 0.2rem 1.5rem;
               width: 102px;
               font-weight: bold;
               font-size: 0.8em;

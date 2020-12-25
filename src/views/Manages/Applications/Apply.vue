@@ -1,13 +1,14 @@
 <script lang="ts">
 import Vue from 'vue';
+import { API_URL, m } from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/manage';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
 
-export type DataType = {
+type DataType = {
   loginFlag: boolean;
-  applyJob: {}[];
+  applyJob: ManageJob[];
   userId: number;
 }
 
@@ -27,12 +28,14 @@ export default Vue.extend({
     // * 参加案件を取得
     if(this.userId) {
       this.loginFlag = true
-      axios.get(`http://localhost:8888/api/v1/apply_job/?user_id=${this.userId}`)
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${this.userId}`)
       .then(response => {
         for(let i = 0; i < response.data.length; i++) {
           const applyJobCorrect: ManageJob = response.data[i];
-          if(applyJobCorrect.applyStatusId === 1 || applyJobCorrect.applyStatusId === 2) {
-
+          if(
+            applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || 
+            applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE
+          ) {
             this.applyJob.push(applyJobCorrect);
           }
         }
