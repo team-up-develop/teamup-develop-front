@@ -1,52 +1,67 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/manage';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
+import Vuex from '@/store/index'
 
-type DataType = {
+type State = {
   manageJobs: ManageJob[];
-  loginFlag: boolean;
   userId: number;
 }
 
-export default Vue.extend({ 
+const initialState = (): State => ({
+  manageJobs: [],
+  userId: Vuex.state.auth.userId
+});
+
+export default defineComponent({ 
   components: {
     UserCard,
     JobsCard
   },
-  data(): DataType {
-    return {
-      manageJobs: [],
-      loginFlag: false,
-      userId: this.$store.state.auth.userId
-    }
-  },
-  mounted() {
-    // * 管理案件を取得
-    if(this.userId) {
-      this.loginFlag = true
-      axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${this.userId}`)
+  setup: (_, context) => {
+    const state = reactive<State>(initialState());
+    const router = context.root.$router
+
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        router.push('/login');
+      }
+    })
+
+    onMounted(() => {
+      // * 管理案件を取得
+      axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${state.userId}`)
       .then(response => {
-        this.manageJobs = response.data
+        state.manageJobs = response.data
       })
       .catch(error =>{
         console.log(error)
       })
+    })
+
+    return {
+      ...toRefs(state),
+      isLogin
     }
-    else {
-      this.loginFlag = false;
-      this.$router.push('/login');
-    }
-  }
+  },
 });
 </script>
 
 <template>
   <section>
-    <v-container class="wrapper" v-if="loginFlag === true">
+    <v-container class="wrapper" v-if="isLogin">
       <v-row>
         <UserCard />
         <v-sheet class="manage">
