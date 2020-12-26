@@ -49,7 +49,7 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0 }
   },
-  setup: (props, context) => {
+  setup: (props) => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
@@ -127,7 +127,7 @@ export default defineComponent({
     <ApplyModal @close="closeModal" v-if="modal">
       <p>応募を完了してよろしいですか？</p>
         <template slot="footer">
-          <applybtn :jobId='id' @compliteEntry="compliteEntry"></applybtn>
+          <Applybtn :jobId='id' @compliteEntry="compliteEntry"></Applybtn>
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>
     </ApplyModal>

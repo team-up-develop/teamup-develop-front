@@ -34,7 +34,7 @@ export default defineComponent({
     // * job.id
     id: { type: Number , default: null },
   },
-  setup: (props, context) => {
+  setup: (props) => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {

@@ -1,23 +1,29 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
 import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
 import { timeChange, truncate } from '@/master'
 import { Job } from '@/types/job';
 
-export default Vue.extend({ 
-  props: {
-    job: { type: Object }
-  },
-  methods: {
-    limit(value: string, num: number) {
-      return truncate(value, num)
-    },
-    moment(value: string, format: string) {
-      return timeChange(value, format)
-    },
-  },
+export default defineComponent({ 
   components: {
     CardJobSkill
+  },
+  props: {
+    job: { type: Object, defalut: null, require: true }
+  },
+  setup: () => {
+    const moment = (value: string, format: string) => timeChange(value, format);
+    const limit = (value: string, num: number) => truncate(value, num);
+    return {
+      moment,
+      limit
+    }
   }
 });
 </script>

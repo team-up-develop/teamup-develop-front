@@ -1,14 +1,15 @@
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { timeChange } from '@/master'
 
-export default Vue.extend({ 
+export default defineComponent({ 
   props: {
-    job: Object
+    job: { type: Object, require: true }
   },
-  methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
+  setup: () => {
+    const moment = (value: string, format: string) => timeChange(value, format);
+    return {
+      moment,
     }
   }
 });
