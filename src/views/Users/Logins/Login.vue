@@ -7,7 +7,6 @@ type DataType = {
   LoginName: string;
   LoginPassword: string;
   loginErrorFlag: boolean;
-  loading: boolean;
 }
 
 export default Vue.extend({ 
@@ -20,7 +19,6 @@ export default Vue.extend({
       LoginName: '',
       LoginPassword: '',
       loginErrorFlag: false,
-      loading: true, 
     }
   },
   methods: {

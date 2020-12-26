@@ -201,7 +201,7 @@ export default defineComponent({
         <div class="button-action-area" @click="registerRedirect">
           <button class="btn-box-apply">応募する</button>
           <div class="favorite-btn-area">
-            <font-awesome-icon icon="heart" class="icon"/>
+            <v-icon class="icon">mdi-heart</v-icon>
           </div>
         </div>
       </div>
@@ -372,7 +372,7 @@ export default defineComponent({
 
 .icon {
   font-size: 30px;
-  padding: 10px;
+  padding: 1.5rem;
   width: 38px;
   height: 38px;
   color: $white;

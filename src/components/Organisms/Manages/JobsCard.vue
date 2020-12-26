@@ -1,17 +1,24 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
 import { timeChange, truncate } from '@/master'
 
-export default Vue.extend({ 
+
+export default defineComponent({ 
   props: {
-    job: Object
+    job: {type: Object, require: true}
   },
-  methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
-    },
-    limit(value: string, num: number) {
-      return truncate(value, num)
+  setup: () => {
+    const moment = (value: string, format: string) => timeChange(value, format);
+    const limit = (value: string, num: number) => truncate(value, num);
+    return {
+      moment,
+      limit
     }
   }
 });
