@@ -6,7 +6,7 @@ import {
   onMounted,
   computed
 } from '@vue/composition-api';
-import { API_URL, isLogin } from '@/master'
+import { API_URL } from '@/master'
 import axios from 'axios'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
@@ -31,6 +31,14 @@ export default defineComponent({
   setup: (_, context) => {
     const state = reactive<State>(initialState());
 
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
     onMounted(() => {
       // * 保存している案件を取得
       axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
@@ -44,7 +52,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      isLogin: () => isLogin,
+      isLogin,
     }
   }
 });

@@ -10,7 +10,7 @@ import axios from 'axios';
 import { ManageJob } from '@/types/manage';
 import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
 import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'
-import { m, API_URL, isLogin } from '@/master'
+import { m, API_URL } from '@/master'
 import Vuex from '@/store/index'
 
 type State = {
@@ -37,6 +37,14 @@ export default defineComponent({
   setup: (props, context) => {
     const state = reactive<State>(initialState());
 
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
     onMounted(() => {
       axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_APPLY  }`)
       .then(response => {
@@ -57,7 +65,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      isLogin: () => isLogin,
+      isLogin,
     }
   }
 });
