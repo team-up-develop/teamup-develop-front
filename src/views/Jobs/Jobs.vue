@@ -510,7 +510,7 @@ export default Vue.extend({
             <div class="top-job-detail-bottom">
               <button class="btn-box-apply" @click="registerRedirect">応募する</button>
               <div class="btn-box-save">
-                <font-awesome-icon icon="heart" class="save-icon" @click="registerRedirect"/>
+                <v-icon class="save-icon" @click="registerRedirect">mdi-heart</v-icon>
               </div>
             </div>
           </div>
@@ -518,7 +518,6 @@ export default Vue.extend({
         <!-- 右側案件詳細 -->
         <div class="main-job-detail-area">
           <div class="tag-area">
-            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             投稿者
           </div>
           <router-link :to="`/account/profile/${ jobDetail.userId }`"> 
@@ -527,7 +526,6 @@ export default Vue.extend({
             </div>
           </router-link>
           <div class="tag-area">
-            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             開発言語
           </div>
           <div class="post-user-area">
@@ -539,7 +537,6 @@ export default Vue.extend({
             </div>
           </div>
           <div class="tag-area">
-            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             フレームワーク
           </div>
           <div class="post-user-area">
@@ -550,7 +547,6 @@ export default Vue.extend({
             </div>
           </div>
           <div class="tag-area">
-            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             その他スキル
           </div>
           <div class="post-user-area">
@@ -563,21 +559,18 @@ export default Vue.extend({
             </div>
           </div>
           <div class="tag-area">
-            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             開発期間
           </div>
           <div class="post-user-area">
             {{ moment(jobDetail.devStartDate , "YYYY年 M月 D日") }}  ~  {{ moment(jobDetail.devEndDate, "YYYY年 M月 D日")}}
           </div>
           <div class="tag-area">
-            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             募集人数
           </div>
           <div class="post-user-area">
             {{ jobDetail.recruitmentNumbers }} 人
           </div>
           <div class="tag-area">
-            <font-awesome-icon icon="chevron-circle-right" class="icon"/> 
             開発詳細
           </div>
           <div class="post-user-area">
