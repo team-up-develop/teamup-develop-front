@@ -1,4 +1,6 @@
 import moment from "moment";
+import router from './router';
+import Vuex from '@/store/index';
 
 //* 応募のステータス
 // 1: 応募
@@ -28,4 +30,12 @@ export const truncate = (value: string, num: number) => {
     return value;
   }
   return value.substring(0, num) + over;
+}
+
+export const isLogin = () => {
+  if(Vuex.state.auth.userId) {
+    return true
+  } else {
+    router.push('/login');
+  }
 }
