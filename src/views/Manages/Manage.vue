@@ -28,7 +28,7 @@ export default defineComponent({
     UserCard,
     JobsCard
   },
-  setup: (_, context) => {
+  setup: () => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {

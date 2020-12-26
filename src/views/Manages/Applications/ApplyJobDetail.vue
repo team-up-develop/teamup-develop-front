@@ -49,7 +49,7 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0 }
   },
-  setup: (props, context) => {
+  setup: (props) => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {

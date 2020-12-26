@@ -1,17 +1,11 @@
 <script lang="ts">
-import { 
-  defineComponent,
-  reactive,
-  toRefs,
-  onMounted,
-  computed
-} from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import { timeChange, truncate } from '@/master'
 
 
 export default defineComponent({ 
   props: {
-    job: {type: Object, require: true}
+    job: { type: Object, require: true }
   },
   setup: () => {
     const moment = (value: string, format: string) => timeChange(value, format);
