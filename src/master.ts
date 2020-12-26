@@ -32,10 +32,12 @@ export const truncate = (value: string, num: number) => {
   return value.substring(0, num) + over;
 }
 
-export const isLogin = () => {
-  if(Vuex.state.auth.userId) {
-    return true
-  } else {
-    router.push('/login');
-  }
-}
+// FIXME: バックエンド完了後に処理を見直す
+// export const isLogin = (userId: number) => {
+//   if(userId) {
+//     return true
+//   } else {
+//     return false
+//     // router.push('/login');
+//   }
+// }
