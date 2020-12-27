@@ -151,4 +151,3 @@ $primary-color: #2196F3;
 
 ## Color
 <img width="612" alt="スクリーンショット 2020-12-19 10 59 58" src="https://user-images.githubusercontent.com/56709557/102679879-7673e880-41f6-11eb-8889-27143779a070.png">
-
