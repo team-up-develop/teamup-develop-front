@@ -59,13 +59,13 @@ export default Vue.extend({
 
       .register-btn {
         @include purple-btn;
-        @include box-shadow-btn;
+        @include neumorphism;
         display: block;
         padding: 1.2rem 4rem;
         border-radius: 50px;
         font-size: .875rem;
         font-weight: 700;
-        color: #fff;
+        color: $white;
         line-height: 1;
         text-align: center;
         max-width: 280px;
@@ -74,14 +74,6 @@ export default Vue.extend({
         cursor: pointer;
         transition: .3s;
         outline: none;
-
-        &:hover {
-          color: #F8FAFF;
-          appearance: none;
-          border: none;
-          box-shadow: 0 5px 20px -3px #AB47BC;
-          transition: .3s;
-        }
       }
     }
   }

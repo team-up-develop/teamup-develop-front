@@ -1,41 +1,58 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
 import { Job } from '@/types/job';
+import Vuex from '@/store/index'
 
-type DataType = {
+type State = {
   favoriteJobs: Job[];
-  loginFlag: boolean;
   userId: number;
 }
 
-export default Vue.extend({ 
+const initialState = (): State => ({
+  favoriteJobs: [],
+  userId: Vuex.state.auth.userId
+});
+
+export default defineComponent({ 
   components: {
     UserCard,
     JobsCard
   },
-  data() {
-    return {
-      favoriteJobs: [],
-      loginFlag: false,
-      userId: this.$store.state.auth.userId
-    }
-  },
-  mounted() {
-    // * 保存している案件を取得
-    if(this.userId) {
-      this.loginFlag = true
-      axios.get(`${API_URL}/favorite_job/?user_id=${this.userId}`)
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
+    onMounted(() => {
+      // * 保存している案件を取得
+      axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
       .then(response => {
-        this.favoriteJobs = response.data
+        state.favoriteJobs = response.data
       })
-    }
-    else {
-      this.loginFlag = false;
-      this.$router.push('/login');
+      .catch(error =>{
+        console.log(error)
+      })
+    })
+
+    return {
+      ...toRefs(state),
+      isLogin,
     }
   }
 });
@@ -43,7 +60,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-container class="wrapper" v-if="loginFlag === true">
+    <v-container class="wrapper" v-if="isLogin">
       <v-row>
         <UserCard />
         <v-sheet class="manage">
@@ -124,7 +141,10 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
+      border-bottom: $dark-grey 1px solid;
+    }
+    .router-link:hover {
+      @include tab-hover;
     }
 
     .router-link-active-click {
@@ -133,8 +153,8 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
-      background-color: silver;
+      border-bottom: $dark-grey 1px solid;
+      background-color: $dark-grey;
     }
   }
 }

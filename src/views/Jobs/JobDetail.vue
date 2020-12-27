@@ -1,5 +1,12 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
+import Vuex from '@/store/index'
 import { API_URL } from '@/master'
 import axios from 'axios'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -11,18 +18,30 @@ import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import EditJobModal from '@/components/Organisms/Modals/Edit/EditJobModal.vue'
 import { Job } from '@/types/job';
+import { ManageJob } from '@/types/manage';
 
-type DataType = {
+type State = {
   job: any; //TODO: Any
   userId: number;
-  selfJobPost: boolean; //? 自分の案件かを判定
-  loginFlag: boolean; //? ログインしているかを判定
+  selfJobPost: boolean; 
   loading: boolean;
   applyFlug: boolean;
   modal: boolean;
   editModal: boolean;
 }
-export default Vue.extend({ 
+
+const initialState = (): State => ({
+  job: {},
+  userId: Vuex.state.auth.userId,
+  loading: true,
+  applyFlug: true,
+  modal: false,
+  editModal: false,
+  selfJobPost: false
+});
+
+
+export default defineComponent({ 
   components: {
     Applybtn,
     FavoriteDetailBtn,
@@ -34,108 +53,97 @@ export default Vue.extend({
     EditJobModal
   },
   props: {
-    id: { type: Number as PropType<number>, default: 0 }
+    id: { type: Number, default: 0 }
   },
-  data(): DataType {
-    return {
-      job: {},
-      userId: this.$store.state.auth.userId,
-      loginFlag: false, //? ログインしているかを判定
-      loading: true, //? ローディング
-      applyFlug: true,
-      modal: false,
-      editModal: false,
-      selfJobPost: false
-    }
-  },
-  mounted() {
+  setup: (props, context) => {
+    const state = reactive<State>(initialState());
+    const router = context.root.$router
+
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
     // * 詳細画面情報を取得
-    axios.get<Job>(`${API_URL}/job/${this.id}/`)
+    axios.get<Job>(`${API_URL}/job/${props.id}/`)
+    .then(response => {
+      setTimeout(() => {
+        state.loading = false;
+        state.job = response.data
+      }, 1000)
+    })
+    .catch(error =>{
+      console.log(error)
+    })
+
+    const registerRedirect = () => router.push('/register');
+
+    const openModal = () => state.modal = true;
+    const closeModal = () => state.modal = false;
+    const doSend = () => closeModal();
+    const openEditModal = () => state.editModal = true;
+    const closeEditModal = () => state.editModal = false;
+
+    onMounted(() => {
+      if(!state.userId) {
+        return 
+      }
+      axios.get<Job[]>(`${API_URL}/job/?user_id=${state.userId}`)
       .then(response => {
-        setTimeout(() => {
-          this.loading = false;
-          this.job = response.data
-        }, 1000)
+        for(let i = 0; i < response.data.length; i++){
+          const selfJob: any = response.data[i]
+          if(selfJob.id === props.id){
+            state.selfJobPost = true
+          }
+        }
       })
       .catch(error =>{
         console.log(error)
       })
-  },
-  created() {
-    if(this.userId) {
-      this.loginFlag = true;
-    } else {
-      this.loginFlag = false;
-    }
-    // * 自分の案件かを判定
-    axios.get(`${API_URL}/job/?user_id=${this.userId}`)
-    .then(response => {
-      for(let i = 0; i < response.data.length; i++){
-        const selfJob = response.data[i]
-        if(selfJob.id === this.id){
-          this.selfJobPost = true
+      // * 自分の案件かを判定
+      axios.get<Job[]>(`${API_URL}/job/?user_id=${state.userId}`)
+      .then(response => {
+        for(let i = 0; i < response.data.length; i++){
+          const selfJob: any = response.data[i]
+          if(selfJob.id === props.id){
+            state.selfJobPost = true
+          }
         }
-      }
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    // * ログインユーザーが応募済みか応募済みではないかを判定する
-    axios.get(`${API_URL}/apply_job/?user_id=${this.userId}`)
-    .then(response => {
-      const arrayApply = []
-      for(let c = 0; c < response.data.length; c++){
-        const applyData = response.data[c];
-        arrayApply.push(applyData.job.id)
-      }
-      if (arrayApply.includes(this.id)) {
-        this.applyFlug = false
-      } else {
-        console.log("まだ応募していません")
-      }
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-  },
-  methods: {
-    // * 非ログイン時 登録リダイレクト
-    registerRedirect() {
-      this.$router.push('/register');
-    },
-    // * モーダルを開く
-    openModal() {
-      this.modal = true
-    },
-    closeModal() {
-      this.modal = false
-    },
-    doSend() {
-      this.closeModal()
-    },
-    openEditModal() {
-      this.editModal = true
-    },
-    closeEditModal() {
-      this.editModal = false
-    },
-    // * Twitter をタブで開く
-    twitterTab() {
-      if(this.job.user.twitterAccount == null) {
-        return this.job.user.twitterAccount;
-      } else {
-        const url: string = this.job.user.twitterAccount;
-        return window.open(url);
-      }
-    },
-    // * Github をタブで開く
-    gitTab() {
-      if(this.job.user.githubAccount == null) {
-        return this.job.user.githubAccount;
-      } else {
-        const url: string = this.job.user.githubAccount;
-        return window.open(url);
-      }
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+      // * ログインユーザーが応募済みか応募済みではないかを判定する
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
+      .then(response => {
+        const arrayApply: any = []
+        for(let c = 0; c < response.data.length; c++){
+          const applyData: any = response.data[c];
+          arrayApply.push(applyData.job.id)
+        }
+        if (arrayApply.includes(props.id)) {
+          state.applyFlug = false
+        } else {
+          console.log("まだ応募していません")
+        }
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+    });
+
+    return {
+      ...toRefs(state),
+      isLogin,
+      openModal,
+      closeModal,
+      doSend,
+      registerRedirect,
+      openEditModal,
+      closeEditModal
     }
   }
 });
@@ -157,7 +165,7 @@ export default Vue.extend({
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template slot="footer">
-          <applybtn :jobId='id'></applybtn>
+          <Applybtn :jobId='id' />
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>
       </ApplyModal>
@@ -174,14 +182,14 @@ export default Vue.extend({
       <div class="detail-post-detail-area">
         <DetailJob :job="job"/>
       </div>
-      <div class="button-area" v-if="loginFlag">
+      <div class="button-area" v-if="isLogin">
         <div v-if="!selfJobPost" class="button-action-area">
           <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
           <div class="btn-box-apply-false" v-if="applyFlug == false">
             応募済み
           </div>
           <div class="favorite-btn-area">
-            <favorite-detail-btn :jobId='id'></favorite-detail-btn>
+            <FavoriteDetailBtn :jobId='id' />
           </div>
         </div>
         <div class="button-action-area-edit" v-if="selfJobPost">
@@ -189,11 +197,11 @@ export default Vue.extend({
         </div>
       </div>
         <!-- 非ログイン時 リダイレクトさせる -->
-      <div class="button-area" v-if="!loginFlag">
+      <div class="button-area" v-else>
         <div class="button-action-area" @click="registerRedirect">
           <button class="btn-box-apply">応募する</button>
           <div class="favorite-btn-area">
-            <font-awesome-icon icon="heart" class="icon"/>
+            <v-icon class="icon">mdi-heart</v-icon>
           </div>
         </div>
       </div>
@@ -283,7 +291,7 @@ export default Vue.extend({
 //* 応募するボタン 
 .btn-box-apply {
   @include red-btn;
-  @include box-shadow-btn;
+  @include neumorphism;
   color: $white;
   position: absolute;
   left: 0;
@@ -300,10 +308,6 @@ export default Vue.extend({
   display: inline-block;
   cursor: pointer;
   border: none;
-
-  &:hover {
-    @include red-btn-hover;
-  }
 }
 
 //* 応募済みボタン */
@@ -324,7 +328,6 @@ export default Vue.extend({
   margin: auto;
   font-size: 1.3rem;
   display: inline-block;
-  cursor: pointer;
   border: none;
 }
 
@@ -369,7 +372,7 @@ export default Vue.extend({
 
 .icon {
   font-size: 30px;
-  padding: 10px;
+  padding: 1.5rem;
   width: 38px;
   height: 38px;
   color: $white;
@@ -380,8 +383,8 @@ export default Vue.extend({
 
 // * モーダル内のキャンセルボタン 
 .modal-btn {
-  @include red-cancel-btn;
-  @include box-shadow-btn;
+  @include neumorphismGrey;
+  color: $red;
   padding: 1rem 2.4rem;
   border-radius: 50px;
   font-weight: 600;

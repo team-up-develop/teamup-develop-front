@@ -175,12 +175,16 @@ export default Vue.extend({
       margin: 0 auto;
 
       .header {
+        border-bottom: $dark-grey 2px solid;
+
         .router-link {
           color: $text-main-color;
           text-decoration: none;
           width: 33.3%;
           padding: 0.7rem 0;
-          border-bottom: #F1F5F9 1px solid;
+        }
+        .router-link:hover {
+          @include tab-hover;
         }
 
         .router-link-active-click {
@@ -189,8 +193,8 @@ export default Vue.extend({
           text-decoration: none;
           width: 33.3%;
           padding: 0.7rem 0;
-          border-bottom: #F1F5F9 1px solid;
-          background-color: #F1F5F9;
+          border-bottom: $dark-grey 1px solid;
+          background-color: $dark-grey;
         }
       }
     }
@@ -201,7 +205,7 @@ export default Vue.extend({
 .detail-wrapper 
 .skill {
   width: 100%;
-  background-color: #F1F5F9;
+  // background-color: #F1F5F9;
 
   &__card {
     width: 75%;
@@ -216,7 +220,7 @@ export default Vue.extend({
 .detail-wrapper 
 .pr {
   width: 100%;
-  background-color: #F1F5F9;
+  // background-color: #F1F5F9;
 
   &__card {
     width: 75%;

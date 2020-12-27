@@ -1,49 +1,66 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
 import { API_URL, m } from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/manage';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
+import Vuex from '@/store/index'
 
-type DataType = {
-  loginFlag: boolean;
+type State = {
   applyJob: ManageJob[];
   userId: number;
 }
 
-export default Vue.extend({ 
+const initialState = (): State => ({
+  applyJob: [],
+  userId: Vuex.state.auth.userId
+});
+
+export default defineComponent({ 
   components: {
     UserCard,
     JobsCard
   },
-  data(): DataType {
-    return {
-      loginFlag: false,
-      applyJob: [],
-      userId: this.$store.state.auth.userId
-    }
-  },
-  mounted() {
-    // * 参加案件を取得
-    if(this.userId) {
-      this.loginFlag = true
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${this.userId}`)
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
+    onMounted(() => {
+      if(!state.userId) {
+        return 
+      }
+      // * 参加案件を取得
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
       .then(response => {
         for(let i = 0; i < response.data.length; i++) {
           const applyJobCorrect: ManageJob = response.data[i];
-          if(
-            applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || 
-            applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE
-          ) {
-            this.applyJob.push(applyJobCorrect);
+          if( applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE ) {
+            state.applyJob.push(applyJobCorrect);
           }
         }
       })
-    }
-    else {
-      this.loginFlag = false;
-      this.$router.push('/login');
+      .catch(error =>{
+        console.log(error)
+      })
+    })
+
+    return {
+      ...toRefs(state),
+      isLogin,
     }
   }
 });
@@ -51,7 +68,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-container class="wrapper" v-if="loginFlag === true">
+    <v-container class="wrapper" v-if="isLogin">
       <v-row>
         <UserCard />
         <v-sheet class="manage">
@@ -132,7 +149,10 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
+      border-bottom: $dark-grey 1px solid;
+    }
+    .router-link:hover {
+      @include tab-hover;
     }
 
     .router-link-active-click {
@@ -141,8 +161,8 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
-      background-color: silver;
+      border-bottom: $dark-grey 1px solid;
+      background-color: $dark-grey;
     }
   }
 }

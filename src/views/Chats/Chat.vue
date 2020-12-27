@@ -282,7 +282,6 @@ export default Vue.extend({
         }
 
           .send {
-            @include box-shadow-btn;
             @include blue-btn;
             color: $white;
             padding: 1rem 1rem;

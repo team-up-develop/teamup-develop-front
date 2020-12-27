@@ -7,6 +7,7 @@ import createPersistedState from "vuex-persistedstate" //? State の値を local
 Vue.use(Vuex)
 
 // TODO: Any
+
 export default new Vuex.Store<any>({
   // * 状態保存
   state: {},

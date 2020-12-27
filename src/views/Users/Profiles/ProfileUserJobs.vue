@@ -170,12 +170,16 @@ export default Vue.extend({
       margin: 0 auto;
 
       .header {
+        border-bottom: $dark-grey 2px solid;
+
         .router-link {
           color: $text-main-color;
           text-decoration: none;
           width: 33.3%;
           padding: 0.7rem 0;
-          border-bottom: #F1F5F9 1px solid;
+        }
+        .router-link:hover {
+          @include tab-hover;
         }
 
         .router-link-active-click {
@@ -184,21 +188,24 @@ export default Vue.extend({
           text-decoration: none;
           width: 33.3%;
           padding: 0.7rem 0;
-          border-bottom: #F1F5F9 1px solid;
-          background-color: #F1F5F9;
+          border-bottom: $dark-grey 1px solid;
+          background-color: $dark-grey;
         }
       }
     }
   }
 
   .jobs {
-    width: 100%;
-    background-color: #F1F5F9;
+    width: 80%;
     margin: 0 auto;
+
+    @media screen and (max-width: 480px) {
+      width: 98%;
+    }
 
     &__card {
       margin-left: 1rem;
-      width: 560px;
+      width: 500px;
       margin: 0 auto;
     }
   }

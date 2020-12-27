@@ -1,53 +1,63 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
 import axios from 'axios';
 import { m, API_URL, truncate } from '@/master'
 import { ManageJob } from '@/types/manage';
 
-type DataType = {
+type State = {
   applyNum: number;
   rejectNum: number;
   assginNum: number;
 }
 
-export default Vue.extend({
+const initialState = (): State => ({
+  applyNum: 0,
+  rejectNum: 0,
+  assginNum: 0
+});
+
+export default defineComponent({ 
   props: {
-    jobTitle: { type: String as PropType<string>, default: "" },
-    jobId: { type: Number as PropType<number>, default: 0 }
+    jobTitle: { type: String, default: "", require: true },
+    jobId: { type: Number, default: 0 , require: true}
   },
-  data(): DataType {
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const limit = (value: string, num: number) => truncate(value, num);
+    onMounted(() => {
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
+      .then(response => {
+        state.applyNum = response.data.length
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
+      .then(response => {
+        state.rejectNum = response.data.length
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
+      .then(response => {
+        state.assginNum = response.data.length
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+    });
+
     return {
-      applyNum: 0,
-      rejectNum: 0,
-      assginNum: 0
-    }
-  },
-  created() {
-    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
-    .then(response => {
-      this.applyNum = response.data.length
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
-    .then(response => {
-      this.rejectNum = response.data.length
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ this.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
-    .then(response => {
-      this.assginNum = response.data.length
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-  },
-  methods: {
-    limit(value: string, num: number) {
-      return truncate(value, num)
+      ...toRefs(state),
+      limit
     }
   }
 })
@@ -125,7 +135,6 @@ section {
 
     .detail-btn {
       @include box-shadow-btn;
-      // @include purple-btn;
       background-color: $secondary-color;
       color: $white;
       padding: 0.5rem 4rem;

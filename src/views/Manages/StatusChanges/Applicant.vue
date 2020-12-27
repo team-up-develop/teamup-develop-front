@@ -1,45 +1,72 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
 import axios from 'axios';
 import { ManageJob } from '@/types/manage';
 import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
 import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'
 import { m, API_URL } from '@/master'
+import Vuex from '@/store/index'
 
-type DataType = {
+type State = {
   applyUsers: ManageJob[];
   userId: number;
   jobTitle: string;
 }
 
-export default Vue.extend({
+const initialState = (): State => ({
+  applyUsers: [],
+  userId: Vuex.state.auth.userId,
+  jobTitle: ""
+});
+
+export default defineComponent({ 
   components: {
     JobsCard,
     UserCard
   },
   props: {
-    // * job.idを受け取る
-    id: { type: Number as PropType<number>, default: 0 },
+    // * job.id
+    id: { type: Number , default: null },
   },
-  data(): DataType {
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
+    onMounted(() => {
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_APPLY  }`)
+      .then(response => {
+        state.applyUsers = response.data
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+      // FIXME: any
+      axios.get<any>(`${API_URL}/job/${ props.id }`)
+      .then(response => {
+        state.jobTitle = response.data.jobTitle
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+    })
+
     return {
-      applyUsers: [], //? 応募者
-      userId: this.$store.state.auth.userId,
-      jobTitle: ""
+      ...toRefs(state),
+      isLogin,
     }
-  },
-  created() {
-    axios.get(`${API_URL}/apply_job/?job_id=${ this.id }&apply_status_id=${ m.APPLY_STATUS_APPLY  }`)
-    .then(response => {
-      this.applyUsers = response.data
-    })
-  },
-  mounted() {
-    // *  案件タイトル取得
-    axios.get(`${API_URL}/job/${ this.id }`)
-    .then(response => {
-      this.jobTitle = response.data.jobTitle
-    })
   }
 });
 </script>
@@ -47,7 +74,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-container class="wrapper">
+    <v-container class="wrapper" v-if="isLogin">
       <v-row>
         <JobsCard 
           :jobTitle="jobTitle" 
@@ -78,6 +105,9 @@ export default Vue.extend({
         </v-sheet>
       </v-row>
     </v-container>
+    <div v-else>
+      ログインが必要です！
+    </div>
   </section>
 </template>
 
@@ -127,7 +157,10 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
+      border-bottom: $dark-grey 1px solid;
+    }
+    .router-link:hover {
+      @include tab-hover;
     }
 
     .router-link-active-click {
@@ -136,8 +169,8 @@ export default Vue.extend({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: grey 1px solid;
-      background-color: silver;
+      border-bottom: $dark-grey 1px solid;
+      background-color: $dark-grey;
     }
   }
 }

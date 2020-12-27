@@ -1,12 +1,19 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
+import Vuex from '@/store/index'
 import { API_URL, m } from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/manage';
 import { User } from '@/types/user';
 import { Job } from '@/types/job';
 
-type DataType = {
+type State = {
   userId: number;
   user: User | {};
   manageNum: number;
@@ -15,58 +22,64 @@ type DataType = {
   applyJob: ManageJob[];
 }
 
-export default Vue.extend({ 
-  data(): DataType {
-    return {
-      userId: this.$store.state.auth.userId,
-      user: {},
-      manageNum: 0,
-      favoriteNum: 0,
-      applyNum: 0,
-      applyJob: [],
-    }
-  },
-  created() {
-    // * user 取得
-    axios.get<User>(`${API_URL}/user/${this.userId}`)
-    .then(response => {
-      this.user = response.data
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    // * 管理案件数
-    axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${this.userId}`)
-    .then(response => {
-      this.manageNum = response.data.length
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    // * 保存案件数
-    axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${this.userId}`)
-    .then(response => {
-      this.favoriteNum = response.data.length
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${this.userId}`)
-    .then(response => {
-      for(let i = 0; i < response.data.length; i++) {
-        const applyJobCorrect: ManageJob = response.data[i];
-        if(
-          applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || 
-          applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE
-        ) {
-          this.applyJob.push(applyJobCorrect);
+const initialState = (): State => ({
+  userId: Vuex.state.auth.userId,
+  user: {},
+  manageNum: 0,
+  favoriteNum: 0,
+  applyNum: 0,
+  applyJob: [],
+});
+
+export default defineComponent({ 
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    onMounted(() => {
+      axios.get<User>(`${API_URL}/user/${state.userId}`)
+      .then(response => {
+        state.user = response.data
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+      // * 管理案件数
+      axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${state.userId}`)
+      .then(response => {
+        state.manageNum = response.data.length
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+      // * 保存案件数
+      axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
+      .then(response => {
+        state.favoriteNum = response.data.length
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+      // * 応募案件数
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
+      .then(response => {
+        for(let i = 0; i < response.data.length; i++) {
+          const applyJobCorrect: ManageJob = response.data[i];
+          if(
+            applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || 
+            applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE
+          ) {
+            state.applyJob.push(applyJobCorrect);
+          }
         }
-      }
-      this.applyNum = this.applyJob.length
-    })
-    .catch(error =>{
-      console.log(error)
-    })
+        state.applyNum = state.applyJob.length
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+    });
+    return {
+      ...toRefs(state),
+    }
   }
 });
 </script>

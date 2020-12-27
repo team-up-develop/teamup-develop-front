@@ -74,11 +74,8 @@ export default Vue.extend({
 
 <template>
   <section>
-    <font-awesome-icon icon="heart" class="icon" @click="saveJob" v-if="flag"/>
-    <font-awesome-icon icon="heart" class="save-icon" @click="deleteJob" v-if="flag == false"/>
-    <!-- <div class="btn-box-save-false" @click="deleteJob" v-if="flag == false">
-      保存削除
-    </div> -->
+    <v-icon class="icon" @click="saveJob" v-if="flag">mdi-heart</v-icon>
+    <v-icon class="save-icon" @click="deleteJob" v-if="flag == false">mdi-heart</v-icon>
   </section>
 </template>
 

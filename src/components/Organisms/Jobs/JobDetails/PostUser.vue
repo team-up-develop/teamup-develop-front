@@ -1,34 +1,37 @@
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import { timeChange } from '@/master'
+import { Job } from '@/types/job';
 
-export default Vue.extend({ 
+export default defineComponent({ 
   props: {
-    job: Object
+    job: { type: Object, require: true, defalut: {} }
   },
-  // TODO: Atomsに切り分け
-  methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
-    },
+  setup: (props: any) => {
+    const moment = (value: string, format: string) => timeChange(value, format);
     // * Twitter をタブで開く
-    twitterTab() {
-      if(this.job.user.twitterAccount == null) {
-        return this.job.user.twitterAccount;
+    const twitterTab = () => {
+      if(props.job.user.twitterAccount == null) {
+        return props.job.user.twitterAccount;
       } else {
-        const url: string = this.job.user.twitterAccount;
+        const url: string = props.job.user.twitterAccount;
         return window.open(url);
       }
-    },
+    };
     // * Github をタブで開く
-    gitTab() {
-      if(this.job.user.githubAccount == null) {
-        return this.job.user.githubAccount;
+    const gitTab = () => {
+      if(props.job.user.githubAccount == null) {
+        return props.job.user.githubAccount;
       } else {
-        const url: string = this.job.user.githubAccount;
+        const url: string = props.job.user.githubAccount;
         return window.open(url);
       }
-    },
+    };
+    return {
+      moment,
+      twitterTab,
+      gitTab
+    }
   }
 });
 </script>

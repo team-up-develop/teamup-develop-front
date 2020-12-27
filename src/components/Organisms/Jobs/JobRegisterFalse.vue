@@ -1,8 +1,8 @@
 <script lang="ts">
-import Vue from 'vue';
+import { defineComponent } from '@vue/composition-api';
 import RegisteForm from '@/components/Molecules/Jobs/JobRegisterFalses/RegisteForm.vue'
 
-export default Vue.extend({ 
+export default defineComponent({ 
   components: {
     RegisteForm
   },
@@ -37,13 +37,13 @@ export default Vue.extend({
     padding: 1rem 0;
     text-align: center;
     position: relative;
-    color: $secondary-color;
+    color: $secondary-dark;
     font-weight: bold;
     font-size: 20px;
     letter-spacing: 0.5rem;
 
     &:after {
-      background-color: $secondary-color;
+      background-color: $secondary-dark;
       content: "";
       display: block;
       height: 4px;

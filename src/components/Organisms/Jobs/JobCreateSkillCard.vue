@@ -1,5 +1,5 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue, { PropType }  from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select'
@@ -28,6 +28,12 @@ export default Vue.extend({
   components: {
     vSelect,
     Session
+  },
+  props: {
+    jobTitle: { type: String as PropType<string>, default: "" },
+    devStartDate: { type: String as PropType<string>, default: "" },
+    devEndDate: { type: String as PropType<string>, default: "" },
+    jobDescription: { type: String as PropType<string>, default: "" },
   },
   data(): DataType {
     return {
@@ -104,29 +110,25 @@ export default Vue.extend({
       for(let d = 0; d < this.selectedSkill.length; d++) {
         skillArray.push({id: this.selectedSkill[d]})
       }
-      // * settion 1のデータを変数に格納する
-      const jobTitle = sessionStorage.getItem('jobTitle');
-      const jobDescription = sessionStorage.getItem('jobDescription');
-      const devStartDateString = sessionStorage.getItem('devStartDateString');
-      const devEndDateString = sessionStorage.getItem('devEndDateString');
 
-      // ! 宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
+      // FIXME:  宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
       // * date型に変換のための data用意
       function toDate (str: any, delim: any) {
         const arr = str.split(delim)
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
-      // //* 開始日
-      const devStart = devStartDateString
+      
+      //* 開始日
+      const devStart = this.devStartDate
       const devStartDate = toDate(devStart, '-');
       // *終了日
-      const devEnd = devEndDateString
+      const devEnd = this.devEndDate
       const devEndDate = toDate(devEnd, '-');
 
       const params: JobCreateDataComp = {
         userId: this.$store.state.auth.userId, //? ログインUserId
-        jobTitle : jobTitle,  //? タイトル
-        jobDescription: jobDescription, //? 詳細
+        jobTitle : this.jobTitle,  //? タイトル
+        jobDescription: this.jobDescription, //? 詳細
         devStartDate: devStartDate,  //? 開始日
         devEndDate: devEndDate, //? 終了日
         programingLanguage: languageArray,  //? プログラミング言語
@@ -293,7 +295,7 @@ export default Vue.extend({
 
 .btn-area {
   .post-job-btn {
-    @include box-shadow-btn;
+    @include neumorphism;
     @include blue-btn;
     width: 191px;
     color: $white;
@@ -311,12 +313,6 @@ export default Vue.extend({
     font-size: 1rem;
     float: right;
     cursor: pointer;
-    transition: .3s;
-    outline: none;
-
-    &:hover {
-      @include btn-hover;
-    }
   }
 
   .next-btn-false {
@@ -342,7 +338,9 @@ export default Vue.extend({
   }
 
   .post-job-back {
-    @include blue-cancel-btn;
+    @include neumorphismGrey;
+    color: $primary-color;
+    font-weight: 600;
     width: 191px;
     text-align: left;
     display: block;
