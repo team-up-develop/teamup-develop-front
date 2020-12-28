@@ -3,8 +3,7 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
-  computed
+  onMounted
 } from '@vue/composition-api';
 import Vuex from '@/store/index'
 import { API_URL, m } from '@/master'
@@ -32,7 +31,7 @@ const initialState = (): State => ({
 });
 
 export default defineComponent({ 
-  setup: (props) => {
+  setup: () => {
     const state = reactive<State>(initialState());
 
     onMounted(() => {

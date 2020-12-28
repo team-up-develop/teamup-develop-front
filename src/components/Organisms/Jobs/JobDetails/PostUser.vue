@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import { timeChange } from '@/master'
-import { Job } from '@/types/job';
 
 export default defineComponent({ 
   props: {
