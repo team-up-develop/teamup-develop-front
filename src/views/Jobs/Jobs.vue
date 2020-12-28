@@ -407,7 +407,7 @@ export default Vue.extend({
     <div class="modal-window">
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
-        <template slot="footer">
+        <template v-slot:footer>
           <Applybtn @compliteEntry="compliteEntry" :jobId='id' />
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>

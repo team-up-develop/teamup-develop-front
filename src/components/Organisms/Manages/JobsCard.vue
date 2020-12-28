@@ -61,6 +61,7 @@ export default defineComponent({
   text-decoration: none;
 
   &__skill {
+    margin-top: 0.01rem;
 
     .lang {
       @include border_language;
@@ -104,7 +105,8 @@ export default defineComponent({
   }
 
   &__title {
-    padding: 0.2rem 0 3rem 0;
+    padding: 0.4em 0 3rem 0;
+    margin-top: 0.6rem;
     font-size: 1.2em;
     font-weight: bold;
   }

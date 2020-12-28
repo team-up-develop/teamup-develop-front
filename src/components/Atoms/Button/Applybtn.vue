@@ -62,7 +62,7 @@ export default Vue.extend({
     </div>
     <complite-modal @close="closeCompliteModal" v-if="compliteModal">
       <p>応募が完了しました。</p>
-      <template slot="footer">
+      <template v-slot:footer>
       </template>
     </complite-modal>
   </div>
