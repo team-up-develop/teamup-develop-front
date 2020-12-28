@@ -1,6 +1,6 @@
 import moment from "moment";
-import router from './router';
-import Vuex from '@/store/index';
+// import router from './router';
+// import Vuex from '@/store/index';
 
 //* 応募のステータス
 // 1: 応募

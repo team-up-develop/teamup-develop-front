@@ -56,6 +56,7 @@ export default Vue.extend({
       axios.put<EditParams>(`${API_URL}/user/${this.id}`, params)
       .then(response => {
         this.$emit('compliteEdit')
+        return response
       })
       .catch(error => {
         console.log(error)

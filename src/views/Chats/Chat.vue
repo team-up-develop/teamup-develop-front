@@ -1,56 +1,69 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
+import Vuex from '@/store/index'
 import axios from 'axios'
 import { Job } from '@/types/job';
 import { m, timeChange, API_URL, truncate } from '@/master'
+import { ManageJob } from '@/types/manage';
 
-type DataType = {
+type State = {
   chatGroups: Job[];
-  loginFlag: boolean;
   userId: number;
   isActive: boolean;
   hasError: boolean;
 }
 
-export default Vue.extend({ 
-  data(): DataType {
-    return {
-      chatGroups: [],
-      loginFlag: false,
-      userId: this.$store.state.auth.userId,
-      isActive: true,
-      hasError: false,
-    }
-  },
-  computed: {
-    m: () => m,
-  },
-  mounted() {
-    // * 参加案件のみを取得する
-    if(this.$store.state.auth.userId !== undefined) {
-      this.loginFlag = true
-      axios.get(`${API_URL}/apply_job/?user_id=${ this.userId }`)
+const initialState = (): State => ({
+  chatGroups: [],
+  userId: Vuex.state.auth.userId,
+  isActive: true,
+  hasError: false,
+});
+
+export default defineComponent({ 
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
+    const moment = (value: string, format: string) => timeChange(value, format);
+    const limit = (value: string, num: number) => truncate(value, num);
+
+    onMounted(() => {
+      if(!state.userId) {
+        return
+      }
+      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${ state.userId }`)
       .then(response => {
-        const array = [];
+        const array: ManageJob[] = [];
         for(let i = 0; i < response.data.length; i++){
-          const applyData = response.data[i]
+          const applyData: ManageJob = response.data[i]
           if(applyData.applyStatusId == m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ) {
             array.push(applyData)
-            this.chatGroups = array
-          }
-          else {
-            console.log("Not Found")
+            state.chatGroups = array
           }
         }
       })
-    }
-  },
-  methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
-    },
-    limit(value: string, num: number) {
-      return truncate(value, num)
+    });
+
+    return {
+      ...toRefs(state),
+      isLogin,
+      m: computed(() => m),
+      moment,
+      limit
     }
   }
 });
@@ -58,7 +71,7 @@ export default Vue.extend({
 
 <template>
   <div class="wrapper">
-    <v-sheet class="chat-card" v-if="loginFlag === true">
+    <v-sheet class="chat-card" v-if="isLogin">
       <div class="chat-card__left">
         <div class="title">
           チャットグループ

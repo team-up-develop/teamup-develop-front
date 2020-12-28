@@ -135,6 +135,7 @@ export default Vue.extend({
       // ? 投稿
       axios.post<messageParams>(`${API_URL}/chat_message`, params)
       .then(response => {
+        console.log(response.data)
         axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${this.id}`)
         .then(response => {
           this.chats = response.data

@@ -20,7 +20,7 @@ export default Vue.extend({
       userId: this.$store.state.auth.userId,
       compliteModal: false,
       applyFlag: true,
-    }
+    };
   },
   methods: {
     // * 応募する
@@ -30,21 +30,22 @@ export default Vue.extend({
         userId: this.userId,
         applyStatusId: 1  
       };
-      axios.post(`${API_URL}/apply_job/`, params)
+      axios.post<ApplyParams>(`${API_URL}/apply_job/`, params)
       .then(response => {
-        this.compliteModal = true
-        this.applyFlag = false
-        this.$emit('compliteEntry')
+        this.compliteModal = true;
+        this.applyFlag = false;
+        this.$emit('compliteEntry');
+        return response
       })
       .catch(error =>{
-        console.log(error)
-      })
+        console.log(error);
+      });
     },
     openCompliteModal() {
-      this.compliteModal = true
+      this.compliteModal = true;
     },
     closeCompliteModal() {
-      this.compliteModal = false
+      this.compliteModal = false;
     },
   },
   components: {

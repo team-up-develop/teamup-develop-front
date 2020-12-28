@@ -11,7 +11,6 @@ export default Vue.extend({
   },
   methods: {
     onInput(e: []) {
-      console.log(e)
       this.$emit("input", e);
     }
   }

@@ -1,14 +1,7 @@
 <script lang="ts">
-import { 
-  defineComponent,
-  reactive,
-  toRefs,
-  onMounted,
-  computed
-} from '@vue/composition-api';
+import { defineComponent } from '@vue/composition-api';
 import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
 import { timeChange, truncate } from '@/master'
-import { Job } from '@/types/job';
 
 export default defineComponent({ 
   components: {

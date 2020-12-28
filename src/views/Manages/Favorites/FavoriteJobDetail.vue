@@ -16,7 +16,6 @@ import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vu
 import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
-import { Job } from '@/types/job';
 
 type State = {
   job: any; //TODO: Any

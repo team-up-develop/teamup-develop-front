@@ -1,5 +1,5 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue from 'vue';
 import LoginBtn from '@/components/Atoms/Commons/Entires/LoginBtn.vue'
 import RegisteBtn from '@/components/Atoms/Commons/Entires/RegisteBtn.vue'
 

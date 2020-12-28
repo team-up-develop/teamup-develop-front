@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import { API_URL } from '@/master'
-import axios, { AxiosResponse } from 'axios'
+import axios from 'axios'
 import vSelect from 'vue-select'
 import 'vue-select/dist/vue-select.css';
 import { Language, Framework, Skill } from '@/types/index';

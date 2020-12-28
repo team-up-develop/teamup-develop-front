@@ -49,7 +49,7 @@ export default Vue.extend({
       span {
         font-size: 22px;
         background: -webkit-linear-gradient(0deg, #1142e2, #19bde6);
-        -webkit-background-clip: text;
+        // -webkit-background-clip: text;
         -webkit-text-fill-color: transparent;
         font-weight: bold;
       }

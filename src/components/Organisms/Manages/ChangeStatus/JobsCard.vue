@@ -3,8 +3,7 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
-  computed
+  onMounted
 } from '@vue/composition-api';
 import axios from 'axios';
 import { m, API_URL, truncate } from '@/master'

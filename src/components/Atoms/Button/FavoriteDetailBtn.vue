@@ -2,7 +2,7 @@
 import Vue, { PropType } from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { FavoriteParams, Job } from '@/types/job';
+import { FavoriteParams } from '@/types/job';
 
 type DataType = {
   userId: number;
