@@ -65,6 +65,7 @@ export default defineComponent({
   text-decoration: none;
 
   &__skill {
+    margin-top: 0.01rem;
 
     .lang {
       @include border_language;
@@ -109,6 +110,7 @@ export default defineComponent({
 
   &__user {
     padding: 0.6rem 0 1rem 2rem;
+    margin-top: 1rem;
     font-size: 1.2em;
     font-weight: bold;
 

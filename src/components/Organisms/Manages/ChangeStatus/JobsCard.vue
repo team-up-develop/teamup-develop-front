@@ -106,6 +106,7 @@ section {
 .card {
   @include card-border-color;
   width: 360px;
+  height: 248px;
   padding: 1rem 1.2rem ;
   border-radius: 8px;
 
@@ -129,6 +130,7 @@ section {
   }
 
   &__center {
+    padding: 20px 0 0 0;
     height: 120px;
     position: relative;
 

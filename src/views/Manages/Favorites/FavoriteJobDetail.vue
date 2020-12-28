@@ -125,7 +125,7 @@ export default defineComponent({
     <!-- 応募する モーダル画面 -->
     <ApplyModal @close="closeModal" v-if="modal">
       <p>応募を完了してよろしいですか？</p>
-        <template slot="footer">
+        <template v-slot:footer>
           <Applybtn :jobId='id' @compliteEntry="compliteEntry"></Applybtn>
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>

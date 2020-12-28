@@ -139,7 +139,7 @@ export default defineComponent({
           <div class="example-modal-window">
             <ApplyModal @close="closeModal" v-if="modal">
               <p>応募を完了してよろしいですか？</p>
-              <template slot="footer">
+              <template v-slot:footer>
                 <Applybtn :jobId='id' />
                 <button @click="doSend" class="modal-btn">キャンセル</button>
               </template>
