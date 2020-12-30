@@ -9,7 +9,7 @@ import {
 import Vuex from '@/store/index'
 import axios from 'axios'
 import { Job } from '@/types/job';
-import { m, timeChange, API_URL, truncate } from '@/master'
+import { m, dayJs, API_URL, truncate } from '@/master'
 import { ManageJob } from '@/types/manage';
 
 type State = {
@@ -38,7 +38,7 @@ export default defineComponent({
       }
     });
 
-    const moment = (value: string, format: string) => timeChange(value, format);
+    const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
 
     onMounted(() => {
@@ -62,7 +62,7 @@ export default defineComponent({
       ...toRefs(state),
       isLogin,
       m: computed(() => m),
-      moment,
+      day,
       limit
     }
   }
@@ -96,7 +96,7 @@ export default defineComponent({
                 class="post" 
                 v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
               >参加案件</label>
-              <section>{{ moment(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
+              <section>{{ day(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
             </v-row>
           </div>
         </v-card>

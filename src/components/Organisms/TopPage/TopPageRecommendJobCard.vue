@@ -2,7 +2,7 @@
 // FIXME: 現状は使用していない
 import Vue from 'vue';
 import axios from 'axios'
-import { timeChange, API_URL, truncate } from '@/master';
+import { dayJs, API_URL, truncate } from '@/master';
 
 export default Vue.extend({ 
   data() {
@@ -20,8 +20,8 @@ export default Vue.extend({
     })
   },
   methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
+    day(value: string, format: string) {
+      return dayJs(value, format)
     },
     limit(value: string, num: number) {
       return truncate(value, num)
@@ -66,7 +66,7 @@ export default Vue.extend({
             開発期間:
           </div>
           <div class="product-start-end-time">
-            {{ moment(newJob.devStartDate, "YYYY年 M月 D日") }}  ~  {{ moment(newJob.devEndDate, "YYYY年 M月 D日")}}
+            {{ day(newJob.devStartDate, "YYYY年 M月 D日") }}  ~  {{ day(newJob.devEndDate, "YYYY年 M月 D日")}}
           </div>
         </div>
         <div class="post-user-area">
@@ -122,7 +122,7 @@ export default Vue.extend({
             開発期間:
           </div>
           <div class="product-start-end-time">
-            {{ newJob.devStartDate | moment("YYYY年 M月 D日") }}  ~  {{ newJob.devEndDate | moment("YYYY年 M月 D日")}}
+            {{ day(newJob.devStartDate, "YYYY年 M月 D日") }}  ~  {{ day(newJob.devEndDate, "YYYY年 M月 D日") }}
           </div>
         </div>
         <div class="post-user-area">

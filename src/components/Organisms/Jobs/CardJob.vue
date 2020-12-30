@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
-import { timeChange, truncate } from '@/master'
+import { truncate, dayJs } from '@/master'
 
 export default defineComponent({ 
   components: {
@@ -11,11 +11,11 @@ export default defineComponent({
     job: { type: Object, defalut: null, require: true }
   },
   setup: () => {
-    const moment = (value: string, format: string) => timeChange(value, format);
+    const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
     return {
-      moment,
-      limit
+      limit,
+      day
     }
   }
 });
@@ -37,7 +37,8 @@ export default defineComponent({
           開発期間:
         </div>
         <div class="product-start-end-time">
-          {{ moment(job.devStartDate , "YYYY年 M月 D日") }}  ~  {{ moment(job.devEndDate , "YYYY年 M月 D日")}}
+          {{ day(job.devStartDate , "YYYY年 M月 D日") }}  ~  
+          {{ day(job.devEndDate, "YYYY年 M月 D日") }}
         </div>
       </div>
       <div class="post-user-area">

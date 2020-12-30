@@ -1,16 +1,16 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { timeChange } from '@/master';
+import { dayJs } from '@/master';
 
 export default defineComponent({ 
   props: {
     user: { type: Object, default: null, require: true }
   },
   setup: () => {
-    const moment = (value: string, format: string) => timeChange(value, format);
+    const day = (value: string, format: string) => dayJs(value, format);
 
     return {
-      moment,
+      day,
     }
   }
 });
@@ -40,14 +40,14 @@ export default defineComponent({
               {{ user.user.userName }}
             </div>
             <div class="card__user__study">
-              {{ moment(user.user.learningStartDate, "YYYY年 M月 D日") }}
+              {{ day(user.user.learningStartDate, "YYYY年 M月 D日") }}
             </div>
           </v-col>
         </v-row>
       </div>
       <div class="card__bottom">
         <span>
-          {{ moment(user.createdAt, "YYYY年 M月 D日") }}
+          {{ day(user.createdAt, "YYYY年 M月 D日") }}
         </span>
       </div>
     </v-sheet>
