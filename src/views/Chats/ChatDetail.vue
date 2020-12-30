@@ -6,7 +6,7 @@ import { Message, messageParams } from '@/types/chat'
 import { Job } from '@/types/job';
 import {
   m, 
-  timeChange,
+  dayJs,
   API_URL, 
   truncate 
 } from '@/master'
@@ -114,8 +114,8 @@ export default Vue.extend({
     })
   },
   methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
+    day(value: string, format: string) {
+      return dayJs(value, format)
     },
     limit(value: string, num: number) {
       return truncate(value, num)
@@ -185,7 +185,7 @@ export default Vue.extend({
                 class="post" 
                 v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
               >参加案件</label>
-              <section>{{ moment(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
+              <section>{{ day(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
             </v-row>
             <!-- <div v-for="myselfUser in myselfUser" :key="myselfUser.id" class="chat-member-name">
             <div v-for="chatMembar in chatMembers" :key="chatMembar.id" class="chat-member-name">

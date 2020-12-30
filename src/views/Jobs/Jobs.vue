@@ -12,7 +12,7 @@ import LanguageSearchModal from '@/components/Organisms/Modals/Searches/Language
 import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
 import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
 import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
-import { timeChange, truncate } from '@/master';
+import { dayJs, truncate } from '@/master';
 import { Job } from '@/types/job';
 
 type DataType = {
@@ -184,8 +184,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
+    day(value: string, format: string) {
+      return dayJs(value, format)
     },
     limit(value: string, num: number) {
       return truncate(value, num)
@@ -562,7 +562,7 @@ export default Vue.extend({
             開発期間
           </div>
           <div class="post-user-area">
-            {{ moment(jobDetail.devStartDate , "YYYY年 M月 D日") }}  ~  {{ moment(jobDetail.devEndDate, "YYYY年 M月 D日")}}
+            {{ day(jobDetail.devStartDate , "YYYY年 M月 D日") }}  ~  {{ day(jobDetail.devEndDate, "YYYY年 M月 D日")}}
           </div>
           <div class="tag-area">
             募集人数
@@ -577,7 +577,7 @@ export default Vue.extend({
             {{ jobDetail.jobDescription }}
           </div>
           <div class="jobDetail-time-area">
-            投稿期日   {{ moment(jobDetail.createdAt, "YYYY年 M月 D日") }}
+            投稿期日   {{ day(jobDetail.createdAt, "YYYY年 M月 D日") }}
           </div>
         </div>
       </div>

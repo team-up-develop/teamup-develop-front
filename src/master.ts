@@ -1,6 +1,6 @@
-import moment from "moment";
 // import router from './router';
 // import Vuex from '@/store/index';
+import dayjs from 'dayjs';
 
 //* 応募のステータス
 // 1: 応募
@@ -20,10 +20,6 @@ export const m = {
 }
 export const API_URL = 'http://localhost:8888/api/v1';
 
-export const timeChange = (value: string, format: string) => {
-  return moment(value).format(format);
-}
-
 export const truncate = (value: string, num: number) => {
   const over = "...";
   if (value.length <= num) {
@@ -41,3 +37,7 @@ export const truncate = (value: string, num: number) => {
 //     // router.push('/login');
 //   }
 // }
+
+export const dayJs = (value: string, format: string) => {
+  return dayjs(value).format(format);
+}

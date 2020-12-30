@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import { timeChange } from '@/master';
+import { dayJs } from '@/master';
 
 export default Vue.extend({ 
   props: {
@@ -16,8 +16,8 @@ export default Vue.extend({
     }
   },
   methods: {
-    moment(value: string, format: string) {
-      return timeChange(value, format)
+    day(value: string, format: string) {
+      return dayJs(value, format)
     },
     // * Twitter をタブで開く
     twitterTab() {
@@ -60,7 +60,7 @@ export default Vue.extend({
             </v-col>
             <v-col class="introduce-area" style="padding: none">
               <div class="introduce">
-                {{ moment(user.learningStartDate, "YYYY年 M月 D日")}}
+                {{ day(user.learningStartDate, "YYYY年 M月 D日")}}
               </div>
             </v-col>
             <v-col class="url-area">

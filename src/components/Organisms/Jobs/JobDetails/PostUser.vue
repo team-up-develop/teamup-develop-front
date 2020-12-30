@@ -1,13 +1,13 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { timeChange } from '@/master'
+import { dayJs } from '@/master'
 
 export default defineComponent({ 
   props: {
     job: { type: Object, require: true, defalut: {} }
   },
   setup: (props: any) => {
-    const moment = (value: string, format: string) => timeChange(value, format);
+    const day = (value: string, format: string) => dayJs(value, format);
     // * Twitter をタブで開く
     const twitterTab = () => {
       if(props.job.user.twitterAccount == null) {
@@ -27,7 +27,7 @@ export default defineComponent({
       }
     };
     return {
-      moment,
+      day,
       twitterTab,
       gitTab
     }
@@ -54,7 +54,7 @@ export default defineComponent({
           <div class="user-introduce-area">
             <div class="introduce-tag">学習開始</div>
             <div class="introduce">
-              {{ moment(job.user.learningStartDate, "YYYY年 M月 D日") }}
+              {{ day(job.user.learningStartDate, "YYYY年 M月 D日") }}
             </div>
           </div>
         </div>

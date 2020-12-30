@@ -1,15 +1,15 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { timeChange } from '@/master'
+import { dayJs } from '@/master'
 
 export default defineComponent({ 
   props: {
     job: { type: Object, require: true }
   },
   setup: () => {
-    const moment = (value: string, format: string) => timeChange(value, format);
+    const day = (value: string, format: string) => dayJs(value, format);
     return {
-      moment,
+      day,
     }
   }
 });
@@ -33,7 +33,7 @@ export default defineComponent({
         </div> -->
         <div class="detail-information">
           <div class="tag">開発期間</div>
-          <div class="sub-area">{{ moment(job.devStartDate, "YYYY年 M月 D日") }} ~ {{ moment(job.devEndDate, "YYYY年 M月 D日")}}</div>
+          <div class="sub-area">{{ day(job.devStartDate, "YYYY年 M月 D日") }} ~ {{ day(job.devEndDate, "YYYY年 M月 D日")}}</div>
         </div>
         <div class="detail-information">
           <div class="tag">詳細</div>

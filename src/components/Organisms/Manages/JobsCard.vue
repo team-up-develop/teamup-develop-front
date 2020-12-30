@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
-import { timeChange, truncate } from '@/master'
+import { dayJs, truncate } from '@/master'
 
 
 export default defineComponent({ 
@@ -8,10 +8,10 @@ export default defineComponent({
     job: { type: Object, require: true }
   },
   setup: () => {
-    const moment = (value: string, format: string) => timeChange(value, format);
+    const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
     return {
-      moment,
+      day,
       limit
     }
   }
@@ -45,7 +45,7 @@ export default defineComponent({
         <span>{{ limit(job.jobTitle, 55) }}</span>
       </div>
       <div class="card__bottom">
-        <span>{{ moment(job.devStartDate, "YYYY年 M月 D日") }}  ~  {{ moment(job.devEndDate , "YYYY年 M月 D日")}}</span>
+        <span>{{ day(job.devStartDate, "YYYY年 M月 D日") }}  ~  {{ day(job.devEndDate , "YYYY年 M月 D日")}}</span>
       </div>
     </v-sheet>
   </section>
