@@ -16,6 +16,12 @@ docker-compose exec app sh
 npm run dev
 ```
 
+### build size 
+
+```
+yarn build --analyze
+```
+
 ### errorが起きるはずです。
 その際に必要なパッケージをInstallしてくださいと指示があるはずです。
 それらを指示通りコンテナ内でinstallしてください。
