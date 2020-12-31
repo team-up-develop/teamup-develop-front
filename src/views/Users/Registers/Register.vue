@@ -52,11 +52,12 @@ export default Vue.extend({
 
 <template>
   <section>
-    <div class="login-wrapper" v-show="!loading">
+    <div class="login-wrapper">
       <div class="login-container">
         <div class="login-title">REGISTER</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
+          <br/><br/>
           <v-row
             cols="12"
             md="4"
@@ -75,6 +76,7 @@ export default Vue.extend({
         </div>
         <div class="name-form-password">
           <label for="name">パスワード</label>
+          <br/><br/>
           <v-row
             cols="12"
             md="4"
@@ -115,7 +117,7 @@ section {
   text-decoration: none;
 
   span {
-    color: $primary-color;
+    color: $secondary-dark;
   }
 }
 
@@ -138,13 +140,13 @@ section {
 
     //* ログインタイトル
     .login-title {
-      color: $primary-color;
+      color: $secondary-dark;
       font-size: 1.8rem;  
       font-weight: bold;
       height: 50px;
       margin-top: 1rem;
       width: 100%;
-      border-bottom: solid 3px $primary-color;
+      border-bottom: solid 3px $secondary-dark;
     }
 
     // * メールフォーム
@@ -183,10 +185,9 @@ section {
       position: absolute;
       bottom: 0;
       padding: 2rem 0;
-      // background-color: #B9B9B9;
 
       .login-btn {
-        @include blue-btn;
+        @include purple-btn;
         @include neumorphism;
         color: $white;
         display: block;

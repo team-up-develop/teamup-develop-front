@@ -47,6 +47,7 @@ export default Vue.extend({
         <div class="login-title">LOGIN</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
+          <br/><br/>
           <v-row
             cols="12"
             md="4"
@@ -59,6 +60,7 @@ export default Vue.extend({
         </div>
         <div class="name-form-password">
           <label for="name">パスワード</label>
+          <br/><br/>
           <v-row
             cols="12"
             md="4"
@@ -160,9 +162,9 @@ section {
       // background-color: #B9B9B9;
 
       .login-btn {
-        // @include blue-btn;
-        @include neumorphismGrey;
-        color: $primary-color;
+        @include blue-btn;
+        @include neumorphism;
+        color: $white;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
