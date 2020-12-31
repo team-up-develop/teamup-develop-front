@@ -262,7 +262,7 @@ export default Vue.extend({
     background-color: $white;
     width: 980px;
     border-radius: 8px;
-    margin: 2rem auto;
+    margin: 0rem auto;
     padding: 0 0rem;
     position: absolute;
     right: 0;
@@ -311,10 +311,10 @@ export default Vue.extend({
           position: relative;
 
           .row {
-            padding: 0rem 0 0.5rem 1rem;
+            padding: 0rem 0 1rem 1rem;
             position: absolute;
             bottom: 0;
-            height: 30px;
+            // height: 30px;
             width: 100%;
 
             .selfPost {
@@ -417,7 +417,7 @@ export default Vue.extend({
         width: 100%;
         border-radius: 0 0px 8px 0;
         box-shadow: 0 -3px 2px #00000020;
-        padding: 1rem 0 1rem 1rem;
+        padding: 1.5rem 0 1.5rem 1rem;
 
         .chat-form {
           width: 80%;

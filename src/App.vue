@@ -56,6 +56,7 @@ export default Vue.extend({
   width: 100%;
   display: inline-block;
   position: relative;
+  margin-top: 1rem;
 }
 
 @media (min-width: 960px) {

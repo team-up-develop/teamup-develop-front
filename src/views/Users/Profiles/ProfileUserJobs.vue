@@ -197,7 +197,7 @@ export default Vue.extend({
 
   .jobs {
     width: 80%;
-    margin: 0 auto;
+    margin: 2rem auto;
 
     @media screen and (max-width: 480px) {
       width: 98%;
