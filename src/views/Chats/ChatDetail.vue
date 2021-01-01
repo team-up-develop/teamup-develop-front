@@ -1,5 +1,13 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed,
+  ref
+} from '@vue/composition-api';
+import Vuex from '@/store/index'
 import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import { Message, messageParams } from '@/types/chat'
@@ -11,7 +19,7 @@ import {
   truncate 
 } from '@/master'
 
-type DataType = {
+type State = {
   chatGroups: Job[]; //? 今使ってない
   chats: Message[];
   chatMessage: string;
@@ -26,106 +34,41 @@ type DataType = {
   clickJobId: number;
 }
 
-export default Vue.extend({ 
+const initialState = (): State => ({
+  chatGroups: [],
+  chats: [],
+  chatMessage: "",
+  chatMembers: [],
+  myselfUser: {},
+  postUser: null,
+  userId: Vuex.state.auth.userId,
+  isActive: true,
+  hasError: false,
+  loading: true,
+  jobTitle: "",
+  clickJobId: 0
+});
+
+export default defineComponent({ 
   components: {
     Loading
   },
   props: {
     // * job.idを受け取る
-    id: { type: Number as PropType<number>, required: true },
-    // id: { type: Number },
+    id: { type: Number , required: true },
   },
-  data(): DataType {
-    return {
-      chatGroups: [],
-      chats: [],
-      chatMessage: "",
-      chatMembers: [],
-      myselfUser: {},
-      postUser: null,
-      userId: this.$store.state.auth.userId,
-      isActive: true,
-      hasError: false,
-      loading: true,
-      jobTitle: "",
-      clickJobId: 0
-    }
-  },
-  computed: {
-    m: () => m,
-  },
-  created() {
-    let chatLength = 0;
-    // * チャット詳細画面実装
-    setInterval(() => {
-      axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${this.id}`)
-      .then(response => {
-        this.loading = false;
-        this.chats = response.data
-        if(chatLength === this.chats.length) {
-          console.log("chatLengt 一緒だよん")
-        } else {
-          chatLength = this.chats.length
-          // ? GET 際に変今点があったら下にスクロールする
-          const chatLog: any = this.$refs.target
-          if (!chatLog) return 
-          chatLog.scrollTop = chatLog.scrollHeight
-        }
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      axios.get(`${API_URL}/job/${this.id}`)
-      .then(response => {
-        this.jobTitle = response.data.jobTitle
-        this.clickJobId = response.data.id
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-    }, 1000)
-    // ! チャットのタイトルごとに案件参加者を取得できるようにする
-    // // * 案件参加者を取得
-    // axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=2`)
-    // .then(response => {
-    //   this.chatMembers = response.data
-    // })
-    // // * 投稿者を取得
-    // axios.get(`http://localhost:8888/api/v1/apply_job/?job_id=${ this.id }&apply_status_id=4`)
-    // .then(response => {
-    //   this.myselfUser= response.data
-    // })
-    axios.get(`${API_URL}/apply_job/?user_id=${ this.userId }`)
-    .then(response => {
-      const array = [];
-      for(let i = 0; i < response.data.length; i++){
-        const applyData = response.data[i]
-        if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ){
-          array.push(applyData)
-          this.chatGroups = array
-        }
-        else {
-          console.log("Not Found")
-        }
-      }
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-  },
-  methods: {
-    day(value: string, format: string) {
-      return dayJs(value, format)
-    },
-    limit(value: string, num: number) {
-      return truncate(value, num)
-    },
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+    const day = (value: string, format: string) => dayJs(value, format);
+    const limit = (value: string, num: number) => truncate(value, num);
+    let root: any = ref(null)
+
     // * メッセージの送信
-    chatCreate() {
+    const chatCreate = () => {
       const params: messageParams = {
-        message: this.chatMessage,
-        userID: this.userId,
-        jobID: this.id
+        message: state.chatMessage,
+        userID: state.userId,
+        jobID: props.id
       }
       // ? 空のメッセージは送信させない
       if(params.message == "") {
@@ -136,14 +79,9 @@ export default Vue.extend({
       axios.post<messageParams>(`${API_URL}/chat_message`, params)
       .then(response => {
         console.log(response.data)
-        axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${this.id}`)
+        axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
         .then(response => {
-          this.chats = response.data
-          // ! Postされた内容がDOMに反映される前にスクロールされるため、最新投稿までスクロールされていない
-          // ? 一番下にスクロール
-          const chatLog: any = this.$refs.target
-          if (!chatLog) return 
-          chatLog.scrollTop = chatLog.scrollHeight
+          state.chats = response.data
         })
         .catch(error =>{
           console.log(error)
@@ -152,8 +90,84 @@ export default Vue.extend({
       .catch(error =>{
         console.log(error)
       })
-      this.chatMessage = "";
-    },
+      state.chatMessage = "";
+    };
+
+    onMounted(() => {
+      setTimeout(() => {
+        const a = Number(root.value.scrollHeight)
+        const b = Number(root.value.clientHeight)
+        const bottom = a - b
+        if(root.value.scrollTop === bottom) {
+          return 
+        } else {
+          root.value.scrollTop = bottom;
+        }
+      }, 2000);
+
+      let chatLength = 0;
+      setInterval(() => {
+        axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
+        .then(response => {
+          state.loading = false;
+          state.chats = response.data
+          if(chatLength === state.chats.length) {
+            console.log("chatLengt が一緒なのでスクロールしません。")
+          } else {
+            console.log("chatLengt の更新がかかりました。")
+            chatLength = state.chats.length
+            // ? GET 際に変今点があったら下にスクロールする
+            const a = Number(root.value.scrollHeight)
+            const b = Number(root.value.clientHeight)
+            const bottom = a - b
+            if(root.value.scrollTop === bottom) {
+              return 
+            } else {
+              root.value.scrollTop = bottom;
+            }
+          }
+        })
+        .catch(error =>{
+          console.log(error)
+        })
+      }, 1500)
+
+      axios.get(`${API_URL}/job/${props.id}`)
+      .then(response => {
+        state.jobTitle = response.data.jobTitle
+        state.clickJobId = response.data.id
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+
+      axios.get(`${API_URL}/apply_job/?user_id=${ state.userId }`)
+      .then(response => {
+        const array = [];
+        for(let i = 0; i < response.data.length; i++){
+          const applyData = response.data[i]
+          if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ){
+            array.push(applyData)
+            state.chatGroups = array
+          }
+          else {
+            console.log("Not Found")
+          }
+        }
+      })
+      .catch(error =>{
+        console.log(error)
+      })
+    });
+
+    return {
+      ...toRefs(state),
+      m: computed(() => m),
+      day,
+      limit,
+      chatCreate,
+      root
+    }
   }
 });
 </script>
@@ -200,7 +214,7 @@ export default Vue.extend({
           <router-link :to="`/jobs/${ clickJobId }`" class="router">
             <header class="header">{{ limit(jobTitle, 60) }}</header>
           </router-link>
-          <section class="room">
+          <section class="room" ref="root">
             <div class="balloon" v-for="chat in chats" :key="chat.id">
               <div class="balloon-image-left">
                 <div class="balloon-img"></div>
