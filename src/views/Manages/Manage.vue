@@ -39,20 +39,23 @@ export default defineComponent({
       }
     });
 
-    onMounted(() => {
-      // * 管理案件を取得
-      axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${state.userId}`)
-      .then(response => {
+    const getManageJobs = async () => {
+      try { 
+        const response = await axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${state.userId}`) 
         state.manageJobs = response.data
-      })
-      .catch(error =>{
+      } catch (error) {
         console.log(error)
-      })
+      }
+    };
+
+    onMounted(() => {
+      getManageJobs();
     })
 
     return {
       ...toRefs(state),
       isLogin,
+      getManageJobs
     }
   },
 });
