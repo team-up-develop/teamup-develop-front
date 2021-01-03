@@ -68,57 +68,39 @@ export default defineComponent({
     });
 
     // * 詳細画面情報を取得
-    axios.get<Job>(`${API_URL}/job/${props.id}/`)
-    .then(response => {
-      setTimeout(() => {
-        state.loading = false;
-        state.job = response.data
-      }, 1000)
-    })
-    .catch(error =>{
-      console.log(error)
-    })
+    const getJobDetail = async () => {
+      try { 
+        const response = await axios.get<Job>(`${API_URL}/job/${props.id}/`)
+        setTimeout(() => {
+          state.loading = false;
+          state.job = response.data
+        }, 1000)
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    getJobDetail();
 
     const registerRedirect = () => router.push('/register');
 
-    const openModal = () => state.modal = true;
-    const closeModal = () => state.modal = false;
-    const doSend = () => closeModal();
-    const openEditModal = () => state.editModal = true;
-    const closeEditModal = () => state.editModal = false;
-
-    onMounted(() => {
-      if(!state.userId) {
-        return 
+    // * 自分の案件か否かを判定
+    const getCheckSelfJob = async () => {
+      try { 
+        const response = await axios.get(`${API_URL}/job/?user_id=${state.userId}`)
+        for(let i = 0; i < response.data.length; i++){
+          const selfJob = response.data[i]
+          if(selfJob.id === props.id){
+            state.selfJobPost = true
+          }
+        }
+      } catch (error) {
+        console.log(error)
       }
-      axios.get<Job[]>(`${API_URL}/job/?user_id=${state.userId}`)
-      .then(response => {
-        for(let i = 0; i < response.data.length; i++){
-          const selfJob: any = response.data[i]
-          if(selfJob.id === props.id){
-            state.selfJobPost = true
-          }
-        }
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      // * 自分の案件かを判定
-      axios.get<Job[]>(`${API_URL}/job/?user_id=${state.userId}`)
-      .then(response => {
-        for(let i = 0; i < response.data.length; i++){
-          const selfJob: any = response.data[i]
-          if(selfJob.id === props.id){
-            state.selfJobPost = true
-          }
-        }
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      // * ログインユーザーが応募済みか応募済みではないかを判定する
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
-      .then(response => {
+    };
+    // * ログインユーザーが応募済みか応募済みではないかを判定する
+    const getCheckStatus = async () => {
+      const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
+      try {
         const arrayApply: any = []
         for(let c = 0; c < response.data.length; c++){
           const applyData: any = response.data[c];
@@ -129,10 +111,21 @@ export default defineComponent({
         } else {
           console.log("まだ応募していません")
         }
-      })
-      .catch(error =>{
+      } catch (error) {
         console.log(error);
-      });
+      }
+    };
+
+    const openModal = () => state.modal = true;
+    const closeModal = () => state.modal = false;
+    const doSend = () => closeModal();
+    const openEditModal = () => state.editModal = true;
+    const closeEditModal = () => state.editModal = false;
+
+    onMounted(() => {
+      if(!state.userId) { return }
+      getCheckSelfJob();
+      getCheckStatus();
     });
 
     return {
@@ -143,7 +136,10 @@ export default defineComponent({
       doSend,
       registerRedirect,
       openEditModal,
-      closeEditModal
+      closeEditModal,
+      getCheckSelfJob,
+      getCheckStatus,
+      getJobDetail
     }
   }
 });

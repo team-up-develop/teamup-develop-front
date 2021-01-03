@@ -17,6 +17,7 @@ import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import { Job } from '@/types/job';
+import { ManageJob } from '@/types/manage';
 
 type State = {
   job: any; //TODO: Any
@@ -67,28 +68,39 @@ export default defineComponent({
       return true
     });
 
-    const openModal = () => state.modal = true;
-    const closeModal = () => state.modal = false;
-    const doSend = () => closeModal();
-
-    onMounted(() => {
-      // * 詳細画面情報を取得
-      axios.get<Job>(`${API_URL}/job/${props.id}/`)
-      .then(response => {
+    // * 詳細画面情報を取得
+    const getJobDetail = async () => {
+      try { 
+        const response = await axios.get<Job>(`${API_URL}/job/${props.id}/`)
         setTimeout(() => {
           state.loading = false;
           state.job = response.data
         }, 1000)
-      })
-      // * 応募済みか応募済みでないかを判定
-      axios.get(`${API_URL}/apply_job/?job_id=${ props.id }&user_id=${ state.userId }`)
-      .then(response => {
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    // * 応募済みか否かを判定
+    const getCheckStatus = async () => {
+      try { 
+        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&user_id=${ state.userId }`)
         if(response.data.length == 0) {
           return 
         } else {
           state.statusId = response.data[0].applyStatusId
         }
-      });
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    const openModal = () => state.modal = true;
+    const closeModal = () => state.modal = false;
+    const doSend = () => closeModal();
+
+    onMounted(() => {
+      getJobDetail();
+      getCheckStatus();
     });
 
     return {
@@ -98,6 +110,8 @@ export default defineComponent({
       openModal,
       closeModal,
       doSend,
+      getJobDetail,
+      getCheckStatus
     }
   }
 });

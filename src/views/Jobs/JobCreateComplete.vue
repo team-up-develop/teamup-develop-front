@@ -1,36 +1,66 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed
+} from '@vue/composition-api';
+import Vuex from '@/store/index'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobCreateCompleteCard from '@/components/Organisms/Jobs/JobCreateCompleteCard.vue'
 
-type DataType = {
+type State = {
   loading: boolean;
+  userId: number;
 }
 
-export default Vue.extend({
+const initialState = (): State => ({
+  loading: true,
+  userId: Vuex.state.auth.userId,
+});
+
+export default defineComponent({ 
   components: {
     Loading,
     UserCard,
     JobCreateCompleteCard
   },
-  data(): DataType {
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    const isLogin = computed(() => {
+      if(state.userId) {
+        return true
+      } else {
+        return false
+      }
+    });
+
+    const Loading = () => {
+      setTimeout(() => {
+        state.loading = false;
+      }, 1500)
+    };
+
+    onMounted(() => {
+      Loading();
+    });
+
     return {
-      loading: true,
+      ...toRefs(state),
+      Loading,
+      isLogin
     }
-  },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-    }, 1500)
-  },
+  }
 });
 </script>
 
 <template>
   <section>
     <v-container class="wrapper" v-show="!loading">
-      <v-row>
+      <v-row v-if="isLogin">
         <UserCard />
         <v-sheet class="create">
           <v-col>
@@ -38,6 +68,9 @@ export default Vue.extend({
           </v-col>
         </v-sheet>
       </v-row>
+      <div v-else>
+        ログインが必要です
+      </div>
     </v-container>
     <Loading v-show="loading">
     </Loading>

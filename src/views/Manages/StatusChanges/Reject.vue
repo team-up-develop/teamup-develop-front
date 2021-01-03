@@ -45,27 +45,34 @@ export default defineComponent({
       }
     });
 
-    onMounted(() => {
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
-      .then(response => {
+    const getRejectUser = async () => {
+      try { 
+        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
         state.rejectUsers = response.data
-      })
-      .catch(error =>{
+      } catch (error) {
         console.log(error)
-      })
+      }
+    };
 
-      axios.get<any>(`${API_URL}/job/${ props.id }`)
-      .then(response => {
+    const getJobTitle = async () => {
+      try { 
+        const response = await axios.get<any>(`${API_URL}/job/${ props.id }`)
         state.jobTitle = response.data.jobTitle
-      })
-      .catch(error =>{
+      } catch (error) {
         console.log(error)
-      })
+      }
+    };
+
+    onMounted(() => {
+      getRejectUser();
+      getJobTitle();
     })
 
     return {
       ...toRefs(state),
       isLogin,
+      getRejectUser,
+      getJobTitle
     }
   }
 });

@@ -41,12 +41,9 @@ export default defineComponent({
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
 
-    onMounted(() => {
-      if(!state.userId) {
-        return
-      }
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${ state.userId }`)
-      .then(response => {
+    const getChatGroups = async () => {
+      try { 
+        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${ state.userId }`)
         const array: ManageJob[] = [];
         for(let i = 0; i < response.data.length; i++){
           const applyData: ManageJob = response.data[i]
@@ -55,7 +52,14 @@ export default defineComponent({
             state.chatGroups = array
           }
         }
-      })
+      } catch (error) {
+        console.log(error)
+      }
+    };
+
+    onMounted(() => {
+      if(!state.userId) { return }
+      getChatGroups();
     });
 
     return {
@@ -63,7 +67,8 @@ export default defineComponent({
       isLogin,
       m: computed(() => m),
       day,
-      limit
+      limit,
+      getChatGroups
     }
   }
 });
@@ -101,21 +106,21 @@ export default defineComponent({
           </div>
         </v-card>
       </div>
-        <div class="chat-card__right">
-          <div class="main" ref="target">
-          </div>
-          <div class="bottom">
-            <v-row>
-              <textarea type="text" class="chat-form" name="" maxlength="0" placeholder="チャットグループを選択してください"></textarea>
-              <span>
-                <button class="send">送信する</button>
-              </span>
-            </v-row>
-          </div>
+      <div class="chat-card__right">
+        <div class="main" ref="target">
         </div>
+        <div class="bottom">
+          <v-row>
+            <textarea type="text" class="chat-form" name="" maxlength="0" placeholder="チャットグループを選択してください"></textarea>
+            <span>
+              <button class="send">送信する</button>
+            </span>
+          </v-row>
+        </div>
+      </div>
     </v-sheet>
       <div v-else>
-        ログインが必要です！
+        ログインが必要です
       </div>
     </div>
 </template>

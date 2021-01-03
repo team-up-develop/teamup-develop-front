@@ -1,35 +1,45 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  computed
+} from '@vue/composition-api';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobCreateSkillCard from '@/components/Organisms/Jobs/JobCreateSkillCard.vue'
-import { JobCreateSession1 as DateType } from '@/components/Organisms/Jobs/JobCreateCard.vue'
+import { JobCreateSession1 as State } from '@/components/Organisms/Jobs/JobCreateCard.vue'
 
-export default Vue.extend({
+const initialState = (): State => ({
+  jobTitle: "",
+  devStartDate: "",
+  devEndDate: "",
+  jobDescription: "",
+});
+
+export default defineComponent({ 
   components: {
     UserCard,
     JobCreateSkillCard
   },
-  computed: {
-    isValue() {
-      if(this.jobTitle && this.devStartDate && this.devEndDate) {
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    state.jobTitle = sessionStorage.getItem('jobTitle');
+    state.devStartDate = sessionStorage.getItem('devStartDate');
+    state.devEndDate = sessionStorage.getItem('devEndDate');
+    state.jobDescription = sessionStorage.getItem('jobDescription');
+
+    const isValue = computed(() => {
+      if(state.jobTitle && state.devStartDate && state.devEndDate) {
         return true
       }
       return false
-    }
-  },
-  data(): DateType {
+    });
+
     return {
-      jobTitle: "",
-      devStartDate: "",
-      devEndDate: "",
-      jobDescription: "",
+      ...toRefs(state),
+      isValue
     }
-  },
-  created() {
-    this.jobTitle = sessionStorage.getItem('jobTitle');
-    this.devStartDate = sessionStorage.getItem('devStartDate');
-    this.devEndDate = sessionStorage.getItem('devEndDate');
-    this.jobDescription = sessionStorage.getItem('jobDescription');
   }
 });
 </script>

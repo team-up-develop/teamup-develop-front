@@ -6,7 +6,7 @@ import {
   onMounted,
   computed
 } from '@vue/composition-api';
-import { API_URL } from '@/master'
+import { API_URL, m } from '@/master'
 import Vuex from '@/store/index'
 import axios from 'axios'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -16,6 +16,8 @@ import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vu
 import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
+import { Job } from '@/types/job';
+import { ManageJob } from '@/types/manage';
 
 type State = {
   job: any; //TODO: Any
@@ -59,6 +61,45 @@ export default defineComponent({
       }
     });
 
+    // * 詳細画面情報を取得
+    const getJobDetail = async () => {
+      try { 
+        const response = await axios.get<Job>(`${API_URL}/job/${props.id}/`)
+        setTimeout(() => {
+          state.loading = false;
+          state.job = response.data
+        }, 1000)
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    // * 自分の案件か否かを判定
+    const getCheckSelfJob = async () => {
+      try { 
+        const response = await axios.get(`${API_URL}/job/?user_id=${state.userId}`)
+        for(let i = 0; i < response.data.length; i++){
+          const selfJob = response.data[i]
+          if(selfJob.id === props.id){
+            state.selfJobPost = true
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    };
+    // * 応募済みか否かを判定
+    const getCheckStatus = async () => {
+      try { 
+        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&user_id=${ state.userId }`)
+        if(response.data.length == 0) {
+          return 
+        } else {
+          state.statusId = response.data[0].applyStatusId
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    };
     const DoneApply = computed(() => {
       if(state.statusId == 0) {
         return false
@@ -69,37 +110,12 @@ export default defineComponent({
     const openModal = () => state.modal = true;
     const closeModal = () => state.modal = false;
     const doSend = () => closeModal();
-
-    const compliteEntry = () => state.statusId = 1;
+    const compliteEntry = () => state.statusId = m.APPLY_STATUS_APPLY;
 
     onMounted(() => {
-      // * 詳細画面情報を取得
-      axios.get(`${API_URL}/job/${props.id}/`)
-      .then(response => {
-        setTimeout(() => {
-          state.loading = false;
-          state.job = response.data
-        }, 1000)
-      })
-      // * 応募済みか応募済みでないかを判定
-      axios.get(`${API_URL}/apply_job/?job_id=${ props.id }&user_id=${ state.userId }`)
-      .then(response => {
-        if(response.data.length == 0) {
-          return 
-        } else {
-          state.statusId = response.data[0].applyStatusId
-        }
-      });
-      // * 自分の案件かを判定
-      axios.get(`${API_URL}/job/?user_id=${state.userId}`)
-      .then(response => {
-        for(let i = 0; i < response.data.length; i++){
-          const selfJob = response.data[i]
-          if(selfJob.id === props.id){
-            state.selfJobPost = true
-          }
-        }
-      })
+      getJobDetail();
+      getCheckSelfJob();
+      getCheckStatus();
     });
 
     return {
@@ -109,7 +125,10 @@ export default defineComponent({
       openModal,
       closeModal,
       doSend,
-      compliteEntry
+      compliteEntry,
+      getJobDetail,
+      getCheckStatus,
+      getCheckSelfJob
     }
   }
 });
@@ -125,10 +144,10 @@ export default defineComponent({
     <!-- 応募する モーダル画面 -->
     <ApplyModal @close="closeModal" v-if="modal">
       <p>応募を完了してよろしいですか？</p>
-        <template v-slot:footer>
-          <Applybtn :jobId='id' @compliteEntry="compliteEntry"></Applybtn>
-          <button @click="doSend" class="modal-btn">キャンセル</button>
-        </template>
+      <template v-slot:footer>
+        <Applybtn :jobId='id' @compliteEntry="compliteEntry" />
+        <button @click="doSend" class="modal-btn">キャンセル</button>
+      </template>
     </ApplyModal>
     <section v-if="loading == false">
       <div class="detail-post-user-area">

@@ -10,7 +10,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-stepper :num="num">
+    <v-stepper num="num">
       <v-stepper-header>
         <v-stepper-step
           :complete="num > 1"
