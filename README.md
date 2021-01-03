@@ -2,7 +2,7 @@
 Typescript導入後
 
 ## 環境構築
-### build
+### コンテナ作成 / 起動
 ```
 docker-compose up -d --build
 ```
@@ -12,20 +12,21 @@ docker-compose up -d --build
 docker-compose exec app sh
 ```
 
+### node package install
+```
+npm i
+```
+
 ### runserver
 ```
 npm run dev
 ```
 
+## その他コマンド
 ### build size 
 
 ```
 yarn build --analyze
-```
-
-### node package install
-```
-npm i
 ```
 
 ### vue cli not found と出た場合
@@ -38,7 +39,7 @@ rm -rf node_modules package-lock.json && npm install
 rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
 
-# Compoent構成
+## Compoent構成
 Atomic Design 導入 
 詳しくは → https://github.com/team-up-develop/teamup-develop-front/issues/86
 
@@ -63,7 +64,7 @@ favorite
 ```
 
 ## Style & JavaScript
-- キャメルケースを使用(JavaScript)
+- JavaScript キャメルケース推奨
 - インデントは半角スペース2つ分で揃え、タブは混ぜないこと
 - 固有名詞などを除いて大文字は使用を控えること
 - 不要なスペースをコード各所に残さないこと
