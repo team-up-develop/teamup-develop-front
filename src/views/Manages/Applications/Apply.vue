@@ -38,29 +38,30 @@ export default defineComponent({
         return false
       }
     });
-
-    onMounted(() => {
-      if(!state.userId) {
-        return 
-      }
-      // * 参加案件を取得
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
-      .then(response => {
+    // * 応募案件を取得
+    const getApplyJobs = async () => {
+      if(!state.userId) { return }
+      try {
+        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
         for(let i = 0; i < response.data.length; i++) {
           const applyJobCorrect: ManageJob = response.data[i];
           if( applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE ) {
             state.applyJob.push(applyJobCorrect);
           }
         }
-      })
-      .catch(error =>{
+      } catch (error) {
         console.log(error)
-      })
+      }
+    };
+
+    onMounted(() => {
+      getApplyJobs();
     })
 
     return {
       ...toRefs(state),
       isLogin,
+      getApplyJobs
     }
   }
 });

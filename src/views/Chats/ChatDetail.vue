@@ -20,12 +20,9 @@ import {
 } from '@/master'
 
 type State = {
-  chatGroups: Job[]; //? 今使ってない
+  chatGroups: Job[];
   chats: Message[];
   chatMessage: string;
-  chatMembers: []; //? 今使ってない
-  myselfUser: {}; //? 今使ってない
-  postUser: null; //? 今使ってない
   userId: number;
   isActive: boolean;
   hasError: boolean;
@@ -38,9 +35,6 @@ const initialState = (): State => ({
   chatGroups: [],
   chats: [],
   chatMessage: "",
-  chatMembers: [],
-  myselfUser: {},
-  postUser: null,
   userId: Vuex.state.auth.userId,
   isActive: true,
   hasError: false,
@@ -63,37 +57,7 @@ export default defineComponent({
     const limit = (value: string, num: number) => truncate(value, num);
     let root: any = ref(null)
 
-    // * メッセージの送信
-    const chatCreate = () => {
-      const params: messageParams = {
-        message: state.chatMessage,
-        userID: state.userId,
-        jobID: props.id
-      }
-      // ? 空のメッセージは送信させない
-      if(params.message == "") {
-        console.log("空のメッセージは送信させない")
-        return
-      }
-      // ? 投稿
-      axios.post<messageParams>(`${API_URL}/chat_message`, params)
-      .then(response => {
-        console.log(response.data)
-        axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
-        .then(response => {
-          state.chats = response.data
-        })
-        .catch(error =>{
-          console.log(error)
-        })
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      state.chatMessage = "";
-    };
-
-    onMounted(() => {
+    const scrollChat = () => {
       setTimeout(() => {
         const a = Number(root.value.scrollHeight)
         const b = Number(root.value.clientHeight)
@@ -104,45 +68,11 @@ export default defineComponent({
           root.value.scrollTop = bottom;
         }
       }, 2000);
+    }
 
-      let chatLength = 0;
-      setInterval(() => {
-        axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
-        .then(response => {
-          state.loading = false;
-          state.chats = response.data
-          if(chatLength === state.chats.length) {
-            console.log("chatLengt が一緒なのでスクロールしません。")
-          } else {
-            console.log("chatLengt の更新がかかりました。")
-            chatLength = state.chats.length
-            // ? GET 際に変今点があったら下にスクロールする
-            const a = Number(root.value.scrollHeight)
-            const b = Number(root.value.clientHeight)
-            const bottom = a - b
-            if(root.value.scrollTop === bottom) {
-              return 
-            } else {
-              root.value.scrollTop = bottom;
-            }
-          }
-        })
-        .catch(error =>{
-          console.log(error)
-        })
-      }, 1500)
-
-      axios.get(`${API_URL}/job/${props.id}`)
-      .then(response => {
-        state.jobTitle = response.data.jobTitle
-        state.clickJobId = response.data.id
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-
-      axios.get(`${API_URL}/apply_job/?user_id=${ state.userId }`)
-      .then(response => {
+    const getChatGroups = async () => {
+      try { 
+        const response = await axios.get(`${API_URL}/apply_job/?user_id=${ state.userId }`)
         const array = [];
         for(let i = 0; i < response.data.length; i++){
           const applyData = response.data[i]
@@ -150,14 +80,66 @@ export default defineComponent({
             array.push(applyData)
             state.chatGroups = array
           }
-          else {
-            console.log("Not Found")
-          }
+          else { console.log("Not Found") }
         }
-      })
-      .catch(error =>{
+      } catch (error) {
         console.log(error)
-      })
+      }
+    }
+
+    const getJob = async () => {
+      try {
+        const response =  await axios.get(`${API_URL}/job/${props.id}`)
+        state.jobTitle = response.data.jobTitle
+        state.clickJobId = response.data.id
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    // * チャット内容を取得 setInterval
+    const getChatMessage = async () => {
+      let chatLength = 0;
+      setInterval(async() => {
+        const response = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
+        try { 
+          state.loading = false;
+          state.chats = response.data
+          if(chatLength === state.chats.length) { return console.log("chatLengt が一緒なのでスクロールしません。") } 
+          else {
+            console.log("chatLengt の更新がかかりました。")
+            chatLength = state.chats.length
+            scrollChat();
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      }, 1500)
+    }
+    // * メッセージの送信
+    const postMessage = async () => {
+      const params: messageParams = {
+        message: state.chatMessage,
+        userID: state.userId,
+        jobID: props.id
+      }
+      // ? 空のメッセージは送信させない
+      if(params.message == "") { return console.log("空のメッセージは送信させない") }
+      try {
+        // ? 投稿
+        await axios.post<messageParams>(`${API_URL}/chat_message`, params)
+        const getMessage = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
+        state.chats = getMessage.data
+      } catch (error) {
+        console.log(error)
+      }
+      state.chatMessage = "" ;
+    };
+
+    onMounted(() => {
+      scrollChat();
+      getChatMessage();
+      getJob();
+      getChatGroups();
     });
 
     return {
@@ -165,8 +147,12 @@ export default defineComponent({
       m: computed(() => m),
       day,
       limit,
-      chatCreate,
-      root
+      postMessage,
+      root,
+      scrollChat,
+      getChatMessage,
+      getJob,
+      getChatGroups
     }
   }
 });
@@ -201,11 +187,6 @@ export default defineComponent({
               >参加案件</label>
               <section>{{ day(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
             </v-row>
-            <!-- <div v-for="myselfUser in myselfUser" :key="myselfUser.id" class="chat-member-name">
-            <div v-for="chatMembar in chatMembers" :key="chatMembar.id" class="chat-member-name">
-              <p>{{ myselfUser.user.userName }}  {{ chatMembar.user.userName }}</p>
-            </div>
-            </div> -->
           </div>
         </v-card>
       </div>
@@ -233,7 +214,7 @@ export default defineComponent({
         <div class="bottom">
           <v-row>
             <textarea type="text" class="chat-form" v-model="chatMessage" name="" maxlength="250" placeholder="メッセージを入力してください"></textarea>
-            <span @click="chatCreate">
+            <span @click="postMessage">
               <button class="send">送信する</button>
             </span>
           </v-row>

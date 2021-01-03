@@ -39,20 +39,23 @@ export default defineComponent({
       }
     });
 
-    onMounted(() => {
-      // * 保存している案件を取得
-      axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
-      .then(response => {
+    const getFavoriteJobs = async () => {
+      try { 
+        const response = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
         state.favoriteJobs = response.data
-      })
-      .catch(error =>{
+      } catch (error) {
         console.log(error)
-      })
+      }
+    };
+
+    onMounted(() => {
+      getFavoriteJobs();
     })
 
     return {
       ...toRefs(state),
       isLogin,
+      getFavoriteJobs
     }
   }
 });

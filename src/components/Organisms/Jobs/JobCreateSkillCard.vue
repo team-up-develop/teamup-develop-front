@@ -161,7 +161,7 @@ export default Vue.extend({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="2"/>
+      <Session :num="2.5"/>
       <section>
         <div class="create-area">
           <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須 5つまで</label>
