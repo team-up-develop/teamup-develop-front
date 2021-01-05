@@ -4,10 +4,10 @@ import axios from 'axios';
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
-import { ParticipateParams, RejectParams } from '@/types/manage';
+import StatusChangeBtnArea from '@/components/Organisms/Manages/StatusChangeBtnArea.vue'
 import { ManageJob } from '@/types/manage';
 import { User } from '@/types/user';
-import { m, API_URL, truncate } from '@/master'
+import { API_URL, truncate } from '@/master'
 // import Logout from '@/components/button/Logout'
 
 type DataType = {
@@ -25,7 +25,8 @@ export default Vue.extend({
   components: {
     Loading,
     PostUser,
-    CardJob
+    CardJob,
+    StatusChangeBtnArea
   },
   props: {
     id: { type: Number as PropType<number>, default: 0 }, //? 詳細を見るユーザーのID
@@ -43,43 +44,18 @@ export default Vue.extend({
       manageJobs: []
     }
   },
-  computed: {
-    // * 参加
-    doneParticipate() { 
-      if(this.statusId == m.APPLY_STATUS_PARTICIPATE) {
-        return true
-      }
-      return false
-    },
-    // * 拒否
-    doneReject() {
-      if(this.statusId == m.APPLY_STATUS_REJECT) {
-        return true
-      }
-      return false
-    },
-  },
   created() {
     // * ユーザー情報取得
     axios.get(`${API_URL}/user/${this.id}`)
     .then(response => {
-      this.userInfo = response.data;
-    })
-    .catch(error => {
-      console.log(error)
-    })
-
-    // * 表示中のユーザーのステータスを格納
-    axios.get(`${API_URL}/apply_job/?job_id=${ this.jobId }&user_id=${ this.id }`)
-    .then(response => {
       setTimeout(() => {
         this.loading = false;
-        this.statusId = response.data[0].applyStatusId
-      }, 500)
+        this.userInfo = response.data;
+      }, 1000)
     })
     .catch(error => {
       console.log(error)
-    });
+    })
 
     // *  案件タイトル取得
     axios.get(`${API_URL}/job/${ this.jobId }`)
@@ -102,38 +78,6 @@ export default Vue.extend({
   methods: {
     limit(value: string, num: number) {
       return truncate(value, num)
-    },
-    // * 参加させる
-    applyUserPut() {
-      const params: ParticipateParams = {
-        jobId: this.jobId,
-        userId: this.id,
-        applyStatusId: m.APPLY_STATUS_PARTICIPATE
-      };
-      axios.put(`${API_URL}/apply_job/`, params)
-      .then(response => {
-        this.statusId = m.APPLY_STATUS_PARTICIPATE;
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    // * 拒否する
-    applyUserReject() {
-      const params: RejectParams = {
-        jobId: this.jobId,
-        userId: this.id,
-        applyStatusId: m.APPLY_STATUS_REJECT
-      };
-      axios.put(`${API_URL}/apply_job/`, params)
-      .then(response => {
-        console.log(response.data)
-        this.statusId = m.APPLY_STATUS_REJECT;
-      })
-      .catch(error => {
-        console.log(error)
-      })
     },
   }
 });
@@ -176,16 +120,7 @@ export default Vue.extend({
       <div class="button-area">
         <!-- 案件管理からきたら -->
         <section v-if="jobId">
-          <div class="button-action-area" v-if="doneParticipate">
-            <button class="btn-done">参加しています</button>
-          </div>
-          <div class="button-action-area" v-if="doneReject">
-            <button class="btn-done">拒否しています</button>
-          </div>
-          <div class="button-action-area" v-if="!doneParticipate && !doneReject">
-            <button class="btn-applicant" @click="applyUserPut">参加させる</button>
-            <button class="btn-reject" @click="applyUserReject">拒否する</button>
-          </div>
+          <StatusChangeBtnArea :id="id" :jobId="jobId" />
         </section>
       </div>
     </div>
@@ -312,68 +247,6 @@ export default Vue.extend({
   position: sticky;
   left: 0;
   bottom: 0;
-  
-  section {
-    width: 100%;
-
-    .button-action-area {
-      margin: 0em auto 0.5rem auto;
-      width: 80%;
-      position: relative;
-
-      .btn-applicant {
-        @include red-btn;
-        @include neumorphism;
-        color: $white;
-        padding: 1.2rem 5rem;
-        transition: .3s;
-        border-radius: 50px;
-        font-weight: 600;
-        line-height: 1;
-        text-align: center;
-        margin: auto;
-        font-size: 1.3rem;
-        display: inline-block;
-        cursor: pointer;
-        border: none;
-
-        &:hover {
-          @include red-btn-hover;
-        }
-      }
-
-      .btn-reject {
-        @include neumorphismGrey;
-        color: $red;
-        margin-left: 1rem;
-        padding: 1.2rem 5.5rem;
-        transition: .3s;
-        border-radius: 50px;
-        font-weight: 600;
-        line-height: 1;
-        text-align: center;
-        font-size: 1.3rem;
-        display: inline-block;
-        cursor: pointer;
-      }
-
-      .btn-done {
-        @include grey-btn;
-        @include box-shadow-btn;
-        color: $white;
-        margin-left: 1rem;
-        padding: 1.2rem 5.5rem;
-        transition: .3s;
-        border-radius: 50px;
-        font-weight: 600;
-        line-height: 1;
-        text-align: center;
-        font-size: 1.3rem;
-        display: inline-block;
-        pointer-events:none;
-      }
-    }
-  }
 }
 
 /* タブレットレスポンシブ */
