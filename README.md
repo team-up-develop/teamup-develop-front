@@ -70,12 +70,12 @@ favorite
 - 不要なスペースをコード各所に残さないこと
 - コメントは必要に応じて残すこと
 > https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
-
+> https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight
 ```
-// Todo: 
-// FIXME: 
-//* 内容(必要に応じて)
-//? 子要素に使用 or paramsの説明
+//* 処理の内容(必要に応じて)
+//? 処理の中の子説明 or paramsの説明
+// TODO: すること
+// FIXME: 私が修正します
 ```
 
 - メディアのキャプションや alt テキストを設定すること
