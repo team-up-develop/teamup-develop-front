@@ -1,16 +1,22 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+} from '@vue/composition-api';
 import axios from 'axios';
+import Vuex from '@/store/index'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import SkillUser from '@/components/Organisms/Users/SkillUser.vue'
 import IntroduceUser from '@/components/Organisms/Users/IntroduceUser.vue'
-import { ParticipateParams, RejectParams } from '@/types/manage';
+import StatusChangeBtnArea from '@/components/Organisms/Manages/StatusChangeBtnArea.vue'
 import { User } from '@/types/user';
-import { m, API_URL, truncate } from '@/master'
+import { API_URL, truncate } from '@/master'
 // import Logout from '@/components/button/Logout'
 
-type DataType = {
+type State = {
   myselfFlag: boolean;
   userInfo: User;
   jobTitle: string;
@@ -20,105 +26,63 @@ type DataType = {
   statusId: number;
 }
 
+const initialState = (): State => ({
+  myselfFlag: false,
+  userInfo: {},
+  jobTitle: "",
+  userId: Vuex.state.auth.userId,
+  loading: true, //? ローディング
+  doneStatusFlag: false,
+  statusId: 1,
+});
 
-export default Vue.extend({
+
+export default defineComponent({ 
   components: {
     Loading,
     PostUser,
     SkillUser,
-    IntroduceUser
+    IntroduceUser,
+    StatusChangeBtnArea
   },
   props: {
-    id: { type: Number as PropType<number>, default: 0 }, //? 詳細を見るユーザーのID
-    jobId: { type: Number as PropType<number>, default: 0 }
+    id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
+    jobId: { type: Number, default: 0 }
   },
-  data(): DataType {
-    return {
-      myselfFlag: false,
-      userInfo: {},
-      jobTitle: "",
-      userId: this.$store.state.auth.userId,
-      loading: true, //? ローディング
-      doneStatusFlag: false,
-      statusId: 1,
-    }
-  },
-  computed: {
-    // * 参加
-    doneParticipate() { 
-      if(this.statusId == m.APPLY_STATUS_PARTICIPATE) {
-        return true
-      }
-      return false
-    },
-    // * 拒否
-    doneReject() {
-      if(this.statusId == m.APPLY_STATUS_REJECT) {
-        return true
-      }
-      return false
-    },
-  },
-  created() {
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const limit = (value: string, num: number) => truncate(value, num);
+
     // * ユーザー情報取得
-      axios.get(`${API_URL}/user/${this.id}`)
-      .then(response => {
-        this.userInfo = response.data;
-      })
-      .catch(error => {
+    const getUser = async () => {
+      try {
+        setTimeout(async() => {
+          const response = await axios.get(`${API_URL}/user/${props.id}`)
+          state.loading = false;
+          state.userInfo = response.data;
+        }, 700)
+      } catch (error) {
         console.log(error)
-      })
-    // * 表示中のユーザーのステータスを格納
-    axios.get(`${API_URL}/apply_job/?job_id=${ this.jobId }&user_id=${ this.id }`)
-    .then(response => {
-      setTimeout(() => {
-        this.loading = false;
-        this.statusId = response.data[0].applyStatusId
-      }, 700)
+      }
+    }
+    getUser();
+
+    const getJobTitle = async () => {
+      const response = await axios.get(`${API_URL}/job/${ props.jobId }`)
+      state.jobTitle = response.data.jobTitle
+    }
+
+    onMounted(() => {
+      if(!state.userId) { return }
+      getJobTitle();
     });
 
-    // *  案件タイトル取得
-    axios.get(`${API_URL}/job/${ this.jobId }`)
-    .then(response => {
-      this.jobTitle = response.data.jobTitle
-    })
-  },
-  methods: {
-    limit(value: string, num: number) {
-      return truncate(value, num)
-    },
-    // * 参加させる
-    applyUserPut() {
-      const params: ParticipateParams = {
-        jobId: this.jobId,
-        userId: this.id,
-        applyStatusId: m.APPLY_STATUS_PARTICIPATE
-      };
-      axios.put(`${API_URL}/apply_job/`, params)
-      .then(response => {
-        this.statusId = m.APPLY_STATUS_PARTICIPATE;
-        console.log(response.data)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    // * 拒否する
-    applyUserReject() {
-      const params: RejectParams = {
-        jobId: this.jobId,
-        userId: this.id,
-        applyStatusId: m.APPLY_STATUS_REJECT
-      };
-      axios.put(`${API_URL}/apply_job/`, params)
-      .then(response => {
-        console.log(response.data)
-        this.statusId = m.APPLY_STATUS_REJECT;
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
+    return {
+      ...toRefs(state),
+      limit,
+      getJobTitle,
+    }
   }
 });
 </script>
@@ -162,16 +126,7 @@ export default Vue.extend({
       <div class="button-area">
         <!-- 案件管理からきたら -->
         <section v-if="jobId">
-          <div class="button-action-area" v-if="doneParticipate">
-            <button class="btn-done">参加しています</button>
-          </div>
-          <div class="button-action-area" v-if="doneReject">
-            <button class="btn-done">拒否しています</button>
-          </div>
-          <div class="button-action-area" v-if="!doneParticipate && !doneReject">
-            <button class="btn-applicant" @click="applyUserPut">参加させる</button>
-            <button class="btn-reject" @click="applyUserReject">拒否する</button>
-          </div>
+          <StatusChangeBtnArea :id="id" :jobId="jobId" />
         </section>
       </div>
     </div>
@@ -282,71 +237,9 @@ export default Vue.extend({
   position: sticky;
   left: 0;
   bottom: 0;
-  
-  section {
-    width: 100%;
-
-    .button-action-area {
-      margin: 0em auto 0.5rem auto;
-      width: 80%;
-      position: relative;
-
-      .btn-applicant {
-        @include red-btn;
-        @include neumorphism;
-        color: $white;
-        padding: 1.2rem 5rem;
-        transition: .3s;
-        border-radius: 50px;
-        font-weight: 600;
-        line-height: 1;
-        text-align: center;
-        margin: auto;
-        font-size: 1.3rem;
-        display: inline-block;
-        cursor: pointer;
-        border: none;
-
-        &:hover {
-          @include red-btn-hover;
-        }
-      }
-
-      .btn-reject {
-        @include neumorphismGrey;
-        color: $red;
-        margin-left: 1rem;
-        padding: 1.2rem 5.5rem;
-        transition: .3s;
-        border-radius: 50px;
-        font-weight: 600;
-        line-height: 1;
-        text-align: center;
-        font-size: 1.3rem;
-        display: inline-block;
-        cursor: pointer;
-      }
-
-      .btn-done {
-        @include grey-btn;
-        @include box-shadow-btn;
-        color: $white;
-        margin-left: 1rem;
-        padding: 1.2rem 5.5rem;
-        transition: .3s;
-        border-radius: 50px;
-        font-weight: 600;
-        line-height: 1;
-        text-align: center;
-        font-size: 1.3rem;
-        display: inline-block;
-        pointer-events:none;
-      }
-    }
-  }
 }
 
-/* タブレットレスポンシブ */
+//* タブレットレスポンシブ
 @media screen and (max-width: 900px) {
   .detail-wrapper {
     .user-area {
@@ -368,24 +261,7 @@ export default Vue.extend({
   }
 }
 
-@media screen and (max-width: 690px) {
-  //* ボタン エリア 
-  .button-area 
-  section 
-  .button-action-area {
-    .btn-applicant {
-      padding: 1.2rem 3rem;
-      font-size: 1rem;
-    }
-
-    .btn-reject {
-      padding: 1.2rem 3rem;
-      font-size: 1rem;
-    }
-  } 
-}
-
-/* スマホレスポンシブ */
+//* スマホレスポンシブ 
 @media screen and (max-width: 500px) {
   .detail-wrapper {
     .skill {
@@ -399,14 +275,6 @@ export default Vue.extend({
         width: 100%;
       }
     }
-
-
-    //* ボタン エリア 
-    .button-area 
-    section 
-    .button-action-area {
-      width: 100%;
-    } 
   }
 }
 
