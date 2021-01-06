@@ -10,17 +10,16 @@ import {
 import Vuex from '@/store/index'
 import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import { Message, messageParams } from '@/types/chat'
-import { Job } from '@/types/job';
+import ChatGroups from '@/components/Organisms/Chats/ChatGroups.vue'
+import SendMessage from '@/components/Organisms/Chats/SendMessage.vue'
+import { Message } from '@/types/chat'
 import {
   m, 
-  dayJs,
   API_URL, 
-  truncate 
+  truncate
 } from '@/master'
 
 type State = {
-  chatGroups: Job[];
   chats: Message[];
   chatMessage: string;
   userId: number;
@@ -32,7 +31,6 @@ type State = {
 }
 
 const initialState = (): State => ({
-  chatGroups: [],
   chats: [],
   chatMessage: "",
   userId: Vuex.state.auth.userId,
@@ -45,7 +43,9 @@ const initialState = (): State => ({
 
 export default defineComponent({ 
   components: {
-    Loading
+    Loading,
+    ChatGroups,
+    SendMessage
   },
   props: {
     // * job.idを受け取る
@@ -53,9 +53,8 @@ export default defineComponent({
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
-    const day = (value: string, format: string) => dayJs(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
     let root: any = ref(null)
+    const limit = (value: string, num: number) => truncate(value, num);
 
     const scrollChat = () => {
       setTimeout(() => {
@@ -68,23 +67,6 @@ export default defineComponent({
           root.value.scrollTop = bottom;
         }
       }, 2000);
-    }
-
-    const getChatGroups = async () => {
-      try { 
-        const response = await axios.get(`${API_URL}/apply_job/?user_id=${ state.userId }`)
-        const array = [];
-        for(let i = 0; i < response.data.length; i++){
-          const applyData = response.data[i]
-          if(applyData.applyStatusId === m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ){
-            array.push(applyData)
-            state.chatGroups = array
-          }
-          else { console.log("Not Found") }
-        }
-      } catch (error) {
-        console.log(error)
-      }
     }
 
     const getJob = async () => {
@@ -115,44 +97,21 @@ export default defineComponent({
         }
       }, 1500)
     }
-    // * メッセージの送信
-    const postMessage = async () => {
-      const params: messageParams = {
-        message: state.chatMessage,
-        userID: state.userId,
-        jobID: props.id
-      }
-      // ? 空のメッセージは送信させない
-      if(params.message == "") { return console.log("空のメッセージは送信させない") }
-      try {
-        // ? 投稿
-        await axios.post<messageParams>(`${API_URL}/chat_message`, params)
-        const getMessage = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
-        state.chats = getMessage.data
-      } catch (error) {
-        console.log(error)
-      }
-      state.chatMessage = "" ;
-    };
 
     onMounted(() => {
       scrollChat();
       getChatMessage();
       getJob();
-      getChatGroups();
     });
 
     return {
       ...toRefs(state),
       m: computed(() => m),
-      day,
-      limit,
-      postMessage,
       root,
       scrollChat,
       getChatMessage,
       getJob,
-      getChatGroups
+      limit
     }
   }
 });
@@ -165,30 +124,7 @@ export default defineComponent({
         <div class="title">
           チャットグループ
         </div>
-        <v-card 
-          :to="`/chat/${ chatGroup.job.id }`" 
-          v-for="chatGroup in chatGroups" 
-          :key="chatGroup.job.id" 
-          v-bind:class="{ active: isActive, 'text-danger': hasError }"
-          class="group"
-          >
-          <div class="group__area">
-            <p>{{ limit(chatGroup.job.jobTitle, 36) }}</p>
-            <v-row class="row">
-              <label 
-                for="name" 
-                class="selfPost" 
-                v-if="chatGroup.applyStatusId === m.APPLY_STATUS_SELF"
-              >投稿案件</label>
-              <label 
-                for="name" 
-                class="post" 
-                v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
-              >参加案件</label>
-              <section>{{ day(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
-            </v-row>
-          </div>
-        </v-card>
+        <ChatGroups :userId="userId" />
       </div>
       <div class="chat-card__right">
         <div class="main" ref="target" v-show="!loading">
@@ -209,15 +145,9 @@ export default defineComponent({
             </div>
           </section>
         </div>
-      <Loading v-show="loading">
-      </Loading>
+        <Loading v-show="loading" />
         <div class="bottom">
-          <v-row>
-            <textarea type="text" class="chat-form" v-model="chatMessage" name="" maxlength="250" placeholder="メッセージを入力してください"></textarea>
-            <span @click="postMessage">
-              <button class="send">送信する</button>
-            </span>
-          </v-row>
+          <SendMessage :id="id"/>
         </div>
       </div>
     </v-sheet>
@@ -266,7 +196,6 @@ export default defineComponent({
 
     &__left {
       width: 285px;
-      background-color: sandybrown;
       height: 100%;
       box-shadow: 5px 0 3px #00000011;
       border-radius: 8px 0 0px 8px;
@@ -342,7 +271,7 @@ export default defineComponent({
             }
 
             section {
-              color: grey;
+              color: $text-sub-color;
               font-size: 12px;
               margin-left: 5.5rem;
               position: absolute;
@@ -413,33 +342,6 @@ export default defineComponent({
         border-radius: 0 0px 8px 0;
         box-shadow: 0 -3px 2px #00000020;
         padding: 1.5rem 0 1.5rem 1rem;
-
-        .chat-form {
-          width: 80%;
-          border-radius: 8px;
-          padding: 1rem;
-          background-color: #ffffff;
-          border: $card-border-color 1px solid;
-          float: left;
-          resize: none;
-          outline: none;
-          margin-left: 1rem
-        }
-
-        .send {
-          @include neumorphism;
-          @include blue-btn;
-          color: $white;
-          padding: 1rem 1rem;
-          font-weight: bold;
-          font-size: 14px;
-          border-radius: 8px;
-          appearance: none;
-          border: none;
-          transition: .3s;
-          outline: none;
-          margin-left: 0.5rem;
-        }
       }
     }
   }
@@ -569,11 +471,6 @@ export default defineComponent({
         .room {
           padding: 1rem 0.5rem 1rem 1rem;
         }
-
-        .bottom 
-        .chat-form {
-          width: 70%;
-        }
       }
     }
   }
@@ -582,15 +479,6 @@ export default defineComponent({
 @media (max-width: 500px) {
   .wrapper .chat-card__right .bottom { 
     padding: 1rem 0 1rem 0.1rem;
-    .chat-form{
-      width: 65%;
-    }
-  }
-}
-
-@media (max-width: 380px) {
-  .wrapper .chat-card__right .bottom .chat-form{
-    width: 60%;
   }
 }
 </style>
