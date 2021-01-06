@@ -214,7 +214,7 @@ export default Vue.extend({
     @include neumorphism;
     color: $white;
     padding: 1rem 3.4rem;
-    border-radius: 50px;
+    border-radius: 35px;
     font-weight: 600;
     line-height: 1;
     text-align: center;

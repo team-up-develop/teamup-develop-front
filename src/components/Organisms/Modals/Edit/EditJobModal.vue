@@ -292,17 +292,16 @@ export default Vue.extend({
 
 // * モーダル内 編集するボタン
 .modal-edit-btn {
-  background-color: $secondary-color;
+  background-color: $primary-dark;
   display: block;
   padding: 1.4rem 5rem;
   box-shadow: 0 0px 5px 2px #d4d4d4;
   border-radius: 50px;
   font-weight: 600;
-  color: #fff;
+  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 800px;
-  // margin: auto;
   font-size: 1.1rem;
   display: inline-block;
   cursor: pointer;
