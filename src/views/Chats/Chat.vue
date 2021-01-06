@@ -7,26 +7,22 @@ import {
   computed
 } from '@vue/composition-api';
 import Vuex from '@/store/index'
-import axios from 'axios'
-import { Job } from '@/types/job';
-import { m, dayJs, API_URL, truncate } from '@/master'
-import { ManageJob } from '@/types/manage';
+import ChatGroups from '@/components/Organisms/Chats/ChatGroups.vue'
+import SendMessage from '@/components/Organisms/Chats/SendMessage.vue'
 
 type State = {
-  chatGroups: Job[];
   userId: number;
-  isActive: boolean;
-  hasError: boolean;
 }
 
 const initialState = (): State => ({
-  chatGroups: [],
   userId: Vuex.state.auth.userId,
-  isActive: true,
-  hasError: false,
 });
 
 export default defineComponent({ 
+  components: {
+    ChatGroups,
+    SendMessage
+  },
   setup: () => {
     const state = reactive<State>(initialState());
 
@@ -38,37 +34,13 @@ export default defineComponent({
       }
     });
 
-    const day = (value: string, format: string) => dayJs(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
-
-    const getChatGroups = async () => {
-      try { 
-        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${ state.userId }`)
-        const array: ManageJob[] = [];
-        for(let i = 0; i < response.data.length; i++){
-          const applyData: ManageJob = response.data[i]
-          if(applyData.applyStatusId == m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ) {
-            array.push(applyData)
-            state.chatGroups = array
-          }
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    };
-
     onMounted(() => {
       if(!state.userId) { return }
-      getChatGroups();
     });
 
     return {
       ...toRefs(state),
       isLogin,
-      m: computed(() => m),
-      day,
-      limit,
-      getChatGroups
     }
   }
 });
@@ -81,62 +53,26 @@ export default defineComponent({
         <div class="title">
           チャットグループ
         </div>
-        <v-card 
-          :to="`/chat/${ chatGroup.job.id }`" 
-          v-for="chatGroup in chatGroups" 
-          :key="chatGroup.job.id" 
-          v-bind:class="{ active: isActive, 'text-danger': hasError }"
-          class="group"
-          >
-          <div class="group__area">
-            <p>{{ limit(chatGroup.job.jobTitle, 36) }}</p>
-            <v-row class="row">
-              <label 
-                for="name" 
-                class="selfPost" 
-                v-if="chatGroup.applyStatusId === m.APPLY_STATUS_SELF"
-              >投稿案件</label>
-              <label 
-                for="name" 
-                class="post" 
-                v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
-              >参加案件</label>
-              <section>{{ day(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
-            </v-row>
-          </div>
-        </v-card>
+        <ChatGroups :userId="userId" />
       </div>
       <div class="chat-card__right">
         <div class="main" ref="target">
         </div>
         <div class="bottom">
-          <v-row>
-            <textarea type="text" class="chat-form" name="" maxlength="0" placeholder="チャットグループを選択してください"></textarea>
-            <span>
-              <button class="send">送信する</button>
-            </span>
-          </v-row>
+          <SendMessage :id="0" />
         </div>
       </div>
     </v-sheet>
-      <div v-else>
-        ログインが必要です
-      </div>
+    <div v-else>
+      ログインが必要です
     </div>
+  </div>
 </template>
 
 
 <style lang="scss" scoped>
 @import '@/assets/scss/_variables.scss';
 
-.active {
-  text-decoration: none;
-}
-.router-link-exact-active.router-link-active.active {
-  color: $primary-color;
-  font-weight: bold;
-  text-decoration: underline;
-}
 .wrapper{
   width: 90%;
   height: 90vh;
@@ -182,80 +118,6 @@ export default defineComponent({
         display: flex;
         font-weight: bold;
       }
-
-      .group {
-        border-bottom: $card-border-color 1px solid;
-        border-radius: none;
-
-        &__area {
-          width: 90%;
-          height: 102px;
-          margin: 0 auto;
-          padding: 0.7rem 0 0.5rem 0;
-          margin-top: 0.2rem;
-          position: relative;
-
-          .row {
-            padding: 0rem 0 1rem 1rem;
-            position: absolute;
-            bottom: 0;
-            width: 100%;
-            // background-color: yellow;
-
-            .selfPost {
-              @include box-shadow-btn;
-              background-color: $third-dark;
-              color: $white;
-              padding: 0.2rem 1.5rem;
-              width: 102px;
-              font-weight: bold;
-              font-size: 0.8em;
-              border-radius: 8px;
-              appearance: none;
-              border: none;
-              transition: .3s;
-              outline: none;
-            }
-
-            .post {
-              border: $third-dark 1px solid;
-              color: $third-dark;
-              background-color: $white;
-              padding: 0.2rem 1.5rem;
-              width: 102px;
-              font-weight: bold;
-              font-size: 0.8em;
-              border-radius: 8px;
-              appearance: none;
-              transition: .3s;
-              outline: none;
-            }
-
-            section {
-              color: grey;
-              font-size: 12px;
-              margin-left: 5.5rem;
-              position: absolute;
-              right: 0;
-              top: 0;
-            }
-          }
-          p {
-            text-align: left;
-            color: $text-main-color;
-          }
-
-          .chat-member-name {
-            font-size: 12px;
-            color: $text-sub-color;
-          }
-        }
-      }
-
-      .router {
-        cursor: pointer;
-        text-decoration: none;
-      }
     }
 
     &__right {
@@ -299,28 +161,24 @@ export default defineComponent({
           margin-left: 1rem
         }
 
-          .send {
-            @include blue-btn;
-            color: $white;
-            padding: 1rem 1rem;
-            font-weight: bold;
-            font-size: 14px;
-            border-radius: 8px;
-            appearance: none;
-            border: none;
-            transition: .3s;
-            outline: none;
-            margin-left: 0.5rem;
-          }
+        .send {
+          @include grey-btn;
+          color: $white;
+          padding: 1rem 1rem;
+          font-weight: bold;
+          font-size: 14px;
+          border-radius: 8px;
+          appearance: none;
+          border: none;
+          transition: .3s;
+          outline: none;
+          margin-left: 0.5rem;
+        }
       }
     }
   }
 }
 
-// * v-card の boxshadowを消します
-.v-sheet.v-card:not(.v-sheet--outlined) {
-  box-shadow: none; 
-}
 
 @media screen and (max-width: 1200px) {
   .wrapper{
@@ -335,11 +193,6 @@ export default defineComponent({
 
       &__left {
         width: 100%;
-
-        .group__area {
-          padding: 0.7rem 0 0.5rem 1rem;
-          margin: 0;
-        }
 
       }
       &__right {
