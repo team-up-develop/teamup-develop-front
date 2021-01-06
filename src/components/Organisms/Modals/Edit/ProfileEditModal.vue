@@ -164,7 +164,7 @@ export default Vue.extend({
     }
     .serach-btn {
       @include box-shadow-btn;
-      background-color: $secondary-color;
+      background-color: $primary-dark;
       color: $white;
       text-align: left;
       display: block;

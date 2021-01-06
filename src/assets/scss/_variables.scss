@@ -67,33 +67,25 @@ $modal-background: rgba(0, 0, 0, 0.637);
 
 // * ボタン グラデーション
 // ? 青(基本)
-$gradation-blue-left: #1142e2;
-$gradation-blue-right: #19bde6;
 @mixin blue-btn {
-  background: linear-gradient(60deg, $gradation-blue-left, $gradation-blue-right);
+  background-image: linear-gradient(to right, #2196F3 0%, #2575fc 100%);
 }
 // ? 紫(サブ)
-$gradation-purple-left: #673AB7;
-$gradation-purple-right: #AB47BC;
 @mixin purple-btn {
-  background: linear-gradient(60deg, $gradation-purple-left, $gradation-purple-right);
+  background-image: linear-gradient(to right, #AB47BC 0%, #673AB7 100%);
 }
 // ? 赤(重要箇所)
-$gradation-red-left: #D81B60;
-$gradation-red-right: #EC407A;
 @mixin red-btn {
-  background: linear-gradient(60deg, $gradation-red-left, $gradation-red-right);
+  background-image: linear-gradient(to right, #EC407A 0%, #D81B60 100%);
 }
 // ? 黒(終了)
-$gradation-grey-left: #424242;
-$gradation-grey-right: #9E9E9E;
 @mixin grey-btn {
-  background: linear-gradient(60deg, $gradation-grey-left, $gradation-grey-right);
+  background-image: linear-gradient(to right, #9E9E9E 0%, #424242 100%);
 }
 // ? 赤 白余白
 @mixin red-cancel-btn {
-  border: solid 1px #D81B60;
-  color: #D81B60;
+  border: solid 1px $red;
+  color: $red;
   background-color: $white;
 }
 //? 青 白余白
@@ -128,7 +120,7 @@ $primary-border-color: #2196F3;
 
 
 // * ホバー
-// タブ
+//? タブ
 @mixin tab-hover {
   background-color: $dark-grey;
   transition: .3s;

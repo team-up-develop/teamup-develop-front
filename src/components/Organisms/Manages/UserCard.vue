@@ -167,7 +167,7 @@ section {
 
     .edit-btn {
       @include box-shadow-btn;
-      background-color: $secondary-color;
+      background-color: $primary-dark;
       color: $white;
       padding: 0.5rem 4rem;
       position: absolute;

@@ -330,7 +330,7 @@ export default defineComponent({
 //* 編集するボタン 
 .btn-box-edit {
   @include box-shadow-btn;
-  background-color: $secondary-color;
+  background-color: $primary-dark;
   color: $white;
   padding: 1.2rem 8rem;
   transition: .3s;
