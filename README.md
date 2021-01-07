@@ -1,5 +1,11 @@
 # team-devlop-fornt
-Typescript導入後
+Node v12.12.0
+vue/cli v4.3.1
+vue v2.6.12 
+typescript v3.8.3 
+vuex v3.4.0
+eslint v6.7.2
+Docker v19.03.13
 
 ## 環境構築
 ### コンテナ作成 / 起動
