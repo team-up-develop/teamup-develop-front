@@ -1,5 +1,5 @@
-# team-devlop-fornt
-- Node v12.12.0
+# team-devlop-fornt 環境
+- node v12.12.0
 - vue/cli v4.3.1
 - vue v2.6.12 
 - typescript v3.8.3 
@@ -29,12 +29,12 @@ npm run dev
 ```
 
 ## その他コマンド
-### build size 
+### bundle size 
 
 ```
 yarn build --analyze
 ```
-
+## Error 対応
 ### vue cli not found と出た場合
 ```
 rm -rf node_modules package-lock.json && npm install
@@ -51,25 +51,18 @@ Atomic Design 導入
 
 ## 命名規約
 ```
-案件
-job
-詳細
-detail
-管理
-manage
-参加
-participate
-応募
-apply
-拒否
-reject
-チャット
-chat
-お気に入り いいね
-favorite
+案件: job
+詳細: detail
+管理: manage
+参加: participate
+応募: apply
+拒否: reject
+チャット: chat
+お気に入り いいね: favorite
+
 ```
 
-## Style & JavaScript
+## style & javaScript
 - JavaScript キャメルケース推奨
 - インデントは半角スペース2つ分で揃え、タブは混ぜないこと
 - 固有名詞などを除いて大文字は使用を控えること
@@ -94,5 +87,5 @@ favorite
 - media screen ごとに分けること
 - ComponentあたりでStyleを適用すること
 
-## Color
+## color
 <img width="612" alt="スクリーンショット 2020-12-19 10 59 58" src="https://user-images.githubusercontent.com/56709557/102679879-7673e880-41f6-11eb-8889-27143779a070.png">
