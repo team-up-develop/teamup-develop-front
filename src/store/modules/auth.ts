@@ -1,8 +1,11 @@
-import axios from 'axios'
-import { GetterTree } from 'vuex';
-import { ActionTree } from 'vuex';
-import { MutationTree } from 'vuex';
-import router from '@/router/index.ts' // Vue router instance
+import { 
+  ActionTree, 
+  GetterTree,
+  MutationTree,
+} from 'vuex';
+import axios from 'axios';
+import { API_URL } from '@/master'
+import router from '@/router/index.ts';
 
 interface State {
   idToken: string | null;
@@ -50,7 +53,7 @@ const actions: ActionTree<State, LoginData> = {
       LoginName: authData.LoginName,
       LoginPassword: authData.LoginPassword,
     }
-    axios.post('http://localhost:8888/api/v1/login', params)
+    axios.post(`${ API_URL }/login`, params)
     .then(response => {
       router.push('/jobs');
       commit('updateIdToken', response.data.idToken)

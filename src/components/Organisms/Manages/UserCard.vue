@@ -6,11 +6,9 @@ import {
   onMounted
 } from '@vue/composition-api';
 import Vuex from '@/store/index'
-import { API_URL, m } from '@/master'
+import { API_URL } from '@/master'
 import axios from 'axios'
-import { ManageJob } from '@/types/manage';
 import { User } from '@/types/user';
-import { Job } from '@/types/job';
 
 type State = {
   userId: number;
@@ -18,59 +16,27 @@ type State = {
   manageNum: number;
   favoriteNum: number;
   applyNum: number;
-  applyJob: ManageJob[];
 }
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
   user: {},
-  manageNum: 0,
-  favoriteNum: 0,
-  applyNum: 0,
-  applyJob: [],
+  manageNum: Vuex.state.statusJobs.jobsManageNum,
+  favoriteNum: Vuex.state.statusJobs.jobsFavoriteJobsNum,
+  applyNum: Vuex.state.statusJobs.jobsApplyNum,
 });
 
 export default defineComponent({ 
   setup: () => {
     const state = reactive<State>(initialState());
-
     onMounted(() => {
+      Vuex.dispatch('getJobNum', {
+        userId: state.userId
+      });
+      
       axios.get<User>(`${API_URL}/user/${state.userId}`)
       .then(response => {
         state.user = response.data
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      // * 管理案件数
-      axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${state.userId}`)
-      .then(response => {
-        state.manageNum = response.data.length
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      // * 保存案件数
-      axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
-      .then(response => {
-        state.favoriteNum = response.data.length
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      // * 応募案件数
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
-      .then(response => {
-        for(let i = 0; i < response.data.length; i++) {
-          const applyJobCorrect: ManageJob = response.data[i];
-          if(
-            applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || 
-            applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE
-          ) {
-            state.applyJob.push(applyJobCorrect);
-          }
-        }
-        state.applyNum = state.applyJob.length
       })
       .catch(error =>{
         console.log(error)
