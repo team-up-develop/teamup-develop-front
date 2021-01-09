@@ -4,68 +4,42 @@ import {
   reactive,
   toRefs,
   onMounted,
-  computed
 } from '@vue/composition-api';
 import Vuex from '@/store/index'
 import { API_URL } from '@/master'
 import axios from 'axios'
-import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
-import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
-import EditJobModal from '@/components/Organisms/Modals/Edit/EditJobModal.vue'
+import BtnArea from '@/components/Organisms/Jobs/JobDetails/BtnArea.vue'
 import { Job } from '@/types/job';
-import { ManageJob } from '@/types/manage';
 
 type State = {
-  job: any; //TODO: Any
+  job: any;
   userId: number;
-  selfJobPost: boolean; 
   loading: boolean;
-  applyFlug: boolean;
-  modal: boolean;
-  editModal: boolean;
 }
 
 const initialState = (): State => ({
   job: {},
   userId: Vuex.state.auth.userId,
   loading: true,
-  applyFlug: true,
-  modal: false,
-  editModal: false,
-  selfJobPost: false
 });
-
 
 export default defineComponent({ 
   components: {
-    Applybtn,
-    FavoriteDetailBtn,
     Loading,
-    ApplyModal,
     PostUser,
     SkillJob,
     DetailJob,
-    EditJobModal
+    BtnArea
   },
   props: {
     id: { type: Number, default: 0 }
   },
-  setup: (props, context) => {
+  setup: (props) => {
     const state = reactive<State>(initialState());
-    const router = context.root.$router
-
-    const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
-    });
 
     // * 詳細画面情報を取得
     const getJobDetail = async () => {
@@ -81,64 +55,12 @@ export default defineComponent({
     };
     getJobDetail();
 
-    const registerRedirect = () => router.push('/register');
-
-    // * 自分の案件か否かを判定
-    const getCheckSelfJob = async () => {
-      try { 
-        const response = await axios.get(`${API_URL}/job/?user_id=${state.userId}`)
-        for(let i = 0; i < response.data.length; i++){
-          const selfJob = response.data[i]
-          if(selfJob.id === props.id){
-            state.selfJobPost = true
-          }
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    };
-    // * ログインユーザーが応募済みか応募済みではないかを判定する
-    const getCheckStatus = async () => {
-      try {
-        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
-        const arrayApply: any = []
-        for(let c = 0; c < response.data.length; c++){
-          const applyData: any = response.data[c];
-          arrayApply.push(applyData.job.id)
-        }
-        if (arrayApply.includes(props.id)) {
-          state.applyFlug = false
-        } else {
-          console.log("まだ応募していません")
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    const openModal = () => state.modal = true;
-    const closeModal = () => state.modal = false;
-    const doSend = () => closeModal();
-    const openEditModal = () => state.editModal = true;
-    const closeEditModal = () => state.editModal = false;
-
     onMounted(() => {
       if(!state.userId) { return }
-      getCheckSelfJob();
-      getCheckStatus();
     });
 
     return {
       ...toRefs(state),
-      isLogin,
-      openModal,
-      closeModal,
-      doSend,
-      registerRedirect,
-      openEditModal,
-      closeEditModal,
-      getCheckSelfJob,
-      getCheckStatus,
       getJobDetail
     }
   }
@@ -147,24 +69,10 @@ export default defineComponent({
 
 <template>
   <div class="detail-wrapper">
-  <!-- 編集 モーダル画面 -->
-  <div class="example-modal-window">
-    <EditJobModal @close="closeEditModal" v-if="editModal" :job="job"/>
-  </div>
     <div class="back-space">
       <router-link :to="`/jobs`">
       <p>＜ 案件一覧に戻る</p>
       </router-link>
-    </div>
-    <!-- 応募する モーダル画面 -->
-    <div class="example-modal-window">
-      <ApplyModal @close="closeModal" v-if="modal">
-        <p>応募を完了してよろしいですか？</p>
-        <template v-slot:footer>
-          <Applybtn :jobId='id' />
-          <button @click="doSend" class="modal-btn">キャンセル</button>
-        </template>
-      </ApplyModal>
     </div>
     <section v-if="loading == false">
       <div class="detail-post-user-area">
@@ -178,29 +86,7 @@ export default defineComponent({
       <div class="detail-post-detail-area">
         <DetailJob :job="job"/>
       </div>
-      <div class="button-area" v-if="isLogin">
-        <div v-if="!selfJobPost" class="button-action-area">
-          <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
-          <div class="btn-box-apply-false" v-if="applyFlug == false">
-            応募済み
-          </div>
-          <div class="favorite-btn-area">
-            <FavoriteDetailBtn :jobId='id' />
-          </div>
-        </div>
-        <div class="button-action-area-edit" v-if="selfJobPost">
-          <button class="btn-box-edit" @click="openEditModal">編集する</button>
-        </div>
-      </div>
-        <!-- 非ログイン時 リダイレクトさせる -->
-      <div class="button-area" v-else>
-        <div class="button-action-area" @click="registerRedirect">
-          <button class="btn-box-apply">応募する</button>
-          <div class="favorite-btn-area">
-            <v-icon class="icon">mdi-heart</v-icon>
-          </div>
-        </div>
-      </div>
+      <BtnArea :id="id" :job="job" />
     </section>
     <Loading v-else>
     </Loading>
@@ -262,141 +148,6 @@ export default defineComponent({
   margin-bottom: 0.7rem;
 }
 
-.tag {
-  font-weight: bold;
-}
-
-//* ボタン エリア 
-.button-area {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  bottom: 0;
-
-  .button-action-area {
-    margin: 0em auto 4rem auto;
-    width: 50%;
-    position: relative;
-  }
-}
-
-//* 応募するボタン 
-.btn-box-apply {
-  @include red-btn;
-  @include neumorphism;
-  color: $white;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 60%;
-  padding: 1.2rem 4rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-}
-
-//* 応募済みボタン */
-.btn-box-apply-false {
-  @include grey-btn;
-  @include box-shadow-btn;
-  color: $white;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 60%;
-  padding: 1.2rem 4rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  border: none;
-}
-
-//* 編集するボタン 
-.btn-box-edit {
-  @include box-shadow-btn;
-  background-color: $primary-dark;
-  color: $white;
-  padding: 1.2rem 8rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  border: none;
-  appearance: none;
-  border: none;
-  transition: .3s;
-  outline: none;
-
-  &:hover {
-    @include btn-hover;
-  }
-}
-
-.favorite-btn-area {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 20%;
-  padding: 0.2rem 0 0 0 ;
-
-  .heart {
-    background-color: blue;
-  }
-}
-
-.icon {
-  font-size: 30px;
-  padding: 1.5rem;
-  width: 38px;
-  height: 38px;
-  color: $white;
-  cursor: pointer;
-  background-color: #d8d6d6;
-  border-radius: 5px / 5px;
-}
-
-// * モーダル内のキャンセルボタン 
-.modal-btn {
-  @include neumorphismGrey;
-  color: $red;
-  padding: 1rem 2.4rem;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin-left: 1.2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 1rem;
-  outline: none;
-}
-
 /* タブレットレスポンシブ */
 @media screen and (max-width: 900px) {
   .detail-wrapper {
@@ -432,28 +183,6 @@ export default defineComponent({
     .detail-post-detail-area{
       width: 95%;
     }
-
-    //* ボタンエリア 
-    .button-area {
-      .button-action-area {
-        margin: 0em auto 0rem auto;
-        width: 100%;
-        position: relative;
-
-        .btn-box-apply {
-          width: 80%;
-          padding: 1.2rem 2rem;
-          font-size: 1rem;
-        }
-
-        //* 応募済みボタン 
-        .btn-box-apply-false {
-          width: 80%;
-          padding: 1.2rem 2rem;
-          font-size: 1rem;
-        }
-      }
-    }
   }
 }
 
@@ -480,10 +209,6 @@ export default defineComponent({
     .detail-post-detail-area{
       width: 100%;
     }
-    // * 編集する
-    .btn-box-edit {
-      font-size: 1rem;
-    }
   }
 }
 
@@ -499,14 +224,6 @@ export default defineComponent({
     //* 詳細 カード */
     .detail-post-detail-area {
       width: 100%;
-    }
-    //* ボタンエリア */
-    .button-area {
-      height: 125px;
-
-      .button-action-area {
-        width: 95%;
-      }
     }
   }
 }

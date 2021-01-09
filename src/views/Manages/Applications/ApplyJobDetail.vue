@@ -4,69 +4,43 @@ import {
   reactive,
   toRefs,
   onMounted,
-  computed
+  // computed
 } from '@vue/composition-api';
 import { API_URL } from '@/master'
 import Vuex from '@/store/index'
 import axios from 'axios'
-import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
-import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
+import BtnArea from '@/components/Organisms/Jobs/JobDetails/BtnArea.vue'
 import { Job } from '@/types/job';
-import { ManageJob } from '@/types/manage';
 
 type State = {
   job: any; //TODO: Any
   userId: number;
   loading: boolean;
-  modal: boolean;
-  statusId: number;
-  selfJobPost: boolean;
 }
 
 const initialState = (): State => ({
   job: {},
   userId: Vuex.state.auth.userId,
   loading: true, 
-  modal: false,
-  statusId: 0,
-  selfJobPost: false
 });
 
 export default defineComponent({ 
   components: {
-    Applybtn,
-    FavoriteDetailBtn,
     Loading,
-    ApplyModal,
     PostUser,
     SkillJob,
-    DetailJob
+    DetailJob,
+    BtnArea
   },
   props: {
     id: { type: Number, default: 0 }
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
-
-    const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
-    });
-
-    const DoneApply = computed(() => {
-      if(state.statusId == 0) {
-        return false
-      }
-      return true
-    });
 
     // * 詳細画面情報を取得
     const getJobDetail = async () => {
@@ -80,38 +54,14 @@ export default defineComponent({
         console.log(error)
       }
     };
-    // * 応募済みか否かを判定
-    const getCheckStatus = async () => {
-      try { 
-        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&user_id=${ state.userId }`)
-        if(response.data.length == 0) {
-          return 
-        } else {
-          state.statusId = response.data[0].applyStatusId
-        }
-      } catch (error) {
-        console.log(error)
-      }
-    };
-
-    const openModal = () => state.modal = true;
-    const closeModal = () => state.modal = false;
-    const doSend = () => closeModal();
 
     onMounted(() => {
       getJobDetail();
-      getCheckStatus();
     });
 
     return {
       ...toRefs(state),
-      isLogin,
-      DoneApply,
-      openModal,
-      closeModal,
-      doSend,
       getJobDetail,
-      getCheckStatus
     }
   }
 });
@@ -140,30 +90,7 @@ export default defineComponent({
           <DetailJob :job="job"/>
         </div>
       </div>
-      <div class="button-area">
-        <div v-if="isLogin" class="button-action-area">
-          <div class="btn-box-apply-false" v-if="DoneApply">
-            応募済み
-          </div>
-          <button @click="openModal" class="btn-box-apply" v-else>応募する</button>
-          <div class="favorite-btn-area">
-            <FavoriteDetailBtn :jobId='id' />
-          </div>
-          <!-- 応募する モーダル画面 -->
-          <div class="example-modal-window">
-            <ApplyModal @close="closeModal" v-if="modal">
-              <p>応募を完了してよろしいですか？</p>
-              <template v-slot:footer>
-                <Applybtn :jobId='id' />
-                <button @click="doSend" class="modal-btn">キャンセル</button>
-              </template>
-            </ApplyModal>
-          </div>
-        </div>
-        <div v-else>
-          ログインが必要です！
-        </div>
-      </div>
+      <BtnArea :id="id" :job="job" />
     </section>
     <Loading v-else>
     </Loading>
@@ -225,138 +152,6 @@ export default defineComponent({
   margin-bottom: 0.7rem;
 }
 
-.tag {
-  font-weight: bold;
-}
-
-//* ボタン エリア 
-.button-area {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: -webkit-sticky;
-  position: sticky;
-  left: 0;
-  bottom: 0;
-  height: 100px;
-
-  .button-action-area {
-    margin: 0em auto 4rem auto;
-    width: 50%;
-    position: relative;
-  }
-}
-
-//* 応募するボタン 
-.btn-box-apply {
-  @include red-btn;
-  @include neumorphism;
-  color: $white;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 60%;
-  padding: 1.2rem 4rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-}
-
-//* 応募済みボタン */
-.btn-box-apply-false {
-  @include grey-btn;
-  @include box-shadow-btn;
-  color: $white;
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 60%;
-  padding: 1.2rem 4rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  border: none;
-}
-
-//* 編集するボタン 
-.btn-box-edit {
-  @include box-shadow-btn;
-  background-color: $secondary-color;
-  color: $white;
-  padding: 1.2rem 8rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  border: none;
-
-  &:hover {
-    @include btn-hover;
-  }
-}
-
-.favorite-btn-area {
-  position: absolute;
-  right: 0;
-  top: 0;
-  width: 20%;
-  padding: 0.2rem 0 0 0 ;
-
-  .heart {
-    background-color: blue;
-  }
-}
-
-.icon {
-  font-size: 30px;
-  padding: 10px;
-  width: 38px;
-  height: 38px;
-  color: $white;
-  cursor: pointer;
-  background-color: #d8d6d6;
-  border-radius: 5px / 5px;
-}
-
-// * モーダル内のキャンセルボタン 
-.modal-btn {
-  @include neumorphismGrey;
-  color: $red;
-  padding: 1rem 2.4rem;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin-left: 1.2rem;
-  font-size: 1rem;
-  cursor: pointer;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 1rem;
-  outline: none;
-}
-
 /* タブレットレスポンシブ */
 @media screen and (max-width: 900px) {
   .detail-wrapper {
@@ -393,28 +188,6 @@ export default defineComponent({
     .detail-post-detail-area{
       width: 95%;
     }
-
-    //* ボタンエリア 
-    .button-area {
-      .button-action-area {
-        margin: 0em auto 0rem auto;
-        width: 100%;
-        position: relative;
-
-        .btn-box-apply {
-          width: 80%;
-          padding: 1.2rem 2rem;
-          font-size: 1rem;
-        }
-
-        //* 応募済みボタン 
-        .btn-box-apply-false {
-          width: 80%;
-          padding: 1.2rem 2rem;
-          font-size: 1rem;
-        }
-      }
-    }
   }
 }
 
@@ -441,10 +214,6 @@ export default defineComponent({
     .detail-post-detail-area{
       width: 100%;
     }
-    // * 編集する
-    .btn-box-edit {
-      font-size: 1rem;
-    }
   }
 }
 
@@ -460,14 +229,6 @@ export default defineComponent({
     //* 詳細 カード */
     .detail-post-detail-area {
       width: 100%;
-    }
-    //* ボタンエリア */
-    .button-area {
-      height: 125px;
-
-      .button-action-area {
-        width: 95%;
-      }
     }
   }
 }
