@@ -99,8 +99,8 @@ export default defineComponent({
     };
     // * ログインユーザーが応募済みか応募済みではないかを判定する
     const getCheckStatus = async () => {
-      const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
       try {
+        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
         const arrayApply: any = []
         for(let c = 0; c < response.data.length; c++){
           const applyData: any = response.data[c];

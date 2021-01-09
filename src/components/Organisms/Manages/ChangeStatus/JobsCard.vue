@@ -5,20 +5,19 @@ import {
   toRefs,
   onMounted
 } from '@vue/composition-api';
-import axios from 'axios';
-import { m, API_URL, truncate } from '@/master'
-import { ManageJob } from '@/types/manage';
+import Vuex from '@/store/index'
+import { truncate } from '@/master'
 
 type State = {
   applyNum: number;
   rejectNum: number;
-  assginNum: number;
+  participateNum: number;
 }
 
 const initialState = (): State => ({
-  applyNum: 0,
-  rejectNum: 0,
-  assginNum: 0
+  applyNum: Vuex.state.statusUser.userApplyNum,
+  participateNum: Vuex.state.statusUser.userParticipateNum,
+  rejectNum: Vuex.state.statusUser.userRejectNum,
 });
 
 export default defineComponent({ 
@@ -28,30 +27,17 @@ export default defineComponent({
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
-
     const limit = (value: string, num: number) => truncate(value, num);
+    
     onMounted(() => {
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.jobId }&apply_status_id=${ m.APPLY_STATUS_APPLY }`)
-      .then(response => {
-        state.applyNum = response.data.length
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.jobId }&apply_status_id=${ m.APPLY_STATUS_REJECT }`)
-      .then(response => {
-        state.rejectNum = response.data.length
-      })
-      .catch(error =>{
-        console.log(error)
-      })
-      axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.jobId }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
-      .then(response => {
-        state.assginNum = response.data.length
-      })
-      .catch(error =>{
-        console.log(error)
-      })
+      Vuex.dispatch('getUserNum', {
+        jobId: props.jobId
+      });
+      setTimeout(() => {
+        state.applyNum = Vuex.state.statusUser.userApplyNum;
+        state.participateNum = Vuex.state.statusUser.userParticipateNum;
+        state.rejectNum =  Vuex.state.statusUser.userRejectNum;
+      }, 500);
     });
 
     return {
@@ -78,7 +64,7 @@ export default defineComponent({
               <label for="name">応募数</label>
             </div>
             <div class="value">
-              <div class="num">{{ assginNum }}</div>
+              <div class="num">{{ participateNum }}</div>
               <label for="name">参加数</label>
             </div>
             <div class="value">

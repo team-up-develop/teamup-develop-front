@@ -1,6 +1,8 @@
-import { ActionTree } from 'vuex';
-import { GetterTree } from 'vuex';
-import { MutationTree } from 'vuex';
+import { 
+  ActionTree, 
+  GetterTree,
+  MutationTree,
+} from 'vuex';
 import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
@@ -55,22 +57,18 @@ const mutations: MutationTree<State> = {
 const actions: ActionTree<State, SearchData> = {
   // * フリーワード 検索
   freeWordSearch({ commit }, freeWord: SearchData) {
-    // router.push('/jobs');
     commit('freeWord', freeWord.freeWord)
   },
   // * 言語 検索
   languageSearch({ commit }, language: State) {
-    // router.push('/jobs');
     commit('language', language.language)
   },
   // * フレームワーク 検索
   framworkSearch({ commit }, framwork: State) {
-    // router.push('/jobs');
     commit('framwork', framwork.framwork)
   },
   // * その他スキル 検索
   skillSearch({ commit }, skill: State) {
-    // router.push('/jobs');
     commit('skill', skill.skill)
   }
 }

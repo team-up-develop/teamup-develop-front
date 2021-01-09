@@ -41,7 +41,7 @@ const initialState = (): State => ({
   clickJobId: 0
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     Loading,
     ChatGroups,
@@ -71,7 +71,7 @@ export default defineComponent({
 
     const getJob = async () => {
       try {
-        const response =  await axios.get(`${API_URL}/job/${props.id}`)
+        const response = await axios.get(`${API_URL}/job/${props.id}`)
         state.jobTitle = response.data.jobTitle
         state.clickJobId = response.data.id
       } catch (error) {
@@ -82,8 +82,8 @@ export default defineComponent({
     const getChatMessage = async () => {
       let chatLength = 0;
       setInterval(async() => {
-        const response = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
         try { 
+          const response = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
           state.loading = false;
           state.chats = response.data
           if(chatLength === state.chats.length) { return console.log("chatLengt が一緒なのでスクロールしません。") } 
