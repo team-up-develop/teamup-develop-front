@@ -53,8 +53,8 @@ export default defineComponent({
           <v-col>
             <JobCreateSkillCard 
               :jobTitle="jobTitle"
-              :devStartDate="jobTitle"
-              :devEndDate="jobTitle"
+              :devStartDate="devStartDate"
+              :devEndDate="devEndDate"
               :jobDescription="jobDescription"
             />
           </v-col>

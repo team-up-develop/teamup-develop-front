@@ -70,7 +70,6 @@ export default Vue.extend({
           devStartDate: this.devStartDate, //? 開発開始
           devEndDate: this.devEndDate, //? 開発終了
         };
-        console.log(params)
         if(params.jobTitle) {
           sessionStorage.setItem('jobTitle', params.jobTitle);
         } 

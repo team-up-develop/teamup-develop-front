@@ -90,7 +90,7 @@ export default Vue.extend({
             <input type="url" v-model="twitterAccount" class="edit-value" placeholder="Twitterアカウント">
             <br>
             <template>
-              <div class="serach-btn" @click="profileEdit">
+              <div class="btn" @click="profileEdit">
                 編集する
               </div>
             </template>
@@ -122,8 +122,6 @@ export default Vue.extend({
   width: 100%;
   height: 100%;
   background: $modal-background;
-
-  /* font-weight: bold; */
 }
 
 .modal-window {
@@ -134,10 +132,23 @@ export default Vue.extend({
 
 .modal-content {
   padding: 2rem 2rem;
-  width: 40vw;
-  height: 64vh;
+  width: 52vw;
+  height:74vh;
   text-align: left;
   overflow: scroll;
+
+  @media screen and (max-width: 1000px) {
+    width: 60vw;
+  }
+  @media screen and (max-width: 768px) {
+    width: 75vw;
+  }
+  @media screen and (max-width: 500px) {
+    width: 85vw;
+  }
+  @media screen and (max-width:400px) {
+    width: 92vw;
+  }
 
   // * モーダル
   section {
@@ -162,9 +173,9 @@ export default Vue.extend({
       padding: 0.5rem;
       background-color: $dark-white;
     }
-    .serach-btn {
+    .btn {
       @include box-shadow-btn;
-      background-color: $primary-dark;
+      background-color: $secondary-color;
       color: $white;
       text-align: left;
       display: block;
@@ -184,28 +195,6 @@ export default Vue.extend({
       transition: .3s;
       outline: none;
     }
-  }
-}
-
-//* 編集するボタン 
-.btn-box-edit {
-  @include box-shadow-btn;
-  background-color: $secondary-color;
-  color: $white;
-  padding: 1.2rem 8rem;
-  transition: .3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-
-  &:hover {
-    @include btn-hover;
   }
 }
 
