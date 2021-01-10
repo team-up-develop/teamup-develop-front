@@ -8,7 +8,7 @@ export default Vue.extend({
 <template>
   <section>
     <router-link to="/jobs">
-      <img src="@/assets/images/teamUp.png" alt="チームアップ" width="45px">
+      <img src="@/assets/images/header_logo1.png" alt="" width="180px">
     </router-link>
   </section>
 </template>
