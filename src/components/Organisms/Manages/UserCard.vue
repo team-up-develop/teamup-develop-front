@@ -58,7 +58,9 @@ export default defineComponent({
           <div class="user-name">{{ user.userName }}</div>
         </v-row>
         <v-row class="card__center">
-          <button class="edit-btn">編集する</button>
+          <router-link :to="`/account/profile/${ userId }`" class="">
+            <button class="btn">詳細をみる</button>
+          </router-link>
           <v-row class="data-area">
             <div class="value">
               <div class="num">{{ manageNum }}</div>
@@ -131,7 +133,7 @@ section {
     height: 120px;
     position: relative;
 
-    .edit-btn {
+    .btn {
       @include box-shadow-btn;
       background-color: $primary-dark;
       color: $white;

@@ -53,7 +53,8 @@ export default Vue.extend({
               >
                 <v-list style="z-index: 100;">
                   <v-list-item>
-                    <router-link to="/account/profile/1" class="menu-list"><v-list-item-title>
+                    <router-link to="/account/profile/1" class="menu-list">
+                    <v-list-item-title>
                       <v-icon class="icon">mdi-card-account-details-outline</v-icon>
                       Kazuya
                     </v-list-item-title>
@@ -139,14 +140,14 @@ export default Vue.extend({
       .header-main-left {
         width: 180px;
         height: 100%;
-        padding: 0.5rem 0 0rem 2rem;
+        padding: 1rem 0 0rem 2rem;
 
         @media screen and (max-width: 768px) {
           width: 100px;
         }
 
         @media screen and (max-width: 500px) {
-          padding: 1rem 0 0rem 0rem;
+          padding: 1rem 0 0rem 0.5rem;
         }
       }
 

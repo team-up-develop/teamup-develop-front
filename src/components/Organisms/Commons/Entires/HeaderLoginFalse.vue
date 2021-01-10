@@ -58,14 +58,14 @@ export default Vue.extend({
       .header-main-left {
         width: 180px;
         height: 100%;
-        padding: 0.5rem 0 0rem 2rem;
+        padding: 1rem 0 0rem 2rem;
 
         @media screen and (max-width: 768px) {
           width: 100px;
         }
 
         @media screen and (max-width: 500px) {
-          padding: 1rem 0 0rem 0rem;
+          padding: 1rem 0 0rem 0.5rem;
         }
       }
 

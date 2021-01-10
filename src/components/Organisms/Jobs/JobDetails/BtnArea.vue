@@ -171,6 +171,7 @@ export default defineComponent({
   position: sticky;
   left: 0;
   bottom: 0;
+  z-index: 2;
 }
 .router {
   text-decoration: none;
@@ -278,7 +279,7 @@ export default defineComponent({
 //* 編集するボタン 
 .edit {
   @include box-shadow-btn;
-  background-color: $primary-dark;
+  background-color: $secondary-color;
   color: $white;
   padding: 1.2rem 8rem;
   transition: .3s;

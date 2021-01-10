@@ -163,6 +163,13 @@ export default Vue.extend({
   border-radius: 8px;
   overflow: hidden;
   overflow: scroll;
+
+  @media screen and (max-width: 768px) {
+    width: 85%;
+  }
+  @media screen and (max-width: 500px) {
+    width: 92%;
+  }
 }
 
 // * モーダル
@@ -292,7 +299,7 @@ export default Vue.extend({
 
 // * モーダル内 編集するボタン
 .modal-edit-btn {
-  background-color: $primary-dark;
+  background-color: $secondary-color;
   display: block;
   padding: 1.4rem 5rem;
   box-shadow: 0 0px 5px 2px #d4d4d4;

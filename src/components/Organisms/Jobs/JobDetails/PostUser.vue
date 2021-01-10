@@ -205,6 +205,7 @@ export default defineComponent({
     padding: 2rem;
 
     .right-user-area {
+      width: 70%;
       .user-profile-area
       .user-introduce-area {
         margin-top: 2rem;
@@ -223,6 +224,7 @@ export default defineComponent({
     padding: 1.5rem 1rem;
 
     .right-user-area{
+      padding: 1.8rem 1.2rem 0px;
       .user-profile-area
       .user-introduce-area {
         margin-top: 1.3rem;

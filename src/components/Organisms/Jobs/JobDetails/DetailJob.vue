@@ -27,10 +27,6 @@ export default defineComponent({
           <div class="tag">募集人数</div>
           <div class="sub-area">{{ job.recruitmentNumbers }}人</div>
         </div>
-        <!-- <div class="detail-information">
-          <div class="tag">応募ケース</div>
-          <div class="sub-area">新規開発</div>
-        </div> -->
         <div class="detail-information">
           <div class="tag">開発期間</div>
           <div class="sub-area">{{ day(job.devStartDate, "YYYY年 M月 D日") }} ~ {{ day(job.devEndDate, "YYYY年 M月 D日")}}</div>
@@ -40,12 +36,6 @@ export default defineComponent({
           <div class="sub-area">{{ job.jobDescription }}</div>
         </div>
       </div>
-      <!-- <div class="detail-right-area">
-        <div class="tag">募集内容詳細</div>
-        <div class="description">
-          {{ job.jobDescription }}
-        </div>
-      </div> -->
     </v-sheet>
   </section>
 </template>
