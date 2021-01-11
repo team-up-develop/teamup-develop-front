@@ -1,30 +1,41 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+} from '@vue/composition-api';
+import Vuex from '@/store/index'
 import Header from '@/components/Organisms/Commons/Entires/Header.vue'
 import Footer from '@/components/Organisms/Commons/Entires/Footer.vue'
 import HeaderLoginFalse from '@/components/Organisms/Commons/Entires/HeaderLoginFalse.vue'
 
-type DataType = {
+type State = {
   loginFlag: boolean;
 }
 
-export default Vue.extend({
-  name: 'App',
+const initialState = (): State => ({
+  loginFlag: false,
+});
 
+export default defineComponent({ 
+  name: 'App',
   components: {
     Header,
     Footer,
     HeaderLoginFalse,
   },
+  setup: () => {
+    const state = reactive<State>(initialState());
 
-  data(): DataType {
+    onMounted(() => {
+      if(Vuex.state.auth.userId) {
+        state.loginFlag = true;
+      }
+    });
+
     return {
-      loginFlag: false,
-    }
-  },  
-  mounted() {
-    if(this.$store.state.auth.userId) {
-      this.loginFlag = true;
+      ...toRefs(state),
     }
   }
 });
@@ -32,7 +43,7 @@ export default Vue.extend({
 
 <template>
   <v-app class="app">
-    <Header  v-if="$store.state.auth.userId || this.loginFlag == true"/>
+    <Header v-if="$store.state.auth.userId || this.loginFlag == true"/>
     <HeaderLoginFalse v-else />
     <div class="container">
       <router-view/>
@@ -44,6 +55,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
+
 .app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -52,7 +64,6 @@ export default Vue.extend({
   color: #111111;
   position: relative;
   width: 100%;
-  // height: 100vh;
 }
 
 .container {
@@ -60,8 +71,11 @@ export default Vue.extend({
   width: 100%;
   position: relative;
   margin-top: 1rem;
-  // box-sizing: border-box;
   padding-bottom: 15rem;
+
+  @media screen and (max-width: 600px) {
+    padding: 1rem 0;
+  }
 
   footer {
     margin-top: auto;
@@ -72,11 +86,6 @@ export default Vue.extend({
   }
 }
 
-@media (min-width: 960px) {
-.container[data-v-7ba5bd90] {
-  max-width: none;
-}
-}
 @media (min-width: 960px) {
   .container {
     max-width: none;
