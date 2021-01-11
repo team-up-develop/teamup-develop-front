@@ -60,15 +60,15 @@ const actions: ActionTree<State, SearchData> = {
     commit('freeWord', freeWord.freeWord)
   },
   // * 言語 検索
-  languageSearch({ commit }, language: State) {
+  languageSearch({ commit }, language: SearchData) {
     commit('language', language.language)
   },
   // * フレームワーク 検索
-  framworkSearch({ commit }, framwork: State) {
+  framworkSearch({ commit }, framwork: SearchData) {
     commit('framwork', framwork.framwork)
   },
   // * その他スキル 検索
-  skillSearch({ commit }, skill: State) {
+  skillSearch({ commit }, skill: SearchData) {
     commit('skill', skill.skill)
   }
 }

@@ -8,8 +8,8 @@ import { API_URL } from '@/master'
 import router from '@/router/index.ts';
 
 interface State {
-  idToken: string | null;
   userId: number | null;
+  userName: string;
   errorFlag: boolean;
 }
 
@@ -19,53 +19,45 @@ interface LoginData {
 }
 
 const state: State = {
-  idToken: null,
   userId: null,
+  userName: "",
   errorFlag: false
 }
 
 const getters: GetterTree<State, LoginData> = {
   userId: (state: State)  => state.userId,
-  // errorFlag: (state: State) => state.errorFlag
+  userName: (state: State) => state.userName
 }
 
 const mutations: MutationTree<State> = {
-  // * idToken を使用する
-  updateIdToken(state: State, idToken: string | null) {
-    state.idToken = idToken;
-  },
-  // * localStorageにuserIdを保存し、判定する
-  loginUserId(state: State, userId: number | null) {
+  loginUserId(state: State, userId: number) {
     state.userId = userId
-    // localStorage.userId = state.userId //? ローカルストレージ
+  },
+  loginUserName(state: State, userName: string) {
+    state.userName  = userName
   },
   loginError(state: State, errorFlag: boolean) {
     state.errorFlag = errorFlag;
   }
 }
 
-// ! commit は 暗黙的な anyになってます Binding element 'commit' implicitly has an 'any' type.
 const actions: ActionTree<State, LoginData> = {
   // * ログイン
-  login({ commit }, authData: LoginData ) {
-    console.log(authData)
-    const params = {
+  async login({ commit }, authData: LoginData ) {
+    const params: LoginData = {
       LoginName: authData.LoginName,
       LoginPassword: authData.LoginPassword,
     }
-    axios.post(`${ API_URL }/login`, params)
-    .then(response => {
+    try {
+      const response = await axios.post(`${ API_URL }/login`, params)
       router.push('/jobs');
-      commit('updateIdToken', response.data.idToken)
       commit('loginUserId', response.data.userId)
-    })
-    .catch(error => {
-      console.log(error)
+      commit('loginUserName', response.data.user.userName)
+    } catch (error) {
       const errorFlag = true
-      console.log("Errorが起きました!!!!!")
+      console.log("ログイン失敗しました")
       commit('loginError', errorFlag)
-    })
-    ;
+    }
   },
   // * ログアウト
   logout({ commit }) {

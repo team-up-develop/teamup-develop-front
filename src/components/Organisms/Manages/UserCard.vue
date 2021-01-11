@@ -6,21 +6,18 @@ import {
   onMounted
 } from '@vue/composition-api';
 import Vuex from '@/store/index'
-import { API_URL } from '@/master'
-import axios from 'axios'
-import { User } from '@/types/user';
 
 type State = {
   userId: number;
-  user: User | {};
   manageNum: number;
   favoriteNum: number;
   applyNum: number;
+  userName: string;
 }
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
-  user: {},
+  userName: Vuex.state.auth.userName,
   manageNum: Vuex.state.statusJobs.jobsManageNum,
   favoriteNum: Vuex.state.statusJobs.jobsFavoriteJobsNum,
   applyNum: Vuex.state.statusJobs.jobsApplyNum,
@@ -33,14 +30,6 @@ export default defineComponent({
       Vuex.dispatch('getJobNum', {
         userId: state.userId
       });
-      
-      axios.get<User>(`${API_URL}/user/${state.userId}`)
-      .then(response => {
-        state.user = response.data
-      })
-      .catch(error =>{
-        console.log(error)
-      })
     });
     return {
       ...toRefs(state),
@@ -55,7 +44,7 @@ export default defineComponent({
       <v-col>
         <v-row class="card__top">
           <div class="user-image"></div>
-          <div class="user-name">{{ user.userName }}</div>
+          <div class="user-name">{{ userName }}</div>
         </v-row>
         <v-row class="card__center">
           <router-link :to="`/account/profile/${ userId }`" class="">
