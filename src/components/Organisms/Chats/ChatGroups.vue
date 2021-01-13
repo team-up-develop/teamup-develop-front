@@ -105,9 +105,7 @@ export default defineComponent({
   text-decoration: none;
 }
 .router-link-exact-active.router-link-active.active {
-  color: $primary-color;
   font-weight: bold;
-  text-decoration: underline;
 }
 
 .group {
