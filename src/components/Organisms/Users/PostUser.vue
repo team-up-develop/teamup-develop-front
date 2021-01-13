@@ -1,44 +1,54 @@
+
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  computed
+} from '@vue/composition-api';
 import { dayJs } from '@/master';
 
-export default Vue.extend({ 
+export default defineComponent({ 
   props: {
-    user: Object,
-    myselfFlag: Boolean
+    user: { type: Object, require: true, defalut: {} },
+    myselfFlag: { type: Boolean, require: true, defalut: false },
   },
-  computed: {
-    enabledBtn() {
-      if(this.myselfFlag == true) {
+  setup: (props: any, context) => {
+    const day = (value: string, format: string) => dayJs(value, format);
+
+    const enabledBtn = computed(() => {
+      if(props.myselfFlag == true) {
         return true;
       }
       return false;
+    });
+
+    const twitterTab = () => {
+      if(props.user.twitterAccount == null) {
+        return props.user.twitterAccount;
+      } else {
+        const url: string = props.user.twitterAccount;
+        return window.open(url);
+      }
+    };
+
+    const gitTab = () => {
+      if(props.user.githubAccount == null) {
+        return props.user.githubAccount;
+      } else {
+        const url: string = props.user.githubAccount;
+        return window.open(url);
+      }
+    };
+
+    const editEmit = () => {
+      context.emit('editEmit')
     }
-  },
-  methods: {
-    day(value: string, format: string) {
-      return dayJs(value, format)
-    },
-    // * Twitter をタブで開く
-    twitterTab() {
-      if(this.user.twitterAccount == null) {
-        return this.user.twitterAccount;
-      } else {
-        const url: string = this.user.twitterAccount;
-        return window.open(url);
-      }
-    },
-    // * Github をタブで開く
-    gitTab() {
-      if(this.user.githubAccount == null) {
-        return this.user.githubAccount;
-      } else {
-        const url: string = this.user.githubAccount;
-        return window.open(url);
-      }
-    },
-    editEmit() {
-      this.$emit('editEmit')
+
+    return {
+      day,
+      enabledBtn,
+      twitterTab,
+      gitTab,
+      editEmit
     }
   }
 });
@@ -121,6 +131,7 @@ export default Vue.extend({
     .url-area {
       padding: 0rem 0rem 0 1rem;
       .img {
+        cursor: pointer;
         padding: 0 0 0 0.5rem;
       }
     }

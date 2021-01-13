@@ -70,11 +70,13 @@ export default defineComponent({
   min-height: 112vh;
   width: 100%;
   position: relative;
-  margin-top: 1rem;
+  margin-top: 0.7rem;
   padding-bottom: 15rem;
 
   @media screen and (max-width: 600px) {
     padding: 1rem 0;
+    padding-bottom: 17rem;
+    margin-top: 0rem;
   }
 
   footer {

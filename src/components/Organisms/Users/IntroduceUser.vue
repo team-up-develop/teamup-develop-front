@@ -1,13 +1,9 @@
 <script lang="ts">
-import Vue from 'vue';
-export default Vue.extend({
+import { defineComponent } from '@vue/composition-api';
+
+export default defineComponent({ 
   props: {
-    user: Object
-  },
-  data() {
-    return {
-      bio: this.user.bio
-    }
+    user: { type: Object, require: true, defalut: {} }
   },
 });
 </script>

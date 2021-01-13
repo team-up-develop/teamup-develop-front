@@ -1,38 +1,50 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import Email from '@/components/Atoms/Forms/Email.vue'
 import Password from '@/components/Atoms/Forms/Password.vue'
 
-type DataType = {
+type State = {
   LoginName: string;
   LoginPassword: string;
 }
 
-export default Vue.extend({ 
+const initialState = (): State => ({
+  LoginName: '',
+  LoginPassword: '',
+});
+
+export default defineComponent({
   components: {
     Email,
     Password
   },
-  data(): DataType {
-    return {
-      LoginName: '',
-      LoginPassword: '',
-    }
-  },
-  methods: {
-    register() {
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    const register = async() => {
       const params = {
-        LoginName: this.LoginName,
-        LoginPassword: this.LoginPassword,
+        LoginName: state.LoginName,
+        LoginPassword: state.LoginPassword,
       }
-      axios.post(`${API_URL}/signup`, params)
-      .then(response => {
+      try { 
+        const response = await axios.post(`${API_URL}/signup`, params)
         console.log(response)
-      });
-      this.LoginName = "";
-      this.LoginPassword = "";
+        state.LoginName = "";
+        state.LoginPassword = "";
+      } catch (error) {
+        console.log(error)
+      }
+    }
+
+    return {
+      ...toRefs(state),
+      register
     }
   }
 })

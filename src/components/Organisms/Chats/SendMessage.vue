@@ -133,7 +133,6 @@ export default defineComponent({
     border: none;
     transition: .3s;
     outline: none;
-    margin-left: 0.5rem;
   }
 }
 .message-room {
@@ -172,7 +171,6 @@ export default defineComponent({
     border: none;
     transition: .3s;
     outline: none;
-    margin-left: 0.5rem;
   }
 }
 
