@@ -3,7 +3,7 @@ import Vue, { PropType }  from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select'
-// import 'vue-select/dist/vue-select.css';
+// import "vue-select/dist/vue-select.css"
 import Session from '@/components/Atoms/Commons/Session.vue'
 import { JobCreateDataComp } from '@/types/job';
 import { Language } from '@/types/index';

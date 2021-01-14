@@ -1,20 +1,34 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
 
-export default Vue.extend({ 
+type State = {
+  jobDescriptionLimit: number;
+}
+
+const initialState = (): State => ({
+  jobDescriptionLimit: 0,
+});
+
+export default defineComponent({ 
   props: {
-    type: { type: String as PropType<string>, required: true },
-    value: { type: String as PropType<string>, required: false, default: null },
+    type: { type: String, required: true },
+    value: { type: String, required: false, default: null },
   },
-  data() {
-    return {
-      jobDescriptionLimit: 0,
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState());
+
+    const onInputJobDescription = (e: any) => {
+      state.jobDescriptionLimit = e.target.value.length;
+      ctx.emit("input", e.target.value);
     }
-  },
-  methods: {
-    onInputTitle(e: any) {
-      this.jobDescriptionLimit = e.target.value.length;
-      this.$emit("input", e.target.value);
+
+    return {
+      ...toRefs(state),
+      onInputJobDescription
     }
   }
 });
@@ -25,10 +39,10 @@ export default Vue.extend({
     <textarea
       type="text"
       :value="value"
-      @input="onInputTitle" 
+      @input="onInputJobDescription" 
       placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" 
       maxlength="250" 
-      />
+    />
     <small id="rem">残り{{ 250 - jobDescriptionLimit }}文字</small>
   </section>
 </template>
@@ -57,7 +71,9 @@ textarea[type='text'] {
 }
 
 #rem {
-  color: #7c7c7c;
+  color: $text-sub-color;
   margin-top: 2px;
+  font-size: 12px;
+  font-weight: bold;
 }
 </style>

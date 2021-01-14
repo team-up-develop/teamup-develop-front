@@ -1,5 +1,5 @@
-<script>
-// FIXME: ts ファイルにすると saveが Error
+<script lang="ts">
+// FIXME: Composition にすると $refs.dialogが取得できない？
 import Vue from 'vue';
 
 export default Vue.extend({ 
@@ -16,8 +16,9 @@ export default Vue.extend({
     }
   },
   methods: {
-    onInputTitle() {
+    onInputDialog() {
       this.modal = false;
+      // @ts-ignore
       this.$refs.dialog.save(this.date)
       this.$emit("input", this.date);
     }
@@ -71,7 +72,7 @@ export default Vue.extend({
           <v-btn
             text
             color="primary"
-            @click="onInputTitle"
+            @click="onInputDialog"
           >
             決定
           </v-btn>
