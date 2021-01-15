@@ -62,7 +62,7 @@ Atomic Design 導入
 
 ```
 
-## style & javaScript
+## style & javaScript ※この辺は今後linter で設定します🙇‍♂️
 - JavaScript キャメルケース推奨
 - インデントは半角スペース2つ分で揃え、タブは混ぜないこと
 - 固有名詞などを除いて大文字は使用を控えること
