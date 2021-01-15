@@ -74,10 +74,10 @@ export default defineComponent({
 <template>
   <v-container>
     <div v-if="doneParticipate">
-      <button class="btn-done">参加しています</button>
+      <span class="btn-done">参加しています</span>
     </div>
     <div v-if="doneReject">
-      <button class="btn-done">拒否しています</button>
+      <span class="btn-done">拒否しています</span>
     </div>
     <v-row v-if="!doneParticipate && !doneReject" class="btn-area">
       <StatusChangeBtnArea :id="id" :jobId="jobId" @participate="participate" @reject="reject" />

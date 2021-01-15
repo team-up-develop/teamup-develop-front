@@ -142,6 +142,7 @@ export default Vue.extend({
 @import '@/assets/scss/_variables.scss';
 
 .detail-tag {
+  color: $primary-color;
   text-align: left;
   font-size: 17px;
   font-weight: bold;
