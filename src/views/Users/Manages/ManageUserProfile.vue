@@ -140,6 +140,7 @@ export default defineComponent({
 @import '@/assets/scss/_variables.scss';
 
 .detail-tag {
+  color: $primary-color;
   text-align: left;
   font-size: 17px;
   font-weight: bold;
@@ -157,10 +158,12 @@ export default defineComponent({
   position: relative;
 
   .back-space {
+    text-align: left;
     position: absolute;
     left: 0;
     top: 0;
     margin-top: 1rem;
+    padding: 0 2rem;
   }
   .user-area {
     width: 88%;
