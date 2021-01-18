@@ -10,39 +10,44 @@
 ## 環境構築
 ### コンテナ作成 / 起動
 ```
-docker-compose up -d --build
+$ docker-compose up -d --build
 ```
 
 ### in container & bash start up
 ```
-docker-compose exec app sh
+$ docker-compose exec app sh
 ```
 
 ### node package install
 ```
-npm i
+$ npm i
 ```
 
 ### runserver
 ```
-npm run dev
+$ npm run dev
 ```
 
 ## その他コマンド
 ### bundle size 
 
 ```
-yarn build --analyze
+$ yarn build --analyze
 ```
 ## Error 対応
+## cache クリア
+```
+$ npm cache verify --force
+```
+
 ### vue cli not found と出た場合
 ```
-rm -rf node_modules package-lock.json && npm install
+$ rm -rf node_modules package-lock.json && npm install
 ```
 
 ### error が起きている時
 ```
-rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
+$ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
 
 ## Compoent構成
