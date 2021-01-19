@@ -1,11 +1,11 @@
 import { Job } from '@/types/job';
 import { User } from '@/types/user';
-import { m } from '@/master'
+// import { m } from '@/master'
 
 // * 管理案件
 export interface ManageJob {
   applyStatus: ApplyStatus;
-  applyStatusId: number;
+  apply_status_id: number;
   createdAt: Date;
   deletedAt: null | Date;
   id: number;
@@ -14,6 +14,12 @@ export interface ManageJob {
   updatedAt: Date;
   user: User;
   userId: number;
+}
+
+export type FetchManageJobs = {
+  msg: string;
+  response: ManageJob[]
+  status: string;
 }
 
 // *応募ステータス
@@ -25,15 +31,7 @@ export interface ApplyStatus {
   updatedAt: Date;
 }
 
-// * ステータスの名前
-enum StatusName {
-  応募 = '応募',
-  参加 = '参加',
-  落選 = '落選',
-  主宰 = '主宰'
-}
-
-// * 参加させる パラメーター
+// * 参加させる 
 export interface ParticipateParams {
   jobId: number;
   userId: number;

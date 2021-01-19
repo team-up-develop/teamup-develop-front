@@ -1,42 +1,56 @@
 <script lang="ts">
-import Vue from 'vue';
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+} from '@vue/composition-api';
+import Vuex from '@/store/index'
 import Email from '@/components/Atoms/Forms/Email.vue'
 import Password from '@/components/Atoms/Forms/Password.vue'
 
-type DataType = {
+type State = {
   LoginName: string;
   LoginPassword: string;
   loginErrorFlag: boolean;
 }
 
-export default Vue.extend({ 
+const initialState = (): State => ({
+  LoginName: '',
+  LoginPassword: '',
+  loginErrorFlag: false,
+});
+
+export default defineComponent({ 
   components: {
     Email,
     Password
   },
-  data(): DataType {
-    return {
-      LoginName: '',
-      LoginPassword: '',
-      loginErrorFlag: false,
-    }
-  },
-  methods: {
-    login(): void {
-      this.$store.dispatch('login', {
-        LoginName: this.LoginName,
-        LoginPassword: this.LoginPassword,
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    const fetchError = () => {
+      Vuex.state.auth.errorFlag = false;
+    };
+    fetchError();
+
+    const login = () => {
+      Vuex.dispatch('login', {
+        login_name: state.LoginName,
+        login_password: state.LoginPassword,
       })
       setTimeout(() => {
-      if (this.$store.state.auth.errorFlag === true) {
-        this.loginErrorFlag = true;
+      if (Vuex.state.auth.errorFlag === true) {
+        state.loginErrorFlag = true;
       }
       }, 700)
-    },
-  },
-  created() {
-    this.$store.state.auth.errorFlag = false;
-  },
+    };
+
+    return {
+      ...toRefs(state),
+      fetchError,
+      login
+    }
+  }
 });
 </script>
 
@@ -78,7 +92,7 @@ export default Vue.extend({
         </div>
         <div class="btn-area">
           <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
-          <div @click="login" class="login-btn">ログイン</div>
+          <button @click="login" class="login-btn">ログイン</button>
         </div>
       </div>
     </div>

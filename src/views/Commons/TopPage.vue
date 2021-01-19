@@ -6,9 +6,14 @@ import axios from 'axios'
 // import TopPageNewJobCard from '@/components/Organisms/TopPage/TopPageNewJobCard.vue'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import HeaderArea from '@/components/Organisms/TopPage/HeaderArea.vue'
-import { Language } from '@/types/index';
-import { Framework } from '@/types/index';
-import { Skill } from '@/types/index';
+import { 
+  Language,
+  FetchLanguages,
+  Framework,
+  FetchFrameworks,
+  Skill,
+  FetchSkills
+} from '@/types/index';
 
 type DataType = {
   languages: Language[];
@@ -43,25 +48,26 @@ export default Vue.extend({
       this.$store.state.search.framwork = []
       this.$store.state.search.skill = []
       // * 開発言語 取得
-      axios.get<Language[]>(`${API_URL}/programing_language`)
+      axios.get<FetchLanguages>(`${API_URL}/programing_languages`)
       .then(response => {
-        this.languages = response.data.slice(8)
+        // .slice(5)
+        this.languages = response.data.response
       })
       .catch(error =>{
         console.log(error)
       })
       // * フレームワーク
-      axios.get<Framework[]>(`${API_URL}/programing_framework`)
+      axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
       .then(response => {
-        this.framworks = response.data.slice(10)
+        this.framworks = response.data.response
       })
       .catch(error =>{
         console.log(error)
       })
       // * その他スキル
-      axios.get<Skill[]>(`${API_URL}/skill`)
+      axios.get<FetchSkills>(`${API_URL}/skills`)
       .then(response => {
-        this.skills = response.data.slice(18)
+        this.skills = response.data.response
       })
       .catch(error =>{
         console.log(error)
@@ -120,7 +126,7 @@ export default Vue.extend({
               <label for="name" class="language-tag">開発言語</label>
               <div class="langage">
                 <div class="language-box" v-for="language in languages" :key="language.id" @click="languageClick(language)">
-                  {{ language.programingLanguageName }}
+                  {{ language.programing_language_name }}
                 </div>
               </div>
             </div>
@@ -129,7 +135,7 @@ export default Vue.extend({
               <label for="name" class="framework-tag">フレームワーク</label>
               <div class="framework">
                 <div class="framework-box" v-for="framwork in framworks" :key="framwork.id" @click="framworkClick(framwork)">
-                  {{ framwork.programingFrameworkName }}
+                  {{ framwork.programing_framework_name }}
                 </div>
               </div>
             </div>
@@ -138,7 +144,7 @@ export default Vue.extend({
               <label for="name" class="skill-tag">その他スキル</label>
               <div class="skill">
                 <div class="skill-box" v-for="skill in skills" :key="skill.id" @click="skillClick(skill)">
-                  {{ skill.skillName }}
+                  {{ skill.skill_name }}
                 </div>
               </div>
             </div>

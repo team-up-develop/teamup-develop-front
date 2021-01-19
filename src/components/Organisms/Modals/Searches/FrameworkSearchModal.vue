@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { Framework } from '@/types/index';
+import { Framework, FetchFrameworks } from '@/types/index';
 import { Job } from '@/types/job';
 
 type DateType = {
@@ -34,9 +34,9 @@ export default Vue.extend({
   },
   created() {
     // * フレームワーク取得
-    axios.get<Framework[]>(`${API_URL}/programing_framework`)
+    axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
     .then(response => {
-      this.frameworks = response.data
+      this.frameworks = response.data.response
     })
   },
   methods: {
@@ -50,14 +50,14 @@ export default Vue.extend({
       for(let i = 0; i < params.framework.length; i++) {
         const frameworkParams: number = params.framework[i];
         frameworkState.push(frameworkParams)
-        const queryParams: string =  'programing_framework_id' + '[' + Number(frameworkParams - 1) + ']' + '=' + frameworkParams + '&';
+        const queryParams: string =  'pf_id=' + frameworkParams + '&';
         arrayFramework.push(queryParams)
       }
       const frameworkStateEnd: number[]  = frameworkState.slice(0)
       const result: string = arrayFramework.join('');
-      axios.get(`${API_URL}/job/?${result}`)
+      axios.get(`${API_URL}/jobs?${result}`)
       .then(response => {
-        this.jobs = response.data
+        this.jobs = response.data.response
         this.$emit('compliteSearchFramework', this.jobs)
         // * フレームワーク 検索語 Vuexに値を格納する
         this.$store.dispatch('framworkSearch', {
@@ -88,7 +88,7 @@ export default Vue.extend({
             <v-row>
               <label v-for="framework in frameworks" v-bind:key="framework.id">
               <input type="checkbox" v-model="selectedFramework" v-bind:value="framework.id">
-                <span>{{ framework.programingFrameworkName }}</span>
+                <span>{{ framework.programing_framework_name }}</span>
               </label>
             </v-row>
           </div>

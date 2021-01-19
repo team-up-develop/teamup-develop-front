@@ -9,7 +9,7 @@ import {
 import Vuex from '@/store/index'
 import axios from 'axios'
 import { API_URL } from '@/master'
-import { ManageJob } from '@/types/manage';
+import { FetchManageJobs } from '@/types/manage';
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -57,9 +57,9 @@ export default defineComponent({
     // * 自分の案件か否かを判定
     const getCheckSelfJob = async () => {
       try { 
-        const response = await axios.get(`${API_URL}/job/?user_id=${state.userId}`)
-        for(let i = 0; i < response.data.length; i++){
-          const selfJob = response.data[i]
+        const response = await axios.get(`${API_URL}/jobs?user_id=${state.userId}`)
+        for(let i = 0; i < response.data.response.length; i++){
+          const selfJob = response.data.response[i]
           if(selfJob.id === props.id){
             state.selfJobPost = true
           }
@@ -72,10 +72,10 @@ export default defineComponent({
     // * ログインユーザーが応募済みか応募済みではないかを判定する
     const getCheckStatus = async () => {
       try {
-        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
+        const response = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
         const arrayApply: any = []
-        for(let c = 0; c < response.data.length; c++){
-          const applyData: any = response.data[c];
+        for(let c = 0; c < response.data.response.length; c++){
+          const applyData: any = response.data.response[c];
           arrayApply.push(applyData.job.id)
         }
         if (arrayApply.includes(props.id)) {

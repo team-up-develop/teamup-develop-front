@@ -5,45 +5,45 @@ import Vue, { PropType } from 'vue';
 export default Vue.extend({
   props: {
     job: Object as PropType<Job>
-  }
+  },
 });
 </script>
 
 <template>
   <div>
     <div class="langage" 
-      v-for="(langage, index) in job.programingLanguage.slice(0,3)" 
+      v-for="(langage, index) in job.programing_language_responses.slice(0,3)" 
       :key="`language-${index}`">
-      {{ langage.programingLanguageName }}
+      {{ langage.programing_language_name }}
     </div>
     <!-- レスポンシブ 言語 360px-->
     <div class="langage-responsive" 
-      v-for="(langage, index) in job.programingLanguage.slice(0,2)" 
+      v-for="(langage, index) in job.programing_language_responses.slice(0,2)" 
       :key="`language-responsive-${index}`">
-      {{ langage.programingLanguageName }}
+      {{ langage.programing_language_name }}
     </div>
     <div class="framework" 
-    v-for="(framework, index) in job.programingFramework.slice(0,3)" 
+    v-for="(framework, index) in job.programing_framework_responses.slice(0,3)" 
     :key="`framework-${index}`">
-      {{ framework.programingFrameworkName }}
+      {{ framework.programing_framework_name }}
     </div>
     <!-- レスポンシブ フレームワーク 360px -->
     <div class="framework-responsive" 
-    v-for="(framework, index)  in job.programingFramework.slice(0,2)" 
+    v-for="(framework, index)  in job.programing_framework_responses.slice(0,2)" 
     :key="`framework-responsive-${index}`">
-      {{ framework.programingFrameworkName }}
+      {{ framework.programing_framework_name }}
     </div>
 
     <div class="skill" 
-    v-for="(skill, index) in job.skill.slice(0,4)" 
+    v-for="(skill, index) in job.skill_responses.slice(0,4)" 
     :key="`skill-${index}`">
-      {{ skill.skillName }}
+      {{ skill.skill_name }}
     </div>
     <!-- レスポンシブ その他スキル 360px-->
     <div class="skill-responsive" 
-    v-for="(skill, index) in job.skill.slice(0,3)" 
+    v-for="(skill, index) in job.skill_responses.slice(0,3)" 
     :key="`skill-responsive-${index}`">
-      {{ skill.skillName }}
+      {{ skill.skill_name }}
     </div>
   </div>
 </template>

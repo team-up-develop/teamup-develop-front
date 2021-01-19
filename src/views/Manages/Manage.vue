@@ -8,7 +8,7 @@ import {
 } from '@vue/composition-api';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { ManageJob } from '@/types/manage';
+import { ManageJob, FetchManageJobs } from '@/types/manage';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
 import Vuex from '@/store/index'
@@ -41,8 +41,8 @@ export default defineComponent({
 
     const getManageJobs = async () => {
       try { 
-        const response = await axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${state.userId}`) 
-        state.manageJobs = response.data
+        const response = await axios.get<FetchManageJobs>(`${API_URL}/jobs?user_id=${state.userId}`) 
+        state.manageJobs = response.data.response
       } catch (error) {
         console.log(error)
       }

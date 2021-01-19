@@ -24,8 +24,8 @@ export default defineComponent({
 <template>
   <div class="job-cards">
     <div class="job-cards__top">
-      <span>{{ limit(job.jobTitle, 40) }}</span>
-      <p>{{ limit(job.jobTitle, 30) }}</p>
+      <span>{{ limit(job.job_title, 40) }}</span>
+      <p>{{ limit(job.job_title, 30) }}</p>
     </div>
     <div class="job-cards__center">
       <!-- カード スキルコンポーネント -->
@@ -37,15 +37,15 @@ export default defineComponent({
           開発期間:
         </div>
         <div class="product-start-end-time">
-          {{ day(job.devStartDate , "YYYY年 M月 D日") }}  ~  
-          {{ day(job.devEndDate, "YYYY年 M月 D日") }}
+          {{ day(job.dev_start_date , "YYYY年 M月 D日") }}  ~  
+          {{ day(job.dev_end_date, "YYYY年 M月 D日") }}
         </div>
       </div>
       <div class="post-user-area">
         <div class="post-user-image"></div>
         <div class="post-user-name-area">
           <div class="post-user-name">
-            {{ job.user.userName }}
+            {{ job.user.user_name }}
           </div>
         </div>
       </div>

@@ -21,11 +21,11 @@ export default Vue.extend({
   },
   mounted() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
-    axios.get(`${API_URL}/favorite_job/?user_id=${this.userId}`)
+    axios.get(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
     .then(response => {
       const array = []
-      for(let i = 0; i < response.data.length; i++){
-        const likeData = response.data[i]
+      for(let i = 0; i < response.data.response.length; i++){
+        const likeData = response.data.response[i]
         array.push(likeData.job.id)
       }
       if(array.includes(this.jobId)){

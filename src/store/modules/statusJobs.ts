@@ -4,9 +4,9 @@ import {
   MutationTree,
 } from 'vuex';
 import axios from 'axios'
-import { ManageJob } from '@/types/manage'
+import { ManageJob, FetchManageJobs } from '@/types/manage'
 import { API_URL, m } from '@/master'
-import { Job } from '@/types/job';
+import { FetchJobs } from '@/types/job';
 
 interface State {
   jobsManageNum: number;
@@ -54,17 +54,17 @@ const actions: ActionTree<State, GetStatus> = {
       if(!userObject) {
         return 
       }
-      const responseManage = await axios.get<ManageJob[]>(`${API_URL}/job/?user_id=${userObject.userId}`)
-      commit('getJobsManageNum', responseManage.data.length)
-      const responseFavorite = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${userObject.userId}`)
-      commit('getJobsFavoriteNum', responseFavorite.data.length)
-      const responseApply = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${userObject.userId}`)
+      const responseManage = await axios.get<FetchManageJobs>(`${API_URL}/jobs?user_id=${userObject.userId}`)
+      commit('getJobsManageNum', responseManage.data.response.length)
+      const responseFavorite = await axios.get<FetchJobs>(`${API_URL}/favorite_jobs?user_id=${userObject.userId}`)
+      commit('getJobsFavoriteNum', responseFavorite.data.response.length)
+      const responseApply = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${userObject.userId}`)
       const applyNumber: any = [];
-      for(let i = 0; i < responseApply.data.length; i++) {
-        const applyJobCorrect: ManageJob = responseApply.data[i];
+      for(let i = 0; i < responseApply.data.response.length; i++) {
+        const applyJobCorrect: ManageJob = responseApply.data.response[i];
         if(
-          applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || 
-          applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE
+          applyJobCorrect.apply_status_id === m.APPLY_STATUS_APPLY || 
+          applyJobCorrect.apply_status_id === m.APPLY_STATUS_PARTICIPATE
         ) {
           applyNumber.push(applyJobCorrect);
         }

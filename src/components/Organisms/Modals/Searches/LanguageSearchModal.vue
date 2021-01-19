@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { Language } from '@/types/index';
+import { Language, FetchLanguages } from '@/types/index';
 import { Job } from '@/types/job';
 
 type DateType = {
@@ -24,19 +24,19 @@ export default Vue.extend({
   },
   computed: {
     // FIXME: 現状は使用していない
-    isSearch() {
-      if(this.selectedLang.length !== 0) {
-        return true;
-      } else {
-        return false;
-      }
-    }
+    // isSearch() {
+    //   if(this.selectedLang.length !== 0) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
   },
   created() {
     // * プログラミング言語 取得
-    axios.get<Language[]>(`${API_URL}/programing_language`)
+    axios.get<FetchLanguages>(`${API_URL}/programing_languages`)
     .then(response => {
-      this.languages = response.data
+      this.languages = response.data.response
     })
   },
   methods: {
@@ -50,14 +50,14 @@ export default Vue.extend({
       for(let i = 0; i < params.language.length; i++) {
         const languageParams: number = params.language[i];
         languageState.push(languageParams)
-        const queryParams: string =  'programing_language_id' + '[' + Number(languageParams - 1) + ']' + '=' + languageParams + '&';
+        const queryParams: string =  'pl_id=' + languageParams + '&';
         array.push(queryParams)
       }
       const languageStateEnd: number[] = languageState.slice(0)
       const result: string = array.join('');
-      axios.get(`${API_URL}/job/?${result}`)
+      axios.get(`${API_URL}/jobs?${result}`)
       .then(response => {
-        this.jobs = response.data
+        this.jobs = response.data.response
         this.$emit('compliteSearchLanguage', this.jobs)
 
         // * 言語 検索語 Vuexに値を格納する
@@ -86,9 +86,9 @@ export default Vue.extend({
         <v-card-text class="modal-content">
           <div class="modal-content">
             <v-row>
-              <label v-for="lang in languages" v-bind:key="lang.id">
-                <input type="checkbox" v-model="selectedLang" v-bind:value="lang.id">
-                <span>{{ lang.programingLanguageName }}</span>
+              <label v-for="language in languages" v-bind:key="language.id">
+                <input type="checkbox" v-model="selectedLang" v-bind:value="language.id">
+                <span>{{ language.programing_language_name }}</span>
               </label>
             </v-row>
           </div>

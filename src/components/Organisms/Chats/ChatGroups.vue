@@ -39,7 +39,7 @@ export default defineComponent({
         const array: ManageJob[] = [];
         for(let i = 0; i < response.data.length; i++){
           const applyData: ManageJob = response.data[i]
-          if(applyData.applyStatusId == m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ) {
+          if(applyData.apply_status_id == m.APPLY_STATUS_PARTICIPATE || applyData.apply_status_id  == m.APPLY_STATUS_SELF ) {
             array.push(applyData)
             state.chatGroups = array
           }

@@ -47,24 +47,24 @@ export default defineComponent({
             <div class="user-name-tag">名前</div>
             <router-link :to="`/account/profile/${ job.userId }`"> 
               <div class="user-name">
-                {{ job.user.userName }} 
+                {{ job.user.user_name }} 
               </div>
             </router-link>
           </div>
           <div class="user-introduce-area">
             <div class="introduce-tag">学習開始</div>
             <div class="introduce">
-              {{ day(job.user.learningStartDate, "YYYY年 M月 D日") }}
+              {{ day(job.user.learning_start_date, "YYYY年 M月 D日") }}
             </div>
           </div>
         </div>
         <div class="user-url-area">
           <section>
             <div class="user-github" @click="gitTab">
-              <img class="img" src="@/assets/github.png" width="50" />
+              <img class="img" src="@/assets/github.png" width="30" />
               </div>
             <div class="user-twtter" @click="twitterTab">
-              <img class="img" src="@/assets/images/twitter.png" width="52" />
+              <img class="img" src="@/assets/images/twitter.png" width="32" />
             </div>
           </section>
         </div>
@@ -83,6 +83,10 @@ export default defineComponent({
   margin-bottom: 2rem;
   position: relative;
 
+  @media screen and (max-width: 500px) {
+    padding: 2.5rem 1rem;
+  }
+
   .left-user-area {
     width: 20%;
     height: 100%;
@@ -91,6 +95,11 @@ export default defineComponent({
       @include user-image;
       width: 130px;
       height: 130px;
+
+      @media screen and (max-width: 500px) {
+        width: 100px;
+        height: 100px;
+      }
     }
   }
 
@@ -151,7 +160,8 @@ export default defineComponent({
 
     .user-url-area {
       display: inline-block;
-      width: 120px;
+      width: 80px;
+      height: 60px;
       position: absolute;
       top: 0;
       right: 0;
@@ -175,7 +185,6 @@ export default defineComponent({
           position: absolute;
           right: 0;
           top: 0;
-          margin-top: 0.1rem;
           font-weight: bold;
           cursor: pointer;
 
@@ -206,14 +215,6 @@ export default defineComponent({
 
     .right-user-area {
       width: 70%;
-      .user-profile-area
-      .user-introduce-area {
-        margin-top: 2rem;
-      }
-
-      .user-url-area {
-        padding: 2.2rem 0 0 1rem;
-      }
     }
   }
 }
@@ -221,30 +222,15 @@ export default defineComponent({
 //* スマホレスポンシブ 
 @media screen and (max-width: 500px) {
   .post-user-area {
-    padding: 1.5rem 1rem;
-
     .right-user-area{
       padding: 1.8rem 1.2rem 0px;
       .user-profile-area
       .user-introduce-area {
-        margin-top: 1.3rem;
+        margin-top: 0.5rem;
       }
 
       .user-url-area {
         padding: 1rem 0 0 0.5rem;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .post-user-area{
-    padding: 2.5rem 1rem;
-
-    .left-user-area {
-      .user-image{
-        width: 100px;
-        height: 100px;
       }
     }
   }

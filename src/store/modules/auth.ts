@@ -14,13 +14,13 @@ interface State {
 }
 
 interface LoginData {
-  LoginName: string;
-  LoginPassword: string;
+  login_name: string;
+  login_password: string;
 }
 
 const state: State = {
-  userId: null,
-  userName: "",
+  userId: 1,
+  userName: "Test",
   errorFlag: false
 }
 
@@ -45,9 +45,10 @@ const actions: ActionTree<State, LoginData> = {
   // * ログイン
   async login({ commit }, authData: LoginData ) {
     const params: LoginData = {
-      LoginName: authData.LoginName,
-      LoginPassword: authData.LoginPassword,
+      login_name: authData.login_name,
+      login_password: authData.login_password,
     }
+    console.log(params)
     try {
       const response = await axios.post(`${ API_URL }/login`, params)
       router.push('/jobs');

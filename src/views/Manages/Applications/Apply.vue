@@ -8,7 +8,10 @@ import {
 } from '@vue/composition-api';
 import { API_URL, m } from '@/master'
 import axios from 'axios'
-import { ManageJob } from '@/types/manage';
+import { 
+  ManageJob,
+  FetchManageJobs
+} from '@/types/manage';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
 import Vuex from '@/store/index'
@@ -38,14 +41,14 @@ export default defineComponent({
         return false
       }
     });
-    // * 応募案件を取得
+    // * 応募案件 / 参加案件 を取得
     const getApplyJobs = async () => {
       if(!state.userId) { return }
       try {
-        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${state.userId}`)
-        for(let i = 0; i < response.data.length; i++) {
-          const applyJobCorrect: ManageJob = response.data[i];
-          if( applyJobCorrect.applyStatusId === m.APPLY_STATUS_APPLY || applyJobCorrect.applyStatusId === m.APPLY_STATUS_PARTICIPATE ) {
+        const response = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
+        for(let i = 0; i < response.data.response.length; i++) {
+          const applyJobCorrect: ManageJob = response.data.response[i];
+          if( applyJobCorrect.apply_status_id === m.APPLY_STATUS_APPLY || applyJobCorrect.apply_status_id === m.APPLY_STATUS_PARTICIPATE ) {
             state.applyJob.push(applyJobCorrect);
           }
         }

@@ -2,7 +2,7 @@
 import Vue from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { Skill } from '@/types/index';
+import { Skill, FetchSkills } from '@/types/index';
 import { Job } from '@/types/job';
 
 type DateType = {
@@ -34,9 +34,9 @@ export default Vue.extend({
   },
   created() {
     // * フレームワーク取得
-    axios.get<Skill[]>(`${API_URL}/skill`)
+    axios.get<FetchSkills>(`${API_URL}/skills`)
     .then(response => {
-      this.skills = response.data
+      this.skills = response.data.response
     })
   },
   methods: {
@@ -50,14 +50,15 @@ export default Vue.extend({
       for(let i = 0; i < params.skill.length; i++) {
         const skillParams: number = params.skill[i];
         skillState.push(skillParams)
-        const queryParams: string =  'skill_id' + '[' + Number(skillParams - 1) + ']' + '=' + skillParams + '&';
+        // /jobs?skill_id=1&skill_id=4
+        const queryParams: string =  'skill_id=' + skillParams + '&';
         arraySkill.push(queryParams)
       }
       const skillStateEnd: number[] = skillState.slice(0)
       const result: string = arraySkill.join('');
-      axios.get(`${API_URL}/job/?${result}`)
+      axios.get(`${API_URL}/jobs?${result}`)
       .then(response => {
-        this.jobs = response.data
+        this.jobs = response.data.response
 
         this.$emit('compliteSearchSkill', this.jobs)
         // * その他スキル 検索語 Vuexに値を格納する
@@ -88,7 +89,7 @@ export default Vue.extend({
             <v-row>
               <label v-for="skill in skills" v-bind:key="skill.id">
                 <input type="checkbox" v-model="selectedSkill" v-bind:value="skill.id">
-                <span>{{ skill.skillName }}</span>
+                <span>{{ skill.skill_name }}</span>
               </label>
             </v-row>
           </div>

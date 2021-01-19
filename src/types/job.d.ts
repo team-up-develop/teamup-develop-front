@@ -4,26 +4,32 @@ import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
 // * 案件
 export type Job = {
-  createdAt: Date;
-  deletedAt: null | Date;
-  devEndDate: Date;
-  devStartDate: Date;
+  created_at: Date;
+  deleted_at: null | Date;
+  dev_end_date: Date;
+  dev_start_date: Date;
   id: number;
-  jobDescription: string | null;
-  jobStatusId: number; //TODO: あってる？
-  jobTitle: string;
-  programingFramework: Framework[];
-  programingLanguage: Language[];
-  publicationPeriod: Date;
-  recruitmentNumbers: number;
-  skill: Skill[];
-  updatedAt: Date;
-  useMenter?: boolean;
+  job_description: string | null;
+  job_status_id: number; //TODO: あってる？
+  job_title: string;
+  programing_framework_responses: Framework[];
+  programing_language_responses: Language[];
+  skill_responses: Skill[];
+  // publicationPeriod: Date;
+  recruitment_numbers: number;
+  updated_at: Date;
+  // useMenter?: boolean;
   user: User;
-  userId: number;
+  user_id: number;
 } | {};
 
-// * 案件作成時 session1 
+export type FetchJobs = {
+  msg: string;
+  response: Job[]
+  status: string;
+}
+
+// * 案件作成時 session1
 export interface JobCreateData {
   jobTitle: string | null;  //? タイトル
   jobDescription: string | null; //? 詳細
@@ -31,7 +37,7 @@ export interface JobCreateData {
   devEndDate: string | null; //? 開発終了
 }
 
-// * 案件作成 session2 完了
+// * 案件作成 session2
 export interface JobCreateDataComp {
   userId: number; //? ログインUserId
   jobTitle: string | null;  //? タイトル

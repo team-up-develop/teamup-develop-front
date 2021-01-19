@@ -15,24 +15,24 @@ export default Vue.extend({
       <div class="lang-area">
         <label for="name" class="name-tag">開発言語</label>
         <div class="lang-box">
-          <div class="skill-tag"  v-for="langage in job.programingLanguage" :key="langage.id">
-            {{ langage.programingLanguageName }}
+          <div class="skill-tag"  v-for="langage in job.programing_language_responses" :key="langage.id">
+            {{ langage.programing_language_name }}
           </div>
         </div>
       </div>
       <div class="lang-area">
         <label for="name" class="name-tag">フレームワーク</label>
         <div class="lang-box">
-          <div class="flame-tag" v-for="framework in job.programingFramework" :key="framework.programingFrameworkName">
-            {{ framework.programingFrameworkName }}
+          <div class="flame-tag" v-for="framework in job.programing_framework_responses" :key="framework.id">
+            {{ framework.programing_framework_name }}
           </div>
         </div>
       </div>
       <div class="lang-area">
         <label for="name" class="name-tag">その他関連スキル</label>
         <div class="lang-box">
-          <div class="other-tag" v-for="skill in job.skill" :key="skill.skillName">
-            {{ skill.skillName }}
+          <div class="other-tag" v-for="skill in job.skill_responses" :key="skill.id">
+            {{ skill.skill_name }}
           </div>
         </div>
       </div>

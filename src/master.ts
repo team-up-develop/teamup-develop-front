@@ -18,7 +18,9 @@ export const m = {
   APPLY_STATUS_REJECT,
   APPLY_STATUS_SELF
 }
-export const API_URL = 'http://localhost:8888/api/v1';
+// 移行前に接続がしたい場合
+// port: 8888
+export const API_URL = 'http://localhost:8090/api/v1';
 
 export const truncate = (value: string, num: number) => {
   const over = "...";

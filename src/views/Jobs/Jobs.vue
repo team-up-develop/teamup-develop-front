@@ -18,7 +18,7 @@ import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/Framewo
 import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
 import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
 import { dayJs, truncate } from '@/master';
-import { Job } from '@/types/job';
+import { Job, FetchJobs } from '@/types/job';
 import Vuex from '@/store/index'
 
 type State = {
@@ -103,16 +103,16 @@ export default defineComponent({
       // * 投稿一覧取得
       const posts: Job[] = [];
       try { 
-        const response = await axios.get<Job[]>(`${API_URL}/job`)
+        const response = await axios.get<FetchJobs>(`${API_URL}/jobs`)
         setTimeout(() => {
           state.loading = false;
-          state.jobs = response.data
+          state.jobs = response.data.response
           paginateJobs(state.jobs);
 
           //* トップページから フリーワード 検索をした際の処理
-          for(const i in response.data) {
-            const jobs: any = response.data[i]; //FIXME: any
-            if(jobs.jobDescription.indexOf(state.freeWord) !== -1){
+          for(const i in response.data.response) {
+            const jobs: any = response.data.response[i]; //FIXME: any
+            if(jobs.job_description.indexOf(state.freeWord) !== -1){
               posts.push(jobs)
             }
           }
@@ -120,11 +120,11 @@ export default defineComponent({
           paginateJobs(state.jobs);
           // * トップページから 開発言語 検索した際の処理
           if (Vuex.state.search.language.length !== 0) {
-            skillQueryParameter(Vuex.state.search.language, 'programing_language_id');
+            skillQueryParameter(Vuex.state.search.language, 'pl_id');
           }
           // * トップページから フレームワーク 検索した際の処理
           else if (Vuex.state.search.framwork.length !== 0) {
-            skillQueryParameter(Vuex.state.search.framwork, 'programing_framework_id');
+            skillQueryParameter(Vuex.state.search.framwork, 'pf_id');
           }
           // * トップページから その他スキル 検索した際の処理
           else if (Vuex.state.search.skill.length !== 0) {
@@ -149,13 +149,14 @@ export default defineComponent({
       const languageNum: number[] = searchLang;
       for(let s = 0; s < languageNum.length; s++) {
         const languageNumParams = languageNum[s]
-        const queryParamsLanguage =  urlParams + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
+        // const queryParamsLanguage =  urlParams + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
+        const queryParamsLanguage = urlParams + '=' + languageNumParams + '&';
         arrayLanguage.push(queryParamsLanguage)
       }
       const LastLanguageURL: string = arrayLanguage.join('')
       try {
-        const response = await axios.get<Job[]>(`${API_URL}/job/?${LastLanguageURL}`)
-        state.jobs = response.data
+        const response = await axios.get<FetchJobs>(`${API_URL}/jobs?${LastLanguageURL}`)
+        state.jobs = response.data.response
         if(state.jobs.length == 0) {
           state.jobsNullFlag = true;
         } else {
@@ -194,10 +195,10 @@ export default defineComponent({
     const searchFreeword = async () => {
       const posts: Job[] = [];
       try { 
-        const response = await axios.get(`${API_URL}/job`)
-        for(const i in response.data){
-          const jobs: any = response.data[i]; //FIXME: any
-          if(jobs.jobDescription.indexOf(state.freeWord) !== -1){
+        const response = await axios.get(`${API_URL}/jobs`)
+        for(const i in response.data.response){
+          const jobs: any = response.data.response[i]; //FIXME: any
+          if(jobs.job_description.indexOf(state.freeWord) !== -1){
             posts.push(jobs)
           }
         }
@@ -245,6 +246,7 @@ export default defineComponent({
     // * click して案件を取得 === 詳細
     const getJob = async (job: any) => { // FIXME: any
       state.jobDetail = job; //? clickした案件を取得
+      console.log(state.jobDetail)
       state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
       state.id = job.id;  //? clickしたIdを this.idに格納する
       state.selfJobPost = false; //? clickする度に 自分の案件では無くする
@@ -253,7 +255,7 @@ export default defineComponent({
       if (state.userId) {
         // * 自分の案件かを判定
         try {
-          const response = await axios.get<Job[]>(`${API_URL}/job/?user_id=${ state.userId }`)
+          const response = await axios.get<Job[]>(`${API_URL}/jobs/?user_id=${ state.userId }`)
           for (let i = 0; i < response.data.length; i++) {
             state.selfJob = response.data[i]
             if (state.selfJob.id === state.id) { state.selfJobPost = true }
@@ -483,7 +485,7 @@ export default defineComponent({
       <div class="job-wrapper-right" v-if="detailFlag === true">
         <div class="top-job-detail-area">
           <div class="top-job-detail-area__title">
-            {{ limit(jobDetail.jobTitle, 60) }}
+            {{ limit(jobDetail.job_title, 60) }}
           </div>
           <!-- ログイン時 -->
           <div v-if="entryRedirect == false">
@@ -521,7 +523,7 @@ export default defineComponent({
           </div>
           <router-link :to="`/account/profile/${ jobDetail.userId }`"> 
             <div class="post-user-name-area">
-              {{ jobDetail.user.userName }}
+              {{ jobDetail.user.user_name }}
             </div>
           </router-link>
           <div class="tag-area">
@@ -530,9 +532,9 @@ export default defineComponent({
           <div class="post-user-area">
             <div 
               class="detail-langage" 
-              v-for="langage in jobDetail.programingLanguage.slice(0,5)" 
-              :key="langage.id">
-              {{ langage.programingLanguageName }}
+              v-for="langage in jobDetail.programing_language_responses.slice(0,5)" 
+              :key="langage.programing_language_name">
+              {{ langage.programing_language_name }}
             </div>
           </div>
           <div class="tag-area">
@@ -540,9 +542,9 @@ export default defineComponent({
           </div>
           <div class="post-user-area">
             <div class="detail-framework" 
-              v-for="framework in jobDetail.programingFramework.slice(0,5)" 
-              :key="framework.programingFrameworkName">
-              {{ framework.programingFrameworkName }}
+              v-for="framework in jobDetail.programing_framework_responses.slice(0,5)" 
+              :key="framework.programing_framework_name">
+              {{ framework.programing_framework_name }}
             </div>
           </div>
           <div class="tag-area">
@@ -551,32 +553,32 @@ export default defineComponent({
           <div class="post-user-area">
             <div 
               class="detail-skill" 
-              v-for="skill in jobDetail.skill.slice(0,5)" 
-              :key="skill.skillName"
+              v-for="skill in jobDetail.skill_responses.slice(0,5)" 
+              :key="skill.skill_name"
             >
-              {{ skill.skillName }}
+              {{ skill.skill_name }}
             </div>
           </div>
           <div class="tag-area">
             開発期間
           </div>
           <div class="post-user-area">
-            {{ day(jobDetail.devStartDate , "YYYY年 M月 D日") }}  ~  {{ day(jobDetail.devEndDate, "YYYY年 M月 D日")}}
+            {{ day(jobDetail.dev_start_date , "YYYY年 M月 D日") }}  ~  {{ day(jobDetail.dev_end_date, "YYYY年 M月 D日")}}
           </div>
           <div class="tag-area">
             募集人数
           </div>
           <div class="post-user-area">
-            {{ jobDetail.recruitmentNumbers }} 人
+            {{ jobDetail.recruitment_numbers }} 人
           </div>
           <div class="tag-area">
             開発詳細
           </div>
           <div class="post-user-area">
-            {{ jobDetail.jobDescription }}
+            {{ jobDetail.job_description }}
           </div>
           <div class="jobDetail-time-area">
-            投稿期日   {{ day(jobDetail.createdAt, "YYYY年 M月 D日") }}
+            投稿期日   {{ day(jobDetail.created_at, "YYYY年 M月 D日") }}
           </div>
         </div>
       </div>

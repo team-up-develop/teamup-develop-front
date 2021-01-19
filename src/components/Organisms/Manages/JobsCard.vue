@@ -23,29 +23,29 @@ export default defineComponent({
     <v-sheet class="card">
       <v-row class="card__skill">
         <div class="lang" 
-          v-for="(langage, index) in job.programingLanguage.slice(0,3)" 
+          v-for="(langage, index) in job.programing_language_responses.slice(0,3)" 
           :key="`langage-${index}`"
         >
-          {{ langage.programingLanguageName }}
+          {{ langage.programing_language_name }}
         </div>
         <div class="fram" 
-          v-for="(framework, index) in job.programingFramework.slice(0,3)" 
+          v-for="(framework, index) in job.programing_framework_responses.slice(0,3)" 
           :key="`framework-${index}`"
         >
-          {{ framework.programingFrameworkName }} 
+          {{ framework.programing_framework_name }} 
         </div>
         <div class="skill" 
-          v-for="(skill, index) in job.skill.slice(0,2)" 
+          v-for="(skill, index) in job.skill_responses.slice(0,2)" 
           :key="`skill-${index}`"
         >
-          {{ skill.skillName }} 
+          {{ skill.skill_name }} 
         </div>
       </v-row>
       <div class="card__title">
-        <span>{{ limit(job.jobTitle, 55) }}</span>
+        <span>{{ limit(job.job_title, 55) }}</span>
       </div>
       <div class="card__bottom">
-        <span>{{ day(job.devStartDate, "YYYY年 M月 D日") }}  ~  {{ day(job.devEndDate , "YYYY年 M月 D日")}}</span>
+        <span>{{ day(job.dev_start_date, "YYYY年 M月 D日") }}  ~  {{ day(job.dev_end_date , "YYYY年 M月 D日")}}</span>
       </div>
     </v-sheet>
   </section>

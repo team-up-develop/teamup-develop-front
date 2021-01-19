@@ -1,26 +1,41 @@
-// * 開発言語
 export interface Language {
   id: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  programingLanguageName: string;
+  programing_language_name: string;
 }
 
-// * フレームワーク
 export interface Framework {
   id: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  programingFrameworkName: string;
+  programing_framework_name: string;
 }
 
-// * その他スキル
 export interface Skill {
   id: number;
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  skillName: string;
+  skill_name: string;
+}
+
+export type FetchLanguages = {
+  msg: string;
+  response: Language[]
+  status: string;
+}
+
+export type FetchFrameworks = {
+  msg: string;
+  response: Framework[]
+  status: string;
+}
+
+export type FetchSkills = {
+  msg: string;
+  response: Skill[]
+  status: string;
 }

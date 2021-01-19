@@ -13,7 +13,7 @@ import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import BtnArea from '@/components/Organisms/Jobs/JobDetails/BtnArea.vue'
-import { Job } from '@/types/job';
+import { FetchJobs } from '@/types/job';
 
 type State = {
   job: any;
@@ -44,10 +44,10 @@ export default defineComponent({
     // * 詳細画面情報を取得
     const getJobDetail = async () => {
       try { 
-        const response = await axios.get<Job>(`${API_URL}/job/${props.id}/`)
+        const response = await axios.get<FetchJobs>(`${API_URL}/job/${props.id}`)
         setTimeout(() => {
           state.loading = false;
-          state.job = response.data
+          state.job = response.data.response
         }, 1000)
       } catch (error) {
         console.log(error)

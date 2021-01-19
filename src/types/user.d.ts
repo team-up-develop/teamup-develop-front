@@ -6,11 +6,13 @@ export type User = {
   githubAccount: string | null;
   id: number;
   job: null;
-  learningStartDate: Date;
+  learning_start_date: Date;
   twitterAccount: string | null;
   updatedAt: Date;
-  userBirthday: Date;
-  userName: string;
+  birthday: Date;
+  login_name: string;
+  login_password: string;
+  user_name: string;
 } | {};
 
 // * 登録
