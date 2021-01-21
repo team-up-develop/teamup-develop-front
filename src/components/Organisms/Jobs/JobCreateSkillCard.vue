@@ -1,16 +1,25 @@
 <script lang="ts">
 import Vue, { PropType }  from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL, 
+  catchError
+} from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select'
-// import "vue-select/dist/vue-select.css"
+import "vue-select/dist/vue-select.css"
 import Session from '@/components/Atoms/Commons/Session.vue'
-import { JobCreateDataComp } from '@/types/job';
-import { Language } from '@/types/index';
-import { Framework } from '@/types/index';
-import { Skill } from '@/types/index';
+import { JobCreateParamsSecond } from '@/types/job';
+import { 
+  Language,
+  Framework,
+  Skill, 
+  FetchLanguages, 
+  FetchFrameworks, 
+  FetchSkills,
+} from '@/types/index';
+import { m } from '@/master'
 
-type DataType = {
+type State = {
   selectedLang: number[];
   languages: Language[];
   selectedFramwork: number[];
@@ -35,7 +44,7 @@ export default Vue.extend({
     devEndDate: { type: String as PropType<string>, default: "" },
     jobDescription: { type: String as PropType<string>, default: "" },
   },
-  data(): DataType {
+  data(): State {
     return {
       selectedLang: [], //? プログラミング言語
       languages: [],
@@ -57,42 +66,27 @@ export default Vue.extend({
         && this.selectedFramwork.length !== 0 
         && this.selectedSkill.length !== 0 
         && this.recruitNumber
-        ) {
-        return true
-      } else {
-        return false
-      }
+      ) { return true } 
+      else { return false }
     },
   },
-  mounted() {
-    // *開発言語
-    axios.get<Language[]>(`${API_URL}/programing_language`)
-    .then(response => {
-      this.languages = response.data;
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    // * フレームワーク
-    axios.get<Framework[]>(`${API_URL}/programing_framework`)
-    .then(response => {
-      this.framworks = response.data;
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    // * その他スキル
-    axios.get<Skill[]>(`${API_URL}/skill`)
-    .then(response => {
-      this.skills = response.data;
-    })
-    .catch(error =>{
-      console.log(error)
-    })
+  async mounted() {
+    try {
+      const res = await axios.get<FetchLanguages>(`${API_URL}/programing_languages`)
+      this.languages = res.data.response;
+    } catch (error) { catchError(error) }
+    try {
+      const res = await axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+      this.framworks = res.data.response;
+    } catch (error) { catchError(error) }
+    try {
+      const res = await axios.get<FetchSkills>(`${API_URL}/skills`)
+      this.skills = res.data.response;
+    } catch (error) { catchError(error) }
   },
   methods: {
     // * 案件投稿
-    createJob() {
+    async createJob() {
       // * 応募者人数を文字列から数値に変換
       const recruitNum = Number(this.recruitNumber);
       // * 言語を {id: Number}に変換
@@ -125,33 +119,30 @@ export default Vue.extend({
       const devEnd = this.devEndDate
       const devEndDate = toDate(devEnd, '-');
 
-      const params: JobCreateDataComp = {
-        userId: this.$store.state.auth.userId, //? ログインUserId
-        jobTitle : this.jobTitle,  //? タイトル
-        jobDescription: this.jobDescription, //? 詳細
-        devStartDate: devStartDate,  //? 開始日
-        devEndDate: devEndDate, //? 終了日
-        programingLanguage: languageArray,  //? プログラミング言語
-        programingFramework: framworksArray , //? フレームワーク
-        skill: skillArray, //? その他開発スキル,
-        recruitmentNumbers: recruitNum //?募集人数
+      const params: JobCreateParamsSecond = {
+        user_id: this.$store.state.auth.userId,
+        job_title : this.jobTitle,
+        job_description: this.jobDescription,
+        dev_start_date: devStartDate,
+        dev_end_date: devEndDate,
+        programing_language_ids: languageArray,
+        programing_framework_ids: framworksArray,
+        skill_ids: skillArray,
+        recruitment_numbers: recruitNum, 
+        job_status_id: m.APPLY_STATUS_APPLY,
       };
-      axios.post(`${API_URL}/job`, params)
-      .then(response => {
-        console.log(response);
+      try {
+        await axios.post<JobCreateParamsSecond>(`${API_URL}/job`, params)
         sessionStorage.removeItem('jobTitle');
         sessionStorage.removeItem('jobDescription');
-        sessionStorage.removeItem('devStartDateString');
-        sessionStorage.removeItem('devEndDateString');
+        sessionStorage.removeItem('devStartDate');
+        sessionStorage.removeItem('devEndDate');
         this.$router.push('/job_create/3');
-      })
-      .catch(error => {
-        console.log(error);
-      });
-      this.selectedLang = [];
-      this.selectedFramwork = [];
-      this.selectedSkill = [];
-      this.recruitNumber = 0;
+        this.selectedLang = [];
+        this.selectedFramwork = [];
+        this.selectedSkill = [];
+        this.recruitNumber = 0;
+      } catch (error) { catchError(error) }
     },
   }
 });
@@ -169,7 +160,7 @@ export default Vue.extend({
             class="input-area"
             multiple
             :options="languages"
-            label="programingLanguageName"
+            label="programing_language_name"
             v-model="selectedLang"
             :reduce="languages => languages.id"
             :selectable="() => selectedLang.length < 5"
@@ -185,7 +176,7 @@ export default Vue.extend({
             class="input-area"
             multiple
             :options="framworks"
-            label="programingFrameworkName"
+            label="programing_framework_name"
             v-model="selectedFramwork"
             :reduce="framworks => framworks.id"
             :selectable="() => selectedFramwork.length < 5"
@@ -201,7 +192,7 @@ export default Vue.extend({
             class="input-area"
             multiple
             :options="skills"
-            label="skillName"
+            label="skill_name"
             v-model="selectedSkill"
             :reduce="skills => skills.id"
             :selectable="() => selectedSkill.length < 5"

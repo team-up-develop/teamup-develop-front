@@ -35,17 +35,17 @@ export default Vue.extend({
       this.myselfFlag = true
     }
     // * 投稿案件取得
-    axios.get(`${API_URL}/job/?user_id=${this.id}`)
-    .then(response => {
-      this.manageJobs = response.data
+    axios.get(`${API_URL}/jobs?user_id=${this.id}`)
+    .then(res => {
+      this.manageJobs = res.data.response
     })
     .catch(error => {
       console.log(error)
     })
     // * ユーザー情報取得
     axios.get(`${API_URL}/user/${this.id}`)
-    .then(response => {
-      this.userInfo = response.data;
+    .then(res => {
+      this.userInfo = res.data.response;
     })
     .catch(error => {
       console.log(error)
@@ -64,8 +64,8 @@ export default Vue.extend({
       this.closeModal();
       // * ユーザー情報取得
       axios.get(`${API_URL}/user/${this.id}`)
-      .then(response => {
-        this.userInfo = response.data;
+      .then(res => {
+        this.userInfo = res.data;
       })
       .catch(error => {
         console.log(error)

@@ -52,8 +52,8 @@ export default defineComponent({
     // * 表示中のユーザーのステータスを格納
     const getStatus = async () => {
       try { 
-        const response = await axios.get(`${API_URL}/apply_job/?job_id=${ props.jobId }&user_id=${ props.id }`)
-        state.statusId = response.data[0].applyStatusId
+        const res = await axios.get(`${API_URL}/apply_job/?job_id=${ props.jobId }&user_id=${ props.id }`)
+        state.statusId = res.data[0].applyStatusId
       } catch (error) {
         console.log(error)
       }

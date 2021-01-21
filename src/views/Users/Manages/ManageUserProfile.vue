@@ -58,9 +58,9 @@ export default defineComponent({
     const getUser = async () => {
       try {
         setTimeout(async() => {
-          const response = await axios.get(`${API_URL}/user/${props.id}`)
+          const res = await axios.get(`${API_URL}/user/${props.id}`)
           state.loading = false;
-          state.userInfo = response.data;
+          state.userInfo = res.data;
         }, 700)
       } catch (error) {
         console.log(error)
@@ -69,8 +69,8 @@ export default defineComponent({
     getUser();
 
     const getJobTitle = async () => {
-      const response = await axios.get(`${API_URL}/job/${ props.jobId }`)
-      state.jobTitle = response.data.jobTitle
+      const res = await axios.get(`${API_URL}/job/${ props.jobId }`)
+      state.jobTitle = res.data.jobTitle
     }
 
     onMounted(() => {

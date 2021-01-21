@@ -22,6 +22,14 @@ export const m = {
 // port: 8888
 export const API_URL = 'http://localhost:8090/api/v1';
 
+export const catchError = (error: any) => {
+  const {
+    status,
+    statusText
+  } = error.response;
+  return console.log(`エラーが発生しました。お問合せください。\n HTTP Status: ${status} ${statusText} \n メッセージ: ${error.response.data.message}`); 
+}
+
 export const truncate = (value: string, num: number) => {
   const over = "...";
   if (value.length <= num) {

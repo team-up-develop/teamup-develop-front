@@ -39,8 +39,8 @@ export default Vue.extend({
   created() {
     // * 開発言語
     axios.get<Language[]>(`${API_URL}/programing_language`)
-    .then(response => {
-      this.languages = response.data
+    .then(res => {
+      this.languages = res.data
     })
     this.selectedLang = this.job.programingLanguage
     for(let l = 0; l < this.selectedLang.length; l++) {
@@ -75,8 +75,8 @@ export default Vue.extend({
         programingLanguage: languageArray,
       }
       axios.put(`${API_URL}/job/${this.jobId}`, params)
-      .then(response => {
-        console.log(response)
+      .then(res => {
+        console.log(res)
         // this.$emit('compliteAssgin', this.message)
       })
       .catch(error => {

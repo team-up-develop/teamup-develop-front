@@ -2,6 +2,7 @@ import { User } from '@/types/user';
 import { Language } from '@/types/index';
 import { Framework } from '@/types/index';
 import { Skill } from '@/types/index';
+
 // * 案件
 export type Job = {
   created_at: Date;
@@ -28,37 +29,34 @@ export type FetchJobs = {
   response: Job[]
   status: string;
 }
-
-// * 案件作成時 session1
-export interface JobCreateData {
+// * 案件作成時 session1 ここは API通信しないので キャメルケース
+export interface JobCreateParamsFirst {
   jobTitle: string | null;  //? タイトル
   jobDescription: string | null; //? 詳細
   devStartDate: string | null; //? 開発開始
   devEndDate: string | null; //? 開発終了
 }
 
-// * 案件作成 session2
-export interface JobCreateDataComp {
-  userId: number; //? ログインUserId
-  jobTitle: string | null;  //? タイトル
-  jobDescription: string | null; //? 詳細
-  devStartDate: Date;  //? 開始日
-  devEndDate: Date; //? 終了日
-  programingLanguage: {}[];  //? プログラミング言語
-  programingFramework: {}[] ; //? フレームワーク
-  skill: {}[]; //? その他開発スキル,
-  recruitmentNumbers: number; //?募集人数
+export interface JobCreateParamsSecond {
+  user_id: number; //? ログインUserId
+  job_title: string | null;  //? タイトル
+  job_description: string | null; //? 詳細
+  dev_start_date: Date;  //? 開始日
+  dev_end_date: Date; //? 終了日
+  programing_language_ids: {}[];  //? プログラミング言語
+  programing_framework_ids: {}[] ; //? フレームワーク
+  skill_ids: {}[]; //? その他開発スキル,
+  recruitment_numbers: number; //?募集人数
+  job_status_id: 1;
 }
 
-// * 応募 parameter
 export interface ApplyParams {
   jobId: number;
   userId: number;
   applyStatusId: number; 
 }
 
-// * お気に入り parameter
 export interface FavoriteParams {
-  jobId: number;
-  userId: number;
+  job_id: number;
+  user_id: number;
 }

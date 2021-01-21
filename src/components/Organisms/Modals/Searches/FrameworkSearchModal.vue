@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError
+} from '@/master'
 import axios from 'axios'
 import { Framework, FetchFrameworks } from '@/types/index';
 import { Job } from '@/types/job';
@@ -32,16 +35,15 @@ export default Vue.extend({
     //   }
     // }
   },
-  created() {
-    // * フレームワーク取得
-    axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
-    .then(response => {
-      this.frameworks = response.data.response
-    })
+  async created() {
+    try {
+      const res = await axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+      this.frameworks = res.data.response
+    } catch (error) { catchError(error) }
   },
   methods: {
     // * フレームワーク検索
-    searchFramework() {
+    async searchFramework() {
       const arrayFramework: string[] = [];
       const frameworkState: number[] = [];
       const params = {
@@ -55,9 +57,9 @@ export default Vue.extend({
       }
       const frameworkStateEnd: number[]  = frameworkState.slice(0)
       const result: string = arrayFramework.join('');
-      axios.get(`${API_URL}/jobs?${result}`)
-      .then(response => {
-        this.jobs = response.data.response
+      try {
+        const res = await axios.get(`${API_URL}/jobs?${result}`)
+        this.jobs = res.data.response
         this.$emit('compliteSearchFramework', this.jobs)
         // * フレームワーク 検索語 Vuexに値を格納する
         this.$store.dispatch('framworkSearch', {
@@ -69,7 +71,7 @@ export default Vue.extend({
             framwork: [],
           })
         }
-      })
+      } catch (error) { catchError(error) }
     },
   }
 });

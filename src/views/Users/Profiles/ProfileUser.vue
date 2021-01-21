@@ -44,10 +44,10 @@ export default Vue.extend({
     }
     // * ユーザー情報取得
     axios.get(`${API_URL}/user/${this.id}`)
-    .then(response => {
+    .then(res => {
       // setTimeout(() => {
       //   this.loading = false;
-        this.userInfo = response.data;
+        this.userInfo = res.data.response;
       // }, 1000)
     })
     .catch(error => {
@@ -70,11 +70,11 @@ export default Vue.extend({
       this.closeModal();
       // * ユーザー情報取得
       axios.get(`${API_URL}/user/${this.id}`)
-      .then(response => {
+      .then(res => {
         // this.loading = true;
         // setTimeout(() => {
           // this.loading = false;
-        this.userInfo = response.data;
+        this.userInfo = res.data;
         // }, 1000)
       })
       .catch(error => {

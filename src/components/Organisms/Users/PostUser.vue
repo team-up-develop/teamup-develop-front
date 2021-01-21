@@ -22,19 +22,19 @@ export default defineComponent({
     });
 
     const twitterTab = () => {
-      if(props.user.twitterAccount == null) {
-        return props.user.twitterAccount;
+      if(props.user.twitter_account == null) {
+        return props.user.twitter_account;
       } else {
-        const url: string = props.user.twitterAccount;
+        const url: string = props.user.twitter_account;
         return window.open(url);
       }
     };
 
     const gitTab = () => {
-      if(props.user.githubAccount == null) {
-        return props.user.githubAccount;
+      if(props.user.github_account == null) {
+        return props.user.github_account;
       } else {
-        const url: string = props.user.githubAccount;
+        const url: string = props.user.github_account;
         return window.open(url);
       }
     };
@@ -65,12 +65,12 @@ export default defineComponent({
           <div class="profile-area">
             <v-col class="name-are">
               <div class="user-name">
-                {{ user.userName }}
+                {{ user.user_name }}
               </div>
             </v-col>
             <v-col class="introduce-area" style="padding: none">
               <div class="introduce">
-                {{ day(user.learningStartDate, "YYYY年 M月 D日")}}
+                {{ day(user.learning_start_date, "YYYY年 M月 D日")}}
               </div>
             </v-col>
             <v-col class="url-area">

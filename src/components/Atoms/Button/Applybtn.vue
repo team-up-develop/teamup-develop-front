@@ -31,11 +31,11 @@ export default Vue.extend({
         applyStatusId: 1  
       };
       axios.post<ApplyParams>(`${API_URL}/apply_job/`, params)
-      .then(response => {
+      .then(res => {
         this.compliteModal = true;
         this.applyFlag = false;
         this.$emit('compliteEntry');
-        return response
+        return res
       })
       .catch(error =>{
         console.log(error);

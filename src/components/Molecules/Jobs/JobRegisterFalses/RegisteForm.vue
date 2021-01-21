@@ -33,8 +33,8 @@ export default defineComponent({
         LoginPassword: state.LoginPassword,
       }
       try { 
-        const response = await axios.post(`${API_URL}/signup`, params)
-        console.log(response)
+        const res = await axios.post(`${API_URL}/signup`, params)
+        console.log(res)
         state.LoginName = "";
         state.LoginPassword = "";
       } catch (error) {

@@ -13,8 +13,9 @@ export type Message = {
   userId: number;
 }
 
-export type messageParams = {
+export interface messageParams {
   message: string;
   userID: number;
   jobID: number;
 }
+

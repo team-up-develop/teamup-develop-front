@@ -54,9 +54,9 @@ export default Vue.extend({
         twitterAccount: this.twitterAccount,
       }
       axios.put<EditParams>(`${API_URL}/user/${this.id}`, params)
-      .then(response => {
+      .then(res => {
         this.$emit('compliteEdit')
-        return response
+        return res
       })
       .catch(error => {
         console.log(error)

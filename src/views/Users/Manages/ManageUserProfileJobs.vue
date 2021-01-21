@@ -47,10 +47,10 @@ export default Vue.extend({
   created() {
     // * ユーザー情報取得
     axios.get(`${API_URL}/user/${this.id}`)
-    .then(response => {
+    .then(res => {
       setTimeout(() => {
         this.loading = false;
-        this.userInfo = response.data;
+        this.userInfo = res.data;
       }, 1000)
     })
     .catch(error => {
@@ -59,8 +59,8 @@ export default Vue.extend({
 
     // *  案件タイトル取得
     axios.get(`${API_URL}/job/${ this.jobId }`)
-    .then(response => {
-      this.jobTitle = response.data.jobTitle
+    .then(res => {
+      this.jobTitle = res.data.jobTitle
     })
     .catch(error => {
       console.log(error)
@@ -68,8 +68,8 @@ export default Vue.extend({
 
     // *詳細を見ているユーザーの投稿案件
     axios.get(`${API_URL}/job/?user_id=${this.id}`)
-    .then(response => {
-      this.manageJobs = response.data
+    .then(res => {
+      this.manageJobs = res.data
     })
     .catch(error => {
       console.log(error)

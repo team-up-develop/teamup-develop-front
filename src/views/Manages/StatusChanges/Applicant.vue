@@ -47,8 +47,8 @@ export default defineComponent({
 
     const getApplyUser = async () => {
       try { 
-        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_APPLY  }`)
-        state.applyUsers = response.data
+        const res = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_APPLY  }`)
+        state.applyUsers = res.data
       } catch (error) {
         console.log(error)
       }
@@ -56,8 +56,8 @@ export default defineComponent({
 
     const getJobTitle = async () => {
       try { 
-        const response = await axios.get<any>(`${API_URL}/job/${ props.id }`)
-        state.jobTitle = response.data.jobTitle
+        const res = await axios.get<any>(`${API_URL}/job/${ props.id }`)
+        state.jobTitle = res.data.jobTitle
       } catch (error) {
         console.log(error)
       }

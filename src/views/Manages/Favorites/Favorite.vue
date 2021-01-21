@@ -41,8 +41,8 @@ export default defineComponent({
 
     const getFavoriteJobs = async () => {
       try { 
-        const response = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
-        state.favoriteJobs = response.data
+        const res = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
+        state.favoriteJobs = res.data
       } catch (error) {
         console.log(error)
       }

@@ -9,7 +9,7 @@ import JobTitleInput from '@/components/Atoms/Forms/JobTitleInput.vue'
 import DatePicker from '@/components/Atoms/Forms/DatePicker.vue'
 import JobDescriptionInput from '@/components/Atoms/Forms/JobDescriptionInput.vue'
 import Session from '@/components/Atoms/Commons/Session.vue'
-import { JobCreateData } from '@/types/job';
+import { JobCreateParamsFirst } from '@/types/job';
 
 export type JobCreateSession1 = {
   jobTitle: string | null;
@@ -65,7 +65,7 @@ export default defineComponent({
 
     const nextCreateBtn = () => { 
       if(state.jobTitle && state.devStartDate && state.devEndDate) {
-        const params: JobCreateData = {
+        const params: JobCreateParamsFirst = {
           jobTitle : state.jobTitle,
           jobDescription: state.jobDescription,
           devStartDate: state.devStartDate,

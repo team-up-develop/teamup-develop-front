@@ -36,8 +36,8 @@ export default Vue.extend({
       }
 
       axios.post(`${API_URL}/signup`, params)
-      .then(response => {
-        console.log(response);
+      .then(res => {
+        console.log(res);
         return this.$router.push('/register/sent_mail');
       })
       .catch(error => {

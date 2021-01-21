@@ -49,25 +49,25 @@ export default Vue.extend({
       this.$store.state.search.skill = []
       // * 開発言語 取得
       axios.get<FetchLanguages>(`${API_URL}/programing_languages`)
-      .then(response => {
+      .then(res => {
         // .slice(5)
-        this.languages = response.data.response
+        this.languages = res.data.response
       })
       .catch(error =>{
         console.log(error)
       })
       // * フレームワーク
       axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
-      .then(response => {
-        this.framworks = response.data.response
+      .then(res => {
+        this.framworks = res.data.response
       })
       .catch(error =>{
         console.log(error)
       })
       // * その他スキル
       axios.get<FetchSkills>(`${API_URL}/skills`)
-      .then(response => {
-        this.skills = response.data.response
+      .then(res => {
+        this.skills = res.data.response
       })
       .catch(error =>{
         console.log(error)

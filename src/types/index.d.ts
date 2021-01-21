@@ -1,4 +1,4 @@
-export interface Language {
+export type Language = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
@@ -6,7 +6,7 @@ export interface Language {
   programing_language_name: string;
 }
 
-export interface Framework {
+export type Framework = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
@@ -14,7 +14,7 @@ export interface Framework {
   programing_framework_name: string;
 }
 
-export interface Skill {
+export type Skill = {
   id: number;
   createdAt: Date;
   updatedAt: Date;

@@ -32,24 +32,24 @@ export default Vue.extend({
   mounted() {
     // *開発言語
     axios.get<Language[]>(`${API_URL}/programing_language`)
-    .then(response => {
-      this.languages = response.data
+    .then(res => {
+      this.languages = res.data
     })
     .catch(error =>{
       console.log(error)
     })
     // * フレームワーク
     axios.get<Framework[]>(`${API_URL}/programing_framework`)
-    .then(response => {
-      this.framworks = response.data
+    .then(res => {
+      this.framworks = res.data
     })
     .catch(error =>{
       console.log(error)
     })
     // * その他スキル
     axios.get<Skill[]>(`${API_URL}/skill`)
-    .then(response => {
-      this.skills = response.data
+    .then(res => {
+      this.skills = res.data
     })
     .catch(error =>{
       console.log(error)

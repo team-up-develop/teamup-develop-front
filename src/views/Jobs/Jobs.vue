@@ -6,7 +6,10 @@ import {
   onMounted,
 } from '@vue/composition-api';
 import axios from 'axios'
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
@@ -103,16 +106,16 @@ export default defineComponent({
       // * 投稿一覧取得
       const posts: Job[] = [];
       try { 
-        const response = await axios.get<FetchJobs>(`${API_URL}/jobs`)
+        const res = await axios.get<FetchJobs>(`${API_URL}/jobs`)
         setTimeout(() => {
           state.loading = false;
-          state.jobs = response.data.response
+          state.jobs = res.data.response
           paginateJobs(state.jobs);
 
           //* トップページから フリーワード 検索をした際の処理
-          for(const i in response.data.response) {
-            const jobs: any = response.data.response[i]; //FIXME: any
-            if(jobs.job_description.indexOf(state.freeWord) !== -1){
+          for(const i in res.data.response) {
+            const jobs: any = res.data.response[i]; //FIXME: any
+            if(jobs.job_description.indexOf(state.freeWord) !== -1) {
               posts.push(jobs)
             }
           }
@@ -139,41 +142,36 @@ export default defineComponent({
         if(!state.userId) {
           state.entryRedirect = true //* 非ログイン時表示に
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     }
 
     const skillQueryParameter = async (searchLang: any, urlParams: string) => {
       const arrayLanguage: string[] = [];
       const languageNum: number[] = searchLang;
       for(let s = 0; s < languageNum.length; s++) {
-        const languageNumParams = languageNum[s]
-        // const queryParamsLanguage =  urlParams + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
+        const languageNumParams = languageNum[s];
         const queryParamsLanguage = urlParams + '=' + languageNumParams + '&';
         arrayLanguage.push(queryParamsLanguage)
       }
       const LastLanguageURL: string = arrayLanguage.join('')
       try {
-        const response = await axios.get<FetchJobs>(`${API_URL}/jobs?${LastLanguageURL}`)
-        state.jobs = response.data.response
+        const res = await axios.get<FetchJobs>(`${API_URL}/jobs?${LastLanguageURL}`)
+        state.jobs = res.data.response
         if(state.jobs.length == 0) {
           state.jobsNullFlag = true;
         } else {
           paginateJobs(state.jobs);
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
-    onMounted(() => {
-      fetchData();
+    onMounted(async () => {
+      await fetchData();
     });
 
     // * ページネーション処理(検索)
     const paginateJobs = (value: Job[]) => {
-      state.jobs = value.slice().reverse();
+      state.jobs = value;
       state.paginationLength = Math.ceil(state.jobs.length/state.jobsPageSize);
       state.displayJobs = state.jobs.slice(state.jobsPageSize*(state.page -1), state.jobsPageSize*(state.page));
     };
@@ -195,9 +193,9 @@ export default defineComponent({
     const searchFreeword = async () => {
       const posts: Job[] = [];
       try { 
-        const response = await axios.get(`${API_URL}/jobs`)
-        for(const i in response.data.response){
-          const jobs: any = response.data.response[i]; //FIXME: any
+        const res = await axios.get(`${API_URL}/jobs`)
+        for(const i in res.data.response){
+          const jobs: any = res.data.response[i]; //FIXME: any
           if(jobs.job_description.indexOf(state.freeWord) !== -1){
             posts.push(jobs)
           }
@@ -208,9 +206,7 @@ export default defineComponent({
         })
         state.jobs = posts;
         searchJobPagenate(state.jobs);
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     // * 検索後の処理
@@ -246,7 +242,6 @@ export default defineComponent({
     // * click して案件を取得 === 詳細
     const getJob = async (job: any) => { // FIXME: any
       state.jobDetail = job; //? clickした案件を取得
-      console.log(state.jobDetail)
       state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
       state.id = job.id;  //? clickしたIdを this.idに格納する
       state.selfJobPost = false; //? clickする度に 自分の案件では無くする
@@ -255,39 +250,33 @@ export default defineComponent({
       if (state.userId) {
         // * 自分の案件かを判定
         try {
-          const response = await axios.get<Job[]>(`${API_URL}/jobs/?user_id=${ state.userId }`)
-          for (let i = 0; i < response.data.length; i++) {
-            state.selfJob = response.data[i]
+          const res = await axios.get<FetchJobs>(`${API_URL}/jobs?user_id=${ state.userId }`)
+          for (let i = 0; i < res.data.response.length; i++) {
+            state.selfJob = res.data.response[i]
             if (state.selfJob.id === state.id) { state.selfJobPost = true }
           }
-        } catch (error) {
-          console.log(error)
-        }
+        } catch (error) { catchError(error) }
         try {
-          // * 応募済みか応募済みでないかを判断
-          const response = await axios.get<Job[]>(`${API_URL}/apply_job/?user_id=${ state.userId }`)
+          // * 応募済みか応募済みでないかを判断 
+          const res = await axios.get<FetchJobs>(`${API_URL}/apply_jobs?user_id=${ state.userId }`)
           const arrayApply: number[] = []
-          for (let c = 0; c < response.data.length; c++) {
-            const applyData: any = response.data[c]; // FIXME: any
+          for (let c = 0; c < res.data.response.length; c++) {
+            const applyData: any = res.data.response[c]; // FIXME: any
             arrayApply.push(applyData.job.id)
           }
           if (arrayApply.includes(state.jobDetail.id)) { state.applyFlug = false } 
-        } catch (error) {
-          console.log(error)
-        }
+        } catch (error) { catchError(error) }
         // * 保存済みか保存済みではないかを判定する
         try {
-          const response = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${ state.userId }`)
+          const res = await axios.get<FetchJobs>(`${API_URL}/favorite_jobs?user_id=${ state.userId }`)
           const array: number[] = []
-          for (let i = 0; i < response.data.length; i++){
-            const likeData: any = response.data[i] //FIXME: any
+          for (let i = 0; i < res.data.response.length; i++){
+            const likeData: any = res.data.response[i] //FIXME: any
             array.push(likeData.job.id)
           }
           if (array.includes(state.jobDetail.id)) { state.saveFlag = false }
           else { state.saveFlag = true }
-        } catch (error) {
-          console.log(error)
-        }
+        } catch (error) { catchError(error) }
       } 
       // * 登録 or ログインしてない場合
       else {

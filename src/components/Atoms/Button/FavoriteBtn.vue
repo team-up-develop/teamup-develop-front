@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError
+} from '@/master'
 import axios from 'axios'
 import { FavoriteParams } from '@/types/job';
 
@@ -19,53 +22,41 @@ export default Vue.extend({
       flag: true,
     }
   },
-  created() {
+  async created() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
-    axios.get(`${API_URL}/favorite_job/?user_id=${this.userId}`)
-    .then(response => {
+    try {
+      const res = await axios.get(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
       const array = []
-      for(let i = 0; i < response.data.length; i++){
-        const likeData = response.data[i]
+      for(let i = 0; i < res.data.response.length; i++){
+        const likeData = res.data.response[i]
         array.push(likeData.job.id)
       }
-      if(array.includes(this.jobId)){
-        this.flag = false
-      }
-      else {
-        this.flag = true
-      }
-    })
+      if(array.includes(this.jobId)){ this.flag = false }
+      else { this.flag = true }
+    } catch (error) { catchError(error) }
   },
   methods: {
     // * 案件を保存する
-    saveJob(){
+    async saveJob(){
       const params: FavoriteParams = {
-        jobId: this.jobId, 
-        userId: this.userId
+        job_id: this.jobId,
+        user_id: this.userId
       };
-      axios.post<FavoriteParams>(`${API_URL}/favorite_job/`, params)
-      .then(response => {
+      try {
+        await axios.post<FavoriteParams>(`${API_URL}/favorite_job`, params)
         this.flag = false
-        return response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
+      } catch (error) { catchError(error) }
     },
     // * 案件を削除する
-    deleteJob() {
+    async deleteJob() {
       const params: FavoriteParams = {
-        jobId: this.jobId,
-        userId: this.userId
+        job_id: this.jobId,
+        user_id: this.userId
       };
-      axios.delete<FavoriteParams>(`${API_URL}/favorite_job/`, {data: params })
-      .then(response => {
+      try {
+        await axios.delete<FavoriteParams>(`${API_URL}/favorite_job`, { data: params })
         this.flag = true
-        return response.data
-      })
-      .catch(error => {
-        console.log(error)
-      })
+      } catch (error) { catchError(error) }
     },
   }
 });

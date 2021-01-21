@@ -45,9 +45,9 @@ export default defineComponent({
     const getApplyJobs = async () => {
       if(!state.userId) { return }
       try {
-        const response = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
-        for(let i = 0; i < response.data.response.length; i++) {
-          const applyJobCorrect: ManageJob = response.data.response[i];
+        const res = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
+        for(let i = 0; i < res.data.response.length; i++) {
+          const applyJobCorrect: ManageJob = res.data.response[i];
           if( applyJobCorrect.apply_status_id === m.APPLY_STATUS_APPLY || applyJobCorrect.apply_status_id === m.APPLY_STATUS_PARTICIPATE ) {
             state.applyJob.push(applyJobCorrect);
           }

@@ -50,10 +50,10 @@ const actions: ActionTree<State, LoginData> = {
     }
     console.log(params)
     try {
-      const response = await axios.post(`${ API_URL }/login`, params)
+      const res = await axios.post(`${ API_URL }/login`, params)
       router.push('/jobs');
-      commit('loginUserId', response.data.userId)
-      commit('loginUserName', response.data.user.userName)
+      commit('loginUserId', res.data.userId)
+      commit('loginUserName', res.data.user.userName)
     } catch (error) {
       const errorFlag = true
       console.log("ログイン失敗しました")

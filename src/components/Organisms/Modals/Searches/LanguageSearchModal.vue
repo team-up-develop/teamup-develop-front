@@ -35,8 +35,8 @@ export default Vue.extend({
   created() {
     // * プログラミング言語 取得
     axios.get<FetchLanguages>(`${API_URL}/programing_languages`)
-    .then(response => {
-      this.languages = response.data.response
+    .then(res => {
+      this.languages = res.data.response
     })
   },
   methods: {
@@ -56,8 +56,8 @@ export default Vue.extend({
       const languageStateEnd: number[] = languageState.slice(0)
       const result: string = array.join('');
       axios.get(`${API_URL}/jobs?${result}`)
-      .then(response => {
-        this.jobs = response.data.response
+      .then(res => {
+        this.jobs = res.data.response
         this.$emit('compliteSearchLanguage', this.jobs)
 
         // * 言語 検索語 Vuexに値を格納する

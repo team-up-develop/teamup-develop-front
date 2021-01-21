@@ -22,10 +22,10 @@ export default Vue.extend({
   mounted() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
     axios.get(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
-    .then(response => {
+    .then(res => {
       const array = []
-      for(let i = 0; i < response.data.response.length; i++){
-        const likeData = response.data.response[i]
+      for(let i = 0; i < res.data.response.length; i++){
+        const likeData = res.data.response[i]
         array.push(likeData.job.id)
       }
       if(array.includes(this.jobId)){
@@ -40,13 +40,13 @@ export default Vue.extend({
     // * 案件を保存する
     saveJob(){
       const params: FavoriteParams = {
-        jobId: this.jobId, 
-        userId: this.userId
+        job_id: this.jobId, 
+        user_id: this.userId
       };
-      axios.post<FavoriteParams>(`${API_URL}/favorite_job/`, params)
-      .then(response => {
+      axios.post<FavoriteParams>(`${API_URL}/favorite_job`, params)
+      .then(res => {
         this.flag = false
-        return response.data
+        return res.data
       })
       .catch(error => {
         console.log(error)
@@ -55,13 +55,13 @@ export default Vue.extend({
     // * 案件を削除する
     deleteJob() {
       const params: FavoriteParams = {
-        jobId: this.jobId,
-        userId: this.userId
+        job_id: this.jobId,
+        user_id: this.userId
       };
-      axios.delete<FavoriteParams>(`${API_URL}/favorite_job/`, {data: params })
-      .then(response => {
+      axios.delete<FavoriteParams>(`${API_URL}/favorite_job`, {data: params })
+      .then(res => {
         this.flag = true
-        return response.data
+        return res.data
       })
       .catch(error => {
         console.log(error)

@@ -35,8 +35,8 @@ export default Vue.extend({
   created() {
     // * フレームワーク取得
     axios.get<FetchSkills>(`${API_URL}/skills`)
-    .then(response => {
-      this.skills = response.data.response
+    .then(res => {
+      this.skills = res.data.response
     })
   },
   methods: {
@@ -57,8 +57,8 @@ export default Vue.extend({
       const skillStateEnd: number[] = skillState.slice(0)
       const result: string = arraySkill.join('');
       axios.get(`${API_URL}/jobs?${result}`)
-      .then(response => {
-        this.jobs = response.data.response
+      .then(res => {
+        this.jobs = res.data.response
 
         this.$emit('compliteSearchSkill', this.jobs)
         // * その他スキル 検索語 Vuexに値を格納する

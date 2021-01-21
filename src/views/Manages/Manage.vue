@@ -41,8 +41,8 @@ export default defineComponent({
 
     const getManageJobs = async () => {
       try { 
-        const response = await axios.get<FetchManageJobs>(`${API_URL}/jobs?user_id=${state.userId}`) 
-        state.manageJobs = response.data.response
+        const res = await axios.get<FetchManageJobs>(`${API_URL}/jobs?user_id=${state.userId}`) 
+        state.manageJobs = res.data.response
       } catch (error) {
         console.log(error)
       }

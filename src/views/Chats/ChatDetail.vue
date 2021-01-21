@@ -71,9 +71,9 @@ export default defineComponent({
 
     const getJob = async () => {
       try {
-        const response = await axios.get(`${API_URL}/job/${props.id}`)
-        state.jobTitle = response.data.jobTitle
-        state.clickJobId = response.data.id
+        const res = await axios.get(`${API_URL}/job/${props.id}`)
+        state.jobTitle = res.data.jobTitle
+        state.clickJobId = res.data.id
       } catch (error) {
         console.log(error)
       }
@@ -83,9 +83,9 @@ export default defineComponent({
       let chatLength = 0;
       setInterval(async() => {
         try { 
-          const response = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
+          const res = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
           state.loading = false;
-          state.chats = response.data
+          state.chats = res.data
           if(chatLength === state.chats.length) { return console.log("chatLengt が一緒なのでスクロールしません。") } 
           else {
             console.log("chatLengt の更新がかかりました。")

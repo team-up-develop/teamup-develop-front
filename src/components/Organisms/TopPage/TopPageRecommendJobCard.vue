@@ -13,9 +13,9 @@ export default Vue.extend({
   },
   created() {
     axios.get(`${API_URL}/job`)
-    .then(response => {
-      this.newJobsDesktop = response.data.slice(0, 4)
-      this.newJobs = response.data.slice().reverse(); //? 最新にする
+    .then(res => {
+      this.newJobsDesktop = res.data.slice(0, 4)
+      this.newJobs = res.data.slice().reverse(); //? 最新にする
       this.newJobs = this.newJobs.slice(0, 3)
     })
   },
