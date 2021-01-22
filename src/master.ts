@@ -11,12 +11,19 @@ const APPLY_STATUS_APPLY = 1 as const;
 const APPLY_STATUS_PARTICIPATE = 2 as const;
 const APPLY_STATUS_REJECT = 3 as const;
 const APPLY_STATUS_SELF = 4 as const;
+//* 案件フェーズ
+// 1: 新規募集
+// 2: 追加募集
+const JOB_STATUS_NEW = 1 as const;
+const JOB_STATUS_ADD = 2 as const;
 
 export const m = {
   APPLY_STATUS_APPLY,
   APPLY_STATUS_PARTICIPATE,
   APPLY_STATUS_REJECT,
-  APPLY_STATUS_SELF
+  APPLY_STATUS_SELF,
+  JOB_STATUS_NEW,
+  JOB_STATUS_ADD,
 }
 // 移行前に接続がしたい場合
 // port: 8888

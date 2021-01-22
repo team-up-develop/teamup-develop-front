@@ -17,7 +17,6 @@ import {
   FetchFrameworks, 
   FetchSkills,
 } from '@/types/index';
-import { m } from '@/master'
 
 type State = {
   selectedLang: number[];
@@ -31,6 +30,7 @@ type State = {
   selectedLangErrors: string[];
   selectedFramworkErrors: string[];
   selectedSkillErrors: string[];
+  jobStatusId: number;
 }
 
 export default Vue.extend({
@@ -57,6 +57,7 @@ export default Vue.extend({
       selectedLangErrors: [], //?言語入力エラー
       selectedFramworkErrors: [], //?フレームワーク入力エラー
       selectedSkillErrors: [], //?その他スキル入力エラー
+      jobStatusId: 0,
     }
   },
   computed: {
@@ -65,7 +66,8 @@ export default Vue.extend({
       if(this.selectedLang.length !== 0 
         && this.selectedFramwork.length !== 0 
         && this.selectedSkill.length !== 0 
-        && this.recruitNumber
+        && this.recruitNumber !== 0
+        && this.jobStatusId !== 0
       ) { return true } 
       else { return false }
     },
@@ -87,8 +89,6 @@ export default Vue.extend({
   methods: {
     // * 案件投稿
     async createJob() {
-      // * 応募者人数を文字列から数値に変換
-      const recruitNum = Number(this.recruitNumber);
       // * 言語を {id: Number}に変換
       const languageArray: {}[] = [];
       for(let i = 0; i < this.selectedLang.length; i++) {
@@ -128,8 +128,8 @@ export default Vue.extend({
         programing_language_ids: languageArray,
         programing_framework_ids: framworksArray,
         skill_ids: skillArray,
-        recruitment_numbers: recruitNum, 
-        job_status_id: m.APPLY_STATUS_APPLY,
+        recruitment_numbers: Number(this.recruitNumber), 
+        job_status_id: Number(this.jobStatusId),
       };
       try {
         await axios.post<JobCreateParamsSecond>(`${API_URL}/job`, params)
@@ -200,18 +200,65 @@ export default Vue.extend({
         </div>
         <div class="create-area">
           <label for="name" class="label">募集人数</label><label for="name" class="label-required">必須</label>
-          <v-row class="radio">
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="1">1人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="2">2人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="3">3人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="4">4人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="5">5人</label>
-          </v-row>
+          <v-radio-group
+            v-model="recruitNumber"
+          >
+            <v-row>
+              <v-radio
+                label="1名"
+                color="primary"
+                value="1"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="2名"
+                color="primary"
+                value="2"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="3名"
+                color="primary"
+                value="3"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="4名"
+                color="primary"
+                value="4"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="5名"
+                color="primary"
+                value="5"
+                class="ml-3"
+              ></v-radio>
+            </v-row> 
+          </v-radio-group>
+        </div>
+        <div class="create-area">
+          <label for="name" class="label">開発フェーズ</label><label for="name" class="label-required">必須</label>
+          <v-radio-group
+            v-model="jobStatusId"
+          >
+            <v-row>
+              <v-radio
+                label="新規募集"
+                color="primary"
+                value="1"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="追加募集"
+                color="primary"
+                value="2"
+                class="ml-3"
+              ></v-radio>
+            </v-row> 
+          </v-radio-group>
         </div>
       </section>
-      <br />
-      <br />
-      <br />
       <div class="btn-area">
         <button @click="createJob" class="post-job-btn" v-if="isForm">
           案件投稿する

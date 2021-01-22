@@ -8,7 +8,10 @@ import {
 } from '@vue/composition-api';
 import Vuex from '@/store/index'
 import axios from 'axios'
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError
+} from '@/master'
 import { FetchManageJobs } from '@/types/manage';
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
@@ -47,11 +50,8 @@ export default defineComponent({
     const router = context.root.$router
 
     const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
+      if(state.userId) { return true } 
+      else { return false }
     });
 
     // * 自分の案件か否かを判定
@@ -64,9 +64,7 @@ export default defineComponent({
             state.selfJobPost = true
           }
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     // * ログインユーザーが応募済みか応募済みではないかを判定する
@@ -80,12 +78,8 @@ export default defineComponent({
         }
         if (arrayApply.includes(props.id)) {
           state.applyFlug = false
-        } else {
-          console.log("まだ応募していません")
         }
-      } catch (error) {
-        console.log(error);
-      }
+      } catch (error) { catchError(error) }
     };
 
     const openModal = () => state.modal = true;

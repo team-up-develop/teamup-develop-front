@@ -54,7 +54,9 @@ const actions: ActionTree<State, GetStatus> = {
       if(!userObject) {
         return 
       }
+      console.log(userObject)
       const responseManage = await axios.get<FetchManageJobs>(`${API_URL}/jobs?user_id=${userObject.userId}`)
+      console.log(responseManage.data)
       commit('getJobsManageNum', responseManage.data.response.length)
       const responseFavorite = await axios.get<FetchJobs>(`${API_URL}/favorite_jobs?user_id=${userObject.userId}`)
       commit('getJobsFavoriteNum', responseFavorite.data.response.length)

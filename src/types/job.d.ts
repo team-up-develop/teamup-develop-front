@@ -47,7 +47,7 @@ export interface JobCreateParamsSecond {
   programing_framework_ids: {}[] ; //? フレームワーク
   skill_ids: {}[]; //? その他開発スキル,
   recruitment_numbers: number; //?募集人数
-  job_status_id: 1;
+  job_status_id: number;
 }
 
 export interface ApplyParams {

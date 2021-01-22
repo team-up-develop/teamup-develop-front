@@ -9,7 +9,7 @@ import router from '@/router/index.ts';
 
 interface State {
   userId: number | null;
-  userName: string;
+  loginName: string;
   errorFlag: boolean;
 }
 
@@ -19,22 +19,22 @@ interface LoginData {
 }
 
 const state: State = {
-  userId: 1,
-  userName: "Test",
+  userId: null,
+  loginName: "",
   errorFlag: false
 }
 
 const getters: GetterTree<State, LoginData> = {
   userId: (state: State)  => state.userId,
-  userName: (state: State) => state.userName
+  loginName: (state: State) => state.loginName
 }
 
 const mutations: MutationTree<State> = {
   loginUserId(state: State, userId: number) {
     state.userId = userId
   },
-  loginUserName(state: State, userName: string) {
-    state.userName  = userName
+  loginUserName(state: State, loginName: string) {
+    state.loginName  = loginName
   },
   loginError(state: State, errorFlag: boolean) {
     state.errorFlag = errorFlag;
@@ -48,12 +48,11 @@ const actions: ActionTree<State, LoginData> = {
       login_name: authData.login_name,
       login_password: authData.login_password,
     }
-    console.log(params)
     try {
       const res = await axios.post(`${ API_URL }/login`, params)
       router.push('/jobs');
-      commit('loginUserId', res.data.userId)
-      commit('loginUserName', res.data.user.userName)
+      commit('loginUserId', res.data.response.id)
+      commit('loginUserName', res.data.response.login_name)
     } catch (error) {
       const errorFlag = true
       console.log("ログイン失敗しました")

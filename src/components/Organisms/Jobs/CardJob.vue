@@ -1,21 +1,33 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent, computed } from '@vue/composition-api';
 import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
-import { truncate, dayJs } from '@/master'
+import { truncate, dayJs, m } from '@/master'
+import JobStatusNew from '@/components/Atoms/Jobs/JobStatusNew.vue'
 
 export default defineComponent({ 
   components: {
-    CardJobSkill
+    CardJobSkill,
+    JobStatusNew,
   },
   props: {
     job: { type: Object, defalut: null, require: true }
   },
-  setup: () => {
+  setup: (props: any) => {
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
+
+    const isStatusNew = computed(() => {
+      if (props.job.job_status_id == m.JOB_STATUS_NEW) {
+        return true
+      }
+      return false
+    });
+
     return {
       limit,
-      day
+      day,
+      m: computed(() => m),
+      isStatusNew,
     }
   }
 });
@@ -47,6 +59,9 @@ export default defineComponent({
           <div class="post-user-name">
             {{ job.user.user_name }}
           </div>
+        </div>
+        <div class="label-area mt-5">
+          <JobStatusNew :job="job" />
         </div>
       </div>
     </div>
@@ -149,8 +164,8 @@ export default defineComponent({
     }
 
     .post-user-area {
+      position: relative;
       padding: 0.5rem 0px 0 2rem;
-      // width: 30%;
       text-align: left;
       pointer-events: none;
       position: relative;
@@ -184,6 +199,31 @@ export default defineComponent({
 
         .post-user-name {
           pointer-events: none;
+        }
+      }
+
+      // TODO: 修正
+      .label-area {
+        margin-left: 1rem;
+
+        @media screen and (max-width: 1100px) {
+          margin-left: 0.2rem;
+        }
+
+        @media screen and (max-width: 999px) {
+          margin-left: 4rem;
+        }
+        @media screen and (max-width: 800px) {
+          margin-left: 2rem;
+        }
+        @media screen and (max-width: 768px) {
+          margin-left: 1rem;
+        }
+        @media screen and (max-width: 500px) {
+          margin-left: 0.5rem;
+        }
+        @media screen and (max-width: 430px) {
+          margin-left: 0rem;
         }
       }
     }

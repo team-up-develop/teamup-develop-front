@@ -12,12 +12,12 @@ type State = {
   manageNum: number;
   favoriteNum: number;
   applyNum: number;
-  userName: string;
+  loginName: string;
 }
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
-  userName: Vuex.state.auth.userName,
+  loginName: Vuex.state.auth.loginName,
   manageNum: Vuex.state.statusJobs.jobsManageNum,
   favoriteNum: Vuex.state.statusJobs.jobsFavoriteJobsNum,
   applyNum: Vuex.state.statusJobs.jobsApplyNum,
@@ -44,7 +44,7 @@ export default defineComponent({
       <v-col>
         <v-row class="card__top">
           <div class="user-image"></div>
-          <div class="user-name">{{ userName }}</div>
+          <div class="user-name">{{ loginName }}</div>
         </v-row>
         <v-row class="card__center">
           <router-link :to="`/account/profile/${ userId }`" class="">

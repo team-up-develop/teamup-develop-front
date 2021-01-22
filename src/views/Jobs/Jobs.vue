@@ -20,6 +20,7 @@ import LanguageSearchModal from '@/components/Organisms/Modals/Searches/Language
 import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
 import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
 import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
+import JobStatusNew from '@/components/Atoms/Jobs/JobStatusNew.vue'
 import { dayJs, truncate } from '@/master';
 import { Job, FetchJobs } from '@/types/job';
 import Vuex from '@/store/index'
@@ -49,6 +50,7 @@ type State = {
   jobsPageSize: number; //? ページに表示する案件の数
   paginationLength: number; //? ページネーション番号
   scroll: any;
+  newJobLabel: boolean;
 }
 
 const initialState = (): State => ({
@@ -75,7 +77,8 @@ const initialState = (): State => ({
   displayJobs: [],
   jobsPageSize: 8,
   paginationLength: 0,
-  scroll: null
+  scroll: null,
+  newJobLabel: false,
 });
 
 export default defineComponent({
@@ -89,7 +92,8 @@ export default defineComponent({
     FrameworkSearchModal,
     SkillSearchModal,
     JobRightLogin,
-    FavoriteBtn
+    FavoriteBtn,
+    JobStatusNew,
   },
   setup: (_, ctx: any) => {
     const state = reactive<State>(initialState());
@@ -246,6 +250,8 @@ export default defineComponent({
       state.id = job.id;  //? clickしたIdを this.idに格納する
       state.selfJobPost = false; //? clickする度に 自分の案件では無くする
       state.applyFlug = true; //? clickする度に 応募済み案件にする
+      state.newJobLabel = false;
+      if(state.jobDetail.job_status_id == 1) { state.newJobLabel = true }
       // * ログインしていれば以下の処理が走る
       if (state.userId) {
         // * 自分の案件かを判定
@@ -279,9 +285,7 @@ export default defineComponent({
         } catch (error) { catchError(error) }
       } 
       // * 登録 or ログインしてない場合
-      else {
-        console.log("登録してからご利用いただけます")
-      }
+      else { return }
     };
 
     // * エントリーが完了したら応募済みにする
@@ -486,12 +490,18 @@ export default defineComponent({
               <div class="btn-box-save">
                 <FavoriteBtn :jobId="jobDetail.id"/>
               </div>
+              <div class="label-area mt-5">
+                <JobStatusNew :job="jobDetail" />
+              </div>
             </div>
             <div v-else>
               <div class="top-job-detail-bottom">
                 <router-link :to="`/manage/applicant/${ jobDetail.id }`">
                   <button class="btn-box-manage">管理画面</button>
                 </router-link>
+                <div class="label-area mt-5">
+                  <JobStatusNew :job="jobDetail" />
+                </div>
               </div>
             </div>
           </div>
@@ -501,6 +511,9 @@ export default defineComponent({
               <button class="btn-box-apply" @click="registerRedirect">応募する</button>
               <div class="btn-box-save">
                 <v-icon class="save-icon" @click="registerRedirect">mdi-heart</v-icon>
+              </div>
+              <div class="label-area mt-5">
+                <JobStatusNew :job="jobDetail" />
               </div>
             </div>
           </div>
@@ -764,7 +777,7 @@ export default defineComponent({
 // * 案件詳細画面 
 .job-wrapper-right {
   width: 52%;
-  height: 88vh;
+  height: 90vh;
   margin-left: 2rem;
   margin-top: 1rem;
   background-color: $white;
@@ -795,6 +808,20 @@ export default defineComponent({
       display: inline-block;
       position: relative;
       margin-top: 0.8rem;
+
+      .label-area {
+        float: right;
+
+        .label {
+          width: 146px;
+          font-size: 14px;
+          background-color: $third-dark;
+          color: $white;
+          border-radius: 8px;
+          font-weight: bold;
+          text-decoration: none;
+        }
+      }
     }
   }
 }
@@ -1015,7 +1042,7 @@ export default defineComponent({
 
 // * 案件カード側 
 .job-wrapper-left {
-  width: 43%;
+  width: 44%;
   flex: 1 0 auto;
   align-items: center;
   justify-content: center;

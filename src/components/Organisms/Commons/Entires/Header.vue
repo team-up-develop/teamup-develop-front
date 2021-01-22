@@ -19,9 +19,7 @@ export default Vue.extend({
     }
   },
   created() {
-    if( this.userId !== undefined) {
-      console.log(this.userId)
-    }
+    if( this.userId !== undefined) { return }
   }
 });
 </script> 

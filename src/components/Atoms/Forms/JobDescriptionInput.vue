@@ -41,9 +41,9 @@ export default defineComponent({
       :value="value"
       @input="onInputJobDescription" 
       placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" 
-      maxlength="250" 
+      maxlength="500" 
     />
-    <small id="rem">残り{{ 250 - jobDescriptionLimit }}文字</small>
+    <small id="rem">残り{{ 500 - jobDescriptionLimit }}文字</small>
   </section>
 </template>
 
