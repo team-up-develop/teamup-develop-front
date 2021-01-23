@@ -8,7 +8,8 @@ import {
 } from '@vue/composition-api';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { ManageJob, FetchManageJobs } from '@/types/manage';
+import { ManageJob } from '@/types/index';
+import { FetchManageJobs } from '@/types/fetch';
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
 import Vuex from '@/store/index'

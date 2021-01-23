@@ -1,5 +1,5 @@
 <script lang="ts">
-import { Job } from '@/types/job';
+import { Job } from '@/types/index';
 import Vue, { PropType } from 'vue';
 
 export default Vue.extend({

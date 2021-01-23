@@ -3,9 +3,11 @@ import {
   GetterTree,
   MutationTree,
 } from 'vuex';
-import { Language } from '@/types/index';
-import { Framework } from '@/types/index';
-import { Skill } from '@/types/index';
+import { 
+  Language,
+  Framework,
+  Skill
+} from '@/types/index';
 
 interface State {
   freeWord: string;

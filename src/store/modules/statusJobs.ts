@@ -4,9 +4,12 @@ import {
   MutationTree,
 } from 'vuex';
 import axios from 'axios'
-import { ManageJob, FetchManageJobs } from '@/types/manage'
+import { ManageJob } from '@/types/index'
+import { 
+  FetchManageJobs,
+  FetchJobs,
+} from '@/types/fetch';
 import { API_URL, m } from '@/master'
-import { FetchJobs } from '@/types/job';
 
 interface State {
   jobsManageNum: number;
@@ -54,9 +57,7 @@ const actions: ActionTree<State, GetStatus> = {
       if(!userObject) {
         return 
       }
-      console.log(userObject)
       const responseManage = await axios.get<FetchManageJobs>(`${API_URL}/jobs?user_id=${userObject.userId}`)
-      console.log(responseManage.data)
       commit('getJobsManageNum', responseManage.data.response.length)
       const responseFavorite = await axios.get<FetchJobs>(`${API_URL}/favorite_jobs?user_id=${userObject.userId}`)
       commit('getJobsFavoriteNum', responseFavorite.data.response.length)

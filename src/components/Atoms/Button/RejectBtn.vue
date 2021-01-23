@@ -2,7 +2,7 @@
 import { defineComponent } from '@vue/composition-api';
 import axios from 'axios';
 import { m, API_URL } from '@/master'
-import { RejectParams } from '@/types/manage';
+import { RejectParams } from '@/types/params';
 
 export default defineComponent({ 
   props: {

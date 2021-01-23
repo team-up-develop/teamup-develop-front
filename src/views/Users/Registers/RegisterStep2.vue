@@ -4,7 +4,11 @@ import { API_URL } from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select'
 // import 'vue-select/dist/vue-select.css';
-import { Language, Framework, Skill } from '@/types/index';
+import { 
+  Language,
+  Framework,
+  Skill,
+} from '@/types/index';
 
 type DataType = {
   selectedLang: []; 

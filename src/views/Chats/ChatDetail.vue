@@ -12,7 +12,7 @@ import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import ChatGroups from '@/components/Organisms/Chats/ChatGroups.vue'
 import SendMessage from '@/components/Organisms/Chats/SendMessage.vue'
-import { Message } from '@/types/chat'
+import { Message } from '@/types/index'
 import {
   m, 
   API_URL, 

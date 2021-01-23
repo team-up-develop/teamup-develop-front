@@ -7,7 +7,7 @@ import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import SkillUser from '@/components/Organisms/Users/SkillUser.vue'
 import IntroduceUser from '@/components/Organisms/Users/IntroduceUser.vue'
 // import Logout from '@/components/button/Logout'
-import { User } from '@/types/user';
+import { User } from '@/types/index';
 
 type DataType = {
   myselfFlag: boolean;

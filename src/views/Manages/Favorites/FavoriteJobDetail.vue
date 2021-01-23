@@ -13,10 +13,11 @@ import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
 import SkillJob from '@/components/Organisms/Jobs/JobDetails/SkillJob.vue'
 import DetailJob from '@/components/Organisms/Jobs/JobDetails/DetailJob.vue'
 import BtnArea from '@/components/Organisms/Jobs/JobDetails/BtnArea.vue'
-import { Job } from '@/types/job';
-
+// import { Job } from '@/types/job';
+import { FavoriteJob } from '@/types/index';
+import { FetchFavoriteJob } from '@/types/fetch';
 type State = {
-  job: any; //TODO: Any
+  job: FavoriteJob | {}; //TODO: Any
   userId: number;
   loading: boolean;
 }
@@ -44,10 +45,10 @@ export default defineComponent({
     // * 詳細画面情報を取得
     const getJobDetail = async () => {
       try { 
-        const res = await axios.get<Job>(`${API_URL}/job/${props.id}/`)
+        const res = await axios.get<FetchFavoriteJob>(`${API_URL}/job/${props.id}`)
         setTimeout(() => {
           state.loading = false;
-          state.job = res.data
+          state.job = res.data.response
         }, 1000)
       } catch (error) {
         console.log(error)

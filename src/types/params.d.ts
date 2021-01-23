@@ -1,34 +1,3 @@
-import { User } from '@/types/user';
-import { Language } from '@/types/index';
-import { Framework } from '@/types/index';
-import { Skill } from '@/types/index';
-
-// * 案件
-export type Job = {
-  created_at: Date;
-  deleted_at: null | Date;
-  dev_end_date: Date;
-  dev_start_date: Date;
-  id: number;
-  job_description: string | null;
-  job_status_id: number; //TODO: あってる？
-  job_title: string;
-  programing_framework_responses: Framework[];
-  programing_language_responses: Language[];
-  skill_responses: Skill[];
-  // publicationPeriod: Date;
-  recruitment_numbers: number;
-  updated_at: Date;
-  // useMenter?: boolean;
-  user: User;
-  user_id: number;
-} | {};
-
-export type FetchJobs = {
-  msg: string;
-  response: Job[]
-  status: string;
-}
 // * 案件作成時 session1 ここは API通信しないので キャメルケース
 export interface JobCreateParamsFirst {
   jobTitle: string | null;  //? タイトル
@@ -59,4 +28,29 @@ export interface ApplyParams {
 export interface FavoriteParams {
   job_id: number;
   user_id: number;
+}
+
+export interface ParticipateParams {
+  jobId: number;
+  userId: number;
+  applyStatusId: 2;
+}
+
+export interface RejectParams {
+  jobId: number;
+  userId: number;
+  applyStatusId: 3;
+}
+
+export interface RegisterSessionParams {
+  userName: string;
+  nickName: string;
+  userBirthday: string;
+  learningStartDate: string;
+}
+
+export interface messageParams {
+  message: string;
+  userID: number;
+  jobID: number;
 }

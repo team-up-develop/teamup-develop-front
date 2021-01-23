@@ -7,7 +7,7 @@ import {
   computed
 } from '@vue/composition-api';
 import axios from 'axios';
-import { ManageJob } from '@/types/manage';
+import { ManageJob } from '@/types/index';
 import { m, API_URL } from '@/master'
 import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
 import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'

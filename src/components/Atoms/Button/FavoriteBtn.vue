@@ -5,7 +5,7 @@ import {
   catchError
 } from '@/master'
 import axios from 'axios'
-import { FavoriteParams } from '@/types/job';
+import { FavoriteParams } from '@/types/params';
 
 type DataType = {
   userId: number;

@@ -2,7 +2,7 @@
 import { defineComponent } from '@vue/composition-api';
 import axios from 'axios';
 import { m, API_URL } from '@/master'
-import { ParticipateParams } from '@/types/manage';
+import { ParticipateParams } from '@/types/params';
 
 export default defineComponent({ 
   props: {

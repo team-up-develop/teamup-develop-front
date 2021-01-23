@@ -10,7 +10,8 @@ import { API_URL } from '@/master'
 import axios from 'axios'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
-import { Job } from '@/types/job';
+import { Job } from '@/types/index';
+import { FetchJobs } from '@/types/fetch';
 import Vuex from '@/store/index'
 
 type State = {
@@ -41,8 +42,8 @@ export default defineComponent({
 
     const getFavoriteJobs = async () => {
       try { 
-        const res = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
-        state.favoriteJobs = res.data
+        const res = await axios.get<FetchJobs>(`${API_URL}/favorite_jobs?user_id=${state.userId}`)
+        state.favoriteJobs = res.data.response
       } catch (error) {
         console.log(error)
       }
@@ -80,7 +81,7 @@ export default defineComponent({
           </v-row>
           <v-col>
             <router-link 
-              :to="`/manage/favorite_job/${ jobs.jobId }`" 
+              :to="`/manage/favorite_job/${ jobs.job_id }`" 
               v-for="jobs in favoriteJobs" 
               :key="jobs.id" 
               class="jobs"

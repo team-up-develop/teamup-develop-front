@@ -9,7 +9,7 @@ import JobTitleInput from '@/components/Atoms/Forms/JobTitleInput.vue'
 import DatePicker from '@/components/Atoms/Forms/DatePicker.vue'
 import JobDescriptionInput from '@/components/Atoms/Forms/JobDescriptionInput.vue'
 import Session from '@/components/Atoms/Commons/Session.vue'
-import { JobCreateParamsFirst } from '@/types/job';
+import { JobCreateParamsFirst } from '@/types/params';
 
 export type JobCreateSession1 = {
   jobTitle: string | null;

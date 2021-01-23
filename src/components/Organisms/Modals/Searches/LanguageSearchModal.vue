@@ -2,8 +2,11 @@
 import Vue from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
-import { Language, FetchLanguages } from '@/types/index';
-import { Job } from '@/types/job';
+import { 
+  Job,
+  Language,
+} from '@/types/index';
+import { FetchLanguages } from '@/types/fetch';
 
 type DateType = {
   languages: Language[];

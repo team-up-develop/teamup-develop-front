@@ -8,12 +8,14 @@ import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import HeaderArea from '@/components/Organisms/TopPage/HeaderArea.vue'
 import { 
   Language,
-  FetchLanguages,
   Framework,
-  FetchFrameworks,
   Skill,
-  FetchSkills
 } from '@/types/index';
+import {
+  FetchLanguages, 
+  FetchFrameworks, 
+  FetchSkills,
+} from '@/types/fetch';
 
 type DataType = {
   languages: Language[];

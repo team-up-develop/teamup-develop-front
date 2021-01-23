@@ -5,8 +5,8 @@ import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
 import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 import StatusChangeBtnArea from '@/components/Organisms/Manages/StatusChangeBtnArea.vue'
-import { ManageJob } from '@/types/manage';
-import { User } from '@/types/user';
+import { ManageJob } from '@/types/index';
+import { User } from '@/types/index';
 import { API_URL, truncate } from '@/master'
 // import Logout from '@/components/button/Logout'
 

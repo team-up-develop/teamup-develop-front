@@ -22,7 +22,8 @@ import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearch
 import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
 import JobStatusNew from '@/components/Atoms/Jobs/JobStatusNew.vue'
 import { dayJs, truncate } from '@/master';
-import { Job, FetchJobs } from '@/types/job';
+import { Job } from '@/types/index';
+import { FetchJobs } from '@/types/fetch';
 import Vuex from '@/store/index'
 
 type State = {

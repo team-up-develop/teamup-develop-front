@@ -4,9 +4,11 @@ import { API_URL } from '@/master'
 import axios from 'axios';
 import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
-import { ManageJob } from '@/types/manage';
+import { 
+  ManageJob,
+  User,
+} from '@/types/index';
 import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
-import { User } from '@/types/user';
 // import Logout from '@/components/button/Logout'
 
 type DataType = {

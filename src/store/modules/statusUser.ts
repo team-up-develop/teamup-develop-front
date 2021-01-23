@@ -4,7 +4,7 @@ import {
   MutationTree,
 } from 'vuex';
 import axios from 'axios'
-import { ManageJob } from '@/types/manage'
+import { ManageJob } from '@/types/index'
 import { API_URL, m } from '@/master'
 
 interface State {

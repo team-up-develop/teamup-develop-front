@@ -3,7 +3,7 @@ import Vue, { PropType } from 'vue';
 import { API_URL } from '@/master'
 import axios from 'axios'
 import CompliteModal from '@/components/Organisms/Modals/Applications/CompliteModal.vue'
-import { ApplyParams } from '@/types/job';
+import { ApplyParams } from '@/types/params';
 
 type DataType = {
   userId: number;

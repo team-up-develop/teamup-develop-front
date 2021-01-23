@@ -7,10 +7,18 @@ import {
   computed
 } from '@vue/composition-api';
 import axios from 'axios'
-import { Job } from '@/types/job';
-import { m, dayJs, API_URL, truncate } from '@/master'
-import { ManageJob, FetchManageJobs } from '@/types/manage';
-import { FetchJobs } from '@/types/job';
+import { Job } from '@/types/index';
+import { ManageJob } from '@/types/index';
+import { 
+  m,
+  dayJs,
+  API_URL,
+  truncate,
+} from '@/master'
+import { 
+  FetchJobs,
+  FetchManageJobs
+} from '@/types/fetch';
 
 type State = {
   chatGroups: Job[];

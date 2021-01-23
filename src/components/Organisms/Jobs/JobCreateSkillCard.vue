@@ -8,15 +8,17 @@ import axios from 'axios'
 import vSelect from 'vue-select'
 import "vue-select/dist/vue-select.css"
 import Session from '@/components/Atoms/Commons/Session.vue'
-import { JobCreateParamsSecond } from '@/types/job';
+import { JobCreateParamsSecond } from '@/types/params';
 import { 
   Language,
   Framework,
   Skill, 
+} from '@/types/index';
+import {
   FetchLanguages, 
   FetchFrameworks, 
   FetchSkills,
-} from '@/types/index';
+} from '@/types/fetch';
 
 type State = {
   selectedLang: number[];

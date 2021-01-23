@@ -10,7 +10,7 @@ import axios from 'axios'
 import {
   API_URL, 
 } from '@/master'
-import { messageParams } from '@/types/chat'
+import { messageParams } from '@/types/params'
 
 type State = {
   userId: number;

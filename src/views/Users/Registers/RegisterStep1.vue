@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from 'vue';
-import { RegisterSessionParams } from '@/types/user';
+import { RegisterSessionParams } from '@/types/params';
 
 type DataType = {
   userName: string;

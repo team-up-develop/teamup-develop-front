@@ -5,8 +5,11 @@ import {
   catchError
 } from '@/master'
 import axios from 'axios'
-import { Framework, FetchFrameworks } from '@/types/index';
-import { Job } from '@/types/job';
+import { 
+  Job,
+  Framework,
+} from '@/types/index';
+import { FetchFrameworks } from '@/types/fetch';
 
 type DateType = {
   frameworks: Framework[];

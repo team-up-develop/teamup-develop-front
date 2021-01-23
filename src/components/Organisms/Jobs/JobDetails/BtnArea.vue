@@ -12,7 +12,7 @@ import {
   API_URL,
   catchError
 } from '@/master'
-import { FetchManageJobs } from '@/types/manage';
+import { FetchManageJobs } from '@/types/fetch';
 import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
 import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
 import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
