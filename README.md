@@ -64,10 +64,9 @@ Atomic Design 導入
 拒否: reject
 チャット: chat
 お気に入り いいね: favorite
-
 ```
 
-## style & javaScript ※この辺は今後linter で設定します🙇‍♂️
+## style & javaScript ※ここは今後linterにて設定します🙇‍♂️
 - JavaScript キャメルケース推奨
 - インデントは半角スペース2つ分で揃え、タブは混ぜないこと
 - 固有名詞などを除いて大文字は使用を控えること
