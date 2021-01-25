@@ -13,7 +13,11 @@ import SkillUser from '@/components/Organisms/Users/SkillUser.vue'
 import IntroduceUser from '@/components/Organisms/Users/IntroduceUser.vue'
 import StatusChangeBtnArea from '@/components/Organisms/Manages/StatusChangeBtnArea.vue'
 import { User } from '@/types/index';
-import { API_URL, truncate } from '@/master'
+import { 
+  API_URL, 
+  truncate, 
+  catchError, 
+} from '@/master'
 // import Logout from '@/components/button/Logout'
 
 type State = {
@@ -60,17 +64,15 @@ export default defineComponent({
         setTimeout(async() => {
           const res = await axios.get(`${API_URL}/user/${props.id}`)
           state.loading = false;
-          state.userInfo = res.data;
+          state.userInfo = res.data.response;
         }, 700)
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     }
     getUser();
 
     const getJobTitle = async () => {
       const res = await axios.get(`${API_URL}/job/${ props.jobId }`)
-      state.jobTitle = res.data.jobTitle
+      state.jobTitle = res.data.response.job_title
     }
 
     onMounted(() => {

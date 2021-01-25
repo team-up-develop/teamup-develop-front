@@ -40,7 +40,8 @@ export default Vue.extend({
   },
   async created() {
     try {
-      const res = await axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+      const res = await axios
+        .get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
       this.frameworks = res.data.response
     } catch (error) { catchError(error) }
   },

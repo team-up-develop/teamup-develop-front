@@ -14,6 +14,7 @@ import {
   dayJs,
   API_URL,
   truncate,
+  catchError,
 } from '@/master'
 import { 
   FetchJobs,
@@ -21,7 +22,7 @@ import {
 } from '@/types/fetch';
 
 type State = {
-  chatGroups: Job[];
+  chatGroups: Job[] | {};
   myselfJobs: any;
   isActive: boolean;
   hasError: boolean;
@@ -50,23 +51,22 @@ export default defineComponent({
         const array: ManageJob[] = [];
         for(let i = 0; i < res.data.response.length; i++) {
           const applyData: ManageJob = res.data.response[i]
-          if(applyData.apply_status_id == m.APPLY_STATUS_PARTICIPATE || applyData.apply_status_id  == m.APPLY_STATUS_SELF ) {
+          if(
+            applyData.apply_status_id == m.APPLY_STATUS_PARTICIPATE || 
+            applyData.apply_status_id  == m.APPLY_STATUS_SELF 
+          ) {
             array.push(applyData)
             state.chatGroups = array
           }
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     const getMyselfGroupes = async () => {
       try {
         const res = await axios.get<FetchJobs>(`${API_URL}/jobs?user_id=${ props.userId }`)
         state.myselfJobs = res.data.response
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     onMounted(() => {

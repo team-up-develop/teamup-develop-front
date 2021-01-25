@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios';
 
 type DataType = {
@@ -58,9 +61,7 @@ export default Vue.extend({
         this.$emit('compliteEdit')
         return res
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(error => { catchError(error) })
     },
   }
 });

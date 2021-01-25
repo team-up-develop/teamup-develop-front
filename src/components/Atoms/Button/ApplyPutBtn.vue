@@ -1,7 +1,11 @@
 <script lang="ts">
 import { defineComponent } from '@vue/composition-api';
 import axios from 'axios';
-import { m, API_URL } from '@/master'
+import { 
+  m,
+  API_URL,
+  catchError,
+} from '@/master'
 import { ParticipateParams } from '@/types/params';
 
 export default defineComponent({ 
@@ -19,9 +23,7 @@ export default defineComponent({
       try { 
         await axios.put(`${API_URL}/apply_job/`, params)
         context.emit("participate", m.APPLY_STATUS_PARTICIPATE);
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
     return {
       applyUserPut

@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL, 
+  catchError,
+} from '@/master'
 import axios from 'axios'
 // import TopPageRecommendJobCard from '@/components/common/topPage/TopPageRecommendJobCard.vue'
 // import TopPageNewJobCard from '@/components/Organisms/TopPage/TopPageNewJobCard.vue'
@@ -55,25 +58,19 @@ export default Vue.extend({
         // .slice(5)
         this.languages = res.data.response
       })
-      .catch(error =>{
-        console.log(error)
-      })
+      .catch(error =>{ catchError(error) })
       // * フレームワーク
       axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
       .then(res => {
         this.framworks = res.data.response
       })
-      .catch(error =>{
-        console.log(error)
-      })
+      .catch(error =>{ catchError(error) })
       // * その他スキル
       axios.get<FetchSkills>(`${API_URL}/skills`)
       .then(res => {
         this.skills = res.data.response
       })
-      .catch(error =>{
-        console.log(error)
-      })
+      .catch(error =>{ catchError(error) })
     }, 3000)
   },
   methods: {

@@ -6,7 +6,10 @@ import {
   onMounted,
   computed
 } from '@vue/composition-api';
-import { API_URL } from '@/master'
+import { 
+  API_URL, 
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import UserCard from '@/components/Organisms/Manages/UserCard.vue'
 import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
@@ -42,11 +45,10 @@ export default defineComponent({
 
     const getFavoriteJobs = async () => {
       try { 
-        const res = await axios.get<FetchJobs>(`${API_URL}/favorite_jobs?user_id=${state.userId}`)
+        const res = await axios
+          .get<FetchJobs>(`${API_URL}/favorite_jobs?user_id=${state.userId}`)
         state.favoriteJobs = res.data.response
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     onMounted(() => {

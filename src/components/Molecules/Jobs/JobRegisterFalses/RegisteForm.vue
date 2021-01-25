@@ -4,7 +4,10 @@ import {
   reactive,
   toRefs,
 } from '@vue/composition-api';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import Email from '@/components/Atoms/Forms/Email.vue'
 import Password from '@/components/Atoms/Forms/Password.vue'
@@ -37,9 +40,7 @@ export default defineComponent({
         console.log(res)
         state.LoginName = "";
         state.LoginPassword = "";
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     }
 
     return {

@@ -9,6 +9,7 @@ import Vuex from '@/store/index'
 import axios from 'axios'
 import {
   API_URL, 
+  catchError,
 } from '@/master'
 import { messageParams } from '@/types/params'
 
@@ -48,9 +49,7 @@ export default defineComponent({
       try {
         // ? 投稿
         await axios.post<messageParams>(`${API_URL}/chat_message`, params)
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
       state.chatMessage = "" ;
     };
 

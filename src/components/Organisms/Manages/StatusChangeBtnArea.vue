@@ -7,7 +7,11 @@ import {
   computed
 } from '@vue/composition-api';
 import axios from 'axios';
-import { m, API_URL } from '@/master'
+import { 
+  m,
+  API_URL,
+  catchError,
+} from '@/master'
 import StatusChangeBtnArea from '@/components/Molecules/Manages/StatusChangeBtnArea.vue'
 
 type State = {
@@ -52,11 +56,15 @@ export default defineComponent({
     // * 表示中のユーザーのステータスを格納
     const getStatus = async () => {
       try { 
-        const res = await axios.get(`${API_URL}/apply_job/?job_id=${ props.jobId }&user_id=${ props.id }`)
-        state.statusId = res.data[0].applyStatusId
-      } catch (error) {
-        console.log(error)
-      }
+        const res = await axios
+          .get(`
+            ${API_URL}/apply_jobs?
+              job_id=${ props.jobId }&
+              user_id=${ props.id }
+            `
+          )
+        state.statusId = res.data.response[0].apply_status_id
+      } catch (error) { catchError(error) }
     }
     getStatus();
 

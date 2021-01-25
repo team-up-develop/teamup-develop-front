@@ -4,7 +4,10 @@ import {
   MutationTree,
 } from 'vuex';
 import axios from 'axios';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError
+} from '@/master'
 import router from '@/router/index.ts';
 
 interface State {
@@ -55,7 +58,7 @@ const actions: ActionTree<State, LoginData> = {
       commit('loginUserName', res.data.response.login_name)
     } catch (error) {
       const errorFlag = true
-      console.log("ログイン失敗しました")
+      catchError(error)
       commit('loginError', errorFlag)
     }
   },

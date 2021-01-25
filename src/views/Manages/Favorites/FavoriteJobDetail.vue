@@ -5,7 +5,10 @@ import {
   toRefs,
   onMounted,
 } from '@vue/composition-api';
-import { API_URL } from '@/master'
+import { 
+  API_URL, 
+  catchError, 
+} from '@/master'
 import Vuex from '@/store/index'
 import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
@@ -45,14 +48,13 @@ export default defineComponent({
     // * 詳細画面情報を取得
     const getJobDetail = async () => {
       try { 
-        const res = await axios.get<FetchFavoriteJob>(`${API_URL}/job/${props.id}`)
+        const res = await axios
+          .get<FetchFavoriteJob>(`${API_URL}/job/${props.id}`)
         setTimeout(() => {
           state.loading = false;
           state.job = res.data.response
         }, 1000)
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     onMounted(() => {

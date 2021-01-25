@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import { FavoriteParams } from '@/types/params';
 
@@ -35,6 +38,7 @@ export default Vue.extend({
         this.flag = true
       }
     })
+    .catch(error => { catchError(error) })
   },
   methods: {
     // * 案件を保存する
@@ -48,9 +52,7 @@ export default Vue.extend({
         this.flag = false
         return res.data
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(error => { catchError(error) })
     },
     // * 案件を削除する
     deleteJob() {
@@ -63,9 +65,7 @@ export default Vue.extend({
         this.flag = true
         return res.data
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(error => { catchError(error) })
     },
   }
 });

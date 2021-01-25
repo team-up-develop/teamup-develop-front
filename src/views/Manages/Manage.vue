@@ -6,7 +6,10 @@ import {
   onMounted,
   computed
 } from '@vue/composition-api';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/index';
 import { FetchManageJobs } from '@/types/fetch';
@@ -42,11 +45,10 @@ export default defineComponent({
 
     const getManageJobs = async () => {
       try { 
-        const res = await axios.get<FetchManageJobs>(`${API_URL}/jobs?user_id=${state.userId}`) 
+        const res = await axios
+          .get<FetchManageJobs>(`${API_URL}/jobs?user_id=${state.userId}`) 
         state.manageJobs = res.data.response
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     onMounted(() => {

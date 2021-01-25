@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import CompliteModal from '@/components/Organisms/Modals/Applications/CompliteModal.vue'
 import { ApplyParams } from '@/types/params';
@@ -37,9 +40,7 @@ export default Vue.extend({
         this.$emit('compliteEntry');
         return res
       })
-      .catch(error =>{
-        console.log(error);
-      });
+      .catch(error =>{ catchError(error) });
     },
     openCompliteModal() {
       this.compliteModal = true;

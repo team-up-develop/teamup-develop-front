@@ -16,7 +16,8 @@ import { Message } from '@/types/index'
 import {
   m, 
   API_URL, 
-  truncate
+  truncate,
+  catchError,
 } from '@/master'
 
 type State = {
@@ -74,9 +75,7 @@ export default defineComponent({
         const res = await axios.get(`${API_URL}/job/${props.id}`)
         state.jobTitle = res.data.jobTitle
         state.clickJobId = res.data.id
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     }
     // * チャット内容を取得 setInterval
     const getChatMessage = async () => {
@@ -92,9 +91,7 @@ export default defineComponent({
             chatLength = state.chats.length
             scrollChat();
           }
-        } catch (error) {
-          console.log(error)
-        }
+        } catch (error) { catchError(error) }
       }, 1500)
     }
 

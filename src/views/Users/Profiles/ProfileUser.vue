@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue, { PropType } from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios';
 import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
@@ -50,9 +53,7 @@ export default Vue.extend({
         this.userInfo = res.data.response;
       // }, 1000)
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .catch(error => { catchError(error) })
   },
   methods: {
     // * モーダル
@@ -77,9 +78,7 @@ export default Vue.extend({
         this.userInfo = res.data;
         // }, 1000)
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(error => { catchError(error) })
     },
     editEmit() {
       this.openModal();

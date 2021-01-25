@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios';
 import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
 import PostUser from '@/components/Organisms/Users/PostUser.vue'
@@ -41,17 +44,13 @@ export default Vue.extend({
     .then(res => {
       this.manageJobs = res.data.response
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .catch(error => { catchError(error) })
     // * ユーザー情報取得
     axios.get(`${API_URL}/user/${this.id}`)
     .then(res => {
       this.userInfo = res.data.response;
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .catch(error => { catchError(error) })
   },
   methods: {
     // * モーダル
@@ -69,9 +68,7 @@ export default Vue.extend({
       .then(res => {
         this.userInfo = res.data;
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(error => { catchError(error) })
     },
     editEmit() {
       this.openModal();

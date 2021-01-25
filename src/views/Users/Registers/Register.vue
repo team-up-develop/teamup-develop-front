@@ -1,7 +1,10 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios'
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 
 type DataType = {
   LoginName: string;
@@ -40,9 +43,7 @@ export default Vue.extend({
         console.log(res);
         return this.$router.push('/register/sent_mail');
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(error => { catchError(error) })
       this.LoginName = "";
       this.LoginPassword = "";
     },

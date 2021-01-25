@@ -16,7 +16,7 @@ export type Job = {
   // useMenter?: boolean;
   user: User;
   user_id: number;
-} | {};
+};
 
 export type User = {
   bio: string;

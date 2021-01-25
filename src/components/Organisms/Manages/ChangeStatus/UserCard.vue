@@ -37,7 +37,7 @@ export default defineComponent({
           <div class="card__user__image"></div>
           <v-col>
             <div class="card__user__name">
-              {{ user.user.userName }}
+              {{ user.user.user_name }}
             </div>
             <div class="card__user__study">
               {{ day(user.user.learningStartDate, "YYYY年 M月 D日") }}

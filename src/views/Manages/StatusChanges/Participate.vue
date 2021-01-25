@@ -8,9 +8,14 @@ import {
 } from '@vue/composition-api';
 import axios from 'axios';
 import { ManageJob } from '@/types/index';
+import { FetchManageJobs } from '@/types/fetch';
 import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
 import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'
-import { m, API_URL } from '@/master'
+import { 
+  m,
+  API_URL, 
+  catchError, 
+} from '@/master'
 import Vuex from '@/store/index'
 
 type State = {
@@ -47,20 +52,22 @@ export default defineComponent({
 
     const getAssginUser = async () => {
       try { 
-        const res = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }`)
-        state.assginUsers = res.data
-      } catch (error) {
-        console.log(error)
-      }
+        const res = await axios
+          .get<FetchManageJobs>(`
+            ${API_URL}/apply_jobs?
+              job_id=${ props.id }&
+              apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }
+            `
+          )
+        state.assginUsers = res.data.response
+      } catch (error) { catchError(error) }
     };
 
     const getJobTitle = async () => {
       try { 
         const res = await axios.get<any>(`${API_URL}/job/${ props.id }`)
-        state.jobTitle = res.data.jobTitle
-      } catch (error) {
-        console.log(error)
-      }
+        state.jobTitle = res.data.response.job_title
+      } catch (error) { catchError(error) }
     };
 
     onMounted(() => {
@@ -100,7 +107,7 @@ export default defineComponent({
           </v-row>
           <v-col>
             <router-link 
-              :to="`/manage/profile/${ id }/${ user.userId }`" 
+              :to="`/manage/profile/${ id }/${ user.user_id }`" 
               v-for="user in assginUsers" 
               :key="user.id"
               class="users"

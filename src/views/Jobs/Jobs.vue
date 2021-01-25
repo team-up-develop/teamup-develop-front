@@ -485,7 +485,7 @@ export default defineComponent({
           <div v-if="entryRedirect == false">
             <div class="top-job-detail-bottom" v-if="selfJobPost === false">
               <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
-              <div class="btn-box-apply-false" v-if="applyFlug === false">
+              <div class="btn-box-apply-false" v-if="!applyFlug">
                 応募済み
               </div>
               <div class="btn-box-save">
@@ -524,7 +524,7 @@ export default defineComponent({
           <div class="tag-area">
             投稿者
           </div>
-          <router-link :to="`/account/profile/${ jobDetail.userId }`"> 
+          <router-link :to="`/account/profile/${ jobDetail.user_id }`"> 
             <div class="post-user-name-area">
               {{ jobDetail.user.user_name }}
             </div>

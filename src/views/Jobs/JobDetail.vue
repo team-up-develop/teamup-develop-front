@@ -6,7 +6,10 @@ import {
   onMounted,
 } from '@vue/composition-api';
 import Vuex from '@/store/index'
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
 import PostUser from '@/components/Organisms/Jobs/JobDetails/PostUser.vue'
@@ -49,9 +52,7 @@ export default defineComponent({
           state.loading = false;
           state.job = res.data.response
         }, 1000)
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
     getJobDetail();
 

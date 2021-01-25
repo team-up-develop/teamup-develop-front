@@ -45,7 +45,7 @@ export default defineComponent({
         <div class="user-profile-area">
           <div class="user-name-are">
             <div class="user-name-tag">名前</div>
-            <router-link :to="`/account/profile/${ job.userId }`"> 
+            <router-link :to="`/account/profile/${ job.user_id }`"> 
               <div class="user-name">
                 {{ job.user.user_name }} 
               </div>
@@ -86,6 +86,9 @@ export default defineComponent({
   @media screen and (max-width: 500px) {
     padding: 2.5rem 1rem;
   }
+  @media screen and (max-width: 768px) {
+    padding: 2rem;
+  }
 
   .left-user-area {
     width: 20%;
@@ -111,10 +114,26 @@ export default defineComponent({
     padding: 1.8rem 2rem 0 2rem;
     text-align: left;
 
+    @media screen and (max-width: 1100px) {
+      width: 70%;
+    }
+    @media screen and (max-width: 500px) {
+      padding: 1.8rem 1.2rem 0px;
+    }
+    @media screen and (max-width: 450px) {
+      width: 64%;
+    }
+
     .user-profile-area {
       width: 65%;
       height: 100%;
       display: inline-block;
+
+      @media screen and (max-width: 1200px) {
+        width: 65%;
+        height: 100%;
+        display: inline-block;
+      }
 
       .user-name-are {
         width: 45%;
@@ -146,6 +165,10 @@ export default defineComponent({
 
       .user-introduce-area {
         margin-top: 2rem;
+
+        @media screen and (max-width: 500px) {
+          margin-top: 0.5rem;
+        }
 
         .introduce-tag {
           font-weight: bold;
@@ -197,42 +220,4 @@ export default defineComponent({
   }
 }
 
-@media screen and (max-width: 1200px) {
-  .post-user-area{
-    .right-user-area {
-      .user-profile-area {
-        width: 65%;
-        height: 100%;
-        display: inline-block;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .post-user-area {
-    padding: 2rem;
-
-    .right-user-area {
-      width: 70%;
-    }
-  }
-}
-
-//* スマホレスポンシブ 
-@media screen and (max-width: 500px) {
-  .post-user-area {
-    .right-user-area{
-      padding: 1.8rem 1.2rem 0px;
-      .user-profile-area
-      .user-introduce-area {
-        margin-top: 0.5rem;
-      }
-
-      .user-url-area {
-        padding: 1rem 0 0 0.5rem;
-      }
-    }
-  }
-}
 </style>

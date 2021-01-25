@@ -25,7 +25,8 @@ export default Vue.extend({
   async created() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
     try {
-      const res = await axios.get(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
+      const res = await axios
+        .get(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
       const array = []
       for(let i = 0; i < res.data.response.length; i++){
         const likeData = res.data.response[i]
@@ -43,7 +44,8 @@ export default Vue.extend({
         user_id: this.userId
       };
       try {
-        await axios.post<FavoriteParams>(`${API_URL}/favorite_job`, params)
+        await axios
+          .post<FavoriteParams>(`${API_URL}/favorite_job`, params)
         this.flag = false
       } catch (error) { catchError(error) }
     },
@@ -54,7 +56,8 @@ export default Vue.extend({
         user_id: this.userId
       };
       try {
-        await axios.delete<FavoriteParams>(`${API_URL}/favorite_job`, { data: params })
+        await axios
+          .delete<FavoriteParams>(`${API_URL}/favorite_job`, { data: params })
         this.flag = true
       } catch (error) { catchError(error) }
     },

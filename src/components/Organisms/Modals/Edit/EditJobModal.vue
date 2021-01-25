@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL, 
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select';
 // import 'vue-select/dist/vue-select.css';
@@ -75,13 +78,10 @@ export default Vue.extend({
         programingLanguage: languageArray,
       }
       axios.put(`${API_URL}/job/${this.jobId}`, params)
-      .then(res => {
-        console.log(res)
+      .then(res => { catchError(res)
         // this.$emit('compliteAssgin', this.message)
       })
-      .catch(error => {
-        console.log(error)
-      })
+      .catch(error => { catchError(error) })
     }
   }
 });

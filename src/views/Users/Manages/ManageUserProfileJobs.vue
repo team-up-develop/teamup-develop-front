@@ -7,7 +7,11 @@ import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
 import StatusChangeBtnArea from '@/components/Organisms/Manages/StatusChangeBtnArea.vue'
 import { ManageJob } from '@/types/index';
 import { User } from '@/types/index';
-import { API_URL, truncate } from '@/master'
+import { 
+  API_URL, 
+  truncate, 
+  catchError, 
+} from '@/master'
 // import Logout from '@/components/button/Logout'
 
 type DataType = {
@@ -53,27 +57,21 @@ export default Vue.extend({
         this.userInfo = res.data;
       }, 1000)
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .catch(error => { catchError(error) })
 
     // *  案件タイトル取得
     axios.get(`${API_URL}/job/${ this.jobId }`)
     .then(res => {
       this.jobTitle = res.data.jobTitle
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .catch(error => { catchError(error) })
 
     // *詳細を見ているユーザーの投稿案件
     axios.get(`${API_URL}/job/?user_id=${this.id}`)
     .then(res => {
       this.manageJobs = res.data
     })
-    .catch(error => {
-      console.log(error)
-    })
+    .catch(error => { catchError(error) })
   },
   methods: {
     limit(value: string, num: number) {

@@ -1,6 +1,9 @@
 <script lang="ts">
 import Vue from 'vue';
-import { API_URL } from '@/master'
+import { 
+  API_URL,
+  catchError,
+} from '@/master'
 import axios from 'axios'
 import vSelect from 'vue-select'
 // import 'vue-select/dist/vue-select.css';
@@ -39,25 +42,19 @@ export default Vue.extend({
     .then(res => {
       this.languages = res.data
     })
-    .catch(error =>{
-      console.log(error)
-    })
+    .catch(error =>{ catchError(error) })
     // * フレームワーク
     axios.get<Framework[]>(`${API_URL}/programing_framework`)
     .then(res => {
       this.framworks = res.data
     })
-    .catch(error =>{
-      console.log(error)
-    })
+    .catch(error =>{ catchError(error) })
     // * その他スキル
     axios.get<Skill[]>(`${API_URL}/skill`)
     .then(res => {
       this.skills = res.data
     })
-    .catch(error =>{
-      console.log(error)
-    })
+    .catch(error =>{ catchError(error) })
   },
   methods: {
     nextStep3() {

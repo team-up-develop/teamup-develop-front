@@ -9,7 +9,11 @@ import {
   FetchManageJobs,
   FetchJobs,
 } from '@/types/fetch';
-import { API_URL, m } from '@/master'
+import { 
+  API_URL,
+  m,
+  catchError
+} from '@/master'
 
 interface State {
   jobsManageNum: number;
@@ -73,9 +77,7 @@ const actions: ActionTree<State, GetStatus> = {
         }
       }
       commit('getJobsApplyNum', applyNumber.length)
-    } catch (error) {
-      console.log(error)
-    }
+    } catch (error) { catchError(error) }
   },
 }
 

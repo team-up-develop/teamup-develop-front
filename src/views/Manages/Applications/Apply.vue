@@ -6,7 +6,11 @@ import {
   onMounted,
   computed
 } from '@vue/composition-api';
-import { API_URL, m } from '@/master'
+import { 
+  API_URL,
+  m,
+  catchError
+} from '@/master'
 import axios from 'axios'
 import { ManageJob } from '@/types/index';
 import { FetchManageJobs } from '@/types/fetch';
@@ -43,16 +47,18 @@ export default defineComponent({
     const getApplyJobs = async () => {
       if(!state.userId) { return }
       try {
-        const res = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
+        const res = await axios
+          .get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
         for(let i = 0; i < res.data.response.length; i++) {
           const applyJobCorrect: ManageJob = res.data.response[i];
-          if( applyJobCorrect.apply_status_id === m.APPLY_STATUS_APPLY || applyJobCorrect.apply_status_id === m.APPLY_STATUS_PARTICIPATE ) {
+          if( 
+            applyJobCorrect.apply_status_id === m.APPLY_STATUS_APPLY ||
+            applyJobCorrect.apply_status_id === m.APPLY_STATUS_PARTICIPATE
+          ) {
             state.applyJob.push(applyJobCorrect);
           }
         }
-      } catch (error) {
-        console.log(error)
-      }
+      } catch (error) { catchError(error) }
     };
 
     onMounted(() => {
