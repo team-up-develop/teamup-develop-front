@@ -18,7 +18,7 @@ export default defineComponent({
         job_id: props.jobId,
         user_id: props.id,
         apply_status_id: m.APPLY_STATUS_PARTICIPATE,
-        // @ts-ignore
+        // @ts-ignore //FIXME: 処理見直し
         updated_at: props.updatedAt,
       };
       try {

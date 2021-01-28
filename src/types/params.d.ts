@@ -20,9 +20,9 @@ export interface JobCreateParamsSecond {
 }
 
 export interface ApplyParams {
-  jobId: number;
-  userId: number;
-  applyStatusId: number;
+  job_id: number;
+  user_id: number;
+  apply_status_id: number;
 }
 
 export interface FavoriteParams {
