@@ -1,17 +1,11 @@
 <script lang="ts">
-import Vue from 'vue';
-import { 
-  API_URL,
-  catchError,
-} from '@/master'
-import axios from 'axios';
-import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
-import PostUser from '@/components/Organisms/Users/PostUser.vue'
-import { 
-  ManageJob,
-  User,
-} from '@/types/index';
-import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
+import Vue from "vue";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
+import PostUser from "@/components/Organisms/Users/PostUser.vue";
+import { ManageJob, User } from "@/types/index";
+import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 // import Logout from '@/components/button/Logout'
 
 type DataType = {
@@ -20,11 +14,11 @@ type DataType = {
   userId: number;
   modal: boolean;
   manageJobs: ManageJob[];
-}
+};
 
 export default Vue.extend({
   props: {
-    id: Number
+    id: Number,
   },
   data(): DataType {
     return {
@@ -32,53 +26,62 @@ export default Vue.extend({
       userInfo: {},
       userId: this.$store.state.auth.userId,
       modal: false,
-      manageJobs: []
-    }
+      manageJobs: [],
+    };
   },
   created() {
-    if(this.userId == this.id) {
-      this.myselfFlag = true
+    if (this.userId == this.id) {
+      this.myselfFlag = true;
     }
     // * 投稿案件取得
-    axios.get(`${API_URL}/jobs?user_id=${this.id}`)
-    .then(res => {
-      this.manageJobs = res.data.response
-    })
-    .catch(error => { catchError(error) })
+    axios
+      .get(`${API_URL}/jobs?user_id=${this.id}`)
+      .then((res) => {
+        this.manageJobs = res.data.response;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
     // * ユーザー情報取得
-    axios.get(`${API_URL}/user/${this.id}`)
-    .then(res => {
-      this.userInfo = res.data.response;
-    })
-    .catch(error => { catchError(error) })
+    axios
+      .get(`${API_URL}/user/${this.id}`)
+      .then((res) => {
+        this.userInfo = res.data.response;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
   },
   methods: {
     // * モーダル
     openModal() {
-      this.modal = true
+      this.modal = true;
     },
     closeModal() {
-      this.modal = false
+      this.modal = false;
     },
     // * 編集完了 emit
     compliteEdit() {
       this.closeModal();
       // * ユーザー情報取得
-      axios.get(`${API_URL}/user/${this.id}`)
-      .then(res => {
-        this.userInfo = res.data;
-      })
-      .catch(error => { catchError(error) })
+      axios
+        .get(`${API_URL}/user/${this.id}`)
+        .then((res) => {
+          this.userInfo = res.data;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
     },
     editEmit() {
       this.openModal();
-    }
+    },
   },
   components: {
     ProfileEditModal,
     PostUser,
-    CardJob
-  }
+    CardJob,
+  },
 });
 </script>
 
@@ -86,54 +89,55 @@ export default Vue.extend({
   <section>
     <div class="detail-wrapper">
       <!-- 編集 モーダル画面 -->
-      <ProfileEditModal 
-        :userInfo="userInfo" 
+      <ProfileEditModal
+        :userInfo="userInfo"
         @close="closeModal"
-        @compliteEdit="compliteEdit()" 
+        @compliteEdit="compliteEdit()"
         v-if="modal"
       />
       <section class="user-area">
         <div class="user-area__post">
-          <PostUser 
-            :user="userInfo" 
-            @editEmit="editEmit()" 
-            :myselfFlag="myselfFlag" 
+          <PostUser
+            :user="userInfo"
+            @editEmit="editEmit()"
+            :myselfFlag="myselfFlag"
           />
           <v-row class="header">
-            <router-link :to="`/account/profile/${ id }`" class="router-link">
+            <router-link :to="`/account/profile/${id}`" class="router-link">
               <span>プロフィール</span>
             </router-link>
-            <router-link :to="`/account/profile/${ id }/jobs`" class="router-link-active-click">
-              <span>投稿案件</span> 
+            <router-link
+              :to="`/account/profile/${id}/jobs`"
+              class="router-link-active-click"
+            >
+              <span>投稿案件</span>
             </router-link>
           </v-row>
         </div>
       </section>
       <v-row class="jobs">
-        <router-link 
-          :to="`/jobs/${ jobs.id }`" 
-          v-for="jobs in manageJobs" 
-          :key="jobs.id" 
+        <router-link
+          :to="`/jobs/${jobs.id}`"
+          v-for="jobs in manageJobs"
+          :key="jobs.id"
           class="jobs__card"
         >
           <CardJob :job="jobs" />
         </router-link>
       </v-row>
-        <div class="button-area">
-          <div v-if="myselfFlag === true" class="button-action-area">
-            <button @click="openModal" class="btn-box-edit" >編集する</button>
-          </div>
-          <!-- 非ログイン時 リダイレクトさせる -->
-          <div class="button-action-area" v-else>
-          </div>
+      <div class="button-area">
+        <div v-if="myselfFlag === true" class="button-action-area">
+          <button @click="openModal" class="btn-box-edit">編集する</button>
         </div>
+        <!-- 非ログイン時 リダイレクトさせる -->
+        <div class="button-action-area" v-else></div>
+      </div>
     </div>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .detail-tag {
   text-align: left;
@@ -210,11 +214,10 @@ export default Vue.extend({
   }
 }
 
-//* スキル カード 
-.detail-wrapper 
-.skill {
+//* スキル カード
+.detail-wrapper .skill {
   width: 100%;
-  background-color: #F1F5F9;
+  background-color: #f1f5f9;
 
   &__card {
     width: 75%;
@@ -225,11 +228,10 @@ export default Vue.extend({
   }
 }
 
-//* 開発詳細 カード 
-.detail-wrapper 
-.pr {
+//* 開発詳細 カード
+.detail-wrapper .pr {
   width: 100%;
-  background-color: #F1F5F9;
+  background-color: #f1f5f9;
 
   &__card {
     width: 75%;
@@ -243,7 +245,6 @@ export default Vue.extend({
 .button-area {
   display: none;
 }
-
 
 /* タブレットレスポンシブ */
 @media screen and (max-width: 900px) {
@@ -278,13 +279,13 @@ export default Vue.extend({
     left: 0;
     bottom: 0;
 
-  //* 編集するボタン 
+    //* 編集するボタン
     .btn-box-edit {
       @include box-shadow-btn;
       background-color: $secondary-color;
       color: $white;
       padding: 1.2rem 8rem;
-      transition: .3s;
+      transition: 0.3s;
       border-radius: 50px;
       font-weight: 600;
       line-height: 1;

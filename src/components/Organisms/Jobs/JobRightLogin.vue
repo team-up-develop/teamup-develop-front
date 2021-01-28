@@ -1,12 +1,12 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
 export default Vue.extend({
   methods: {
     redirectJobCreate() {
-      this.$router.push('/job_create/1')
-    }
-  }
+      this.$router.push("/job_create/1");
+    },
+  },
 });
 </script>
 
@@ -14,10 +14,12 @@ export default Vue.extend({
   <section>
     <div class="card">
       <div class="content">
-        <img class="img"  src="@/assets/images/createJob.png" width="100%" />
+        <img class="img" src="@/assets/images/createJob.png" width="100%" />
         <p>自分が<span>開発したい環境</span>を設定して案件を作成しよう！</p>
         <div class="btn-area">
-          <button class="register-btn" @click="redirectJobCreate">案件を作成する</button>
+          <button class="register-btn" @click="redirectJobCreate">
+            案件を作成する
+          </button>
         </div>
       </div>
     </div>
@@ -25,7 +27,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .card {
   @include card-border-color;
@@ -63,7 +65,7 @@ export default Vue.extend({
         display: block;
         padding: 1.2rem 4rem;
         border-radius: 50px;
-        font-size: .875rem;
+        font-size: 0.875rem;
         font-weight: 700;
         color: $white;
         line-height: 1;
@@ -72,11 +74,10 @@ export default Vue.extend({
         margin: auto;
         font-size: 1rem;
         cursor: pointer;
-        transition: .3s;
+        transition: 0.3s;
         outline: none;
       }
     }
   }
 }
-
 </style>

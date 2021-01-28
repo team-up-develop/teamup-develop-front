@@ -1,30 +1,27 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-  computed
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
-import axios from 'axios'
-import { 
-  API_URL,
-  catchError
-} from '@/master'
-import { FetchManageJobs } from '@/types/fetch';
-import FavoriteDetailBtn from '@/components/Atoms/Button/FavoriteDetailBtn.vue'
-import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
-import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
-import EditJobModal from '@/components/Organisms/Modals/Edit/EditJobModal.vue'
+  computed,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
+import axios from "axios";
+import { API_URL, catchError } from "@/master";
+import { FetchManageJobs } from "@/types/fetch";
+import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
+import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
+import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
+import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
 
 type State = {
   userId: number;
-  selfJobPost: boolean; 
+  selfJobPost: boolean;
   applyFlug: boolean;
   modal: boolean;
   editModal: boolean;
-}
+};
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
@@ -34,66 +31,74 @@ const initialState = (): State => ({
   editModal: false,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     FavoriteDetailBtn,
     ApplyModal,
     Applybtn,
-    EditJobModal
+    EditJobModal,
   },
   props: {
     id: { type: Number, default: 0 },
-    job: { type: Object }
+    job: { type: Object },
   },
   setup: (props, context) => {
     const state = reactive<State>(initialState());
-    const router = context.root.$router
+    const router = context.root.$router;
 
     const isLogin = computed(() => {
-      if(state.userId) { return true }
-      return false
+      if (state.userId) {
+        return true;
+      }
+      return false;
     });
 
     // * 自分の案件か否かを判定
     const getCheckSelfJob = async () => {
-      try { 
-        const res = await axios
-          .get(`${API_URL}/jobs?user_id=${state.userId}`)
-        for(let i = 0; i < res.data.response.length; i++){
-          const selfJob = res.data.response[i]
-          if(selfJob.id === props.id){
-            state.selfJobPost = true
+      try {
+        const res = await axios.get(`${API_URL}/jobs?user_id=${state.userId}`);
+        for (let i = 0; i < res.data.response.length; i++) {
+          const selfJob = res.data.response[i];
+          if (selfJob.id === props.id) {
+            state.selfJobPost = true;
           }
         }
-      } catch (error) { catchError(error) }
+      } catch (error) {
+        catchError(error);
+      }
     };
 
     // * ログインユーザーが応募済みか応募済みではないかを判定する
     const getCheckStatus = async () => {
       try {
-        const res = await axios
-          .get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
-        const arrayApply: any = []
-        for(let c = 0; c < res.data.response.length; c++){
+        const res = await axios.get<FetchManageJobs>(
+          `${API_URL}/apply_jobs?user_id=${state.userId}`
+        );
+        const arrayApply: any = [];
+        for (let c = 0; c < res.data.response.length; c++) {
           const applyData: any = res.data.response[c];
-          arrayApply.push(applyData.job.id)
+          arrayApply.push(applyData.job.id);
         }
         if (arrayApply.includes(props.id)) {
-          state.applyFlug = false
+          state.applyFlug = false;
         }
-      } catch (error) { catchError(error) }
+      } catch (error) {
+        catchError(error);
+      }
     };
 
-    const openModal = () => state.modal = true;
-    const closeModal = () => state.modal = false;
+    const openModal = () => (state.modal = true);
+    const closeModal = () => (state.modal = false);
     const doSend = () => closeModal();
-    const openEditModal = () => state.editModal = true;
-    const closeEditModal = () => state.editModal = false;
+    const openEditModal = () => (state.editModal = true);
+    const closeEditModal = () => (state.editModal = false);
 
-    const registerRedirect = () => router.push('/register');
+    const registerRedirect = () => router.push("/register");
 
     onMounted(() => {
-      if(!state.userId) { return }
+      if (!state.userId) {
+        return;
+      }
       getCheckSelfJob();
       getCheckStatus();
     });
@@ -108,12 +113,11 @@ export default defineComponent({
       doSend,
       openEditModal,
       closeEditModal,
-      registerRedirect
-    }
-  }
+      registerRedirect,
+    };
+  },
 });
 </script>
-
 
 <template>
   <section class="wrap">
@@ -122,21 +126,23 @@ export default defineComponent({
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:footer>
-          <Applybtn :jobId='id' />
+          <Applybtn :jobId="id" />
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>
       </ApplyModal>
     </div>
     <!-- 編集 モーダル画面 -->
     <div class="example-modal-window">
-      <EditJobModal @close="closeEditModal" v-if="editModal" :job="job"/>
+      <EditJobModal @close="closeEditModal" v-if="editModal" :job="job" />
     </div>
     <div class="button-area" v-if="isLogin">
       <div v-if="!selfJobPost" class="button-area__action">
-        <button @click="openModal" class="apply" v-if="applyFlug">応募する</button>
+        <button @click="openModal" class="apply" v-if="applyFlug">
+          応募する
+        </button>
         <div class="apply-false" v-if="applyFlug == false">応募済み</div>
         <div class="favorite">
-          <FavoriteDetailBtn :jobId='id' />
+          <FavoriteDetailBtn :jobId="id" />
         </div>
       </div>
       <div v-if="selfJobPost">
@@ -155,9 +161,8 @@ export default defineComponent({
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 .wrap {
   width: 100%;
   display: flex;
@@ -174,7 +179,7 @@ export default defineComponent({
   color: $white;
 }
 
-//* ボタン エリア 
+//* ボタン エリア
 .button-area {
   width: 100%;
   display: flex;
@@ -211,7 +216,7 @@ export default defineComponent({
   }
 }
 
-//* 応募するボタン 
+//* 応募するボタン
 .apply {
   @include red-btn;
   @include neumorphism;
@@ -221,7 +226,7 @@ export default defineComponent({
   top: 0;
   width: 70%;
   padding: 1.2rem 4rem;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
@@ -252,7 +257,7 @@ export default defineComponent({
   top: 0;
   width: 70%;
   padding: 1.2rem 4rem;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
@@ -272,13 +277,13 @@ export default defineComponent({
   }
 }
 
-//* 編集するボタン 
+//* 編集するボタン
 .edit {
   @include box-shadow-btn;
   background-color: $secondary-color;
   color: $white;
   padding: 1.2rem 8rem;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
@@ -291,7 +296,7 @@ export default defineComponent({
   border: none;
   appearance: none;
   border: none;
-  transition: .3s;
+  transition: 0.3s;
   outline: none;
 
   &:hover {
@@ -321,7 +326,7 @@ export default defineComponent({
   border-radius: 5px / 5px;
 }
 
-// * モーダル内のキャンセルボタン 
+// * モーダル内のキャンセルボタン
 .modal-btn {
   @include neumorphismGrey;
   color: $red;
@@ -341,7 +346,7 @@ export default defineComponent({
   outline: none;
 }
 
-//* スマホレスポンシブ 
+//* スマホレスポンシブ
 @media screen and (max-width: 500px) {
   // * 編集する
   .edit {

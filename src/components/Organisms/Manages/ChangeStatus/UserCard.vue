@@ -1,31 +1,29 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { dayJs } from '@/master';
+import { defineComponent } from "@vue/composition-api";
+import { dayJs } from "@/master";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    user: { type: Object, default: null, require: true }
+    user: { type: Object, default: null, require: true },
   },
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);
 
     return {
       day,
-    }
-  }
+    };
+  },
 });
-
 </script>
 
 <template>
   <section>
     <v-sheet class="card">
       <v-row class="card__skill">
-        <div class="lang" 
-        >
+        <div class="lang">
           TypeScript
         </div>
-        <div class="fram" >
+        <div class="fram">
           Vue.js
         </div>
         <div class="skill">
@@ -54,13 +52,12 @@ export default defineComponent({
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 .card {
   position: relative;
   border-bottom: $card-border-color 1px solid;
-  padding: 0.7rem 0rem ;
+  padding: 0.7rem 0rem;
   text-align: left;
   text-decoration: none;
 

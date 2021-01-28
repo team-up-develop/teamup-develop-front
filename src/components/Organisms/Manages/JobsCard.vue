@@ -1,20 +1,19 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { dayJs, truncate } from '@/master'
+import { defineComponent } from "@vue/composition-api";
+import { dayJs, truncate } from "@/master";
 
-
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    job: { type: Object, require: true }
+    job: { type: Object, require: true },
   },
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
     return {
       day,
-      limit
-    }
-  }
+      limit,
+    };
+  },
 });
 </script>
 
@@ -22,41 +21,53 @@ export default defineComponent({
   <section>
     <v-sheet class="card">
       <v-row class="card__skill">
-        <div class="lang" 
-          v-for="(langage, index) in job.programing_language_responses.slice(0,3)" 
+        <div
+          class="lang"
+          v-for="(langage, index) in job.programing_language_responses.slice(
+            0,
+            3
+          )"
           :key="`langage-${index}`"
         >
           {{ langage.programing_language_name }}
         </div>
-        <div class="fram" 
-          v-for="(framework, index) in job.programing_framework_responses.slice(0,3)" 
+        <div
+          class="fram"
+          v-for="(framework, index) in job.programing_framework_responses.slice(
+            0,
+            3
+          )"
           :key="`framework-${index}`"
         >
-          {{ framework.programing_framework_name }} 
+          {{ framework.programing_framework_name }}
         </div>
-        <div class="skill" 
-          v-for="(skill, index) in job.skill_responses.slice(0,2)" 
+        <div
+          class="skill"
+          v-for="(skill, index) in job.skill_responses.slice(0, 2)"
           :key="`skill-${index}`"
         >
-          {{ skill.skill_name }} 
+          {{ skill.skill_name }}
         </div>
       </v-row>
       <div class="card__title">
         <span>{{ limit(job.job_title, 55) }}</span>
       </div>
       <div class="card__bottom">
-        <span>{{ day(job.dev_start_date, "YYYY年 M月 D日") }}  ~  {{ day(job.dev_end_date , "YYYY年 M月 D日")}}</span>
+        <span
+          >{{ day(job.dev_start_date, "YYYY年 M月 D日") }} ~
+          {{ day(job.dev_end_date, "YYYY年 M月 D日") }}</span
+        >
       </div>
     </v-sheet>
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 .card {
   position: relative;
   border-bottom: $card-border-color 1px solid;
-  padding: 0.7rem 0rem ;
+  padding: 0.7rem 0rem;
   text-align: left;
   text-decoration: none;
 

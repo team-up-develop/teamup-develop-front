@@ -1,44 +1,46 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-  computed
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import UserCard from '@/components/Organisms/Manages/UserCard.vue'
-import JobCreateCompleteCard from '@/components/Organisms/Jobs/JobCreateCompleteCard.vue'
+  computed,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import UserCard from "@/components/Organisms/Manages/UserCard.vue";
+import JobCreateCompleteCard from "@/components/Organisms/Jobs/JobCreateCompleteCard.vue";
 
 type State = {
   loading: boolean;
   userId: number;
-}
+};
 
 const initialState = (): State => ({
   loading: true,
   userId: Vuex.state.auth.userId,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     Loading,
     UserCard,
-    JobCreateCompleteCard
+    JobCreateCompleteCard,
   },
   setup: () => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) { return true }
-      return false
+      if (state.userId) {
+        return true;
+      }
+      return false;
     });
 
     const Loading = () => {
       setTimeout(() => {
         state.loading = false;
-      }, 1500)
+      }, 1500);
     };
 
     onMounted(() => {
@@ -48,9 +50,9 @@ export default defineComponent({
     return {
       ...toRefs(state),
       Loading,
-      isLogin
-    }
-  }
+      isLogin,
+    };
+  },
 });
 </script>
 
@@ -69,14 +71,12 @@ export default defineComponent({
         ログインが必要です
       </template>
     </v-container>
-    <Loading v-show="loading">
-    </Loading>
+    <Loading v-show="loading"> </Loading>
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
-
+@import "@/assets/scss/_variables.scss";
 
 .wrapper {
   width: 90%;
@@ -121,5 +121,3 @@ export default defineComponent({
   text-decoration: none;
 }
 </style>
-
-

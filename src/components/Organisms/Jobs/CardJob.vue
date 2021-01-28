@@ -1,16 +1,16 @@
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api';
-import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
-import { truncate, dayJs, m } from '@/master'
-import JobStatusNew from '@/components/Atoms/Jobs/JobStatusNew.vue'
+import { defineComponent, computed } from "@vue/composition-api";
+import CardJobSkill from "@/components/Atoms/Jobs/CardJobSkill.vue";
+import { truncate, dayJs, m } from "@/master";
+import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     CardJobSkill,
     JobStatusNew,
   },
   props: {
-    job: { type: Object, defalut: null, require: true }
+    job: { type: Object, defalut: null, require: true },
   },
   setup: (props: any) => {
     const day = (value: string, format: string) => dayJs(value, format);
@@ -18,9 +18,9 @@ export default defineComponent({
 
     const isStatusNew = computed(() => {
       if (props.job.job_status_id == m.JOB_STATUS_NEW) {
-        return true
+        return true;
       }
-      return false
+      return false;
     });
 
     return {
@@ -28,8 +28,8 @@ export default defineComponent({
       day,
       m: computed(() => m),
       isStatusNew,
-    }
-  }
+    };
+  },
 });
 </script>
 
@@ -49,7 +49,7 @@ export default defineComponent({
           開発期間:
         </div>
         <div class="product-start-end-time">
-          {{ day(job.dev_start_date , "YYYY年 M月 D日") }}  ~  
+          {{ day(job.dev_start_date, "YYYY年 M月 D日") }} ~
           {{ day(job.dev_end_date, "YYYY年 M月 D日") }}
         </div>
       </div>
@@ -68,9 +68,8 @@ export default defineComponent({
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .job-cards {
   width: 97%;
@@ -78,7 +77,7 @@ export default defineComponent({
   border: solid 1px $card-border-color;
   background-color: $white;
   border-radius: 8px;
-  transition: .3s;
+  transition: 0.3s;
   color: $text-main-color;
   cursor: pointer;
 
@@ -126,12 +125,12 @@ export default defineComponent({
   }
 
   &__bottom {
-    padding: 1rem 0px 1.5rem 0 ;
+    padding: 1rem 0px 1.5rem 0;
     pointer-events: none;
     margin-top: 0.2rem;
 
     @media screen and (max-width: 420px) {
-      padding: 0.5rem 0px 1.1rem 0 ;
+      padding: 0.5rem 0px 1.1rem 0;
     }
 
     .product-start-end {
@@ -233,5 +232,4 @@ export default defineComponent({
     display: none;
   }
 }
-
 </style>

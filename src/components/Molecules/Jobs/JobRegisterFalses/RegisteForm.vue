@@ -1,76 +1,65 @@
 <script lang="ts">
-import { 
-  defineComponent,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
-import { 
-  API_URL,
-  catchError,
-} from '@/master'
-import axios from 'axios'
-import Email from '@/components/Atoms/Forms/Email.vue'
-import Password from '@/components/Atoms/Forms/Password.vue'
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import Email from "@/components/Atoms/Forms/Email.vue";
+import Password from "@/components/Atoms/Forms/Password.vue";
 
 type State = {
   LoginName: string;
   LoginPassword: string;
-}
+};
 
 const initialState = (): State => ({
-  LoginName: '',
-  LoginPassword: '',
+  LoginName: "",
+  LoginPassword: "",
 });
 
 export default defineComponent({
   components: {
     Email,
-    Password
+    Password,
   },
   setup: () => {
     const state = reactive<State>(initialState());
 
-    const register = async() => {
+    const register = async () => {
       const params = {
         LoginName: state.LoginName,
         LoginPassword: state.LoginPassword,
-      }
-      try { 
-        const res = await axios.post(`${API_URL}/signup`, params)
-        console.log(res)
+      };
+      try {
+        const res = await axios.post(`${API_URL}/signup`, params);
+        console.log(res);
         state.LoginName = "";
         state.LoginPassword = "";
-      } catch (error) { catchError(error) }
-    }
+      } catch (error) {
+        catchError(error);
+      }
+    };
 
     return {
       ...toRefs(state),
-      register
-    }
-  }
-})
+      register,
+    };
+  },
+});
 </script>
 
 <template>
   <section>
     <div class="register-form-area">
       <label for="name" class="label">メールアドレス</label>
-      <Email
-        v-model="LoginName"
-        type="text"
-      />
+      <Email v-model="LoginName" type="text" />
       <label for="name" class="label">パスワード</label>
-      <Password
-        v-model="LoginPassword"
-        type="password"
-      />
+      <Password v-model="LoginPassword" type="password" />
     </div>
     <div @click="register" class="register-btn">新規登録</div>
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .register-form-area {
   width: 100%;
@@ -86,13 +75,13 @@ export default defineComponent({
 }
 
 .register-btn {
-  @include purple-btn ;
+  @include purple-btn;
   @include neumorphism;
   color: $white;
   display: block;
   padding: 1rem 2rem;
   border-radius: 25px;
-  font-size: .875rem;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1;
   text-align: center;
@@ -100,15 +89,15 @@ export default defineComponent({
   margin: auto;
   font-size: 1rem;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
   outline: none;
 
   &:hover {
     @include btn-hover;
-    color: #F8FAFF;
+    color: #f8faff;
     appearance: none;
     border: none;
-    transition: .3s;
+    transition: 0.3s;
   }
 }
 </style>

@@ -1,35 +1,29 @@
 <script lang="ts">
-import { defineComponent, computed } from '@vue/composition-api';
-import { m } from '@/master'
+import { defineComponent, computed } from "@vue/composition-api";
+import { m } from "@/master";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
     job: { type: Object, defalut: null, require: true },
   },
   setup: (props: any) => {
-
     const isStatusNew = computed(() => {
       if (props.job.job_status_id == m.JOB_STATUS_NEW) {
-        return true
+        return true;
       }
-      return false
+      return false;
     });
 
     return {
-      isStatusNew
-    }
-  }
+      isStatusNew,
+    };
+  },
 });
-
 </script>
 
 <template>
   <section>
-    <label
-      v-if="isStatusNew"
-      class="label pa-2 pr-4"
-      label
-    >
+    <label v-if="isStatusNew" class="label pa-2 pr-4" label>
       <v-icon left>
         mdi-label
       </v-icon>
@@ -39,7 +33,7 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .label {
   width: 106px;

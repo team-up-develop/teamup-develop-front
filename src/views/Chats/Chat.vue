@@ -1,45 +1,49 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-  computed
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
-import ChatGroups from '@/components/Organisms/Chats/ChatGroups.vue'
-import SendMessage from '@/components/Organisms/Chats/SendMessage.vue'
+  computed,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
+import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
+import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
 
 type State = {
   userId: number;
-}
+};
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     ChatGroups,
-    SendMessage
+    SendMessage,
   },
   setup: () => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) { return true }
-      return false
+      if (state.userId) {
+        return true;
+      }
+      return false;
     });
 
     onMounted(() => {
-      if(!state.userId) { return }
+      if (!state.userId) {
+        return;
+      }
     });
 
     return {
       ...toRefs(state),
       isLogin,
-    }
-  }
+    };
+  },
 });
 </script>
 
@@ -53,8 +57,7 @@ export default defineComponent({
         <ChatGroups :userId="userId" />
       </div>
       <div class="chat-card__right">
-        <div class="main" ref="target">
-        </div>
+        <div class="main" ref="target"></div>
         <div class="bottom">
           <SendMessage :id="0" />
         </div>
@@ -66,11 +69,10 @@ export default defineComponent({
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
-.wrapper{
+.wrapper {
   width: 90%;
   height: 90vh;
   margin: 0 auto;
@@ -155,7 +157,7 @@ export default defineComponent({
           float: left;
           resize: none;
           outline: none;
-          margin-left: 1rem
+          margin-left: 1rem;
         }
 
         .send {
@@ -167,7 +169,7 @@ export default defineComponent({
           border-radius: 8px;
           appearance: none;
           border: none;
-          transition: .3s;
+          transition: 0.3s;
           outline: none;
         }
       }
@@ -175,21 +177,19 @@ export default defineComponent({
   }
 }
 
-
 @media screen and (max-width: 1200px) {
-  .wrapper{
+  .wrapper {
     width: 100%;
   }
 }
 
 @media (max-width: 868px) {
-  .wrapper{
+  .wrapper {
     .chat-card {
       width: 95%;
 
       &__left {
         width: 100%;
-
       }
       &__right {
         display: none;

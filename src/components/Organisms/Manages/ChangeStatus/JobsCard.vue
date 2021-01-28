@@ -1,18 +1,18 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
-import { truncate } from '@/master'
+  onMounted,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
+import { truncate } from "@/master";
 
 type State = {
   applyNum: number;
   rejectNum: number;
   participateNum: number;
-}
+};
 
 const initialState = (): State => ({
   applyNum: Vuex.state.statusUser.userApplyNum,
@@ -20,32 +20,32 @@ const initialState = (): State => ({
   rejectNum: Vuex.state.statusUser.userRejectNum,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
     jobTitle: { type: String, default: "", require: true },
-    jobId: { type: Number, default: 0 , require: true}
+    jobId: { type: Number, default: 0, require: true },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
     const limit = (value: string, num: number) => truncate(value, num);
-    
+
     onMounted(() => {
-      Vuex.dispatch('getUserNum', {
-        jobId: props.jobId
+      Vuex.dispatch("getUserNum", {
+        jobId: props.jobId,
       });
       setTimeout(() => {
         state.applyNum = Vuex.state.statusUser.userApplyNum;
         state.participateNum = Vuex.state.statusUser.userParticipateNum;
-        state.rejectNum =  Vuex.state.statusUser.userRejectNum;
+        state.rejectNum = Vuex.state.statusUser.userRejectNum;
       }, 500);
     });
 
     return {
       ...toRefs(state),
-      limit
-    }
-  }
-})
+      limit,
+    };
+  },
+});
 </script>
 <template>
   <section>
@@ -55,7 +55,7 @@ export default defineComponent({
           {{ limit(jobTitle, 60) }}
         </v-row>
         <v-row class="card__center">
-          <router-link :to="`/jobs/${ jobId }`"> 
+          <router-link :to="`/jobs/${jobId}`">
             <button class="detail-btn">詳細をみる</button>
           </router-link>
           <v-row class="data-area">
@@ -78,22 +78,20 @@ export default defineComponent({
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 section {
   width: 30%;
 
   @media screen and (max-width: 900px) {
     width: 100%;
   }
-
 }
 .card {
   @include card-border-color;
   width: 360px;
   height: 248px;
-  padding: 1rem 1.2rem ;
+  padding: 1rem 1.2rem;
   border-radius: 8px;
 
   @media screen and (max-width: 900px) {
@@ -133,7 +131,7 @@ section {
       border-radius: 8px;
       appearance: none;
       border: none;
-      transition: .3s;
+      transition: 0.3s;
       outline: none;
     }
 

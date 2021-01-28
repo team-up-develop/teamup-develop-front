@@ -1,40 +1,37 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   computed,
   reactive,
-  toRefs
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
-import axios from 'axios'
-import {
-  API_URL, 
-  catchError,
-} from '@/master'
-import { messageParams } from '@/types/params'
+  toRefs,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
+import axios from "axios";
+import { API_URL, catchError } from "@/master";
+import { messageParams } from "@/types/params";
 
 type State = {
   userId: number;
   chatMessage: string;
-}
+};
 
 const initialState = (): State => ({
   chatMessage: "",
   userId: Vuex.state.auth.userId,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    id: { type: Number, defalut: 0, required: true }
+    id: { type: Number, defalut: 0, required: true },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
 
     const isChat = computed(() => {
-      if(props.id == 0) {
-        return false
+      if (props.id == 0) {
+        return false;
       }
-      return true
+      return true;
     });
 
     // * メッセージの送信
@@ -42,49 +39,52 @@ export default defineComponent({
       const params: messageParams = {
         message: state.chatMessage,
         userID: state.userId,
-        jobID: props.id
-      }
+        jobID: props.id,
+      };
       // ? 空のメッセージは送信させない
-      if(params.message == "") { return console.log("空のメッセージは送信させない") }
+      if (params.message == "") {
+        return console.log("空のメッセージは送信させない");
+      }
       try {
         // ? 投稿
-        await axios
-          .post<messageParams>(`${API_URL}/chat_message`, params)
-      } catch (error) { catchError(error) }
-      state.chatMessage = "" ;
+        await axios.post<messageParams>(`${API_URL}/chat_message`, params);
+      } catch (error) {
+        catchError(error);
+      }
+      state.chatMessage = "";
     };
 
     return {
       ...toRefs(state),
       isChat,
-      postMessage
-    }
-  }
+      postMessage,
+    };
+  },
 });
 </script>
 
 <template>
   <v-row>
     <div class="is-message-room" v-if="isChat">
-      <textarea 
-        type="text" 
-        class="chat-form" 
-        v-model="chatMessage" 
-        name="" 
-        maxlength="250" 
+      <textarea
+        type="text"
+        class="chat-form"
+        v-model="chatMessage"
+        name=""
+        maxlength="250"
         placeholder="メッセージを入力してください"
-        />
+      />
       <span @click="postMessage">
         <button class="send">送信する</button>
       </span>
     </div>
     <div v-else class="message-room">
-      <textarea 
-        type="text" 
-        class="chat-form" 
-        name="" 
-        maxlength="0" 
-        placeholder="チャットグループを選択してください" 
+      <textarea
+        type="text"
+        class="chat-form"
+        name=""
+        maxlength="0"
+        placeholder="チャットグループを選択してください"
       />
       <span>
         <button class="send">送信する</button>
@@ -93,9 +93,8 @@ export default defineComponent({
   </v-row>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 .is-message-room {
   width: 100%;
 
@@ -131,7 +130,7 @@ export default defineComponent({
     border-radius: 8px;
     appearance: none;
     border: none;
-    transition: .3s;
+    transition: 0.3s;
     outline: none;
   }
 }
@@ -169,9 +168,8 @@ export default defineComponent({
     border-radius: 8px;
     appearance: none;
     border: none;
-    transition: .3s;
+    transition: 0.3s;
     outline: none;
   }
 }
-
 </style>

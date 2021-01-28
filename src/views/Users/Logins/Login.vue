@@ -1,29 +1,25 @@
 <script lang="ts">
-import { 
-  defineComponent,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
-import Email from '@/components/Atoms/Forms/Email.vue'
-import Password from '@/components/Atoms/Forms/Password.vue'
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
+import Vuex from "@/store/index";
+import Email from "@/components/Atoms/Forms/Email.vue";
+import Password from "@/components/Atoms/Forms/Password.vue";
 
 type State = {
   LoginName: string;
   LoginPassword: string;
   loginErrorFlag: boolean;
-}
+};
 
 const initialState = (): State => ({
-  LoginName: '',
-  LoginPassword: '',
+  LoginName: "",
+  LoginPassword: "",
   loginErrorFlag: false,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     Email,
-    Password
+    Password,
   },
   setup: () => {
     const state = reactive<State>(initialState());
@@ -34,23 +30,23 @@ export default defineComponent({
     fetchError();
 
     const login = () => {
-      Vuex.dispatch('login', {
+      Vuex.dispatch("login", {
         login_name: state.LoginName,
         login_password: state.LoginPassword,
-      })
+      });
       setTimeout(() => {
         if (Vuex.state.auth.errorFlag === true) {
           state.loginErrorFlag = true;
         }
-      }, 700)
+      }, 700);
     };
 
     return {
       ...toRefs(state),
       fetchError,
-      login
-    }
-  }
+      login,
+    };
+  },
 });
 </script>
 
@@ -61,35 +57,27 @@ export default defineComponent({
         <div class="login-title">LOGIN</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
-          <br/><br/>
-          <v-row
-            cols="12"
-            md="4"
-          >
-            <Email
-              v-model="LoginName"
-              type="text"
-            />
+          <br /><br />
+          <v-row cols="12" md="4">
+            <Email v-model="LoginName" type="text" />
           </v-row>
         </div>
         <div class="name-form-password">
           <label for="name">パスワード</label>
-          <br/><br/>
-          <v-row
-            cols="12"
-            md="4"
-          >
-            <Password
-              v-model="LoginPassword"
-              type="password"
-            />
+          <br /><br />
+          <v-row cols="12" md="4">
+            <Password v-model="LoginPassword" type="password" />
           </v-row>
         </div>
         <div class="error-flag" v-if="loginErrorFlag == true">
           <span>メールアドレス か パスワードが違います</span>
         </div>
         <div class="btn-area">
-          <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>
+          <p>
+            登録してない方は<router-link to="/register" class="router-link"
+              ><span>こちら</span></router-link
+            >
+          </p>
           <button @click="login" class="login-btn">ログイン</button>
         </div>
       </div>
@@ -98,7 +86,7 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 section {
   height: 87vh;
@@ -117,7 +105,7 @@ section {
     max-width: 500px;
     height: 620px;
     margin: 2rem auto 3rem auto;
-    border: solid 1px #B9B9B9;
+    border: solid 1px #b9b9b9;
     border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
@@ -126,7 +114,7 @@ section {
     //* ログインタイトル
     .login-title {
       color: $primary-color;
-      font-size: 1.8rem;  
+      font-size: 1.8rem;
       font-weight: bold;
       height: 50px;
       margin-top: 1rem;
@@ -180,7 +168,7 @@ section {
         width: 100%;
         padding: 1.2rem 5rem;
         border-radius: 50px;
-        font-size: .875rem;
+        font-size: 0.875rem;
         font-weight: 600;
         line-height: 1;
         text-align: center;
@@ -190,7 +178,7 @@ section {
         display: inline-block;
         cursor: pointer;
         margin: 0 auto;
-        transition: .3s;
+        transition: 0.3s;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
         outline: none;
       }

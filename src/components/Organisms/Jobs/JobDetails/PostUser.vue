@@ -1,16 +1,16 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { dayJs } from '@/master'
+import { defineComponent } from "@vue/composition-api";
+import { dayJs } from "@/master";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    job: { type: Object, require: true, defalut: {} }
+    job: { type: Object, require: true, defalut: {} },
   },
   setup: (props: any) => {
     const day = (value: string, format: string) => dayJs(value, format);
     // * Twitter をタブで開く
     const twitterTab = () => {
-      if(props.job.user.twitterAccount == null) {
+      if (props.job.user.twitterAccount == null) {
         return props.job.user.twitterAccount;
       } else {
         const url: string = props.job.user.twitterAccount;
@@ -19,7 +19,7 @@ export default defineComponent({
     };
     // * Github をタブで開く
     const gitTab = () => {
-      if(props.job.user.githubAccount == null) {
+      if (props.job.user.githubAccount == null) {
         return props.job.user.githubAccount;
       } else {
         const url: string = props.job.user.githubAccount;
@@ -29,9 +29,9 @@ export default defineComponent({
     return {
       day,
       twitterTab,
-      gitTab
-    }
-  }
+      gitTab,
+    };
+  },
 });
 </script>
 
@@ -45,9 +45,9 @@ export default defineComponent({
         <div class="user-profile-area">
           <div class="user-name-are">
             <div class="user-name-tag">名前</div>
-            <router-link :to="`/account/profile/${ job.user_id }`"> 
+            <router-link :to="`/account/profile/${job.user_id}`">
               <div class="user-name">
-                {{ job.user.user_name }} 
+                {{ job.user.user_name }}
               </div>
             </router-link>
           </div>
@@ -62,7 +62,7 @@ export default defineComponent({
           <section>
             <div class="user-github" @click="gitTab">
               <img class="img" src="@/assets/github.png" width="30" />
-              </div>
+            </div>
             <div class="user-twtter" @click="twitterTab">
               <img class="img" src="@/assets/images/twitter.png" width="32" />
             </div>
@@ -74,7 +74,7 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .post-user-area {
   @include card-border-color;
@@ -219,5 +219,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

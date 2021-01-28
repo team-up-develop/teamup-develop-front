@@ -1,10 +1,7 @@
 <script lang="ts">
-import Vue from 'vue';
-import { 
-  API_URL,
-  catchError,
-} from '@/master'
-import axios from 'axios';
+import Vue from "vue";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
 
 type DataType = {
   id: number;
@@ -13,7 +10,7 @@ type DataType = {
   bio: string | null;
   githubAccount: string | null;
   twitterAccount: string | null;
-}
+};
 
 type EditParams = {
   id: number;
@@ -26,33 +23,36 @@ type EditParams = {
   birthday: Date;
   login_name: string;
   login_password: string;
-}
+};
 
 export default Vue.extend({
   props: {
-    userInfo: Object
+    userInfo: Object,
   },
   data(): DataType {
     return {
       id: this.userInfo.id,
       userName: this.userInfo.user_name,
-      learningStartDate: this.userInfo.learning_start_date.substring(0,this.userInfo.learning_start_date.indexOf("T")),
+      learningStartDate: this.userInfo.learning_start_date.substring(
+        0,
+        this.userInfo.learning_start_date.indexOf("T")
+      ),
       bio: this.userInfo.bio,
       githubAccount: this.userInfo.github_account,
       twitterAccount: this.userInfo.twitter_account,
-    }
+    };
   },
   methods: {
     // * 編集する
     profileEdit() {
       // * date型に変換のための data用意
-      function toDate (str: any, delim: string) {
-        const arr = str.split(delim)
+      function toDate(str: any, delim: string) {
+        const arr = str.split(delim);
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
       // //* 開始日
-      const learningStart = this.learningStartDate
-      const learningStartDate = toDate(learningStart, '-');
+      const learningStart = this.learningStartDate;
+      const learningStartDate = toDate(learningStart, "-");
       const params: EditParams = {
         id: this.id,
         user_name: this.userName,
@@ -60,23 +60,25 @@ export default Vue.extend({
         bio: this.bio,
         github_account: this.githubAccount,
         twitter_account: this.twitterAccount,
-        update_at: new Date,
-        birthday: new Date,
-        login_name: '変更しましたUser',
-        login_password: 'password'
-      }
-      console.log(params)
-      axios.put<EditParams>(`${API_URL}/user/${this.id}`, params)
-      .then(res => {
-        this.$emit('compliteEdit')
-        return res
-      })
-      .catch(error => { catchError(error) })
+        update_at: new Date(),
+        birthday: new Date(),
+        login_name: "変更しましたUser",
+        login_password: "password",
+      };
+      console.log(params);
+      axios
+        .put<EditParams>(`${API_URL}/user/${this.id}`, params)
+        .then((res) => {
+          this.$emit("compliteEdit");
+          return res;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
     },
-  }
+  },
 });
 </script>
-
 
 <template>
   <transition name="modal" appear>
@@ -86,27 +88,53 @@ export default Vue.extend({
           <section>
             <p class="label-lang">プロフィール編集</p>
             <label for="name" class="label">名前</label>
-            <input type="text" v-model="userName" class="edit-value" placeholder="ユーザー名">
-            <br>
+            <input
+              type="text"
+              v-model="userName"
+              class="edit-value"
+              placeholder="ユーザー名"
+            />
+            <br />
             <label for="name" class="label">学習開発開始時期</label>
-            <input type="date" v-model="learningStartDate" class="edit-value" placeholder="学習を始めた日にちを入力してください">
-            <br>
+            <input
+              type="date"
+              v-model="learningStartDate"
+              class="edit-value"
+              placeholder="学習を始めた日にちを入力してください"
+            />
+            <br />
             <label for="name" class="label">自己紹介</label>
-            <textarea type="text" v-model="bio" class="edit-text-value" placeholder="自己紹介(250文字以内)" maxlength="250" />
-            <br>
+            <textarea
+              type="text"
+              v-model="bio"
+              class="edit-text-value"
+              placeholder="自己紹介(250文字以内)"
+              maxlength="250"
+            />
+            <br />
             <label for="name" class="label">GitHub</label>
-            <input type="url" v-model="githubAccount" class="edit-value" placeholder="GitHubアカウント">
-            <br>
+            <input
+              type="url"
+              v-model="githubAccount"
+              class="edit-value"
+              placeholder="GitHubアカウント"
+            />
+            <br />
             <label for="name" class="label">Twitter</label>
-            <input type="url" v-model="twitterAccount" class="edit-value" placeholder="Twitterアカウント">
-            <br>
+            <input
+              type="url"
+              v-model="twitterAccount"
+              class="edit-value"
+              placeholder="Twitterアカウント"
+            />
+            <br />
             <template>
               <div class="btn" @click="profileEdit">
                 編集する
               </div>
             </template>
           </section>
-          <slot/>
+          <slot />
         </div>
         <footer class="modal-footer">
           <!-- <slot name="footer">
@@ -118,9 +146,8 @@ export default Vue.extend({
   </transition>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .modal-overlay {
   display: flex;
@@ -144,7 +171,7 @@ export default Vue.extend({
 .modal-content {
   padding: 2rem 2rem;
   width: 52vw;
-  height:74vh;
+  height: 74vh;
   text-align: left;
   overflow: scroll;
 
@@ -157,7 +184,7 @@ export default Vue.extend({
   @media screen and (max-width: 500px) {
     width: 85vw;
   }
-  @media screen and (max-width:400px) {
+  @media screen and (max-width: 400px) {
     width: 92vw;
   }
 
@@ -193,7 +220,7 @@ export default Vue.extend({
       padding: 1.1rem 4rem;
       border-radius: 25px;
       border: none;
-      font-size: .875rem;
+      font-size: 0.875rem;
       font-weight: 600;
       line-height: 1;
       text-align: center;
@@ -203,7 +230,7 @@ export default Vue.extend({
       float: right;
       margin-top: 1.5rem;
       cursor: pointer;
-      transition: .3s;
+      transition: 0.3s;
       outline: none;
     }
   }
@@ -219,11 +246,13 @@ export default Vue.extend({
   font-size: 100px;
 }
 
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
   transition: opacity 0.4s;
 }
 
-.modal-enter-active, .modal-window {
+.modal-enter-active,
+.modal-window {
   transition: opacity 0.4s, transform 0.4s;
 }
 
@@ -231,11 +260,13 @@ export default Vue.extend({
   transition: opacity 0.6s ease 0.4s;
 }
 
-.modal-enter, .modal-leave-to {
+.modal-enter,
+.modal-leave-to {
   opacity: 0;
 }
 
-.modal-enter, .modal-window {
+.modal-enter,
+.modal-window {
   transform: translateY(-20px);
 }
 </style>

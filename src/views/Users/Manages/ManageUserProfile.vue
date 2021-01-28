@@ -31,7 +31,7 @@ const initialState = (): State => ({
   userInfo: {},
   jobTitle: "",
   userId: Vuex.state.auth.userId,
-  loading: true, //? ローディング
+  loading: true,
   doneStatusFlag: false,
   statusId: 1,
 });

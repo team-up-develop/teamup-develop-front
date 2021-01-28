@@ -1,13 +1,12 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
-export default Vue.extend({ 
+export default Vue.extend({
   props: {
-    job: Object
-  }
+    job: Object,
+  },
 });
 </script>
-
 
 <template>
   <section>
@@ -15,7 +14,11 @@ export default Vue.extend({
       <div class="lang-area">
         <label for="name" class="name-tag">開発言語</label>
         <div class="lang-box">
-          <div class="skill-tag"  v-for="langage in job.programing_language_responses" :key="langage.id">
+          <div
+            class="skill-tag"
+            v-for="langage in job.programing_language_responses"
+            :key="langage.id"
+          >
             {{ langage.programing_language_name }}
           </div>
         </div>
@@ -23,7 +26,11 @@ export default Vue.extend({
       <div class="lang-area">
         <label for="name" class="name-tag">フレームワーク</label>
         <div class="lang-box">
-          <div class="flame-tag" v-for="framework in job.programing_framework_responses" :key="framework.id">
+          <div
+            class="flame-tag"
+            v-for="framework in job.programing_framework_responses"
+            :key="framework.id"
+          >
             {{ framework.programing_framework_name }}
           </div>
         </div>
@@ -31,7 +38,11 @@ export default Vue.extend({
       <div class="lang-area">
         <label for="name" class="name-tag">その他関連スキル</label>
         <div class="lang-box">
-          <div class="other-tag" v-for="skill in job.skill_responses" :key="skill.id">
+          <div
+            class="other-tag"
+            v-for="skill in job.skill_responses"
+            :key="skill.id"
+          >
             {{ skill.skill_name }}
           </div>
         </div>
@@ -41,7 +52,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .skill-detail-area {
   @include card-border-color;
@@ -81,7 +92,7 @@ export default Vue.extend({
   }
 }
 
-//* スマホレスポンシブ 
+//* スマホレスポンシブ
 @media screen and (max-width: 500px) {
   .skill-detail-area {
     padding: 1.5rem 1rem;

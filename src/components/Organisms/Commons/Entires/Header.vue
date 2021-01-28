@@ -1,28 +1,30 @@
 <script lang="ts">
-import Vue from 'vue';
-import Logo from '@/components/Atoms/Commons/Entires/Logo.vue'
-import CreateBtn from '@/components/Atoms/Commons/Entires/CreateBtn.vue'
+import Vue from "vue";
+import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
+import CreateBtn from "@/components/Atoms/Commons/Entires/CreateBtn.vue";
 
 type DataType = {
   userId: number;
-}
+};
 
-export default Vue.extend({ 
+export default Vue.extend({
   components: {
     Logo,
-    CreateBtn
+    CreateBtn,
   },
   data(): DataType {
     return {
       userId: this.$store.state.auth.userId,
       // userName: null,
-    }
+    };
   },
   created() {
-    if( this.userId !== undefined) { return }
-  }
+    if (this.userId !== undefined) {
+      return;
+    }
+  },
 });
-</script> 
+</script>
 
 <template>
   <div class="header-wrapper">
@@ -33,46 +35,41 @@ export default Vue.extend({
         </div>
         <div class="header-main-right">
           <v-row class="left-user-menu">
-            <v-menu
-              left
-              bottom
-            >
+            <v-menu left bottom>
               <template v-slot:activator="{ on, attrs }">
-                <v-btn
-                  icon
-                  v-bind="attrs"
-                  v-on="on"
-                >
+                <v-btn icon v-bind="attrs" v-on="on">
                   <div class="user-image"></div>
                 </v-btn>
               </template>
-              <v-list-item-group
-                color="primary"
-              >
+              <v-list-item-group color="primary">
                 <v-list style="z-index: 100;">
                   <v-list-item>
                     <router-link to="/account/profile/1" class="menu-list">
-                    <v-list-item-title>
-                      <v-icon class="icon">mdi-card-account-details-outline</v-icon>
-                      Kazuya
-                    </v-list-item-title>
+                      <v-list-item-title>
+                        <v-icon class="icon"
+                          >mdi-card-account-details-outline</v-icon
+                        >
+                        Kazuya
+                      </v-list-item-title>
                     </router-link>
                   </v-list-item>
                   <div class="boder-line"></div>
                   <v-list-item>
                     <router-link to="/chat" class="menu-list">
-                    <v-list-item-title>
-                      <v-icon class="icon">mdi-chat-plus-outline</v-icon>
-                      チャット
-                    </v-list-item-title>
+                      <v-list-item-title>
+                        <v-icon class="icon">mdi-chat-plus-outline</v-icon>
+                        チャット
+                      </v-list-item-title>
                     </router-link>
                   </v-list-item>
                   <v-list-item>
                     <router-link to="/manage" class="menu-list">
-                    <v-list-item-title>
-                      <v-icon class="icon">mdi-clipboard-multiple-outline</v-icon>
-                      案件管理
-                    </v-list-item-title>
+                      <v-list-item-title>
+                        <v-icon class="icon"
+                          >mdi-clipboard-multiple-outline</v-icon
+                        >
+                        案件管理
+                      </v-list-item-title>
                     </router-link>
                   </v-list-item>
                 </v-list>
@@ -89,7 +86,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .menu-list {
   color: $text-sub-color;
@@ -151,8 +148,8 @@ export default Vue.extend({
 
       .header-main-right {
         width: 300px;
-        padding: 0.7rem 4rem 0 0 ;
-        position: absolute; 
+        padding: 0.7rem 4rem 0 0;
+        position: absolute;
         right: 0;
         top: 0;
 
@@ -192,7 +189,7 @@ export default Vue.extend({
 }
 
 /* スマホ */
-@media (max-width: 500px){
+@media (max-width: 500px) {
   .header-wrapper .header-logo-area {
     padding: 0 0 0 0.3rem;
   }

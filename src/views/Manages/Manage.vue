@@ -1,62 +1,64 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-  computed
-} from '@vue/composition-api';
-import { 
-  API_URL,
-  catchError,
-} from '@/master'
-import axios from 'axios'
-import { ManageJob } from '@/types/index';
-import { FetchManageJobs } from '@/types/fetch';
-import UserCard from '@/components/Organisms/Manages/UserCard.vue'
-import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
-import Vuex from '@/store/index'
+  computed,
+} from "@vue/composition-api";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import { ManageJob } from "@/types/index";
+import { FetchManageJobs } from "@/types/fetch";
+import UserCard from "@/components/Organisms/Manages/UserCard.vue";
+import JobsCard from "@/components/Organisms/Manages/JobsCard.vue";
+import Vuex from "@/store/index";
 
 type State = {
   manageJobs: ManageJob[];
   userId: number;
-}
+};
 
 const initialState = (): State => ({
   manageJobs: [],
-  userId: Vuex.state.auth.userId
+  userId: Vuex.state.auth.userId,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     UserCard,
-    JobsCard
+    JobsCard,
   },
   setup: () => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) { return true }
-      return false
+      if (state.userId) {
+        return true;
+      }
+      return false;
     });
 
     const getManageJobs = async () => {
-      try { 
-        const res = await axios
-          .get<FetchManageJobs>(`${API_URL}/jobs?user_id=${state.userId}`) 
-        state.manageJobs = res.data.response
-      } catch (error) { catchError(error) }
+      try {
+        const res = await axios.get<FetchManageJobs>(
+          `${API_URL}/jobs?user_id=${state.userId}`
+        );
+        state.manageJobs = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
     };
 
     onMounted(() => {
       getManageJobs();
-    })
+    });
 
     return {
       ...toRefs(state),
       isLogin,
-      getManageJobs
-    }
+      getManageJobs,
+    };
   },
 });
 </script>
@@ -69,23 +71,23 @@ export default defineComponent({
         <v-sheet class="manage">
           <v-row class="manage__header">
             <router-link to="/manage" class="router-link-active-click">
-              <span>管理案件</span> 
+              <span>管理案件</span>
             </router-link>
             <router-link to="/manage/apply_job" class="router-link">
               <span>応募案件</span>
             </router-link>
             <router-link to="/manage/favorite_job" class="router-link">
-              <span>保存案件</span> 
+              <span>保存案件</span>
             </router-link>
           </v-row>
           <v-col>
-            <router-link 
-              :to="`/manage/applicant/${ jobs.id }`" 
-              v-for="jobs in manageJobs" 
-              :key="jobs.id" 
+            <router-link
+              :to="`/manage/applicant/${jobs.id}`"
+              v-for="jobs in manageJobs"
+              :key="jobs.id"
               class="jobs"
             >
-              <JobsCard :job="jobs"/>
+              <JobsCard :job="jobs" />
             </router-link>
           </v-col>
         </v-sheet>
@@ -97,9 +99,8 @@ export default defineComponent({
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .wrapper {
   width: 90%;
@@ -164,5 +165,4 @@ export default defineComponent({
 .jobs {
   text-decoration: none;
 }
-
 </style>

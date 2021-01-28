@@ -1,5 +1,5 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 export default Vue.extend({});
 </script>
 
@@ -34,9 +34,8 @@ export default Vue.extend({});
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .skill-detail-area {
   @include card-border-color;

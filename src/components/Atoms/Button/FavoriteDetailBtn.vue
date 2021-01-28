@@ -1,86 +1,92 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
-import { 
-  API_URL,
-  catchError,
-} from '@/master'
-import axios from 'axios'
-import { FavoriteParams } from '@/types/params';
+import Vue, { PropType } from "vue";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import { FavoriteParams } from "@/types/params";
 
 type DataType = {
   userId: number;
   flag: boolean;
-}
+};
 
 export default Vue.extend({
   props: {
-    jobId: { type: Number as PropType<number>, default: 0 }
+    jobId: { type: Number as PropType<number>, default: 0 },
   },
   data(): DataType {
     return {
       flag: true,
       userId: this.$store.state.auth.userId,
-    }
+    };
   },
   mounted() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
-    axios.get(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
-    .then(res => {
-      const array = []
-      for(let i = 0; i < res.data.response.length; i++){
-        const likeData = res.data.response[i]
-        array.push(likeData.job.id)
-      }
-      if(array.includes(this.jobId)){
-        this.flag = false
-      }
-      else{
-        this.flag = true
-      }
-    })
-    .catch(error => { catchError(error) })
+    axios
+      .get(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
+      .then((res) => {
+        const array = [];
+        for (let i = 0; i < res.data.response.length; i++) {
+          const likeData = res.data.response[i];
+          array.push(likeData.job.id);
+        }
+        if (array.includes(this.jobId)) {
+          this.flag = false;
+        } else {
+          this.flag = true;
+        }
+      })
+      .catch((error) => {
+        catchError(error);
+      });
   },
   methods: {
     // * 案件を保存する
-    saveJob(){
+    saveJob() {
       const params: FavoriteParams = {
-        job_id: this.jobId, 
-        user_id: this.userId
+        job_id: this.jobId,
+        user_id: this.userId,
       };
-      axios.post<FavoriteParams>(`${API_URL}/favorite_job`, params)
-      .then(res => {
-        this.flag = false
-        return res.data
-      })
-      .catch(error => { catchError(error) })
+      axios
+        .post<FavoriteParams>(`${API_URL}/favorite_job`, params)
+        .then((res) => {
+          this.flag = false;
+          return res.data;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
     },
     // * 案件を削除する
     deleteJob() {
       const params: FavoriteParams = {
         job_id: this.jobId,
-        user_id: this.userId
+        user_id: this.userId,
       };
-      axios.delete<FavoriteParams>(`${API_URL}/favorite_job`, {data: params })
-      .then(res => {
-        this.flag = true
-        return res.data
-      })
-      .catch(error => { catchError(error) })
+      axios
+        .delete<FavoriteParams>(`${API_URL}/favorite_job`, { data: params })
+        .then((res) => {
+          this.flag = true;
+          return res.data;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
     },
-  }
+  },
 });
 </script>
-
 
 <template>
   <section>
     <v-icon class="icon" @click="saveJob" v-if="flag">mdi-heart</v-icon>
-    <v-icon class="save-icon" @click="deleteJob" v-if="flag == false">mdi-heart</v-icon>
+    <v-icon class="save-icon" @click="deleteJob" v-if="flag == false"
+      >mdi-heart</v-icon
+    >
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 // * 現在は使用していない
 .btn-box-save {
@@ -107,7 +113,7 @@ export default Vue.extend({
 }
 
 .btn-box-save-false {
-  @include grey-btn ;
+  @include grey-btn;
   display: block;
   padding: 1.4rem 4.3rem;
   box-shadow: 0 0px 10px 5px #d4d4d4;
@@ -145,8 +151,7 @@ export default Vue.extend({
   border-radius: 5px / 5px;
 }
 
-
-//* スマホレスポンシブ 
+//* スマホレスポンシブ
 @media screen and (max-width: 500px) {
   .icon {
     width: 48px;

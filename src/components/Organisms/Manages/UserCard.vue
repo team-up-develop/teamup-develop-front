@@ -1,11 +1,11 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
+  onMounted,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
 
 type State = {
   userId: number;
@@ -13,7 +13,7 @@ type State = {
   favoriteNum: number;
   applyNum: number;
   loginName: string;
-}
+};
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
@@ -23,18 +23,18 @@ const initialState = (): State => ({
   applyNum: Vuex.state.statusJobs.jobsApplyNum,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   setup: () => {
     const state = reactive<State>(initialState());
     onMounted(() => {
-      Vuex.dispatch('getJobNum', {
-        userId: state.userId
+      Vuex.dispatch("getJobNum", {
+        userId: state.userId,
       });
     });
     return {
       ...toRefs(state),
-    }
-  }
+    };
+  },
 });
 </script>
 
@@ -47,7 +47,7 @@ export default defineComponent({
           <div class="user-name">{{ loginName }}</div>
         </v-row>
         <v-row class="card__center">
-          <router-link :to="`/account/profile/${ userId }`" class="">
+          <router-link :to="`/account/profile/${userId}`" class="">
             <button class="btn">詳細をみる</button>
           </router-link>
           <v-row class="data-area">
@@ -71,20 +71,19 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 section {
   width: 30%;
 
   @media screen and (max-width: 900px) {
     width: 100%;
   }
-
 }
 .card {
   @include card-border-color;
   width: 360px;
   height: 235px;
-  padding: 1rem 1.2rem ;
+  padding: 1rem 1.2rem;
   border-radius: 8px;
 
   @media screen and (max-width: 900px) {
@@ -135,7 +134,7 @@ section {
       border-radius: 8px;
       appearance: none;
       border: none;
-      transition: .3s;
+      transition: 0.3s;
       outline: none;
     }
     .data-area {

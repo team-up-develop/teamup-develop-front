@@ -1,82 +1,82 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-  computed
-} from '@vue/composition-api';
-import axios from 'axios';
-import { ManageJob } from '@/types/index';
-import { FetchManageJobs } from '@/types/fetch';
-import JobsCard from '@/components/Organisms/Manages/ChangeStatus/JobsCard.vue'
-import UserCard from '@/components/Organisms/Manages/ChangeStatus/UserCard.vue'
-import { 
-  m,
-  API_URL, 
-  catchError, 
-} from '@/master'
-import Vuex from '@/store/index'
+  computed,
+} from "@vue/composition-api";
+import axios from "axios";
+import { ManageJob } from "@/types/index";
+import { FetchManageJobs } from "@/types/fetch";
+import JobsCard from "@/components/Organisms/Manages/ChangeStatus/JobsCard.vue";
+import UserCard from "@/components/Organisms/Manages/ChangeStatus/UserCard.vue";
+import { m, API_URL, catchError } from "@/master";
+import Vuex from "@/store/index";
 
 type State = {
   assginUsers: ManageJob[];
   userId: number;
   jobTitle: string;
-}
+};
 
 const initialState = (): State => ({
   assginUsers: [],
   userId: Vuex.state.auth.userId,
-  jobTitle: ""
+  jobTitle: "",
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     JobsCard,
-    UserCard
+    UserCard,
   },
   props: {
     // * job.idを受け取る
-    id: { type: Number, default: null }
+    id: { type: Number, default: null },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) { return true }
-      return false
+      if (state.userId) {
+        return true;
+      }
+      return false;
     });
 
     const getAssginUser = async () => {
-      try { 
-        const res = await axios
-          .get<FetchManageJobs>(`
-            ${API_URL}/apply_jobs?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }
-            `
-          )
-        state.assginUsers = res.data.response
-      } catch (error) { catchError(error) }
+      try {
+        const res = await axios.get<FetchManageJobs>(`
+            ${API_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}
+            `);
+        state.assginUsers = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
     };
 
     const getJobTitle = async () => {
-      try { 
-        const res = await axios.get<any>(`${API_URL}/job/${ props.id }`)
-        state.jobTitle = res.data.response.job_title
-      } catch (error) { catchError(error) }
+      try {
+        const res = await axios.get<any>(`${API_URL}/job/${props.id}`);
+        state.jobTitle = res.data.response.job_title;
+      } catch (error) {
+        catchError(error);
+      }
     };
 
     onMounted(() => {
       getAssginUser();
       getJobTitle();
-    })
+    });
 
     return {
       ...toRefs(state),
       isLogin,
       getAssginUser,
-      getJobTitle
-    }
-  }
+      getJobTitle,
+    };
+  },
 });
 </script>
 
@@ -84,26 +84,26 @@ export default defineComponent({
   <section>
     <v-container class="wrapper" v-if="isLogin">
       <v-row>
-        <JobsCard 
-          :jobTitle="jobTitle" 
-          :jobId="id"
-        />
+        <JobsCard :jobTitle="jobTitle" :jobId="id" />
         <v-sheet class="manage">
           <v-row class="manage__header">
-            <router-link :to="`/manage/applicant/${ id }`" class="router-link">
-              <span>応募者</span> 
+            <router-link :to="`/manage/applicant/${id}`" class="router-link">
+              <span>応募者</span>
             </router-link>
-            <router-link :to="`/manage/participate/${ id }`" class="router-link-active-click">
+            <router-link
+              :to="`/manage/participate/${id}`"
+              class="router-link-active-click"
+            >
               <span>参加者</span>
             </router-link>
-            <router-link :to="`/manage/reject/${ id }`" class="router-link">
-              <span>拒否者</span> 
+            <router-link :to="`/manage/reject/${id}`" class="router-link">
+              <span>拒否者</span>
             </router-link>
           </v-row>
           <v-col>
-            <router-link 
-              :to="`/manage/profile/${ id }/${ user.user_id }`" 
-              v-for="user in assginUsers" 
+            <router-link
+              :to="`/manage/profile/${id}/${user.user_id}`"
+              v-for="user in assginUsers"
               :key="user.id"
               class="users"
             >
@@ -119,9 +119,8 @@ export default defineComponent({
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .wrapper {
   width: 90%;
@@ -187,5 +186,4 @@ export default defineComponent({
 .users {
   text-decoration: none;
 }
-
 </style>

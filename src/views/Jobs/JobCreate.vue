@@ -1,10 +1,9 @@
 <script lang="ts">
-import Vue from 'vue';
-import JobCreateCard from '@/components/Organisms/Jobs/JobCreateCard.vue'
-import UserCard from '@/components/Organisms/Manages/UserCard.vue'
+import Vue from "vue";
+import JobCreateCard from "@/components/Organisms/Jobs/JobCreateCard.vue";
+import UserCard from "@/components/Organisms/Manages/UserCard.vue";
 
-
-export default Vue.extend({ 
+export default Vue.extend({
   components: {
     JobCreateCard,
     UserCard,
@@ -28,7 +27,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .wrapper {
   width: 90%;
