@@ -36,11 +36,8 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
+      if(state.userId) { return true }
+      return false
     });
 
     const getFavoriteJobs = async () => {
@@ -94,9 +91,9 @@ export default defineComponent({
         </v-sheet>
       </v-row>
     </v-container>
-    <div v-else>
+    <template v-else>
       ログインが必要です！
-    </div>
+    </template>
   </section>
 </template>
 

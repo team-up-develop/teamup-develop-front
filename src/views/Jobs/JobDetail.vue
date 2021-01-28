@@ -47,7 +47,8 @@ export default defineComponent({
     // * 詳細画面情報を取得
     const getJobDetail = async () => {
       try { 
-        const res = await axios.get<FetchJobs>(`${API_URL}/job/${props.id}`)
+        const res = await axios
+          .get<FetchJobs>(`${API_URL}/job/${props.id}`)
         setTimeout(() => {
           state.loading = false;
           state.job = res.data.response

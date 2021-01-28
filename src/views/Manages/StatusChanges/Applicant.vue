@@ -43,21 +43,15 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
+      if(state.userId) { return true } 
+      return false
     });
 
     const getApplyUser = async () => {
       try { 
         const res = await axios
           .get<FetchManageJobs>(`
-            ${API_URL}/apply_jobs?
-              job_id=${ props.id }&
-              apply_status_id=${ m.APPLY_STATUS_APPLY }
-            `
+            ${API_URL}/apply_jobs?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_APPLY }`
           )
         state.applyUsers = res.data.response
       } catch (error) { catchError(error) }
@@ -119,9 +113,9 @@ export default defineComponent({
         </v-sheet>
       </v-row>
     </v-container>
-    <div v-else>
+    <template v-else>
       ログインが必要です！
-    </div>
+    </template>
   </section>
 </template>
 

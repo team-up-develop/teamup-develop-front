@@ -47,7 +47,8 @@ export default defineComponent({
 
     const getChatGroups = async () => {
       try { 
-        const res = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${ props.userId }`)
+        const res = await axios
+          .get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${ props.userId }`)
         const array: ManageJob[] = [];
         for(let i = 0; i < res.data.response.length; i++) {
           const applyData: ManageJob = res.data.response[i]
@@ -64,7 +65,8 @@ export default defineComponent({
 
     const getMyselfGroupes = async () => {
       try {
-        const res = await axios.get<FetchJobs>(`${API_URL}/jobs?user_id=${ props.userId }`)
+        const res = await axios
+          .get<FetchJobs>(`${API_URL}/jobs?user_id=${ props.userId }`)
         state.myselfJobs = res.data.response
       } catch (error) { catchError(error) }
     };

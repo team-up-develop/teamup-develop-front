@@ -27,11 +27,8 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
+      if(state.userId) { return true }
+      return false
     });
 
     onMounted(() => {
@@ -63,9 +60,9 @@ export default defineComponent({
         </div>
       </div>
     </v-sheet>
-    <div v-else>
+    <template v-else>
       ログインが必要です
-    </div>
+    </template>
   </div>
 </template>
 

@@ -37,7 +37,8 @@ export default Vue.extend({
   },
   created() {
     // * プログラミング言語 取得
-    axios.get<FetchLanguages>(`${API_URL}/programing_languages`)
+    axios
+      .get<FetchLanguages>(`${API_URL}/programing_languages`)
     .then(res => {
       this.languages = res.data.response
     })

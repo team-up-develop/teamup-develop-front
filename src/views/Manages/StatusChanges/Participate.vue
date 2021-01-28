@@ -43,20 +43,15 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
+      if(state.userId) { return true }
+      return false
     });
 
     const getAssginUser = async () => {
       try { 
         const res = await axios
           .get<FetchManageJobs>(`
-            ${API_URL}/apply_jobs?
-              job_id=${ props.id }&
-              apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }
+            ${API_URL}/apply_jobs?job_id=${ props.id }&apply_status_id=${ m.APPLY_STATUS_PARTICIPATE }
             `
           )
         state.assginUsers = res.data.response
@@ -118,9 +113,9 @@ export default defineComponent({
         </v-sheet>
       </v-row>
     </v-container>
-    <div v-else>
-      ログインが必要です！
-    </div>
+    <template v-else>
+      <p>ログインが必要です！</p>
+    </template>
   </section>
 </template>
 

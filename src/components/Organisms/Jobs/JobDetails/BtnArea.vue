@@ -50,14 +50,15 @@ export default defineComponent({
     const router = context.root.$router
 
     const isLogin = computed(() => {
-      if(state.userId) { return true } 
-      else { return false }
+      if(state.userId) { return true }
+      return false
     });
 
     // * 自分の案件か否かを判定
     const getCheckSelfJob = async () => {
       try { 
-        const res = await axios.get(`${API_URL}/jobs?user_id=${state.userId}`)
+        const res = await axios
+          .get(`${API_URL}/jobs?user_id=${state.userId}`)
         for(let i = 0; i < res.data.response.length; i++){
           const selfJob = res.data.response[i]
           if(selfJob.id === props.id){
@@ -70,7 +71,8 @@ export default defineComponent({
     // * ログインユーザーが応募済みか応募済みではないかを判定する
     const getCheckStatus = async () => {
       try {
-        const res = await axios.get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
+        const res = await axios
+          .get<FetchManageJobs>(`${API_URL}/apply_jobs?user_id=${state.userId}`)
         const arrayApply: any = []
         for(let c = 0; c < res.data.response.length; c++){
           const applyData: any = res.data.response[c];

@@ -76,15 +76,18 @@ export default Vue.extend({
   },
   async mounted() {
     try {
-      const res = await axios.get<FetchLanguages>(`${API_URL}/programing_languages`)
+      const res = await axios
+        .get<FetchLanguages>(`${API_URL}/programing_languages`)
       this.languages = res.data.response;
     } catch (error) { catchError(error) }
     try {
-      const res = await axios.get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+      const res = await axios
+        .get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
       this.framworks = res.data.response;
     } catch (error) { catchError(error) }
     try {
-      const res = await axios.get<FetchSkills>(`${API_URL}/skills`)
+      const res = await axios
+        .get<FetchSkills>(`${API_URL}/skills`)
       this.skills = res.data.response;
     } catch (error) { catchError(error) }
   },
@@ -134,7 +137,8 @@ export default Vue.extend({
         job_status_id: Number(this.jobStatusId),
       };
       try {
-        await axios.post<JobCreateParamsSecond>(`${API_URL}/job`, params)
+        await axios
+          .post<JobCreateParamsSecond>(`${API_URL}/job`, params)
         sessionStorage.removeItem('jobTitle');
         sessionStorage.removeItem('jobDescription');
         sessionStorage.removeItem('devStartDate');

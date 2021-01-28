@@ -37,7 +37,8 @@ export default Vue.extend({
   },
   created() {
     // * フレームワーク取得
-    axios.get<FetchSkills>(`${API_URL}/skills`)
+    axios
+      .get<FetchSkills>(`${API_URL}/skills`)
     .then(res => {
       this.skills = res.data.response
     })

@@ -39,9 +39,9 @@ export default defineComponent({
         login_password: state.LoginPassword,
       })
       setTimeout(() => {
-      if (Vuex.state.auth.errorFlag === true) {
-        state.loginErrorFlag = true;
-      }
+        if (Vuex.state.auth.errorFlag === true) {
+          state.loginErrorFlag = true;
+        }
       }, 700)
     };
 
@@ -87,8 +87,6 @@ export default defineComponent({
         </div>
         <div class="error-flag" v-if="loginErrorFlag == true">
           <span>メールアドレス か パスワードが違います</span>
-        </div>
-        <div v-else>
         </div>
         <div class="btn-area">
           <p>登録してない方は<router-link to="/register" class="router-link"><span>こちら</span></router-link></p>

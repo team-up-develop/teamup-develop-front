@@ -16,11 +16,16 @@ type DataType = {
 }
 
 type EditParams = {
-  userName: string;
-  learningStartDate: Date;
+  id: number;
+  user_name: string;
+  learning_start_date: Date;
   bio: string | null;
-  githubAccount: string | null;
-  twitterAccount: string | null;
+  github_account: string | null;
+  twitter_account: string | null;
+  update_at: Date;
+  birthday: Date;
+  login_name: string;
+  login_password: string;
 }
 
 export default Vue.extend({
@@ -30,11 +35,11 @@ export default Vue.extend({
   data(): DataType {
     return {
       id: this.userInfo.id,
-      userName: this.userInfo.userName,
-      learningStartDate: this.userInfo.learningStartDate.substring(0,this.userInfo.learningStartDate.indexOf("T")),
+      userName: this.userInfo.user_name,
+      learningStartDate: this.userInfo.learning_start_date.substring(0,this.userInfo.learning_start_date.indexOf("T")),
       bio: this.userInfo.bio,
-      githubAccount: this.userInfo.githubAccount,
-      twitterAccount: this.userInfo.twitterAccount,
+      githubAccount: this.userInfo.github_account,
+      twitterAccount: this.userInfo.twitter_account,
     }
   },
   methods: {
@@ -48,14 +53,19 @@ export default Vue.extend({
       // //* 開始日
       const learningStart = this.learningStartDate
       const learningStartDate = toDate(learningStart, '-');
-
       const params: EditParams = {
-        userName: this.userName,
-        learningStartDate: learningStartDate,
+        id: this.id,
+        user_name: this.userName,
+        learning_start_date: learningStartDate,
         bio: this.bio,
-        githubAccount: this.githubAccount,
-        twitterAccount: this.twitterAccount,
+        github_account: this.githubAccount,
+        twitter_account: this.twitterAccount,
+        update_at: new Date,
+        birthday: new Date,
+        login_name: '変更しましたUser',
+        login_password: 'password'
       }
+      console.log(params)
       axios.put<EditParams>(`${API_URL}/user/${this.id}`, params)
       .then(res => {
         this.$emit('compliteEdit')

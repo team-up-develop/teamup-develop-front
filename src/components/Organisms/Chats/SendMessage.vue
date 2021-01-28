@@ -48,7 +48,8 @@ export default defineComponent({
       if(params.message == "") { return console.log("空のメッセージは送信させない") }
       try {
         // ? 投稿
-        await axios.post<messageParams>(`${API_URL}/chat_message`, params)
+        await axios
+          .post<messageParams>(`${API_URL}/chat_message`, params)
       } catch (error) { catchError(error) }
       state.chatMessage = "" ;
     };

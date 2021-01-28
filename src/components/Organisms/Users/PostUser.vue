@@ -65,7 +65,7 @@ export default defineComponent({
           <div class="profile-area">
             <v-col class="name-are">
               <div class="user-name">
-                {{ user.user_name }}
+                {{ user.login_name }}
               </div>
             </v-col>
             <v-col class="introduce-area" style="padding: none">
@@ -109,11 +109,10 @@ export default defineComponent({
   }
 
   .right {
-    width: 50%;
+    width: 68%;
     text-align: left;
 
     .profile-area {
-      width: 80%;
       padding: 0.5rem 0 0 1rem ;
 
       .name-are

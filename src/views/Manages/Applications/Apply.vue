@@ -37,12 +37,10 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
-      }
+      if(state.userId) { return true }
+      return false
     });
+
     // * 応募案件 / 参加案件 を取得
     const getApplyJobs = async () => {
       if(!state.userId) { return }
@@ -104,9 +102,9 @@ export default defineComponent({
         </v-sheet>
       </v-row>
     </v-container>
-    <div v-else>
+    <template v-else>
       ログインが必要です！
-    </div>
+    </template>
   </section>
 </template>
 

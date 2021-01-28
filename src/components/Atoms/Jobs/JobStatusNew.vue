@@ -44,7 +44,7 @@ export default defineComponent({
 .label {
   width: 106px;
   font-size: 14px;
-  background-color: $third-dark;
+  background-color: $primary-color;
   color: $white;
   border-radius: 8px;
   font-weight: bold;

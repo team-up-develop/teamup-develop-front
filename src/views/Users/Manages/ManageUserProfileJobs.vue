@@ -54,7 +54,7 @@ export default Vue.extend({
     .then(res => {
       setTimeout(() => {
         this.loading = false;
-        this.userInfo = res.data;
+        this.userInfo = res.data.response;
       }, 1000)
     })
     .catch(error => { catchError(error) })
@@ -62,14 +62,14 @@ export default Vue.extend({
     // *  案件タイトル取得
     axios.get(`${API_URL}/job/${ this.jobId }`)
     .then(res => {
-      this.jobTitle = res.data.jobTitle
+      this.jobTitle = res.data.response.job_title
     })
     .catch(error => { catchError(error) })
 
     // *詳細を見ているユーザーの投稿案件
-    axios.get(`${API_URL}/job/?user_id=${this.id}`)
+    axios.get(`${API_URL}/jobs?user_id=${this.id}`)
     .then(res => {
-      this.manageJobs = res.data
+      this.manageJobs = res.data.response
     })
     .catch(error => { catchError(error) })
   },

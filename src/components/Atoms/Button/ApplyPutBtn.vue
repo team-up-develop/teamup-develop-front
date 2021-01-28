@@ -1,34 +1,37 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import axios from 'axios';
-import { 
-  m,
-  API_URL,
-  catchError,
-} from '@/master'
-import { ParticipateParams } from '@/types/params';
+import { defineComponent } from "@vue/composition-api";
+import axios from "axios";
+import { m, API_URL, catchError } from "@/master";
+import { ParticipateParams } from "@/types/params";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
     id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
     jobId: { type: Number, default: 0 },
+    updatedAt: { type: String, defalut: String(new Date()), require: true },
   },
   setup: (props, context) => {
+    console.log(props.updatedAt);
+
     const applyUserPut = async () => {
       const params: ParticipateParams = {
-        jobId: props.jobId,
-        userId: props.id,
-        applyStatusId: m.APPLY_STATUS_PARTICIPATE
+        job_id: props.jobId,
+        user_id: props.id,
+        apply_status_id: m.APPLY_STATUS_PARTICIPATE,
+        // @ts-ignore
+        updated_at: props.updatedAt,
       };
-      try { 
-        await axios.put(`${API_URL}/apply_job/`, params)
+      try {
+        await axios.put(`${API_URL}/apply_job/${props.jobId}`, params);
         context.emit("participate", m.APPLY_STATUS_PARTICIPATE);
-      } catch (error) { catchError(error) }
+      } catch (error) {
+        catchError(error);
+      }
     };
     return {
-      applyUserPut
-    }
-  }
+      applyUserPut,
+    };
+  },
 });
 </script>
 
@@ -39,14 +42,14 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .btn-applicant {
   @include red-btn;
   @include neumorphism;
   color: $white;
   padding: 1.2rem 5rem;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
