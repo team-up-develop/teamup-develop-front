@@ -122,7 +122,7 @@ export default defineComponent({
       <v-col class="skill">
         <div class="skill__card">
           <div class="detail-tag">自己紹介</div>
-          <SkillUser />
+          <SkillUser :user="userInfo" />
         </div>
       </v-col>
       <v-col class="pr">

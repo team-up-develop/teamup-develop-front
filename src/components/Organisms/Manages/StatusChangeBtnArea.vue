@@ -15,7 +15,7 @@ type State = {
 };
 
 const initialState = (): State => ({
-  statusId: 1,
+  statusId: m.APPLY_STATUS_APPLY,
   updatedAt: "",
 });
 

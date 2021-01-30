@@ -39,6 +39,9 @@ export default Vue.extend({
       catchError(error);
     }
   },
+  mounted() {
+    console.log("毎回よばrててほしい");
+  },
   methods: {
     // * 案件を保存する
     async saveJob() {

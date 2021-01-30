@@ -1,5 +1,10 @@
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+} from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
@@ -8,85 +13,80 @@ import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
 // import Logout from '@/components/button/Logout'
 import { User } from "@/types/index";
+import Vuex from "@/store/index";
 
-type DataType = {
+type State = {
   myselfFlag: boolean;
   userInfo: User;
   userId: number;
   modal: boolean;
-  // loading: boolean;
 };
 
-export default Vue.extend({
+const initialState = (): State => ({
+  myselfFlag: false,
+  userInfo: {},
+  userId: Vuex.state.auth.userId,
+  modal: false,
+});
+
+export default defineComponent({
   components: {
     ProfileEditModal,
     // Logout
-    // Loading,
     PostUser,
     SkillUser,
     IntroduceUser,
   },
   props: {
-    id: { type: Number as PropType<number>, default: 0 },
+    id: { type: Number, default: 0 },
   },
-  data(): DataType {
-    return {
-      myselfFlag: false,
-      userInfo: {},
-      userId: this.$store.state.auth.userId,
-      modal: false,
-      // loading: true, //? ローディング
-    };
-  },
-  created() {
-    if (this.userId == this.id) {
-      this.myselfFlag = true;
-    }
-    // * ユーザー情報取得
-    axios
-      .get(`${API_URL}/user/${this.id}`)
-      .then((res) => {
-        // setTimeout(() => {
-        //   this.loading = false;
-        console.log(res);
-        this.userInfo = res.data.response;
-        // }, 1000)
-      })
-      .catch((error) => {
-        catchError(error);
-      });
-  },
-  methods: {
-    // * モーダル
-    openModal() {
-      this.modal = true;
-    },
-    closeModal() {
-      this.modal = false;
-    },
-    doSend() {
-      this.closeModal();
-    },
-    // * 編集完了 emit
-    compliteEdit() {
-      this.closeModal();
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const fetchUser = async () => {
       // * ユーザー情報取得
-      axios
-        .get(`${API_URL}/user/${this.id}`)
-        .then((res) => {
-          // this.loading = true;
-          // setTimeout(() => {
-          // this.loading = false;
-          this.userInfo = res.data.response;
-          // }, 1000)
-        })
-        .catch((error) => {
-          catchError(error);
-        });
-    },
-    editEmit() {
-      this.openModal();
-    },
+      try {
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    if (state.userId == props.id) {
+      state.myselfFlag = true;
+    }
+
+    onMounted(() => {
+      fetchUser();
+    });
+
+    const openModal = () => {
+      state.modal = true;
+    };
+    const closeModal = () => {
+      state.modal = false;
+    };
+    const doSend = () => {
+      closeModal();
+    };
+
+    // * 編集完了 emit
+    const compliteEdit = async () => {
+      closeModal();
+      fetchUser();
+    };
+    const editEmit = () => {
+      openModal();
+    };
+
+    return {
+      ...toRefs(state),
+      openModal,
+      doSend,
+      compliteEdit,
+      editEmit,
+    };
   },
 });
 </script>
@@ -127,7 +127,7 @@ export default Vue.extend({
       <v-col class="skill">
         <div class="skill__card">
           <div class="detail-tag">開発スキル</div>
-          <SkillUser />
+          <SkillUser :user="userInfo" />
         </div>
       </v-col>
       <v-col class="pr">
@@ -137,7 +137,7 @@ export default Vue.extend({
         </div>
       </v-col>
       <div class="button-area">
-        <div v-if="myselfFlag === true" class="button-action-area">
+        <div v-if="myselfFlag" class="button-action-area">
           <button @click="openModal" class="btn-box-edit">編集する</button>
         </div>
         <div class="button-action-area" v-else></div>

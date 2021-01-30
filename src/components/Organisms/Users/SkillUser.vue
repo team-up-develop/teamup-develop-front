@@ -1,6 +1,11 @@
 <script lang="ts">
-import Vue from "vue";
-export default Vue.extend({});
+import { defineComponent } from "@vue/composition-api";
+
+export default defineComponent({
+  props: {
+    user: { type: Object, require: true, defalut: {} },
+  },
+});
 </script>
 
 <template>
@@ -9,24 +14,32 @@ export default Vue.extend({});
       <div class="lang-area">
         <label for="name" class="name-tag">開発言語</label>
         <div class="lang-box">
-          <div class="skill-tag">
-            JavaScript ハリボテ
+          <div
+            class="skill-tag"
+            v-for="langage in user.programing_languages"
+            :key="langage.id"
+          >
+            {{ langage.programing_language_name }}
           </div>
         </div>
       </div>
       <div class="lang-area">
         <label for="name" class="name-tag">フレームワーク</label>
         <div class="lang-box">
-          <div class="flame-tag">
-            Vue ハリボテ
+          <div
+            v-for="framework in user.programing_frameworks"
+            :key="framework.id"
+            class="flame-tag"
+          >
+            {{ framework.programing_framework_name }}
           </div>
         </div>
       </div>
       <div class="lang-area">
         <label for="name" class="name-tag">その他関連スキル</label>
         <div class="lang-box">
-          <div class="other-tag">
-            Docker ハリボテ
+          <div class="other-tag" v-for="skill in user.skills" :key="skill.id">
+            {{ skill.skill_name }}
           </div>
         </div>
       </div>

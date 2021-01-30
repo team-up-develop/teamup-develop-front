@@ -1,30 +1,23 @@
 <script lang="ts">
-import Vue from 'vue';
-import { 
-  API_URL,
-  catchError,
-} from '@/master'
-import axios from 'axios'
-import vSelect from 'vue-select'
+import Vue from "vue";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import vSelect from "vue-select";
 // import 'vue-select/dist/vue-select.css';
-import { 
-  Language,
-  Framework,
-  Skill,
-} from '@/types/index';
+import { Language, Framework, Skill } from "@/types/index";
 
 type DataType = {
-  selectedLang: []; 
+  selectedLang: [];
   languages: Language[];
   selectedFramwork: [];
   framworks: Framework[];
   selectedSkill: [];
   skills: Skill[];
-}
+};
 
-export default Vue.extend({ 
+export default Vue.extend({
   components: {
-    vSelect
+    vSelect,
   },
   data(): DataType {
     return {
@@ -34,57 +27,72 @@ export default Vue.extend({
       framworks: [],
       selectedSkill: [], //? その他開発スキル
       skills: [],
-    }
+    };
   },
   mounted() {
     // *開発言語
-    axios.get<Language[]>(`${API_URL}/programing_language`)
-    .then(res => {
-      this.languages = res.data
-    })
-    .catch(error =>{ catchError(error) })
+    axios
+      .get<Language[]>(`${API_URL}/programing_language`)
+      .then((res) => {
+        this.languages = res.data;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
     // * フレームワーク
-    axios.get<Framework[]>(`${API_URL}/programing_framework`)
-    .then(res => {
-      this.framworks = res.data
-    })
-    .catch(error =>{ catchError(error) })
+    axios
+      .get<Framework[]>(`${API_URL}/programing_framework`)
+      .then((res) => {
+        this.framworks = res.data;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
     // * その他スキル
-    axios.get<Skill[]>(`${API_URL}/skill`)
-    .then(res => {
-      this.skills = res.data
-    })
-    .catch(error =>{ catchError(error) })
+    axios
+      .get<Skill[]>(`${API_URL}/skill`)
+      .then((res) => {
+        this.skills = res.data;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
   },
   methods: {
     nextStep3() {
       // * 言語を {id: Number}に変換
       const languageArray: {}[] = [];
-      for(let i = 0; i < this.selectedLang.length; i++) {
-        languageArray.push({id: this.selectedLang[i]})
+      for (let i = 0; i < this.selectedLang.length; i++) {
+        languageArray.push({ id: this.selectedLang[i] });
       }
       // * フレームワークを{id: Number}に変換
       const framworksArray: {}[] = [];
-      for(let c = 0; c < this.selectedFramwork.length; c++) {
-        framworksArray.push({id: this.selectedFramwork[c]})
+      for (let c = 0; c < this.selectedFramwork.length; c++) {
+        framworksArray.push({ id: this.selectedFramwork[c] });
       }
       // * その他スキルを {id: Number}に変換
       const skillArray: {}[] = [];
-      for(let d = 0; d < this.selectedSkill.length; d++) {
-        skillArray.push({id: this.selectedSkill[d]})
+      for (let d = 0; d < this.selectedSkill.length; d++) {
+        skillArray.push({ id: this.selectedSkill[d] });
       }
 
       const params = {
-        programingLanguage: languageArray,  //? プログラミング言語
-        programingFramework: framworksArray , //? フレームワーク
+        programingLanguage: languageArray, //? プログラミング言語
+        programingFramework: framworksArray, //? フレームワーク
         skill: skillArray, //? その他開発スキル,
       };
-      sessionStorage.setItem('programingLanguage', JSON.stringify(params.programingLanguage));
-      sessionStorage.setItem('programingFramework', JSON.stringify(params.programingFramework));
-      sessionStorage.setItem('skill', JSON.stringify(params.skill));
-      return this.$router.push('/step/3');
-    }
-  }
+      sessionStorage.setItem(
+        "programingLanguage",
+        JSON.stringify(params.programingLanguage)
+      );
+      sessionStorage.setItem(
+        "programingFramework",
+        JSON.stringify(params.programingFramework)
+      );
+      sessionStorage.setItem("skill", JSON.stringify(params.skill));
+      return this.$router.push("/step/3");
+    },
+  },
 });
 </script>
 
@@ -111,7 +119,7 @@ export default Vue.extend({
                 :options="languages"
                 label="programingLanguageName"
                 v-model="selectedLang"
-                :reduce="languages => languages.id"
+                :reduce="(languages) => languages.id"
                 placeholder="開発言語を入力してください"
               />
               <!-- <h1>Selected 言語:{{ selectedLang }}</h1> -->
@@ -124,9 +132,9 @@ export default Vue.extend({
                 :options="framworks"
                 label="programingFrameworkName"
                 v-model="selectedFramwork"
-                :reduce="framworks => framworks.id"
+                :reduce="(framworks) => framworks.id"
                 placeholder="フレームワークを入力してください"
-                />
+              />
             </div>
             <div class="input-area">
               <label for="name" class="label">経験スキル</label>
@@ -136,7 +144,7 @@ export default Vue.extend({
                 :options="skills"
                 label="skillName"
                 v-model="selectedSkill"
-                :reduce="skills => skills.id"
+                :reduce="(skills) => skills.id"
                 placeholder="その他スキルを入力してください"
               />
             </div>
@@ -151,7 +159,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 section {
   height: 95vh;
@@ -174,7 +182,7 @@ section {
     max-width: 500px;
     height: 90%;
     margin: 0rem auto 3rem auto;
-    border: solid 1px #B9B9B9;
+    border: solid 1px #b9b9b9;
     border-radius: 20px;
     padding: 2rem;
 
@@ -257,7 +265,7 @@ section {
           padding: 1.1rem 4rem;
           border-radius: 25px;
           border: none;
-          font-size: .875rem;
+          font-size: 0.875rem;
           font-weight: 600;
           line-height: 1;
           text-align: center;
@@ -267,7 +275,7 @@ section {
           float: right;
           margin-top: 1.5rem;
           cursor: pointer;
-          transition: .3s;
+          transition: 0.3s;
           outline: none;
 
           &:hover {
@@ -277,6 +285,5 @@ section {
       }
     }
   }
-
 }
 </style>

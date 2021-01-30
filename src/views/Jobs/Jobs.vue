@@ -201,7 +201,6 @@ export default defineComponent({
     const compliteSearchSkill = (emitSkill: Job[]) => {
       searchJobPagenate(emitSkill);
     };
-
     // * フリーワード 検索
     const searchFreeword = async () => {
       const posts: Job[] = [];
@@ -223,7 +222,6 @@ export default defineComponent({
         catchError(error);
       }
     };
-
     // * 検索後の処理
     const searchJobPagenate = (value: Job[]) => {
       state.jobs = value.slice().reverse();
@@ -249,7 +247,6 @@ export default defineComponent({
         }
       }, 1500);
     };
-
     // * ページネーション
     const pageChange = (pageNumber: number) => {
       state.loading = true;
@@ -261,7 +258,6 @@ export default defineComponent({
         );
       }, 1000);
     };
-
     // * click して案件を取得 === 詳細
     const getJob = async (job: any) => {
       // FIXME: any
@@ -550,7 +546,7 @@ export default defineComponent({
                 </button>
                 <div class="btn-box-apply-false" v-else>応募済み</div>
                 <div class="btn-box-save">
-                  <FavoriteBtn :jobId="jobDetail.id" />
+                  <FavoriteBtn :jobId="id" />
                 </div>
                 <div class="label-area mt-5">
                   <JobStatusNew :job="jobDetail" />

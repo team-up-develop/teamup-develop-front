@@ -11,7 +11,7 @@ export default defineComponent({
     updatedAt: { type: String, defalut: String(new Date()), require: true },
   },
   setup: (props, context) => {
-    console.log(props.updatedAt);
+    // console.log(props);
 
     const applyUserPut = async () => {
       const params: ParticipateParams = {

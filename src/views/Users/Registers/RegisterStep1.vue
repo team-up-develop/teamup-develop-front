@@ -1,6 +1,6 @@
 <script lang="ts">
-import Vue from 'vue';
-import { RegisterSessionParams } from '@/types/params';
+import Vue from "vue";
+import { RegisterSessionParams } from "@/types/params";
 
 type DataType = {
   userName: string;
@@ -8,40 +8,44 @@ type DataType = {
   userBirthday: string;
   learningStartDate: string;
   dialog: boolean;
-}
+};
 
-export default Vue.extend({ 
+export default Vue.extend({
   data(): DataType {
     return {
-      userName: '',
-      nickName: '',
-      userBirthday: '',
-      learningStartDate: '',
+      userName: "",
+      nickName: "",
+      userBirthday: "",
+      learningStartDate: "",
       dialog: false,
-    }
+    };
   },
   methods: {
     nextStep2() {
-      if(this.userName && this.nickName && this.userBirthday && this.learningStartDate ) {
+      if (
+        this.userName &&
+        this.nickName &&
+        this.userBirthday &&
+        this.learningStartDate
+      ) {
         const params: RegisterSessionParams = {
           userName: this.userName,
           nickName: this.nickName,
           userBirthday: this.userBirthday,
           learningStartDate: this.learningStartDate,
-        }
-        console.log("入力された値は" + params + "です。")
-        sessionStorage.setItem('userName', params.userName);
-        sessionStorage.setItem('nickName', params.nickName);
-        sessionStorage.setItem('userBirthday', params.userBirthday);
-        sessionStorage.setItem('learningStartDate', params.learningStartDate);
-        
-        return this.$router.push('/step/2');
-      }
-      else {
-        console.log("必須が入力されていません")
+        };
+        console.log("入力された値は" + params + "です。");
+        sessionStorage.setItem("userName", params.userName);
+        sessionStorage.setItem("nickName", params.nickName);
+        sessionStorage.setItem("userBirthday", params.userBirthday);
+        sessionStorage.setItem("learningStartDate", params.learningStartDate);
+
+        return this.$router.push("/step/2");
+      } else {
+        console.log("必須が入力されていません");
       }
     },
-  }
+  },
 });
 </script>
 
@@ -61,28 +65,31 @@ export default Vue.extend({
           <!-- 中央 -->
           <div class="box-center">
             <div class="input-area">
-              <label for="name" class="label">氏名</label><label for="name" class="label-required">必須</label>
-              <input type="text" v-model="userName"  placeholder="例) チームアップ 太郎" maxlength="30" >
+              <label for="name" class="label">氏名</label
+              ><label for="name" class="label-required">必須</label>
+              <input
+                type="text"
+                v-model="userName"
+                placeholder="例) チームアップ 太郎"
+                maxlength="30"
+              />
             </div>
             <div class="input-area">
-              <label for="name" class="label">ユーザー名</label><label for="name" class="label-required">必須</label>
+              <label for="name" class="label">ユーザー名</label
+              ><label for="name" class="label-required">必須</label>
               <template>
                 <div class="user-dialog-tag">
-                  <v-dialog
-                    v-model="dialog"
-                    width="500"
-                  >
+                  <v-dialog v-model="dialog" width="500">
                     <template v-slot:activator="{ on, attrs }">
-                      <span
-                        v-bind="attrs"
-                        v-on="on"
-                      >
-                      ユーザー名とは？
+                      <span v-bind="attrs" v-on="on">
+                        ユーザー名とは？
                       </span>
                     </template>
                     <v-card>
                       <v-card-title class="headline light-blue lighten-2">
-                        <span class="user-dialog-title-text">ユーザー名とは？</span>
+                        <span class="user-dialog-title-text"
+                          >ユーザー名とは？</span
+                        >
                       </v-card-title>
                       <v-card-text>
                         <p class="text">
@@ -93,11 +100,7 @@ export default Vue.extend({
                       <v-divider></v-divider>
                       <v-card-actions>
                         <v-spacer></v-spacer>
-                        <v-btn
-                          color="primary"
-                          text
-                          @click="dialog = false"
-                        >
+                        <v-btn color="primary" text @click="dialog = false">
                           閉じる
                         </v-btn>
                       </v-card-actions>
@@ -105,15 +108,32 @@ export default Vue.extend({
                   </v-dialog>
                 </div>
               </template>
-              <input type="text" v-model="nickName"  placeholder="例) チームアップ 太郎" maxlength="30" >
+              <input
+                type="text"
+                v-model="nickName"
+                placeholder="例) チームアップ 太郎"
+                maxlength="30"
+              />
             </div>
             <div class="input-area">
-              <label for="name" class="label">生年月日</label><label for="name" class="label-required">必須</label>
-              <input type="date" v-model="userBirthday" placeholder="例) チームアップ 太郎" maxlength="30" >
+              <label for="name" class="label">生年月日</label
+              ><label for="name" class="label-required">必須</label>
+              <input
+                type="date"
+                v-model="userBirthday"
+                placeholder="例) チームアップ 太郎"
+                maxlength="30"
+              />
             </div>
             <div class="input-area">
-              <label for="name" class="label">学習開始日</label><label for="name" class="label-required">必須</label>
-              <input type="date" v-model="learningStartDate" placeholder="例) チームアップ 太郎" maxlength="30" >
+              <label for="name" class="label">学習開始日</label
+              ><label for="name" class="label-required">必須</label>
+              <input
+                type="date"
+                v-model="learningStartDate"
+                placeholder="例) チームアップ 太郎"
+                maxlength="30"
+              />
             </div>
           </div>
           <div class="box-bottom">
@@ -126,16 +146,15 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 // * Vutify
 .user-dialog-title-text {
   color: $white;
   font-weight: bold;
 }
 .text {
-  padding: 1rem 0 0 0 ;
+  padding: 1rem 0 0 0;
 }
-
 
 section {
   height: 95vh;
@@ -158,7 +177,7 @@ section {
     max-width: 500px;
     height: 90%;
     margin: 0rem auto 3rem auto;
-    border: solid 1px #B9B9B9;
+    border: solid 1px #b9b9b9;
     border-radius: 20px;
     padding: 2rem;
 
@@ -229,7 +248,7 @@ section {
             margin-left: 10px;
           }
 
-          input[type='text'] {
+          input[type="text"] {
             @include input-border-color;
             background-color: $dark-white;
             color: $text-main-color;
@@ -248,7 +267,7 @@ section {
             }
           }
 
-          input[type='date'] {
+          input[type="date"] {
             @include input-border-color;
             background-color: $dark-white;
             color: $text-main-color;
@@ -266,7 +285,6 @@ section {
               @include form-hover;
             }
           }
-
         }
       }
 
@@ -285,7 +303,7 @@ section {
           padding: 1.1rem 4rem;
           border-radius: 25px;
           border: none;
-          font-size: .875rem;
+          font-size: 0.875rem;
           font-weight: 600;
           line-height: 1;
           text-align: center;
@@ -295,7 +313,7 @@ section {
           float: right;
           margin-top: 1.5rem;
           cursor: pointer;
-          transition: .3s;
+          transition: 0.3s;
           outline: none;
 
           &:hover {

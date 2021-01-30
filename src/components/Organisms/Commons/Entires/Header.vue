@@ -1,27 +1,35 @@
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
 import CreateBtn from "@/components/Atoms/Commons/Entires/CreateBtn.vue";
+import Vuex from "@/store/index";
+import { truncate } from "@/master";
 
-type DataType = {
+type State = {
   userId: number;
+  userName: string;
 };
 
-export default Vue.extend({
+const initialState = (): State => ({
+  userId: Vuex.state.auth.userId,
+  userName: Vuex.state.auth.loginName,
+});
+
+export default defineComponent({
   components: {
     Logo,
     CreateBtn,
   },
-  data(): DataType {
+
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    const limit = (value: string, num: number) => truncate(value, num);
+
     return {
-      userId: this.$store.state.auth.userId,
-      // userName: null,
+      ...toRefs(state),
+      limit,
     };
-  },
-  created() {
-    if (this.userId !== undefined) {
-      return;
-    }
   },
 });
 </script>
@@ -44,12 +52,15 @@ export default Vue.extend({
               <v-list-item-group color="primary">
                 <v-list style="z-index: 100;">
                   <v-list-item>
-                    <router-link to="/account/profile/1" class="menu-list">
+                    <router-link
+                      :to="`/account/profile/${userId}`"
+                      class="menu-list"
+                    >
                       <v-list-item-title>
                         <v-icon class="icon"
                           >mdi-card-account-details-outline</v-icon
                         >
-                        Kazuya
+                        {{ limit(userName, 6) }}
                       </v-list-item-title>
                     </router-link>
                   </v-list-item>

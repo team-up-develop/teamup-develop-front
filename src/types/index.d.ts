@@ -18,21 +18,23 @@ export type Job = {
   user_id: number;
 };
 
-export type User = {
-  bio: string;
-  created_at: Date;
-  deleted_at: Date | null;
-  id: number;
-  job: null;
-  learning_start_date: Date;
-  twitter_account: string | null;
-  github_account: string | null;
-  updatedAt: Date;
-  birthday: Date;
-  login_name: string;
-  login_password: string;
-  user_name: string;
-} | {};
+export type User =
+  | {
+      bio: string;
+      created_at: Date;
+      deleted_at: Date | null;
+      id: number;
+      job: null;
+      learning_start_date: Date;
+      twitter_account: string | null;
+      github_account: string | null;
+      updatedAt: Date;
+      birthday: Date;
+      login_name: string;
+      login_password: string;
+      user_name: string;
+    }
+  | {};
 
 export type ManageJob = {
   apply_status_id: number;
@@ -44,7 +46,7 @@ export type ManageJob = {
   updatedAt: Date;
   user: User;
   userId: number;
-}
+};
 
 export type ApplyJob = {
   id: number;
@@ -54,14 +56,14 @@ export type ApplyJob = {
   job: Job;
   user_id: number;
   user: User;
-}
+};
 
 export type FavoriteJob = {
   job_id: number;
   job: Job;
   user_id: number;
   user: User;
-}
+};
 
 export type Language = {
   id: number;
@@ -69,7 +71,7 @@ export type Language = {
   updatedAt: Date;
   deletedAt: Date | null;
   programing_language_name: string;
-}
+};
 
 export type Framework = {
   id: number;
@@ -77,7 +79,7 @@ export type Framework = {
   updatedAt: Date;
   deletedAt: Date | null;
   programing_framework_name: string;
-}
+};
 
 export type Skill = {
   id: number;
@@ -85,7 +87,7 @@ export type Skill = {
   updatedAt: Date;
   deletedAt: Date | null;
   skill_name: string;
-}
+};
 
 export type Message = {
   createdAt: Date;
@@ -97,4 +99,4 @@ export type Message = {
   updatedAt: Date;
   user: User;
   userId: number;
-}
+};
