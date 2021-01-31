@@ -1,31 +1,43 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import CardJobSkill from '@/components/Atoms/Jobs/CardJobSkill.vue'
-import { truncate, dayJs } from '@/master'
+import { defineComponent, computed } from "@vue/composition-api";
+import CardJobSkill from "@/components/Atoms/Jobs/CardJobSkill.vue";
+import { truncate, dayJs, m } from "@/master";
+import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
-    CardJobSkill
+    CardJobSkill,
+    JobStatusNew,
   },
   props: {
-    job: { type: Object, defalut: null, require: true }
+    job: { type: Object, defalut: null, require: true },
   },
-  setup: () => {
+  setup: (props: any) => {
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
+
+    const isStatusNew = computed(() => {
+      if (props.job.job_status_id == m.JOB_STATUS_NEW) {
+        return true;
+      }
+      return false;
+    });
+
     return {
       limit,
-      day
-    }
-  }
+      day,
+      m: computed(() => m),
+      isStatusNew,
+    };
+  },
 });
 </script>
 
 <template>
   <div class="job-cards">
     <div class="job-cards__top">
-      <span>{{ limit(job.jobTitle, 40) }}</span>
-      <p>{{ limit(job.jobTitle, 30) }}</p>
+      <span>{{ limit(job.job_title, 40) }}</span>
+      <p>{{ limit(job.job_title, 30) }}</p>
     </div>
     <div class="job-cards__center">
       <!-- カード スキルコンポーネント -->
@@ -37,25 +49,27 @@ export default defineComponent({
           開発期間:
         </div>
         <div class="product-start-end-time">
-          {{ day(job.devStartDate , "YYYY年 M月 D日") }}  ~  
-          {{ day(job.devEndDate, "YYYY年 M月 D日") }}
+          {{ day(job.dev_start_date, "YYYY年 M月 D日") }} ~
+          {{ day(job.dev_end_date, "YYYY年 M月 D日") }}
         </div>
       </div>
       <div class="post-user-area">
         <div class="post-user-image"></div>
         <div class="post-user-name-area">
           <div class="post-user-name">
-            {{ job.user.userName }}
+            {{ job.user.user_name }}
           </div>
+        </div>
+        <div class="label-area mt-5">
+          <JobStatusNew :job="job" />
         </div>
       </div>
     </div>
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .job-cards {
   width: 97%;
@@ -63,7 +77,7 @@ export default defineComponent({
   border: solid 1px $card-border-color;
   background-color: $white;
   border-radius: 8px;
-  transition: .3s;
+  transition: 0.3s;
   color: $text-main-color;
   cursor: pointer;
 
@@ -111,12 +125,12 @@ export default defineComponent({
   }
 
   &__bottom {
-    padding: 1rem 0px 1.5rem 0 ;
+    padding: 1rem 0px 1.5rem 0;
     pointer-events: none;
     margin-top: 0.2rem;
 
     @media screen and (max-width: 420px) {
-      padding: 0.5rem 0px 1.1rem 0 ;
+      padding: 0.5rem 0px 1.1rem 0;
     }
 
     .product-start-end {
@@ -149,8 +163,8 @@ export default defineComponent({
     }
 
     .post-user-area {
+      position: relative;
       padding: 0.5rem 0px 0 2rem;
-      // width: 30%;
       text-align: left;
       pointer-events: none;
       position: relative;
@@ -186,6 +200,31 @@ export default defineComponent({
           pointer-events: none;
         }
       }
+
+      // TODO: 修正
+      .label-area {
+        margin-left: 1rem;
+
+        @media screen and (max-width: 1100px) {
+          margin-left: 0.2rem;
+        }
+
+        @media screen and (max-width: 999px) {
+          margin-left: 4rem;
+        }
+        @media screen and (max-width: 800px) {
+          margin-left: 2rem;
+        }
+        @media screen and (max-width: 768px) {
+          margin-left: 1rem;
+        }
+        @media screen and (max-width: 500px) {
+          margin-left: 0.5rem;
+        }
+        @media screen and (max-width: 430px) {
+          margin-left: 0rem;
+        }
+      }
     }
   }
   // レスポンシブ時
@@ -193,5 +232,4 @@ export default defineComponent({
     display: none;
   }
 }
-
 </style>

@@ -1,7 +1,7 @@
 <script lang="ts">
-import Vue from 'vue';
-import axios from 'axios'
-import { API_URL } from '@/master'
+import Vue from "vue";
+import axios from "axios";
+import { API_URL, catchError } from "@/master";
 
 type DataType = {
   LoginName: string;
@@ -9,44 +9,48 @@ type DataType = {
   emailRules: any[];
   show2: boolean;
   rules: any;
-}
+};
 
-export default Vue.extend({ 
+export default Vue.extend({
   data(): DataType {
     return {
-      LoginName: '',
-      LoginPassword: '',
+      LoginName: "",
+      LoginPassword: "",
       show2: true,
-      rules: { //? パスワード 文字数
-        required: (value: any) => !!value || 'パスワードが入力されていません.',
-        min: (v: any) => v.length >= 8 || '8文字以上で入力してください',
-        emailMatch: () => (`The email and password you entered don't match`),
+      rules: {
+        //? パスワード 文字数
+        required: (value: any) => !!value || "パスワードが入力されていません.",
+        min: (v: any) => v.length >= 8 || "8文字以上で入力してください",
+        emailMatch: () => `The email and password you entered don't match`,
       },
-      emailRules: [ //? メールアドレス 文字数
-        (v: string) => !!v || 'メールアドレスが入力されていません',
-        (v: string) => /.+@.+/.test(v) || '有効なメールアドレスを入力してください',
+      emailRules: [
+        //? メールアドレス 文字数
+        (v: string) => !!v || "メールアドレスが入力されていません",
+        (v: string) =>
+          /.+@.+/.test(v) || "有効なメールアドレスを入力してください",
       ],
-    }
+    };
   },
   methods: {
     register() {
       const params = {
         LoginName: this.LoginName,
         LoginPassword: this.LoginPassword,
-      }
+      };
 
-      axios.post(`${API_URL}/signup`, params)
-      .then(response => {
-        console.log(response);
-        return this.$router.push('/register/sent_mail');
-      })
-      .catch(error => {
-        console.log(error)
-      })
+      axios
+        .post(`${API_URL}/signup`, params)
+        .then((res) => {
+          console.log(res);
+          return this.$router.push("/register/sent_mail");
+        })
+        .catch((error) => {
+          catchError(error);
+        });
       this.LoginName = "";
       this.LoginPassword = "";
     },
-  }
+  },
 });
 </script>
 
@@ -57,11 +61,8 @@ export default Vue.extend({
         <div class="login-title">REGISTER</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
-          <br/><br/>
-          <v-row
-            cols="12"
-            md="4"
-          >
+          <br /><br />
+          <v-row cols="12" md="4">
             <v-text-field
               class="textholder"
               v-model="LoginName"
@@ -76,11 +77,8 @@ export default Vue.extend({
         </div>
         <div class="name-form-password">
           <label for="name">パスワード</label>
-          <br/><br/>
-          <v-row
-            cols="12"
-            md="4"
-          >
+          <br /><br />
+          <v-row cols="12" md="4">
             <v-text-field
               :type="show2 ? 'text' : 'password'"
               :rules="[rules.required, rules.min]"
@@ -97,18 +95,21 @@ export default Vue.extend({
             ></v-text-field>
           </v-row>
         </div>
-          <div class="btn-area">
-            <p>登録済みの方は<router-link to="/login" class="router-link"><span>こちら</span></router-link></p>
-            <div @click="register" class="login-btn">新規登録</div>
-          </div>
+        <div class="btn-area">
+          <p>
+            登録済みの方は<router-link to="/login" class="router-link"
+              ><span>こちら</span></router-link
+            >
+          </p>
+          <div @click="register" class="login-btn">新規登録</div>
         </div>
+      </div>
     </div>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 section {
   height: 87vh;
@@ -132,7 +133,7 @@ section {
     max-width: 500px;
     height: 620px;
     margin: 2rem auto 3rem auto;
-    border: solid 1px #B9B9B9;
+    border: solid 1px #b9b9b9;
     border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
@@ -141,7 +142,7 @@ section {
     //* ログインタイトル
     .login-title {
       color: $secondary-dark;
-      font-size: 1.8rem;  
+      font-size: 1.8rem;
       font-weight: bold;
       height: 50px;
       margin-top: 1rem;
@@ -194,7 +195,7 @@ section {
         width: 100%;
         padding: 1.2rem 5rem;
         border-radius: 50px;
-        font-size: .875rem;
+        font-size: 0.875rem;
         font-weight: 600;
         line-height: 1;
         text-align: center;
@@ -204,7 +205,7 @@ section {
         display: inline-block;
         cursor: pointer;
         margin: 0 auto;
-        transition: .3s;
+        transition: 0.3s;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
         outline: none;
       }
@@ -218,7 +219,7 @@ section {
 
     .login-container {
       width: 98%;
-      padding: 1rem ;
+      padding: 1rem;
 
       .btn-area {
         width: 90%;

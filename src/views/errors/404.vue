@@ -2,38 +2,40 @@
   <div class="app">
     <div>404</div>
     <div class="txt">
-      <span>こちらのページは存在しません。<span class="blink">_</span></span><br>
+      <span>こちらのページは存在しません。<span class="blink">_</span></span
+      ><br />
       <span>URLが正しいか確認してください。</span>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css?family=Press+Start+2P');
-@import '@/assets/scss/_variables.scss';
+@import url("https://fonts.googleapis.com/css?family=Press+Start+2P");
+@import "@/assets/scss/_variables.scss";
 
 $color2: #1a4f1a;
 $glowSize: 10px;
 
-html,body{
+html,
+body {
   width: 100%;
   height: 100%;
   margin: 0;
 }
 
-*{
-  font-family: 'Press Start 2P', cursive;
+* {
+  font-family: "Press Start 2P", cursive;
   box-sizing: border-box;
 }
-.app{
+.app {
   padding: 1rem;
   background: rgb(255, 255, 255);
   display: flex;
   height: 93vh;
-  justify-content: center; 
+  justify-content: center;
   align-items: center;
   color: $primary-color;
-  text-shadow: 0px 0px $glowSize ;
+  text-shadow: 0px 0px $glowSize;
   font-size: 6rem;
   flex-direction: column;
   .txt {
@@ -41,10 +43,18 @@ html,body{
   }
 }
 @keyframes blink {
-  0%   {opacity: 0}
-  49%  {opacity: 0}
-  50%  {opacity: 1}
-  100% {opacity: 1}
+  0% {
+    opacity: 0;
+  }
+  49% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 1;
+  }
 }
 
 .blink {

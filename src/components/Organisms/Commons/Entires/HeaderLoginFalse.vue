@@ -1,16 +1,16 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
-import Logo from '@/components/Atoms/Commons/Entires/Logo.vue'
-import BtnArea from '@/components/Molecules/Commons/Entires/BtnArea.vue'
+import Vue, { PropType } from "vue";
+import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
+import BtnArea from "@/components/Molecules/Commons/Entires/BtnArea.vue";
 
-export default Vue.extend({ 
+export default Vue.extend({
   components: {
     Logo,
-    BtnArea
+    BtnArea,
   },
   props: {
-    flag: Boolean as PropType<boolean>
-  }
+    flag: Boolean as PropType<boolean>,
+  },
 });
 </script>
 
@@ -30,7 +30,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .header-wrapper {
   background-color: #ffffff;
@@ -71,8 +71,8 @@ export default Vue.extend({
 
       .header-main-right {
         width: 440px;
-        padding: 0.7rem 0rem 0 0 ;
-        position: absolute; 
+        padding: 0.7rem 0rem 0 0;
+        position: absolute;
         right: 0;
         top: 0;
 
@@ -89,7 +89,7 @@ export default Vue.extend({
 }
 
 /* スマホ */
-@media (max-width: 500px){
+@media (max-width: 500px) {
   .header-wrapper .header-logo-area {
     padding: 0 0 0 0.3rem;
   }

@@ -1,10 +1,10 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import axios from 'axios';
-import { m, API_URL } from '@/master'
-import { RejectParams } from '@/types/manage';
+import { defineComponent } from "@vue/composition-api";
+import axios from "axios";
+import { m, API_URL, catchError } from "@/master";
+import { RejectParams } from "@/types/params";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
     id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
     jobId: { type: Number, default: 0 },
@@ -14,19 +14,19 @@ export default defineComponent({
       const params: RejectParams = {
         jobId: props.jobId,
         userId: props.id,
-        applyStatusId: m.APPLY_STATUS_REJECT
+        applyStatusId: m.APPLY_STATUS_REJECT,
       };
       try {
-        await axios.put(`${API_URL}/apply_job/`, params)
+        await axios.put(`${API_URL}/apply_job/`, params);
         context.emit("reject", m.APPLY_STATUS_REJECT);
       } catch (error) {
-        console.log(error)
+        catchError(error);
       }
     };
     return {
-      applyUserReject
-    }
-  }
+      applyUserReject,
+    };
+  },
 });
 </script>
 
@@ -37,14 +37,14 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .btn-reject {
   @include neumorphismGrey;
   color: $red;
   margin-left: 1rem;
   padding: 1.2rem 5.5rem;
-  transition: .3s;
+  transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
@@ -68,5 +68,4 @@ export default defineComponent({
     padding: 1.2rem 2.4rem;
   }
 }
-
 </style>

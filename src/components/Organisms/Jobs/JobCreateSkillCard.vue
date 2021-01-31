@@ -1,16 +1,15 @@
 <script lang="ts">
-import Vue, { PropType }  from 'vue';
-import { API_URL } from '@/master'
-import axios from 'axios'
-import vSelect from 'vue-select'
-// import "vue-select/dist/vue-select.css"
-import Session from '@/components/Atoms/Commons/Session.vue'
-import { JobCreateDataComp } from '@/types/job';
-import { Language } from '@/types/index';
-import { Framework } from '@/types/index';
-import { Skill } from '@/types/index';
+import Vue, { PropType } from "vue";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import vSelect from "vue-select";
+import "vue-select/dist/vue-select.css";
+import Session from "@/components/Atoms/Commons/Session.vue";
+import { JobCreateParamsSecond } from "@/types/params";
+import { Language, Framework, Skill } from "@/types/index";
+import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 
-type DataType = {
+type State = {
   selectedLang: number[];
   languages: Language[];
   selectedFramwork: number[];
@@ -22,12 +21,13 @@ type DataType = {
   selectedLangErrors: string[];
   selectedFramworkErrors: string[];
   selectedSkillErrors: string[];
-}
+  jobStatusId: number;
+};
 
 export default Vue.extend({
   components: {
     vSelect,
-    Session
+    Session,
   },
   props: {
     jobTitle: { type: String as PropType<string>, default: "" },
@@ -35,7 +35,7 @@ export default Vue.extend({
     devEndDate: { type: String as PropType<string>, default: "" },
     jobDescription: { type: String as PropType<string>, default: "" },
   },
-  data(): DataType {
+  data(): State {
     return {
       selectedLang: [], //? プログラミング言語
       languages: [],
@@ -48,192 +48,247 @@ export default Vue.extend({
       selectedLangErrors: [], //?言語入力エラー
       selectedFramworkErrors: [], //?フレームワーク入力エラー
       selectedSkillErrors: [], //?その他スキル入力エラー
-    }
+      jobStatusId: 0,
+    };
   },
   computed: {
     // * 必須が入力されていない
     isForm() {
-      if(this.selectedLang.length !== 0 
-        && this.selectedFramwork.length !== 0 
-        && this.selectedSkill.length !== 0 
-        && this.recruitNumber
-        ) {
-        return true
+      if (
+        this.selectedLang.length !== 0 &&
+        this.selectedFramwork.length !== 0 &&
+        this.selectedSkill.length !== 0 &&
+        this.recruitNumber !== 0 &&
+        this.jobStatusId !== 0
+      ) {
+        return true;
       } else {
-        return false
+        return false;
       }
     },
   },
-  mounted() {
-    // *開発言語
-    axios.get<Language[]>(`${API_URL}/programing_language`)
-    .then(response => {
-      this.languages = response.data;
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    // * フレームワーク
-    axios.get<Framework[]>(`${API_URL}/programing_framework`)
-    .then(response => {
-      this.framworks = response.data;
-    })
-    .catch(error =>{
-      console.log(error)
-    })
-    // * その他スキル
-    axios.get<Skill[]>(`${API_URL}/skill`)
-    .then(response => {
-      this.skills = response.data;
-    })
-    .catch(error =>{
-      console.log(error)
-    })
+  async mounted() {
+    try {
+      const res = await axios.get<FetchLanguages>(
+        `${API_URL}/programing_languages`
+      );
+      this.languages = res.data.response;
+    } catch (error) {
+      catchError(error);
+    }
+    try {
+      const res = await axios.get<FetchFrameworks>(
+        `${API_URL}/programing_frameworks`
+      );
+      this.framworks = res.data.response;
+    } catch (error) {
+      catchError(error);
+    }
+    try {
+      const res = await axios.get<FetchSkills>(`${API_URL}/skills`);
+      this.skills = res.data.response;
+    } catch (error) {
+      catchError(error);
+    }
   },
   methods: {
     // * 案件投稿
-    createJob() {
-      // * 応募者人数を文字列から数値に変換
-      const recruitNum = Number(this.recruitNumber);
+    async createJob() {
       // * 言語を {id: Number}に変換
       const languageArray: {}[] = [];
-      for(let i = 0; i < this.selectedLang.length; i++) {
-        languageArray.push({id: this.selectedLang[i]})
+      for (let i = 0; i < this.selectedLang.length; i++) {
+        languageArray.push({ id: this.selectedLang[i] });
       }
       // * フレームワークを{id: Number}に変換
       const framworksArray: {}[] = [];
-      for(let c = 0; c < this.selectedFramwork.length; c++) {
-        framworksArray.push({id: this.selectedFramwork[c]})
+      for (let c = 0; c < this.selectedFramwork.length; c++) {
+        framworksArray.push({ id: this.selectedFramwork[c] });
       }
       // * その他スキルを {id: Number}に変換
       const skillArray: {}[] = [];
-      for(let d = 0; d < this.selectedSkill.length; d++) {
-        skillArray.push({id: this.selectedSkill[d]})
+      for (let d = 0; d < this.selectedSkill.length; d++) {
+        skillArray.push({ id: this.selectedSkill[d] });
       }
 
       // FIXME:  宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
       // * date型に変換のための data用意
-      function toDate (str: any, delim: any) {
-        const arr = str.split(delim)
+      function toDate(str: any, delim: any) {
+        const arr = str.split(delim);
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
-      
+
       //* 開始日
-      const devStart = this.devStartDate
-      const devStartDate = toDate(devStart, '-');
+      const devStart = this.devStartDate;
+      const devStartDate = toDate(devStart, "-");
       // *終了日
-      const devEnd = this.devEndDate
-      const devEndDate = toDate(devEnd, '-');
+      const devEnd = this.devEndDate;
+      const devEndDate = toDate(devEnd, "-");
 
-      const params: JobCreateDataComp = {
-        userId: this.$store.state.auth.userId, //? ログインUserId
-        jobTitle : this.jobTitle,  //? タイトル
-        jobDescription: this.jobDescription, //? 詳細
-        devStartDate: devStartDate,  //? 開始日
-        devEndDate: devEndDate, //? 終了日
-        programingLanguage: languageArray,  //? プログラミング言語
-        programingFramework: framworksArray , //? フレームワーク
-        skill: skillArray, //? その他開発スキル,
-        recruitmentNumbers: recruitNum //?募集人数
+      const params: JobCreateParamsSecond = {
+        user_id: this.$store.state.auth.userId,
+        job_title: this.jobTitle,
+        job_description: this.jobDescription,
+        dev_start_date: devStartDate,
+        dev_end_date: devEndDate,
+        programing_language_ids: languageArray,
+        programing_framework_ids: framworksArray,
+        skill_ids: skillArray,
+        recruitment_numbers: Number(this.recruitNumber),
+        job_status_id: Number(this.jobStatusId),
       };
-      axios.post(`${API_URL}/job`, params)
-      .then(response => {
-        console.log(response);
-        sessionStorage.removeItem('jobTitle');
-        sessionStorage.removeItem('jobDescription');
-        sessionStorage.removeItem('devStartDateString');
-        sessionStorage.removeItem('devEndDateString');
-        this.$router.push('/job_create/3');
-      })
-      .catch(error => {
-        console.log(error);
-      });
-      this.selectedLang = [];
-      this.selectedFramwork = [];
-      this.selectedSkill = [];
-      this.recruitNumber = 0;
+      try {
+        await axios.post<JobCreateParamsSecond>(`${API_URL}/job`, params);
+        sessionStorage.removeItem("jobTitle");
+        sessionStorage.removeItem("jobDescription");
+        sessionStorage.removeItem("devStartDate");
+        sessionStorage.removeItem("devEndDate");
+        this.$router.push("/job_create/3");
+        this.selectedLang = [];
+        this.selectedFramwork = [];
+        this.selectedSkill = [];
+        this.recruitNumber = 0;
+      } catch (error) {
+        catchError(error);
+      }
     },
-  }
+  },
 });
-
 </script>
 
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="2.5"/>
+      <Session :num="2.5" />
       <section>
         <div class="create-area">
-          <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須 5つまで</label>
+          <label for="name" class="label">開発言語</label
+          ><label for="name" class="label-required">必須 5つまで</label>
           <v-select
             class="input-area"
             multiple
             :options="languages"
-            label="programingLanguageName"
+            label="programing_language_name"
             v-model="selectedLang"
-            :reduce="languages => languages.id"
+            :reduce="(languages) => languages.id"
             :selectable="() => selectedLang.length < 5"
           />
         </div>
         <div class="create-area">
-          <label for="name" class="label">フレームワーク</label><label for="name" class="label-required">必須 5つまで</label>
+          <label for="name" class="label">フレームワーク</label
+          ><label for="name" class="label-required">必須 5つまで</label>
           <label v-if="selectedFramworkErrors.length" class="error-label">
-            <p v-for="selectedFramworkError in selectedFramworkErrors" :key="selectedFramworkError" class="error-message">
-              {{ selectedFramworkError }}</p>
+            <p
+              v-for="selectedFramworkError in selectedFramworkErrors"
+              :key="selectedFramworkError"
+              class="error-message"
+            >
+              {{ selectedFramworkError }}
+            </p>
           </label>
           <v-select
             class="input-area"
             multiple
             :options="framworks"
-            label="programingFrameworkName"
+            label="programing_framework_name"
             v-model="selectedFramwork"
-            :reduce="framworks => framworks.id"
+            :reduce="(framworks) => framworks.id"
             :selectable="() => selectedFramwork.length < 5"
           />
         </div>
         <div class="create-area">
-          <label for="name" class="label">その他技術</label><label for="name" class="label-required">必須 5つまで</label>
+          <label for="name" class="label">その他技術</label
+          ><label for="name" class="label-required">必須 5つまで</label>
           <label v-if="selectedSkillErrors.length" class="error-label">
-            <p v-for="selectedSkillError in selectedSkillErrors" :key="selectedSkillError" class="error-message">
-              {{ selectedSkillError }}</p>
+            <p
+              v-for="selectedSkillError in selectedSkillErrors"
+              :key="selectedSkillError"
+              class="error-message"
+            >
+              {{ selectedSkillError }}
+            </p>
           </label>
           <v-select
             class="input-area"
             multiple
             :options="skills"
-            label="skillName"
+            label="skill_name"
             v-model="selectedSkill"
-            :reduce="skills => skills.id"
+            :reduce="(skills) => skills.id"
             :selectable="() => selectedSkill.length < 5"
           />
         </div>
         <div class="create-area">
-          <label for="name" class="label">募集人数</label><label for="name" class="label-required">必須</label>
-          <v-row class="radio">
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="1">1人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="2">2人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="3">3人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="4">4人</label>
-            <label class="radio-btn"><input type="radio" v-model="recruitNumber" value="5">5人</label>
-          </v-row>
+          <label for="name" class="label">募集人数</label
+          ><label for="name" class="label-required">必須</label>
+          <v-radio-group v-model="recruitNumber">
+            <v-row>
+              <v-radio
+                label="1名"
+                color="primary"
+                value="1"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="2名"
+                color="primary"
+                value="2"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="3名"
+                color="primary"
+                value="3"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="4名"
+                color="primary"
+                value="4"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="5名"
+                color="primary"
+                value="5"
+                class="ml-3"
+              ></v-radio>
+            </v-row>
+          </v-radio-group>
+        </div>
+        <div class="create-area">
+          <label for="name" class="label">開発フェーズ</label
+          ><label for="name" class="label-required">必須</label>
+          <v-radio-group v-model="jobStatusId">
+            <v-row>
+              <v-radio
+                label="新規募集"
+                color="primary"
+                value="1"
+                class="ml-3 mb-0"
+              ></v-radio>
+              <v-radio
+                label="追加募集"
+                color="primary"
+                value="2"
+                class="ml-3"
+              ></v-radio>
+            </v-row>
+          </v-radio-group>
         </div>
       </section>
-      <br />
-      <br />
-      <br />
       <div class="btn-area">
         <button @click="createJob" class="post-job-btn" v-if="isForm">
           案件投稿する
         </button>
         <v-tooltip bottom v-else>
-        <template v-slot:activator="{ on, attrs }">
-          <button class="next-btn-false" v-on="on" v-bind="attrs">
-            案件投稿する
-          </button>
-        </template>
-        <span>必須項目が入力されていません</span>
+          <template v-slot:activator="{ on, attrs }">
+            <button class="next-btn-false" v-on="on" v-bind="attrs">
+              案件投稿する
+            </button>
+          </template>
+          <span>必須項目が入力されていません</span>
         </v-tooltip>
-        <router-link to='/job_create/1' class="post-job-back">
+        <router-link to="/job_create/1" class="post-job-back">
           戻る 1/2
         </router-link>
       </div>
@@ -241,10 +296,8 @@ export default Vue.extend({
   </section>
 </template>
 
-
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .card {
   position: relative;
@@ -304,7 +357,7 @@ export default Vue.extend({
     padding: 1.1rem 1rem;
     border-radius: 8px;
     border: none;
-    font-size: .875rem;
+    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -325,7 +378,7 @@ export default Vue.extend({
     padding: 1.1rem 1rem;
     border-radius: 8px;
     border: none;
-    font-size: .875rem;
+    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -333,7 +386,7 @@ export default Vue.extend({
     margin: auto;
     font-size: 1rem;
     float: right;
-    transition: .3s;
+    transition: 0.3s;
     outline: none;
   }
 
@@ -346,7 +399,7 @@ export default Vue.extend({
     display: block;
     padding: 1.1rem 2rem;
     border-radius: 8px;
-    font-size: .875rem;
+    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -354,14 +407,14 @@ export default Vue.extend({
     margin: auto;
     font-size: 1rem;
     float: left;
-    transition: .3s;
+    transition: 0.3s;
     outline: none;
     text-decoration: none;
   }
 }
 
 /* スマホ */
-@media (max-width: 500px){
+@media (max-width: 500px) {
   .btn-area {
     display: flex;
     flex-direction: column;
@@ -371,5 +424,4 @@ export default Vue.extend({
     }
   }
 }
-
 </style>

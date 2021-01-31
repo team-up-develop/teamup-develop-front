@@ -1,63 +1,67 @@
 <script lang="ts">
-import Vue from 'vue';
-import axios from 'axios'
-import { dayJs, API_URL, truncate } from '@/master';
+import Vue from "vue";
+import axios from "axios";
+import { dayJs, API_URL, truncate } from "@/master";
 
-export default Vue.extend({ 
+export default Vue.extend({
   data() {
     return {
       newJobsDesktop: [], //? デスクトップサイズ 案件4つ
-      newJobs: [] //? 通常 案件3つ
-    }
+      newJobs: [], //? 通常 案件3つ
+    };
   },
   created() {
-    axios.get(`${API_URL}/job`)
-    .then(response => {
-      this.newJobsDesktop = response.data.slice(0, 4)
-      this.newJobs = response.data.slice().reverse(); //? 最新にする
-      this.newJobs = this.newJobs.slice(0, 3)
-    })
+    axios.get(`${API_URL}/job`).then((res) => {
+      this.newJobsDesktop = res.data.slice(0, 4);
+      this.newJobs = res.data.slice().reverse(); //? 最新にする
+      this.newJobs = this.newJobs.slice(0, 3);
+    });
   },
   methods: {
     day(value: string, format: string) {
-      return dayJs(value, format)
+      return dayJs(value, format);
     },
     limit(value: string, num: number) {
-      return truncate(value, num)
-    }
-  }
+      return truncate(value, num);
+    },
+  },
 });
 </script>
-
 
 <template>
   <section>
     <!-- 案件カード デスクトップ -->
-    <router-link :to="`/jobs/${ newJob.id }`" class="job-card-desktop" v-for="newJob in newJobsDesktop" :key="newJob.id">
+    <router-link
+      :to="`/jobs/${newJob.id}`"
+      class="job-card-desktop"
+      v-for="newJob in newJobsDesktop"
+      :key="newJob.id"
+    >
       <div class="job-card-desktop__top">
         <span>{{ limit(newJob.jobTitle, 40) }}</span>
       </div>
       <div class="job-card-desktop__center">
-        <div class="langage" 
-          v-for="(langage, index) in newJob.programingLanguage.slice(0,2)" 
-          :key="`langageDesktop-${ index }`"
+        <div
+          class="langage"
+          v-for="(langage, index) in newJob.programingLanguage.slice(0, 2)"
+          :key="`langageDesktop-${index}`"
         >
           {{ langage.programingLanguageName }}
-        </div> 
-        <div 
-          class="framework" 
-          v-for="(framework, index) in newJob.programingFramework.slice(0,2)" 
-          :key="`frameworkDesktop-${ index }`"
+        </div>
+        <div
+          class="framework"
+          v-for="(framework, index) in newJob.programingFramework.slice(0, 2)"
+          :key="`frameworkDesktop-${index}`"
         >
           {{ framework.programingFrameworkName }}
-        </div> 
-        <div 
-          class="skill" 
-          v-for="(skill, index) in newJob.skill.slice(0,2)" 
-          :key="`skillDesktop-${ index }`"
+        </div>
+        <div
+          class="skill"
+          v-for="(skill, index) in newJob.skill.slice(0, 2)"
+          :key="`skillDesktop-${index}`"
         >
           {{ skill.skillName }}
-        </div> 
+        </div>
       </div>
       <div class="job-card-desktop__bottom">
         <div class="product-start-end">
@@ -65,7 +69,8 @@ export default Vue.extend({
             開発期間:
           </div>
           <div class="product-start-end-time">
-            {{ day(newJob.devStartDate, "YYYY年 M月 D日") }}  ~  {{ day(newJob.devEndDate, "YYYY年 M月 D日")}}
+            {{ day(newJob.devStartDate, "YYYY年 M月 D日") }} ~
+            {{ day(newJob.devEndDate, "YYYY年 M月 D日") }}
           </div>
         </div>
         <div class="post-user-area">
@@ -78,69 +83,66 @@ export default Vue.extend({
         </div>
       </div>
     </router-link>
-    <v-row
-      :align="align"
-      no-gutters
-      style="height: 150px;"
-    >
-    <!-- 通常時案件カード -->
-    <v-card 
-      :to="`/jobs/${ newJob.id }`" 
-      class="job-card" 
-      v-for="newJob in newJobs" 
-      :key="newJob.id"
-    >
-      <div class="job-card__top">
-        <span>{{ limit(newJob.jobTitle, 40) }}</span>
-      </div>
-      <div class="job-card__center">
-        <div class="langage" 
-          v-for="(langage, index) in newJob.programingLanguage.slice(0,2)" 
-          :key="`langage-${ index }`"
-        >
-          {{ langage.programingLanguageName }}
-        </div> 
-        <div 
-          class="framework" 
-          v-for="(framework, index) in newJob.programingFramework.slice(0,2)" 
-          :key="`framework-${ index }`"
-        >
-          {{ framework.programingFrameworkName }}
-        </div> 
-        <div 
-          class="skill" 
-          v-for="(skill, index) in newJob.skill.slice(0,2)" 
-          :key="`skill-${ index }`"
-        >
-          {{ skill.skillName }}
-        </div> 
-      </div>
-      <div class="job-card__bottom">
-        <div class="product-start-end">
-          <div class="product-start-end-tag">
-            開発期間:
+    <v-row :align="align" no-gutters style="height: 150px;">
+      <!-- 通常時案件カード -->
+      <v-card
+        :to="`/jobs/${newJob.id}`"
+        class="job-card"
+        v-for="newJob in newJobs"
+        :key="newJob.id"
+      >
+        <div class="job-card__top">
+          <span>{{ limit(newJob.jobTitle, 40) }}</span>
+        </div>
+        <div class="job-card__center">
+          <div
+            class="langage"
+            v-for="(langage, index) in newJob.programingLanguage.slice(0, 2)"
+            :key="`langage-${index}`"
+          >
+            {{ langage.programingLanguageName }}
           </div>
-          <div class="product-start-end-time">
-            {{ day(newJob.devStartDate, "YYYY年 M月 D日") }}  ~  {{ day(newJob.devEndDate, "YYYY年 M月 D日")}}
+          <div
+            class="framework"
+            v-for="(framework, index) in newJob.programingFramework.slice(0, 2)"
+            :key="`framework-${index}`"
+          >
+            {{ framework.programingFrameworkName }}
+          </div>
+          <div
+            class="skill"
+            v-for="(skill, index) in newJob.skill.slice(0, 2)"
+            :key="`skill-${index}`"
+          >
+            {{ skill.skillName }}
           </div>
         </div>
-        <div class="post-user-area">
-          <div class="post-user-image"></div>
-          <div class="post-user-name-area">
-            <div class="post-user-name">
-              {{ newJob.user.userName }}
+        <div class="job-card__bottom">
+          <div class="product-start-end">
+            <div class="product-start-end-tag">
+              開発期間:
+            </div>
+            <div class="product-start-end-time">
+              {{ day(newJob.devStartDate, "YYYY年 M月 D日") }} ~
+              {{ day(newJob.devEndDate, "YYYY年 M月 D日") }}
+            </div>
+          </div>
+          <div class="post-user-area">
+            <div class="post-user-image"></div>
+            <div class="post-user-name-area">
+              <div class="post-user-name">
+                {{ newJob.user.userName }}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    </v-card>
+      </v-card>
     </v-row>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .job-card {
   display: none;
@@ -152,7 +154,7 @@ export default Vue.extend({
   border: solid 1px $card-border-color;
   background-color: $white;
   border-radius: 8px;
-  transition: .3s;
+  transition: 0.3s;
   color: $text-main-color;
   display: inline-block;
 
@@ -295,7 +297,7 @@ export default Vue.extend({
     border: solid 1px $card-border-color;
     background-color: $white;
     border-radius: 8px;
-    transition: .3s;
+    transition: 0.3s;
     color: $text-main-color;
     display: block;
     // display: inline-block;
@@ -355,7 +357,6 @@ export default Vue.extend({
         pointer-events: none;
       }
     }
-
 
     &__bottom {
       // background-color: purple;

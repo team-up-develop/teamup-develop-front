@@ -1,63 +1,65 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-  computed
-} from '@vue/composition-api';
-import { API_URL } from '@/master'
-import axios from 'axios'
-import UserCard from '@/components/Organisms/Manages/UserCard.vue'
-import JobsCard from '@/components/Organisms/Manages/JobsCard.vue'
-import { Job } from '@/types/job';
-import Vuex from '@/store/index'
+  computed,
+} from "@vue/composition-api";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import UserCard from "@/components/Organisms/Manages/UserCard.vue";
+import JobsCard from "@/components/Organisms/Manages/JobsCard.vue";
+import { Job } from "@/types/index";
+import { FetchJobs } from "@/types/fetch";
+import Vuex from "@/store/index";
 
 type State = {
   favoriteJobs: Job[];
   userId: number;
-}
+};
 
 const initialState = (): State => ({
   favoriteJobs: [],
-  userId: Vuex.state.auth.userId
+  userId: Vuex.state.auth.userId,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     UserCard,
-    JobsCard
+    JobsCard,
   },
   setup: () => {
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if(state.userId) {
-        return true
-      } else {
-        return false
+      if (state.userId) {
+        return true;
       }
+      return false;
     });
 
     const getFavoriteJobs = async () => {
-      try { 
-        const response = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${state.userId}`)
-        state.favoriteJobs = response.data
+      try {
+        const res = await axios.get<FetchJobs>(
+          `${API_URL}/favorite_jobs?user_id=${state.userId}`
+        );
+        state.favoriteJobs = res.data.response;
       } catch (error) {
-        console.log(error)
+        catchError(error);
       }
     };
 
     onMounted(() => {
       getFavoriteJobs();
-    })
+    });
 
     return {
       ...toRefs(state),
       isLogin,
-      getFavoriteJobs
-    }
-  }
+      getFavoriteJobs,
+    };
+  },
 });
 </script>
 
@@ -69,37 +71,39 @@ export default defineComponent({
         <v-sheet class="manage">
           <v-row class="manage__header">
             <router-link to="/manage" class="router-link">
-              <span>管理案件</span> 
+              <span>管理案件</span>
             </router-link>
             <router-link to="/manage/apply_job" class="router-link">
               <span>応募案件</span>
             </router-link>
-            <router-link to="/manage/favorite_job" class="router-link-active-click">
-              <span>保存案件</span> 
+            <router-link
+              to="/manage/favorite_job"
+              class="router-link-active-click"
+            >
+              <span>保存案件</span>
             </router-link>
           </v-row>
           <v-col>
-            <router-link 
-              :to="`/manage/favorite_job/${ jobs.jobId }`" 
-              v-for="jobs in favoriteJobs" 
-              :key="jobs.id" 
+            <router-link
+              :to="`/manage/favorite_job/${jobs.job_id}`"
+              v-for="jobs in favoriteJobs"
+              :key="jobs.id"
               class="jobs"
             >
-              <JobsCard :job="jobs.job"/>
+              <JobsCard :job="jobs.job" />
             </router-link>
           </v-col>
         </v-sheet>
       </v-row>
     </v-container>
-    <div v-else>
+    <template v-else>
       ログインが必要です！
-    </div>
+    </template>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .wrapper {
   width: 90%;
@@ -164,5 +168,4 @@ export default defineComponent({
 .jobs {
   text-decoration: none;
 }
-
 </style>

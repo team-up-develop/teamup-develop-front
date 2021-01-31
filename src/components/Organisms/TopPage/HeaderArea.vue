@@ -1,9 +1,7 @@
 <script lang="ts">
-import Vue from 'vue';
+import Vue from "vue";
 
-export default Vue.extend({ 
-
-});
+export default Vue.extend({});
 </script>
 
 <template>
@@ -19,14 +17,18 @@ export default Vue.extend({
       </div>
     </v-col>
     <div class="right">
-      <button class="register-btn" @click="$router.push('/register')">登録する</button>
-      <button class="login-btn" @click="$router.push('/login')">ログインする</button>
+      <button class="register-btn" @click="$router.push('/register')">
+        登録する
+      </button>
+      <button class="login-btn" @click="$router.push('/login')">
+        ログインする
+      </button>
     </div>
   </v-row>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 .header {
   min-height: 200px;
   position: relative;
@@ -73,8 +75,8 @@ export default Vue.extend({
   }
 
   .login-btn {
-    border: solid 1px #673AB7;
-    color: #673AB7;
+    border: solid 1px #673ab7;
+    color: #673ab7;
     background-color: $white;
     padding: 1.1rem 2rem;
     border-radius: 8px;

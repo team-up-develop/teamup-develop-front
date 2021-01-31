@@ -1,31 +1,34 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-  computed
-} from '@vue/composition-api';
-import axios from 'axios'
-import { Job } from '@/types/job';
-import { m, dayJs, API_URL, truncate } from '@/master'
-import { ManageJob } from '@/types/manage';
+  computed,
+} from "@vue/composition-api";
+import axios from "axios";
+import { Job } from "@/types/index";
+import { ManageJob } from "@/types/index";
+import { m, dayJs, API_URL, truncate, catchError } from "@/master";
+import { FetchJobs, FetchManageJobs } from "@/types/fetch";
 
 type State = {
-  chatGroups: Job[];
+  chatGroups: Job[] | {};
+  myselfJobs: any;
   isActive: boolean;
   hasError: boolean;
-}
+};
 
 const initialState = (): State => ({
   chatGroups: [],
+  myselfJobs: [],
   isActive: true,
   hasError: false,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    userId: { type: Number, defalut: 0 }
+    userId: { type: Number, defalut: 0 },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
@@ -34,23 +37,40 @@ export default defineComponent({
     const limit = (value: string, num: number) => truncate(value, num);
 
     const getChatGroups = async () => {
-      try { 
-        const response = await axios.get<ManageJob[]>(`${API_URL}/apply_job/?user_id=${ props.userId }`)
+      try {
+        const res = await axios.get<FetchManageJobs>(
+          `${API_URL}/apply_jobs?user_id=${props.userId}`
+        );
         const array: ManageJob[] = [];
-        for(let i = 0; i < response.data.length; i++){
-          const applyData: ManageJob = response.data[i]
-          if(applyData.applyStatusId == m.APPLY_STATUS_PARTICIPATE || applyData.applyStatusId  == m.APPLY_STATUS_SELF ) {
-            array.push(applyData)
-            state.chatGroups = array
+        for (let i = 0; i < res.data.response.length; i++) {
+          const applyData: ManageJob = res.data.response[i];
+          if (
+            applyData.apply_status_id == m.APPLY_STATUS_PARTICIPATE ||
+            applyData.apply_status_id == m.APPLY_STATUS_SELF
+          ) {
+            array.push(applyData);
+            state.chatGroups = array;
           }
         }
       } catch (error) {
-        console.log(error)
+        catchError(error);
+      }
+    };
+
+    const getMyselfGroupes = async () => {
+      try {
+        const res = await axios.get<FetchJobs>(
+          `${API_URL}/jobs?user_id=${props.userId}`
+        );
+        state.myselfJobs = res.data.response;
+      } catch (error) {
+        catchError(error);
       }
     };
 
     onMounted(() => {
       getChatGroups();
+      getMyselfGroupes();
     });
 
     return {
@@ -58,48 +78,64 @@ export default defineComponent({
       m: computed(() => m),
       day,
       limit,
-      getChatGroups
-    }
-  }
+      getChatGroups,
+    };
+  },
 });
 </script>
 
 <template>
   <section>
-    <v-card 
-      :to="`/chat/${ chatGroup.job.id }`" 
-      v-for="chatGroup in chatGroups" 
-      :key="chatGroup.job.id" 
+    <v-card
+      :to="`/chat/${chatGroup.job.id}`"
+      v-for="chatGroup in chatGroups"
+      :key="chatGroup.job.id"
       v-bind:class="{ active: isActive, 'text-danger': hasError }"
       class="group"
-      >
+    >
       <div class="group__area">
-        <p>{{ limit(chatGroup.job.jobTitle, 36) }}</p>
+        <p>{{ limit(chatGroup.job.job_title, 36) }}</p>
         <v-row class="row">
-          <label 
-            for="name" 
-            class="selfPost" 
-            v-if="chatGroup.applyStatusId === m.APPLY_STATUS_SELF"
-          >投稿案件</label>
-          <label 
-            for="name" 
-            class="post" 
-            v-if="chatGroup.applyStatusId === m.APPLY_STATUS_PARTICIPATE"
-          >参加案件</label>
-          <section>{{ day(chatGroup.createdAt, "YYYY年 M月 D日") }}</section>
+          <label
+            for="name"
+            class="selfPost"
+            v-if="chatGroup.apply_status_id === m.APPLY_STATUS_SELF"
+            >投稿案件</label
+          >
+          <label
+            for="name"
+            class="post"
+            v-if="chatGroup.apply_status_id === m.APPLY_STATUS_PARTICIPATE"
+            >参加案件</label
+          >
+          <section>{{ day(chatGroup.created_at, "YYYY年 M月 D日") }}</section>
+        </v-row>
+      </div>
+    </v-card>
+    <v-card
+      :to="`/chat/${myselfJob.id}`"
+      v-for="myselfJob in myselfJobs"
+      :key="myselfJob.id"
+      v-bind:class="{ active: isActive, 'text-danger': hasError }"
+      class="group"
+    >
+      <div class="group__area">
+        <p>{{ limit(myselfJob.job_title, 36) }}</p>
+        <v-row class="row">
+          <label for="name" class="selfPost">投稿案件</label>
+          <section>{{ day(myselfJob.created_at, "YYYY年 M月 D日") }}</section>
         </v-row>
       </div>
     </v-card>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 // * v-card の boxshadowを消します
 .v-sheet.v-card:not(.v-sheet--outlined) {
-  box-shadow: none; 
+  box-shadow: none;
 }
 .active {
   text-decoration: none;
@@ -119,7 +155,7 @@ export default defineComponent({
     padding: 0.7rem 0 0.5rem 0;
     margin-top: 0.2rem;
     position: relative;
-    
+
     @media (max-width: 868px) {
       padding: 0.7rem 0 0.5rem 1rem;
       margin: 0;
@@ -142,7 +178,7 @@ export default defineComponent({
         border-radius: 8px;
         appearance: none;
         border: none;
-        transition: .3s;
+        transition: 0.3s;
         outline: none;
       }
 
@@ -156,7 +192,7 @@ export default defineComponent({
         font-size: 0.8em;
         border-radius: 8px;
         appearance: none;
-        transition: .3s;
+        transition: 0.3s;
         outline: none;
       }
 
@@ -185,5 +221,4 @@ export default defineComponent({
   cursor: pointer;
   text-decoration: none;
 }
-
 </style>

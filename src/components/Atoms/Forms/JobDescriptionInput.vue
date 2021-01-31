@@ -1,19 +1,15 @@
 <script lang="ts">
-import { 
-  defineComponent,
-  reactive,
-  toRefs,
-} from '@vue/composition-api';
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 
 type State = {
   jobDescriptionLimit: number;
-}
+};
 
 const initialState = (): State => ({
   jobDescriptionLimit: 0,
 });
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
     type: { type: String, required: true },
     value: { type: String, required: false, default: null },
@@ -24,13 +20,13 @@ export default defineComponent({
     const onInputJobDescription = (e: any) => {
       state.jobDescriptionLimit = e.target.value.length;
       ctx.emit("input", e.target.value);
-    }
+    };
 
     return {
       ...toRefs(state),
-      onInputJobDescription
-    }
-  }
+      onInputJobDescription,
+    };
+  },
 });
 </script>
 
@@ -39,18 +35,18 @@ export default defineComponent({
     <textarea
       type="text"
       :value="value"
-      @input="onInputJobDescription" 
-      placeholder="詳しい内容や現在の状況を記載してください(250文字以内)" 
-      maxlength="250" 
+      @input="onInputJobDescription"
+      placeholder="詳しい内容や現在の状況を記載してください(250文字以内)"
+      maxlength="500"
     />
-    <small id="rem">残り{{ 250 - jobDescriptionLimit }}文字</small>
+    <small id="rem">残り{{ 500 - jobDescriptionLimit }}文字</small>
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
-textarea[type='text'] {
+textarea[type="text"] {
   @include input-border-color;
   background-color: $dark-white;
   color: $text-main-color;

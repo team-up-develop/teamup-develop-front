@@ -3,7 +3,7 @@
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <div class="modal-content">
-          <slot/>
+          <slot />
         </div>
         <footer class="modal-footer">
           <slot name="footer">
@@ -16,7 +16,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .modal-overlay {
   display: flex;
@@ -50,11 +50,13 @@
   display: inline-block;
 }
 
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
   transition: opacity 0.4s;
 }
 
-.modal-enter-active, .modal-window {
+.modal-enter-active,
+.modal-window {
   transition: opacity 0.4s, transform 0.4s;
 }
 
@@ -62,11 +64,13 @@
   transition: opacity 0.6s ease 0.4s;
 }
 
-.modal-enter, .modal-leave-to {
+.modal-enter,
+.modal-leave-to {
   opacity: 0;
 }
 
-.modal-enter, .modal-window {
+.modal-enter,
+.modal-window {
   transform: translateY(-20px);
 }
 </style>

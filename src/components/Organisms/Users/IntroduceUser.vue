@@ -1,9 +1,9 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
+import { defineComponent } from "@vue/composition-api";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    user: { type: Object, require: true, defalut: {} }
+    user: { type: Object, require: true, defalut: {} },
   },
 });
 </script>
@@ -18,13 +18,13 @@ export default defineComponent({
             {{ user.bio }}
           </div>
         </div>
-        </div>
+      </div>
     </v-sheet>
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .dev-detail-area {
   @include card-border-color;

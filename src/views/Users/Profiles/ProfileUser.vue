@@ -1,90 +1,93 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
-import { API_URL } from '@/master'
-import axios from 'axios';
-import ProfileEditModal from '@/components/Organisms/Modals/Edit/ProfileEditModal.vue'
-import PostUser from '@/components/Organisms/Users/PostUser.vue'
-import SkillUser from '@/components/Organisms/Users/SkillUser.vue'
-import IntroduceUser from '@/components/Organisms/Users/IntroduceUser.vue'
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+} from "@vue/composition-api";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
+import PostUser from "@/components/Organisms/Users/PostUser.vue";
+import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
+import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
 // import Logout from '@/components/button/Logout'
-import { User } from '@/types/user';
+import { User } from "@/types/index";
+import Vuex from "@/store/index";
 
-type DataType = {
+type State = {
   myselfFlag: boolean;
   userInfo: User;
   userId: number;
   modal: boolean;
-  // loading: boolean;
-}
+};
 
-export default Vue.extend({
+const initialState = (): State => ({
+  myselfFlag: false,
+  userInfo: {},
+  userId: Vuex.state.auth.userId,
+  modal: false,
+});
+
+export default defineComponent({
   components: {
     ProfileEditModal,
     // Logout
-    // Loading,
     PostUser,
     SkillUser,
-    IntroduceUser
+    IntroduceUser,
   },
   props: {
-    id: { type: Number as PropType<number>, default: 0 }
+    id: { type: Number, default: 0 },
   },
-  data(): DataType {
-    return {
-      myselfFlag: false,
-      userInfo: {},
-      userId: this.$store.state.auth.userId,
-      modal: false,
-      // loading: true, //? ローディング
-    }
-  },
-  created() {
-    if(this.userId == this.id) {
-      this.myselfFlag = true
-    }
-    // * ユーザー情報取得
-    axios.get(`${API_URL}/user/${this.id}`)
-    .then(response => {
-      // setTimeout(() => {
-      //   this.loading = false;
-        this.userInfo = response.data;
-      // }, 1000)
-    })
-    .catch(error => {
-      console.log(error)
-    })
-  },
-  methods: {
-    // * モーダル
-    openModal() {
-      this.modal = true
-    },
-    closeModal() {
-      this.modal = false
-    },
-    doSend() {
-      this.closeModal()
-    },
-    // * 編集完了 emit
-    compliteEdit() {
-      this.closeModal();
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const fetchUser = async () => {
       // * ユーザー情報取得
-      axios.get(`${API_URL}/user/${this.id}`)
-      .then(response => {
-        // this.loading = true;
-        // setTimeout(() => {
-          // this.loading = false;
-        this.userInfo = response.data;
-        // }, 1000)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    },
-    editEmit() {
-      this.openModal();
+      try {
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    if (state.userId == props.id) {
+      state.myselfFlag = true;
     }
-  }
+
+    onMounted(() => {
+      fetchUser();
+    });
+
+    const openModal = () => {
+      state.modal = true;
+    };
+    const closeModal = () => {
+      state.modal = false;
+    };
+    const doSend = () => {
+      closeModal();
+    };
+
+    // * 編集完了 emit
+    const compliteEdit = async () => {
+      closeModal();
+      fetchUser();
+    };
+    const editEmit = () => {
+      openModal();
+    };
+
+    return {
+      ...toRefs(state),
+      openModal,
+      doSend,
+      compliteEdit,
+      editEmit,
+    };
+  },
 });
 </script>
 
@@ -92,24 +95,31 @@ export default Vue.extend({
   <section>
     <div class="detail-wrapper">
       <!-- 編集 モーダル画面 -->
-      <ProfileEditModal 
-        :userInfo="userInfo" 
-        @close="closeModal" 
-        @compliteEdit="compliteEdit()" 
-        v-if="modal" 
+      <ProfileEditModal
+        :userInfo="userInfo"
+        @close="closeModal"
+        @compliteEdit="compliteEdit()"
+        v-if="modal"
       />
       <section class="user-area">
         <div class="user-area__post">
-          <PostUser :user="userInfo" 
-            @editEmit="editEmit()" 
+          <PostUser
+            :user="userInfo"
+            @editEmit="editEmit()"
             :myselfFlag="myselfFlag"
           />
           <v-row class="header">
-            <router-link :to="`/account/profile/${ id }`" class="router-link-active-click">
+            <router-link
+              :to="`/account/profile/${id}`"
+              class="router-link-active-click"
+            >
               <span>プロフィール</span>
             </router-link>
-            <router-link :to="`/account/profile/${ id }/jobs`" class="router-link">
-              <span>投稿案件</span> 
+            <router-link
+              :to="`/account/profile/${id}/jobs`"
+              class="router-link"
+            >
+              <span>投稿案件</span>
             </router-link>
           </v-row>
         </div>
@@ -117,7 +127,7 @@ export default Vue.extend({
       <v-col class="skill">
         <div class="skill__card">
           <div class="detail-tag">開発スキル</div>
-          <SkillUser />
+          <SkillUser :user="userInfo" />
         </div>
       </v-col>
       <v-col class="pr">
@@ -127,19 +137,17 @@ export default Vue.extend({
         </div>
       </v-col>
       <div class="button-area">
-        <div v-if="myselfFlag === true" class="button-action-area">
-          <button @click="openModal" class="btn-box-edit" >編集する</button>
+        <div v-if="myselfFlag" class="button-action-area">
+          <button @click="openModal" class="btn-box-edit">編集する</button>
         </div>
-        <div class="button-action-area" v-else>
-        </div>
+        <div class="button-action-area" v-else></div>
       </div>
     </div>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .detail-tag {
   color: $primary-color;
@@ -202,9 +210,8 @@ export default Vue.extend({
   }
 }
 
-//* スキル カード 
-.detail-wrapper 
-.skill {
+//* スキル カード
+.detail-wrapper .skill {
   width: 100%;
   // background-color: #F1F5F9;
 
@@ -217,9 +224,8 @@ export default Vue.extend({
   }
 }
 
-//* 開発詳細 カード 
-.detail-wrapper 
-.pr {
+//* 開発詳細 カード
+.detail-wrapper .pr {
   width: 100%;
   // background-color: #F1F5F9;
 
@@ -269,13 +275,13 @@ export default Vue.extend({
     left: 0;
     bottom: 0;
 
-  //* 編集するボタン 
+    //* 編集するボタン
     .btn-box-edit {
       @include box-shadow-btn;
       background-color: $secondary-color;
       color: $white;
       padding: 1.2rem 8rem;
-      transition: .3s;
+      transition: 0.3s;
       border-radius: 50px;
       font-weight: 600;
       line-height: 1;

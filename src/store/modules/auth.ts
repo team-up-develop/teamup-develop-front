@@ -1,75 +1,71 @@
-import { 
-  ActionTree, 
-  GetterTree,
-  MutationTree,
-} from 'vuex';
-import axios from 'axios';
-import { API_URL } from '@/master'
-import router from '@/router/index.ts';
+import { ActionTree, GetterTree, MutationTree } from "vuex";
+import axios from "axios";
+import { API_URL, catchError } from "@/master";
+import router from "@/router/index.ts";
 
 interface State {
   userId: number | null;
-  userName: string;
+  loginName: string;
   errorFlag: boolean;
 }
 
 interface LoginData {
-  LoginName: string;
-  LoginPassword: string;
+  login_name: string;
+  login_password: string;
 }
 
 const state: State = {
   userId: null,
-  userName: "",
-  errorFlag: false
-}
+  loginName: "",
+  errorFlag: false,
+};
 
 const getters: GetterTree<State, LoginData> = {
-  userId: (state: State)  => state.userId,
-  userName: (state: State) => state.userName
-}
+  userId: (state: State) => state.userId,
+  loginName: (state: State) => state.loginName,
+};
 
 const mutations: MutationTree<State> = {
   loginUserId(state: State, userId: number) {
-    state.userId = userId
+    state.userId = userId;
   },
-  loginUserName(state: State, userName: string) {
-    state.userName  = userName
+  loginUserName(state: State, loginName: string) {
+    state.loginName = loginName;
   },
   loginError(state: State, errorFlag: boolean) {
     state.errorFlag = errorFlag;
-  }
-}
+  },
+};
 
 const actions: ActionTree<State, LoginData> = {
   // * ログイン
-  async login({ commit }, authData: LoginData ) {
+  async login({ commit }, authData: LoginData) {
     const params: LoginData = {
-      LoginName: authData.LoginName,
-      LoginPassword: authData.LoginPassword,
-    }
+      login_name: authData.login_name,
+      login_password: authData.login_password,
+    };
     try {
-      const response = await axios.post(`${ API_URL }/login`, params)
-      router.push('/jobs');
-      commit('loginUserId', response.data.userId)
-      commit('loginUserName', response.data.user.userName)
+      const res = await axios.post(`${API_URL}/login`, params);
+      router.push("/jobs");
+      commit("loginUserId", res.data.response.id);
+      commit("loginUserName", res.data.response.login_name);
     } catch (error) {
-      const errorFlag = true
-      console.log("ログイン失敗しました")
-      commit('loginError', errorFlag)
+      const errorFlag = true;
+      catchError(error);
+      commit("loginError", errorFlag);
     }
   },
   // * ログアウト
   logout({ commit }) {
-    commit('loginUserId', null);
+    commit("loginUserId", null);
     localStorage.clear();
-    router.replace('/login')
-  }
-}
+    router.replace("/login");
+  },
+};
 
 export default {
-	state,
-	getters,
-	mutations,
-	actions
-}
+  state,
+  getters,
+  mutations,
+  actions,
+};

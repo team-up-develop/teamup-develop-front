@@ -1,10 +1,10 @@
 <script lang="ts">
-import Vue from 'vue';
-import { API_URL } from '@/master'
-import axios from 'axios'
-import vSelect from 'vue-select';
+import Vue from "vue";
+import { API_URL, catchError } from "@/master";
+import axios from "axios";
+import vSelect from "vue-select";
 // import 'vue-select/dist/vue-select.css';
-import { Language } from '@/types/index';
+import { Language } from "@/types/index";
 
 type DataType = {
   jobId: number;
@@ -15,56 +15,61 @@ type DataType = {
   selectedLang: any;
   selectlangNumber: any;
   languages: Language[];
-}
+};
 
-export default Vue.extend({ 
+export default Vue.extend({
   components: {
-    vSelect
+    vSelect,
   },
   props: {
-    job: Object
+    job: Object,
   },
   data(): DataType {
     return {
       jobId: this.job.id,
       jobTitle: this.job.jobTitle,
-      devStartDate: this.job.devStartDate.substring(0,this.job.devStartDate.indexOf("T")),
-      devEndDate: this.job.devEndDate.substring(0,this.job.devEndDate.indexOf("T")),
+      devStartDate: this.job.devStartDate.substring(
+        0,
+        this.job.devStartDate.indexOf("T")
+      ),
+      devEndDate: this.job.devEndDate.substring(
+        0,
+        this.job.devEndDate.indexOf("T")
+      ),
       jobDescription: this.job.jobDescription,
       selectedLang: [], //? プログラミング言語
       selectlangNumber: [], //? 開発言語 編集用 array[Number, Number...]
       languages: [], //? プログラミング言語全て
-    }
+    };
   },
   created() {
     // * 開発言語
-    axios.get<Language[]>(`${API_URL}/programing_language`)
-    .then(response => {
-      this.languages = response.data
-    })
-    this.selectedLang = this.job.programingLanguage
-    for(let l = 0; l < this.selectedLang.length; l++) {
-      this.selectlangNumber.push(this.selectedLang[l].id) //? 開発言語 配列 [Number, Number...]
+    axios.get<Language[]>(`${API_URL}/programing_language`).then((res) => {
+      this.languages = res.data;
+    });
+    this.selectedLang = this.job.programingLanguage;
+    for (let l = 0; l < this.selectedLang.length; l++) {
+      this.selectlangNumber.push(this.selectedLang[l].id); //? 開発言語 配列 [Number, Number...]
     }
   },
   methods: {
     jobEdit() {
       // * date型に変換のための data用意
-      function toDate (str: any, delim: string) {
-        const arr = str.split(delim)
+      function toDate(str: any, delim: string) {
+        const arr = str.split(delim);
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
       // //* 開始日
-      const devStart = this.devStartDate
-      const devStartDate = toDate(devStart, '-');
+      const devStart = this.devStartDate;
+      const devStartDate = toDate(devStart, "-");
       // *終了日
-      const devEnd = this.devEndDate
-      const devEndDate = toDate(devEnd, '-');
+      const devEnd = this.devEndDate;
+      const devEndDate = toDate(devEnd, "-");
       // * 言語を {id: Number}に変換
       const languageArray = [];
-      for(let i = 0; i < this.selectlangNumber.length; i++) {
+      for (let i = 0; i < this.selectlangNumber.length; i++) {
         const langages = this.selectlangNumber[i];
-        languageArray.push({id: langages})
+        languageArray.push({ id: langages });
       }
 
       const params = {
@@ -73,17 +78,18 @@ export default Vue.extend({
         devEndDate,
         jobDescription: this.jobDescription,
         programingLanguage: languageArray,
-      }
-      axios.put(`${API_URL}/job/${this.jobId}`, params)
-      .then(response => {
-        console.log(response)
-        // this.$emit('compliteAssgin', this.message)
-      })
-      .catch(error => {
-        console.log(error)
-      })
-    }
-  }
+      };
+      axios
+        .put(`${API_URL}/job/${this.jobId}`, params)
+        .then((res) => {
+          catchError(res);
+          // this.$emit('compliteAssgin', this.message)
+        })
+        .catch((error) => {
+          catchError(error);
+        });
+    },
+  },
 });
 </script>
 
@@ -92,26 +98,30 @@ export default Vue.extend({
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <div class="modal-content">
-          <slot/>
+          <slot />
           <div class="job-create-title-area">
-            <label for="name" class="label">案件タイトル</label><label for="name" class="label-required">必須</label>
-            <input type="text" v-model="jobTitle">
+            <label for="name" class="label">案件タイトル</label
+            ><label for="name" class="label-required">必須</label>
+            <input type="text" v-model="jobTitle" />
           </div>
           <div class="job-create-time-area">
-            <label for="name" class="label">開発開始</label><label for="name" class="label-required">必須</label>
-            <input type="date" v-model="devStartDate">
+            <label for="name" class="label">開発開始</label
+            ><label for="name" class="label-required">必須</label>
+            <input type="date" v-model="devStartDate" />
             <h5>{{ devStartDate }}</h5>
           </div>
           <div class="job-create-time-area">
-            <label for="name" class="label">開発終了</label><label for="name" class="label-required">必須</label>
-            <input type="date" v-model="devEndDate">
+            <label for="name" class="label">開発終了</label
+            ><label for="name" class="label-required">必須</label>
+            <input type="date" v-model="devEndDate" />
           </div>
           <div class="job-create-detail-area">
             <label for="name" class="label">開発詳細</label>
             <textarea type="text" v-model="jobDescription"></textarea>
           </div>
           <div class="job-create-area">
-            <label for="name" class="label">開発言語</label><label for="name" class="label-required">必須</label>
+            <label for="name" class="label">開発言語</label
+            ><label for="name" class="label-required">必須</label>
             <!-- <label v-if="selectedLangErrors.length" class="error-label">
               <p v-for="selectedLangError in selectedLangErrors" :key="selectedLangError" class="error-message">
                 {{ selectedLangError }}</p>
@@ -122,7 +132,7 @@ export default Vue.extend({
               :options="languages"
               label="programingLanguageName"
               v-model="selectlangNumber"
-              :reduce="languages => languages.id"
+              :reduce="(languages) => languages.id"
             />
             <h3>{{ selectedLang }}</h3>
             <h1>Selected 言語:{{ selectlangNumber }}</h1>
@@ -138,9 +148,8 @@ export default Vue.extend({
   </transition>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .modal-overlay {
   display: flex;
@@ -201,7 +210,7 @@ export default Vue.extend({
     height: 100px;
     text-align: left;
 
-    input[type='text'] {
+    input[type="text"] {
       @include input-border-color;
       background-color: $dark-white;
       color: $text-main-color;
@@ -225,7 +234,7 @@ export default Vue.extend({
     height: 100px;
     text-align: left;
 
-    input[type='date'] {
+    input[type="date"] {
       @include input-border-color;
       background-color: $dark-white;
       color: $text-main-color;
@@ -252,7 +261,7 @@ export default Vue.extend({
     flex-direction: column;
     text-align: left;
 
-    textarea[type='text'] {
+    textarea[type="text"] {
       @include input-border-color;
       background-color: $dark-white;
       color: $text-main-color;
@@ -326,11 +335,13 @@ export default Vue.extend({
   height: 10%;
 }
 
-.modal-enter-active, .modal-leave-active {
+.modal-enter-active,
+.modal-leave-active {
   transition: opacity 0.4s;
 }
 
-.modal-enter-active, .modal-window {
+.modal-enter-active,
+.modal-window {
   transition: opacity 0.4s, transform 0.4s;
 }
 
@@ -338,11 +349,13 @@ export default Vue.extend({
   transition: opacity 0.6s ease 0.4s;
 }
 
-.modal-enter, .modal-leave-to {
+.modal-enter,
+.modal-leave-to {
   opacity: 0;
 }
 
-.modal-enter, .modal-window {
+.modal-enter,
+.modal-window {
   transform: translateY(-20px);
 }
 </style>

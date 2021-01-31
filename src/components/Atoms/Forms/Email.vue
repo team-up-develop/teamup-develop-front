@@ -1,23 +1,25 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue, { PropType } from "vue";
 
-export default Vue.extend({ 
+export default Vue.extend({
   props: {
     type: { type: String as PropType<string>, required: true },
   },
   data() {
     return {
-      emailRules: [ //? メールアドレス 文字数
-        (v: string) => !!v || 'メールアドレスが入力されていません',
-        (v: string) => /.+@.+/.test(v) || '有効なメールアドレスを入力してください',
+      emailRules: [
+        //? メールアドレス 文字数
+        (v: string) => !!v || "メールアドレスが入力されていません",
+        (v: string) =>
+          /.+@.+/.test(v) || "有効なメールアドレスを入力してください",
       ],
-    }
+    };
   },
   methods: {
     updateEmail(e: string) {
       this.$emit("input", e);
-    }
-  }
+    },
+  },
 });
 </script>
 
@@ -36,6 +38,5 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
-
+@import "@/assets/scss/_variables.scss";
 </style>

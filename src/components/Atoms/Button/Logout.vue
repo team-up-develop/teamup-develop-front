@@ -1,12 +1,11 @@
 <script lang="ts">
 // FIXME: 現在使用していない
-import Vue from 'vue';
+import Vue from "vue";
 
-export default Vue.extend({ 
+export default Vue.extend({
   methods: {
     logout() {
-      this.$store.dispatch('logout', {
-      })
+      this.$store.dispatch("logout", {});
     },
   },
 });
@@ -18,6 +17,4 @@ export default Vue.extend({
   </div>
 </template>
 
-<style>
-
-</style>
+<style></style>

@@ -1,22 +1,25 @@
 <script lang="ts">
-import Vue from 'vue';
-import Session from '@/components/Atoms/Commons/Session.vue'
+import Vue from "vue";
+import Session from "@/components/Atoms/Commons/Session.vue";
 
 export default Vue.extend({
   components: {
-    Session
-  }
+    Session,
+  },
 });
-
 </script>
 
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="3"/>
+      <Session :num="3" />
       <section>
         <div class="image-area">
-          <img src="@/assets/images/complete.png" alt="投稿完了" class="image">
+          <img
+            src="@/assets/images/complete.png"
+            alt="投稿完了"
+            class="image"
+          />
         </div>
         <div class="text">
           <p><span>案件投稿が完了しました</span></p>
@@ -24,10 +27,10 @@ export default Vue.extend({
           <p>勉強したい技術や、やってみたい技術をどんどん投稿してみよう！</p>
         </div>
         <div class="btn-area">
-          <router-link to='/job_create/1' class="create-link">
+          <router-link to="/job_create/1" class="create-link">
             続けて投稿する
           </router-link>
-          <router-link to='/manage' class="manage-link">
+          <router-link to="/manage" class="manage-link">
             管理画面にいく
           </router-link>
         </div>
@@ -36,10 +39,8 @@ export default Vue.extend({
   </section>
 </template>
 
-
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .card {
   position: relative;
@@ -95,7 +96,7 @@ export default Vue.extend({
     display: block;
     padding: 1.1rem 2rem;
     border-radius: 8px;
-    font-size: .875rem;
+    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -103,14 +104,14 @@ export default Vue.extend({
     margin: auto;
     font-size: 1rem;
     float: left;
-    transition: .3s;
+    transition: 0.3s;
     outline: none;
     text-decoration: none;
   }
 }
 
 /* スマホ */
-@media (max-width: 500px){
+@media (max-width: 500px) {
   .btn-area {
     display: flex;
     flex-direction: column;
@@ -120,5 +121,4 @@ export default Vue.extend({
     }
   }
 }
-
 </style>

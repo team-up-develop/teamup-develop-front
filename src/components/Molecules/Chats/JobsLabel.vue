@@ -1,7 +1,5 @@
 <script>
-export default {
-
-}
+export default {};
 </script>
 
 <template>
@@ -10,7 +8,4 @@ export default {
   </section>
 </template>
 
-
-<style>
-
-</style>
+<style></style>

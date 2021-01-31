@@ -1,15 +1,14 @@
 <script>
 export default {
   data() {
-    return {
-    }
+    return {};
   },
   methods: {
     topRedirect() {
-      return this.$router.push('/');
-    }
-  }
-}
+      return this.$router.push("/");
+    },
+  },
+};
 </script>
 
 <template>
@@ -21,9 +20,9 @@ export default {
           <img class="img" src="@/assets/images/mail-comp.png" />
           <div>
             <span>
-              チームアップに登録ありがとうございます。<br>
-              メールを確認してください。 <br>
-              <span>まだ登録は完了しておりません。<br></span>
+              チームアップに登録ありがとうございます。<br />
+              メールを確認してください。 <br />
+              <span>まだ登録は完了しておりません。<br /></span>
             </span>
           </div>
           <div class="btn-area">
@@ -36,7 +35,7 @@ export default {
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .wrapper {
   width: 45%;
@@ -44,7 +43,7 @@ export default {
   margin: 2rem auto 0 auto;
 
   .card-title {
-    color: #673AB7;
+    color: #673ab7;
     font-size: 1.4rem;
     font-weight: bold;
     padding: 1rem 2rem;
@@ -56,13 +55,13 @@ export default {
     max-width: 500px;
     height: 98%;
     margin: 0rem auto 3rem auto;
-    border: solid 1px #B9B9B9;
+    border: solid 1px #b9b9b9;
     border-radius: 20px;
     padding: 0 2rem 2rem 2rem;
   }
 
   .card {
-    width: 85%; 
+    width: 85%;
     height: 100%;
     margin: 0 auto;
     position: relative;
@@ -92,12 +91,12 @@ export default {
       .btn-top {
         display: block;
         padding: 1.2rem 5rem;
-        border: #673AB7 1px solid;
+        border: #673ab7 1px solid;
         background-color: #ffffff;
         border-radius: 50px;
-        font-size: .875rem;
+        font-size: 0.875rem;
         font-weight: 600;
-        color: #673AB7;
+        color: #673ab7;
         line-height: 1;
         text-align: center;
         max-width: 280px;
@@ -106,7 +105,7 @@ export default {
         display: inline-block;
         cursor: pointer;
         margin: 0 auto;
-        transition: .3s;
+        transition: 0.3s;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
         outline: none;
       }
@@ -115,11 +114,8 @@ export default {
 }
 
 @media (max-width: 1440px) {
-  .wrapper
-  .container {
-
-    .card 
-    .btn-area {
+  .wrapper .container {
+    .card .btn-area {
       padding: 15% 0 0 0;
     }
   }
@@ -136,9 +132,7 @@ export default {
   .wrapper {
     width: 75%;
   }
-  .container 
-  .card {
-
+  .container .card {
     img {
       width: 80%;
       max-width: 450px;
@@ -165,8 +159,7 @@ export default {
 }
 
 @media (max-width: 420px) {
-  .wrapper 
-  .container {
+  .wrapper .container {
     margin: 0rem auto 3rem auto;
     border: solid 1px $card-border-color;
     border-radius: 20px;

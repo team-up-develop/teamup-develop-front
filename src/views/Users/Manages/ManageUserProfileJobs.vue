@@ -1,13 +1,13 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
-import axios from 'axios';
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import PostUser from '@/components/Organisms/Users/PostUser.vue'
-import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
-import StatusChangeBtnArea from '@/components/Organisms/Manages/StatusChangeBtnArea.vue'
-import { ManageJob } from '@/types/manage';
-import { User } from '@/types/user';
-import { API_URL, truncate } from '@/master'
+import Vue, { PropType } from "vue";
+import axios from "axios";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import PostUser from "@/components/Organisms/Users/PostUser.vue";
+import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
+import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
+import { ManageJob } from "@/types/index";
+import { User } from "@/types/index";
+import { API_URL, truncate, catchError } from "@/master";
 // import Logout from '@/components/button/Logout'
 
 type DataType = {
@@ -19,18 +19,18 @@ type DataType = {
   doneStatusFlag: boolean;
   statusId: number;
   manageJobs: ManageJob[];
-}
+};
 
 export default Vue.extend({
   components: {
     Loading,
     PostUser,
     CardJob,
-    StatusChangeBtnArea
+    StatusChangeBtnArea,
   },
   props: {
     id: { type: Number as PropType<number>, default: 0 }, //? 詳細を見るユーザーのID
-    jobId: { type: Number as PropType<number>, default: 0 }
+    jobId: { type: Number as PropType<number>, default: 0 },
   },
   data(): DataType {
     return {
@@ -41,77 +41,87 @@ export default Vue.extend({
       loading: true, //? ローディング
       doneStatusFlag: false,
       statusId: 1,
-      manageJobs: []
-    }
+      manageJobs: [],
+    };
   },
   created() {
     // * ユーザー情報取得
-    axios.get(`${API_URL}/user/${this.id}`)
-    .then(response => {
-      setTimeout(() => {
-        this.loading = false;
-        this.userInfo = response.data;
-      }, 1000)
-    })
-    .catch(error => {
-      console.log(error)
-    })
+    axios
+      .get(`${API_URL}/user/${this.id}`)
+      .then((res) => {
+        setTimeout(() => {
+          this.loading = false;
+          this.userInfo = res.data.response;
+        }, 1000);
+      })
+      .catch((error) => {
+        catchError(error);
+      });
 
     // *  案件タイトル取得
-    axios.get(`${API_URL}/job/${ this.jobId }`)
-    .then(response => {
-      this.jobTitle = response.data.jobTitle
-    })
-    .catch(error => {
-      console.log(error)
-    })
+    axios
+      .get(`${API_URL}/job/${this.jobId}`)
+      .then((res) => {
+        this.jobTitle = res.data.response.job_title;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
 
     // *詳細を見ているユーザーの投稿案件
-    axios.get(`${API_URL}/job/?user_id=${this.id}`)
-    .then(response => {
-      this.manageJobs = response.data
-    })
-    .catch(error => {
-      console.log(error)
-    })
+    axios
+      .get(`${API_URL}/jobs?user_id=${this.id}`)
+      .then((res) => {
+        this.manageJobs = res.data.response;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
   },
   methods: {
     limit(value: string, num: number) {
-      return truncate(value, num)
+      return truncate(value, num);
     },
-  }
+  },
 });
 </script>
 
 <template>
   <section>
     <div class="detail-wrapper" v-if="loading == false">
-    <div class="back-space">
-      <router-link :to="`/manage/applicant/${ jobId }`">
-      <p>＜ {{ limit(jobTitle, 40) }}に戻る</p>
-      </router-link>
-    </div>
-    <section class="user-area">
-      <div class="user-area__post">
-        <PostUser :user="userInfo" 
-          @editEmit="editEmit()" 
-          :myselfFlag="myselfFlag"
-        />
-        <v-row class="header">
-          <router-link :to="`/manage/profile/${ jobId }/${ id }`"  class="router-link">
-            <span>プロフィール</span>
-          </router-link>
-          <router-link :to="`/account/profile/${ id }/jobs`" class="router-link-active-click">
-            <span>投稿案件</span> 
-          </router-link>
-        </v-row>
+      <div class="back-space">
+        <router-link :to="`/manage/applicant/${jobId}`">
+          <p>＜ {{ limit(jobTitle, 40) }}に戻る</p>
+        </router-link>
       </div>
-    </section>
+      <section class="user-area">
+        <div class="user-area__post">
+          <PostUser
+            :user="userInfo"
+            @editEmit="editEmit()"
+            :myselfFlag="myselfFlag"
+          />
+          <v-row class="header">
+            <router-link
+              :to="`/manage/profile/${jobId}/${id}`"
+              class="router-link"
+            >
+              <span>プロフィール</span>
+            </router-link>
+            <router-link
+              :to="`/account/profile/${id}/jobs`"
+              class="router-link-active-click"
+            >
+              <span>投稿案件</span>
+            </router-link>
+          </v-row>
+        </div>
+      </section>
       <v-row class="jobs">
-        <router-link 
-          :to="`/jobs/${ jobs.id }`" 
-          v-for="jobs in manageJobs" 
-          :key="jobs.id" 
+        <router-link
+          :to="`/jobs/${jobs.id}`"
+          v-for="jobs in manageJobs"
+          :key="jobs.id"
           class="jobs__card"
         >
           <CardJob :job="jobs" />
@@ -124,14 +134,12 @@ export default Vue.extend({
         </section>
       </div>
     </div>
-    <Loading v-else>
-    </Loading>
+    <Loading v-else> </Loading>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .detail-tag {
   text-align: left;
@@ -209,9 +217,8 @@ export default Vue.extend({
   }
 }
 
-//* スキル カード 
-.detail-wrapper 
-.skill {
+//* スキル カード
+.detail-wrapper .skill {
   width: 100%;
 
   &__card {
@@ -223,9 +230,8 @@ export default Vue.extend({
   }
 }
 
-//* 開発詳細 カード 
-.detail-wrapper 
-.pr {
+//* 開発詳細 カード
+.detail-wrapper .pr {
   width: 100%;
 
   &__card {
@@ -237,7 +243,7 @@ export default Vue.extend({
   }
 }
 
-//* ボタン エリア 
+//* ボタン エリア
 .button-area {
   width: 100%;
   display: flex;
@@ -272,10 +278,8 @@ export default Vue.extend({
 }
 
 @media screen and (max-width: 690px) {
-  //* ボタン エリア 
-  .button-area 
-  section 
-  .button-action-area {
+  //* ボタン エリア
+  .button-area section .button-action-area {
     .btn-applicant {
       padding: 1.2rem 3rem;
       font-size: 1rem;
@@ -285,7 +289,7 @@ export default Vue.extend({
       padding: 1.2rem 3rem;
       font-size: 1rem;
     }
-  } 
+  }
 }
 
 /* スマホレスポンシブ */
@@ -303,30 +307,25 @@ export default Vue.extend({
       }
     }
 
-    //* ボタン エリア 
-    .button-area 
-    section 
-    .button-action-area {
+    //* ボタン エリア
+    .button-area section .button-action-area {
       width: 100%;
-    } 
+    }
   }
 }
 
 @media screen and (max-width: 400px) {
-    //* ボタン エリア 
-    .button-area 
-    section 
-    .button-action-area {
-      .btn-applicant {
-        padding: 1.2rem 2rem;
-        font-size: 1rem;
-      }
-
-      .btn-reject {
-        padding: 1.2rem 2rem;
-        font-size: 1rem;
-      }
+  //* ボタン エリア
+  .button-area section .button-action-area {
+    .btn-applicant {
+      padding: 1.2rem 2rem;
+      font-size: 1rem;
     }
-} 
 
+    .btn-reject {
+      padding: 1.2rem 2rem;
+      font-size: 1rem;
+    }
+  }
+}
 </style>
