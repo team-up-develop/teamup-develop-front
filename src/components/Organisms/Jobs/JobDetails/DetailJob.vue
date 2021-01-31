@@ -1,17 +1,17 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { dayJs } from '@/master'
+import { defineComponent } from "@vue/composition-api";
+import { dayJs } from "@/master";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    job: { type: Object, require: true }
+    job: { type: Object, require: true },
   },
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);
     return {
       day,
-    }
-  }
+    };
+  },
 });
 </script>
 
@@ -21,28 +21,30 @@ export default defineComponent({
       <div class="detail-leff-area">
         <div class="detail-information">
           <div class="tag">タイトル</div>
-          <div class="sub-area">{{ job.jobTitle }}</div>
+          <div class="sub-area">{{ job.job_title }}</div>
         </div>
         <div class="detail-information">
           <div class="tag">募集人数</div>
-          <div class="sub-area">{{ job.recruitmentNumbers }}人</div>
+          <div class="sub-area">{{ job.recruitment_numbers }}人</div>
         </div>
         <div class="detail-information">
           <div class="tag">開発期間</div>
-          <div class="sub-area">{{ day(job.devStartDate, "YYYY年 M月 D日") }} ~ {{ day(job.devEndDate, "YYYY年 M月 D日")}}</div>
+          <div class="sub-area">
+            {{ day(job.dev_start_date, "YYYY年 M月 D日") }} ~
+            {{ day(job.dev_end_date, "YYYY年 M月 D日") }}
+          </div>
         </div>
         <div class="detail-information">
           <div class="tag">詳細</div>
-          <div class="sub-area">{{ job.jobDescription }}</div>
+          <div class="sub-area">{{ job.job_description }}</div>
         </div>
       </div>
     </v-sheet>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .dev-detail-area {
   @include card-border-color;
@@ -75,7 +77,7 @@ export default defineComponent({
   }
 }
 
-//* スマホレスポンシブ 
+//* スマホレスポンシブ
 @media screen and (max-width: 500px) {
   .dev-detail-area {
     padding: 1.5rem 1rem;

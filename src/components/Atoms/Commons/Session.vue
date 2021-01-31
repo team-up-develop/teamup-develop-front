@@ -1,10 +1,10 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
+import Vue, { PropType } from "vue";
 
-export default Vue.extend({ 
+export default Vue.extend({
   props: {
     num: { type: Number as PropType<number>, default: 0 },
-  }
+  },
 });
 </script>
 
@@ -12,17 +12,11 @@ export default Vue.extend({
   <section>
     <v-stepper num="num">
       <v-stepper-header>
-        <v-stepper-step
-          :complete="num > 1"
-          step="1"
-        >
+        <v-stepper-step :complete="num > 1" step="1">
           STEP 1
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step
-          :complete="num > 2"
-          step="2"
-        >
+        <v-stepper-step :complete="num > 2" step="2">
           STEP 2
         </v-stepper-step>
         <v-divider></v-divider>
@@ -35,7 +29,7 @@ export default Vue.extend({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .v-stepper {
   box-shadow: none;
@@ -44,5 +38,3 @@ export default Vue.extend({
   }
 }
 </style>
-
-

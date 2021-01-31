@@ -1,24 +1,23 @@
 <script lang="ts">
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import Vue from 'vue';
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import Vue from "vue";
 
 export default Vue.extend({
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
-      loading: true, 
-    }
+      loading: true,
+    };
   },
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 1000)
-  }
+    }, 1000);
+  },
 });
 </script>
-
 
 <template>
   <section>
@@ -40,37 +39,35 @@ export default Vue.extend({
             </div>
           </div>
           <div class="top-area__right">
-            <img class="img" src="@/assets/images/teamup.jpg" width="100%" /> 
+            <img class="img" src="@/assets/images/teamup.jpg" width="100%" />
           </div>
         </div>
       </div>
       <div class="bc-image">
         <p>重なりを</p>
-        <br>
+        <br />
         <p>確かめるため</p>
-        <br>
+        <br />
         <p>一旦</p>
-        <br>
+        <br />
         <p>コメントを</p>
-        <br>
+        <br />
         <p>書いています</p>
-        <br>
+        <br />
         <p>こんな感じで上書き</p>
-        <br>
+        <br />
       </div>
     </div>
-    <Loading v-show="loading">
-    </Loading>
+    <Loading v-show="loading"> </Loading>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
-// * 背景 波 
+// * 背景 波
 .bc-image {
-  background-image: url('data:image/svg+xml;charset=utf8,%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20320%22%3E%20%3Cpath%20fill%3D%22%232196F3%22%20fill-opacity%3D%221%22%20d%3D%22M0%2C64L48%2C90.7C96%2C117%2C192%2C171%2C288%2C186.7C384%2C203%2C480%2C181%2C576%2C154.7C672%2C128%2C768%2C96%2C864%2C85.3C960%2C75%2C1056%2C85%2C1152%2C106.7C1248%2C128%2C1344%2C160%2C1392%2C176L1440%2C192L1440%2C320L1392%2C320C1344%2C320%2C1248%2C320%2C1152%2C320C1056%2C320%2C960%2C320%2C864%2C320C768%2C320%2C672%2C320%2C576%2C320C480%2C320%2C384%2C320%2C288%2C320C192%2C320%2C96%2C320%2C48%2C320L0%2C320Z%22%3E%3C%2Fpath%3E%20%3C%2Fsvg%3E');
+  background-image: url("data:image/svg+xml;charset=utf8,%20%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%201440%20320%22%3E%20%3Cpath%20fill%3D%22%232196F3%22%20fill-opacity%3D%221%22%20d%3D%22M0%2C64L48%2C90.7C96%2C117%2C192%2C171%2C288%2C186.7C384%2C203%2C480%2C181%2C576%2C154.7C672%2C128%2C768%2C96%2C864%2C85.3C960%2C75%2C1056%2C85%2C1152%2C106.7C1248%2C128%2C1344%2C160%2C1392%2C176L1440%2C192L1440%2C320L1392%2C320C1344%2C320%2C1248%2C320%2C1152%2C320C1056%2C320%2C960%2C320%2C864%2C320C768%2C320%2C672%2C320%2C576%2C320C480%2C320%2C384%2C320%2C288%2C320C192%2C320%2C96%2C320%2C48%2C320L0%2C320Z%22%3E%3C%2Fpath%3E%20%3C%2Fsvg%3E");
   background-repeat: no-repeat;
   background-position: center;
   height: 450px;
@@ -126,14 +123,14 @@ export default Vue.extend({
           // background-color: yellowgreen;
 
           .login {
-            border: solid 1px #673AB7;
-            color: #673AB7;
+            border: solid 1px #673ab7;
+            color: #673ab7;
             background-color: #ffffff;
             text-align: left;
             display: block;
             padding: 1.1rem 3rem;
             border-radius: 8px;
-            font-size: .875rem;
+            font-size: 0.875rem;
             font-weight: 600;
             line-height: 1;
             text-align: center;
@@ -142,7 +139,7 @@ export default Vue.extend({
             font-size: 1rem;
             float: right;
             cursor: pointer;
-            transition: .3s;
+            transition: 0.3s;
             outline: none;
             position: absolute;
             right: 0;
@@ -156,7 +153,7 @@ export default Vue.extend({
             padding: 1.1rem 4rem;
             border-radius: 8px;
             border: none;
-            font-size: .875rem;
+            font-size: 0.875rem;
             font-weight: 600;
             color: $white;
             line-height: 1;
@@ -166,7 +163,7 @@ export default Vue.extend({
             font-size: 1rem;
             float: right;
             cursor: pointer;
-            transition: .3s;
+            transition: 0.3s;
             outline: none;
             position: absolute;
             left: 0;
@@ -174,7 +171,7 @@ export default Vue.extend({
           }
         }
       }
-      
+
       &__right {
         width: 50%;
         height: 100%;

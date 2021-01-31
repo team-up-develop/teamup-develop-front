@@ -1,35 +1,37 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-} from '@vue/composition-api';
-import axios from 'axios'
-import { API_URL } from '@/master'
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import ApplyModal from '@/components/Organisms/Modals/Applications/ApplyModal.vue'
-import Applybtn from '@/components/Atoms/Button/Applybtn.vue'
-import JobRegisterFalse from '@/components/Organisms/Jobs/JobRegisterFalse.vue'
-import JobRightLogin from '@/components/Organisms/Jobs/JobRightLogin.vue'
-import CardJob from '@/components/Organisms/Jobs/CardJob.vue'
-import LanguageSearchModal from '@/components/Organisms/Modals/Searches/LanguageSearchModal.vue'
-import FrameworkSearchModal from '@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue'
-import SkillSearchModal from '@/components/Organisms/Modals/Searches/SkillSearchModal.vue'
-import FavoriteBtn from '@/components/Atoms/Button/FavoriteBtn.vue'
-import { dayJs, truncate } from '@/master';
-import { Job } from '@/types/job';
-import Vuex from '@/store/index'
+} from "@vue/composition-api";
+import axios from "axios";
+import { API_URL, catchError } from "@/master";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
+import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
+import JobRegisterFalse from "@/components/Organisms/Jobs/JobRegisterFalse.vue";
+import JobRightLogin from "@/components/Organisms/Jobs/JobRightLogin.vue";
+import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
+import LanguageSearchModal from "@/components/Organisms/Modals/Searches/LanguageSearchModal.vue";
+import FrameworkSearchModal from "@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue";
+import SkillSearchModal from "@/components/Organisms/Modals/Searches/SkillSearchModal.vue";
+import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
+import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
+import { dayJs, truncate } from "@/master";
+import { Job } from "@/types/index";
+import { FetchJobs } from "@/types/fetch";
+import Vuex from "@/store/index";
 
 type State = {
   jobs: Job[]; //? 案件一覧配列
   jobsNullFlag: boolean; //? 案件が存在しない場合 表示のため
   freeWord: string;
-  loading: boolean; 
-  jobDetail: any; //? 案件詳細 
+  loading: boolean;
+  jobDetail: any; //? 案件詳細
   detailFlag: boolean; //? 案件詳細を表示するためのフラグ
   selfJobPost: boolean; //? 自分の案件かを判定
-  selfJob: any;  //FIXME: Any //? 自分の案件を格納する 
+  selfJob: any; //FIXME: Any //? 自分の案件を格納する
   applyFlug: boolean; //?応募済みかの判定フラグ
   id: number; //? clickした案件のIdを取得
   modal: boolean; //?モーダルを開いてるか否か
@@ -46,10 +48,11 @@ type State = {
   jobsPageSize: number; //? ページに表示する案件の数
   paginationLength: number; //? ページネーション番号
   scroll: any;
-}
+  newJobLabel: boolean;
+};
 
 const initialState = (): State => ({
-  jobs: [], 
+  jobs: [],
   jobsNullFlag: false,
   freeWord: Vuex.state.search.freeWord,
   loading: true,
@@ -61,8 +64,8 @@ const initialState = (): State => ({
   id: 0,
   modal: false,
   saveFlag: true,
-  limitationList:1,
-  userId: Vuex.state.auth.userId, 
+  limitationList: 1,
+  userId: Vuex.state.auth.userId,
   entryRedirect: false,
   langModal: false,
   frameworkModal: false,
@@ -72,7 +75,8 @@ const initialState = (): State => ({
   displayJobs: [],
   jobsPageSize: 8,
   paginationLength: 0,
-  scroll: null
+  scroll: null,
+  newJobLabel: false,
 });
 
 export default defineComponent({
@@ -86,49 +90,50 @@ export default defineComponent({
     FrameworkSearchModal,
     SkillSearchModal,
     JobRightLogin,
-    FavoriteBtn
+    FavoriteBtn,
+    JobStatusNew,
   },
   setup: (_, ctx: any) => {
     const state = reactive<State>(initialState());
-    const router = ctx.root.$router
+    const router = ctx.root.$router;
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
 
-    // * 非ログイン時 登録リダイレクト 
+    // * 非ログイン時 登録リダイレクト
     const registerRedirect = () => {
-      router.push({ name: 'register' })
+      router.push({ name: "register" });
     };
 
     const fetchData = async () => {
       // * 投稿一覧取得
       const posts: Job[] = [];
-      try { 
-        const response = await axios.get<Job[]>(`${API_URL}/job`)
+      try {
+        const res = await axios.get<FetchJobs>(`${API_URL}/jobs`);
         setTimeout(() => {
           state.loading = false;
-          state.jobs = response.data
+          state.jobs = res.data.response;
           paginateJobs(state.jobs);
 
           //* トップページから フリーワード 検索をした際の処理
-          for(const i in response.data) {
-            const jobs: any = response.data[i]; //FIXME: any
-            if(jobs.jobDescription.indexOf(state.freeWord) !== -1){
-              posts.push(jobs)
+          for (const i in res.data.response) {
+            const jobs: any = res.data.response[i]; //FIXME: any
+            if (jobs.job_description.indexOf(state.freeWord) !== -1) {
+              posts.push(jobs);
             }
           }
-          state.jobs = posts
+          state.jobs = posts;
           paginateJobs(state.jobs);
           // * トップページから 開発言語 検索した際の処理
           if (Vuex.state.search.language.length !== 0) {
-            skillQueryParameter(Vuex.state.search.language, 'programing_language_id');
+            skillQueryParameter(Vuex.state.search.language, "pl_id");
           }
           // * トップページから フレームワーク 検索した際の処理
           else if (Vuex.state.search.framwork.length !== 0) {
-            skillQueryParameter(Vuex.state.search.framwork, 'programing_framework_id');
+            skillQueryParameter(Vuex.state.search.framwork, "pf_id");
           }
           // * トップページから その他スキル 検索した際の処理
           else if (Vuex.state.search.skill.length !== 0) {
-            skillQueryParameter(Vuex.state.search.skill, 'skill_id');
+            skillQueryParameter(Vuex.state.search.skill, "skill_id");
           }
           // * もし案件が存在しなかったら処理が走る
           else if (!state.jobs.length) {
@@ -136,45 +141,52 @@ export default defineComponent({
           }
         }, 1000);
         // * 非ログイン時は応募/いいねを押下した際にリダイレクトでログインに遷移させる
-        if(!state.userId) {
-          state.entryRedirect = true //* 非ログイン時表示に
+        if (!state.userId) {
+          state.entryRedirect = true; //* 非ログイン時表示に
         }
       } catch (error) {
-        console.log(error)
+        catchError(error);
       }
-    }
+    };
 
     const skillQueryParameter = async (searchLang: any, urlParams: string) => {
       const arrayLanguage: string[] = [];
       const languageNum: number[] = searchLang;
-      for(let s = 0; s < languageNum.length; s++) {
-        const languageNumParams = languageNum[s]
-        const queryParamsLanguage =  urlParams + '[' + Number(languageNumParams - 1) + ']' + '=' + languageNumParams + '&';
-        arrayLanguage.push(queryParamsLanguage)
+      for (let s = 0; s < languageNum.length; s++) {
+        const languageNumParams = languageNum[s];
+        const queryParamsLanguage = urlParams + "=" + languageNumParams + "&";
+        arrayLanguage.push(queryParamsLanguage);
       }
-      const LastLanguageURL: string = arrayLanguage.join('')
+      const LastLanguageURL: string = arrayLanguage.join("");
       try {
-        const response = await axios.get<Job[]>(`${API_URL}/job/?${LastLanguageURL}`)
-        state.jobs = response.data
-        if(state.jobs.length == 0) {
+        const res = await axios.get<FetchJobs>(
+          `${API_URL}/jobs?${LastLanguageURL}`
+        );
+        state.jobs = res.data.response;
+        if (state.jobs.length == 0) {
           state.jobsNullFlag = true;
         } else {
           paginateJobs(state.jobs);
         }
       } catch (error) {
-        console.log(error)
+        catchError(error);
       }
     };
 
-    onMounted(() => {
-      fetchData();
+    onMounted(async () => {
+      await fetchData();
     });
 
     // * ページネーション処理(検索)
     const paginateJobs = (value: Job[]) => {
-      state.jobs = value.slice().reverse();
-      state.paginationLength = Math.ceil(state.jobs.length/state.jobsPageSize);
-      state.displayJobs = state.jobs.slice(state.jobsPageSize*(state.page -1), state.jobsPageSize*(state.page));
+      state.jobs = value;
+      state.paginationLength = Math.ceil(
+        state.jobs.length / state.jobsPageSize
+      );
+      state.displayJobs = state.jobs.slice(
+        state.jobsPageSize * (state.page - 1),
+        state.jobsPageSize * state.page
+      );
     };
 
     // * 言語検索 emit
@@ -189,107 +201,129 @@ export default defineComponent({
     const compliteSearchSkill = (emitSkill: Job[]) => {
       searchJobPagenate(emitSkill);
     };
-
     // * フリーワード 検索
     const searchFreeword = async () => {
       const posts: Job[] = [];
-      try { 
-        const response = await axios.get(`${API_URL}/job`)
-        for(const i in response.data){
-          const jobs: any = response.data[i]; //FIXME: any
-          if(jobs.jobDescription.indexOf(state.freeWord) !== -1){
-            posts.push(jobs)
+      try {
+        const res = await axios.get(`${API_URL}/jobs`);
+        for (const i in res.data.response) {
+          const jobs: any = res.data.response[i]; //FIXME: any
+          if (jobs.job_description.indexOf(state.freeWord) !== -1) {
+            posts.push(jobs);
           }
         }
         // * フリーワード 検索語 Vuexに値を格納する
-        Vuex.dispatch('freeWordSearch', {
+        Vuex.dispatch("freeWordSearch", {
           freeWord: state.freeWord,
-        })
+        });
         state.jobs = posts;
         searchJobPagenate(state.jobs);
       } catch (error) {
-        console.log(error)
+        catchError(error);
       }
     };
-
     // * 検索後の処理
     const searchJobPagenate = (value: Job[]) => {
       state.jobs = value.slice().reverse();
-      state.paginationLength = Math.ceil(state.jobs.length/state.jobsPageSize);
-      state.displayJobs = state.jobs.slice(state.jobsPageSize*(state.page -1), state.jobsPageSize*(state.page));
+      state.paginationLength = Math.ceil(
+        state.jobs.length / state.jobsPageSize
+      );
+      state.displayJobs = state.jobs.slice(
+        state.jobsPageSize * (state.page - 1),
+        state.jobsPageSize * state.page
+      );
       state.jobsNullFlag = false;
       closeLangSearchModal();
       closeFrameworkSearchModal();
       closeSkillSearchModal();
       state.loading = true;
       setTimeout(() => {
-        if(value.length == 0) {
+        if (value.length == 0) {
           state.loading = false;
           state.jobsNullFlag = true;
         } else {
           state.loading = false;
           state.detailFlag = false;
         }
-      }, 1500)
+      }, 1500);
     };
-
     // * ページネーション
     const pageChange = (pageNumber: number) => {
       state.loading = true;
       setTimeout(() => {
         state.loading = false;
-        state.displayJobs = state.jobs.slice(state.jobsPageSize*(pageNumber -1), state.jobsPageSize*(pageNumber));
+        state.displayJobs = state.jobs.slice(
+          state.jobsPageSize * (pageNumber - 1),
+          state.jobsPageSize * pageNumber
+        );
       }, 1000);
     };
-
     // * click して案件を取得 === 詳細
-    const getJob = async (job: any) => { // FIXME: any
+    const getJob = async (job: any) => {
+      // FIXME: any
       state.jobDetail = job; //? clickした案件を取得
       state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
-      state.id = job.id;  //? clickしたIdを this.idに格納する
+      state.id = job.id; //? clickしたIdを this.idに格納する
       state.selfJobPost = false; //? clickする度に 自分の案件では無くする
       state.applyFlug = true; //? clickする度に 応募済み案件にする
+      state.newJobLabel = false;
+      if (state.jobDetail.job_status_id == 1) {
+        state.newJobLabel = true;
+      }
       // * ログインしていれば以下の処理が走る
       if (state.userId) {
         // * 自分の案件かを判定
         try {
-          const response = await axios.get<Job[]>(`${API_URL}/job/?user_id=${ state.userId }`)
-          for (let i = 0; i < response.data.length; i++) {
-            state.selfJob = response.data[i]
-            if (state.selfJob.id === state.id) { state.selfJobPost = true }
+          const res = await axios.get<FetchJobs>(
+            `${API_URL}/jobs?user_id=${state.userId}`
+          );
+          for (let i = 0; i < res.data.response.length; i++) {
+            state.selfJob = res.data.response[i];
+            if (state.selfJob.id === state.id) {
+              state.selfJobPost = true;
+            }
           }
         } catch (error) {
-          console.log(error)
+          catchError(error);
         }
         try {
           // * 応募済みか応募済みでないかを判断
-          const response = await axios.get<Job[]>(`${API_URL}/apply_job/?user_id=${ state.userId }`)
-          const arrayApply: number[] = []
-          for (let c = 0; c < response.data.length; c++) {
-            const applyData: any = response.data[c]; // FIXME: any
-            arrayApply.push(applyData.job.id)
+          const res = await axios.get<FetchJobs>(
+            `${API_URL}/apply_jobs?user_id=${state.userId}`
+          );
+          const arrayApply: number[] = [];
+          for (let c = 0; c < res.data.response.length; c++) {
+            const applyData: any = res.data.response[c]; // FIXME: any
+            arrayApply.push(applyData.job.id);
           }
-          if (arrayApply.includes(state.jobDetail.id)) { state.applyFlug = false } 
+          if (arrayApply.includes(state.jobDetail.id)) {
+            state.applyFlug = false;
+          }
         } catch (error) {
-          console.log(error)
+          catchError(error);
         }
         // * 保存済みか保存済みではないかを判定する
         try {
-          const response = await axios.get<Job[]>(`${API_URL}/favorite_job/?user_id=${ state.userId }`)
-          const array: number[] = []
-          for (let i = 0; i < response.data.length; i++){
-            const likeData: any = response.data[i] //FIXME: any
-            array.push(likeData.job.id)
+          const res = await axios.get<FetchJobs>(
+            `${API_URL}/favorite_jobs?user_id=${state.userId}`
+          );
+          const array: number[] = [];
+          for (let i = 0; i < res.data.response.length; i++) {
+            const likeData: any = res.data.response[i]; //FIXME: any
+            array.push(likeData.job.id);
           }
-          if (array.includes(state.jobDetail.id)) { state.saveFlag = false }
-          else { state.saveFlag = true }
+          if (array.includes(state.jobDetail.id)) {
+            state.saveFlag = false;
+          } else {
+            state.saveFlag = true;
+          }
         } catch (error) {
-          console.log(error)
+          catchError(error);
         }
-      } 
+      }
       // * 登録 or ログインしてない場合
       else {
-        console.log("登録してからご利用いただけます")
+        return;
       }
     };
 
@@ -299,13 +333,13 @@ export default defineComponent({
     };
     // * モーダル
     const openModal = () => {
-      state.modal = true
+      state.modal = true;
     };
     const closeModal = () => {
-      state.modal = false
+      state.modal = false;
     };
     const doSend = () => {
-      closeModal()
+      closeModal();
     };
     // *検索 モーダル
     const langSearchModal = () => {
@@ -327,27 +361,27 @@ export default defineComponent({
       state.skillModal = false;
     };
 
-  //   // * トップに行く
-  //   const scrollTop = () => {
-  //     window.scrollTo({
-  //       behavior: 'smooth',
-  //       top: 0,
-  //     })
-  //   };
-  //   const scrollWindow = () => {
-  //     const top: 100 = 100 // ? ボタンを表示させたい位置
-  //     state.scroll = window.scrollY
-  //     if (top <= state.scroll) {
-  //       state.buttonActive = true
-  //     } else {
-  //       state.buttonActive = false
-  //     }
-  //   }
-  // };
-  // methods: {
-  // mounted() {
-  //   window.addEventListener('scroll', this.scrollWindow) //?ボタンを表示させたい位置
-  // },
+    //   // * トップに行く
+    //   const scrollTop = () => {
+    //     window.scrollTo({
+    //       behavior: 'smooth',
+    //       top: 0,
+    //     })
+    //   };
+    //   const scrollWindow = () => {
+    //     const top: 100 = 100 // ? ボタンを表示させたい位置
+    //     state.scroll = window.scrollY
+    //     if (top <= state.scroll) {
+    //       state.buttonActive = true
+    //     } else {
+    //       state.buttonActive = false
+    //     }
+    //   }
+    // };
+    // methods: {
+    // mounted() {
+    //   window.addEventListener('scroll', this.scrollWindow) //?ボタンを表示させたい位置
+    // },
 
     return {
       ...toRefs(state),
@@ -372,9 +406,9 @@ export default defineComponent({
       closeFrameworkSearchModal,
       skillSearchModal,
       closeSkillSearchModal,
-      skillQueryParameter
-    }
-  }
+      skillQueryParameter,
+    };
+  },
 });
 </script>
 
@@ -385,20 +419,20 @@ export default defineComponent({
         <a href="#"><v-icon class="icon">↑</v-icon></a>
       </div> -->
     </transition>
-    <LanguageSearchModal 
+    <LanguageSearchModal
       :jobsArray="jobs"
       @close="closeLangSearchModal"
       v-if="langModal"
       @compliteSearchLanguage="compliteSearchLanguage($event)"
     />
-    <FrameworkSearchModal 
+    <FrameworkSearchModal
       v-if="frameworkModal"
-      @close="closeFrameworkSearchModal" 
+      @close="closeFrameworkSearchModal"
       :jobsArray="jobs"
       @compliteSearchFramework="compliteSearchFramework($event)"
     />
-    <SkillSearchModal 
-      @close="closeSkillSearchModal" 
+    <SkillSearchModal
+      @close="closeSkillSearchModal"
       v-if="skillModal"
       :jobsArray="jobs"
       @compliteSearchSkill="compliteSearchSkill($event)"
@@ -407,61 +441,75 @@ export default defineComponent({
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:footer>
-          <Applybtn @compliteEntry="compliteEntry" :jobId='id' />
+          <Applybtn @compliteEntry="compliteEntry" :jobId="id" />
           <button @click="doSend" class="modal-btn">キャンセル</button>
         </template>
       </ApplyModal>
     </div>
     <!-- 検索エリアバー -->
-    <div class="search-area">
-      <button 
-        v-if="this.$store.state.search.language.length == 0" 
-        class="search-area__modal-btn" 
-        @click="langSearchModal"
-      >開発言語</button>
-      <button 
-        v-else 
-        class="search-area__modal-btn-active" 
-        @click="langSearchModal"
-        >開発言語</button>
-      <button 
-        v-if="this.$store.state.search.framwork.length == 0" 
-        class="search-area__modal-btn" 
-        @click="frameworkSearchModal"
-      >フレームワーク</button>
-      <button 
-        v-else 
-        class="search-area__modal-btn-active" 
-        @click="frameworkSearchModal"
-      >フレームワーク</button>
-      <button 
-        v-if="this.$store.state.search.skill.length == 0" 
-        class="search-area__modal-btn" 
-        @click="skillSearchModal"
-      >その他技術</button>
-      <button 
-        v-else 
-        class="search-area__modal-btn-active" 
-        @click="skillSearchModal"
-      >その他技術</button>
-      <input
-        type="text" 
-        v-model="freeWord" 
-        placeholder="フリーワード" 
-        class="search-area__freewrod"
-        @keyup.enter="searchFreeword"
-      >
-    </div>
+    <template>
+      <div class="search-area">
+        <button
+          v-if="this.$store.state.search.language.length == 0"
+          class="search-area__modal-btn"
+          @click="langSearchModal"
+        >
+          開発言語
+        </button>
+        <button
+          v-else
+          class="search-area__modal-btn-active"
+          @click="langSearchModal"
+        >
+          開発言語
+        </button>
+        <button
+          v-if="this.$store.state.search.framwork.length == 0"
+          class="search-area__modal-btn"
+          @click="frameworkSearchModal"
+        >
+          フレームワーク
+        </button>
+        <button
+          v-else
+          class="search-area__modal-btn-active"
+          @click="frameworkSearchModal"
+        >
+          フレームワーク
+        </button>
+        <button
+          v-if="this.$store.state.search.skill.length == 0"
+          class="search-area__modal-btn"
+          @click="skillSearchModal"
+        >
+          その他技術
+        </button>
+        <button
+          v-else
+          class="search-area__modal-btn-active"
+          @click="skillSearchModal"
+        >
+          その他技術
+        </button>
+        <input
+          type="text"
+          v-model="freeWord"
+          placeholder="フリーワード"
+          class="search-area__freewrod"
+          @keyup.enter="searchFreeword"
+        />
+      </div>
+    </template>
     <!-- 案件表示エリア -->
     <div class="job-wrapper-center" v-show="!loading">
       <div class="job-wrapper-left" v-if="jobsNullFlag === false">
-        <div 
-          v-for="job in displayJobs" 
-          class="router" 
-          :key="job.index"  
+        <div
+          v-for="job in displayJobs"
+          class="router"
+          :key="job.index"
           :value="job.id"
-          @click="getJob(job)" 
-          :jobId='job'
+          @click="getJob(job)"
+          :jobId="job"
         >
           <!-- 案件カード コンポーネント -->
           <CardJob :job="job" />
@@ -469,122 +517,153 @@ export default defineComponent({
       </div>
       <!-- 検索結果が無い場合 -->
       <div class="job-wrapper-left-false" v-else>
-        この条件での開発案件はありませんでした。<br>
+        この条件での開発案件はありませんでした。<br />
         別のキーワードで検索してください。
       </div>
-      <router-link 
-        :to="`/jobs/${ job.id }`" 
-        class="router-1" 
-        v-for="job in displayJobs" 
-        :key="job.index" 
+      <router-link
+        :to="`/jobs/${job.id}`"
+        class="router-1"
+        v-for="job in displayJobs"
+        :key="job.index"
       >
         <CardJob :job="job" />
       </router-link>
-      <div class="job-wrapper-right" v-if="detailFlag === true">
-        <div class="top-job-detail-area">
-          <div class="top-job-detail-area__title">
-            {{ limit(jobDetail.jobTitle, 60) }}
-          </div>
-          <!-- ログイン時 -->
-          <div v-if="entryRedirect == false">
-            <div class="top-job-detail-bottom" v-if="selfJobPost === false">
-              <button @click="openModal" class="btn-box-apply" v-if="applyFlug">応募する</button>
-              <div class="btn-box-apply-false" v-if="applyFlug === false">
-                応募済み
-              </div>
-              <div class="btn-box-save">
-                <FavoriteBtn :jobId="jobDetail.id"/>
-              </div>
+      <template v-if="detailFlag">
+        <div class="job-wrapper-right">
+          <div class="top-job-detail-area">
+            <div class="top-job-detail-area__title">
+              {{ limit(jobDetail.job_title, 60) }}
             </div>
-            <div v-else>
+            <!-- ログイン時 -->
+            <template v-if="!entryRedirect">
+              <div class="top-job-detail-bottom" v-if="!selfJobPost">
+                <button
+                  @click="openModal"
+                  class="btn-box-apply"
+                  v-if="applyFlug"
+                >
+                  応募する
+                </button>
+                <div class="btn-box-apply-false" v-else>応募済み</div>
+                <div class="btn-box-save">
+                  <FavoriteBtn :jobId="id" />
+                </div>
+                <div class="label-area mt-5">
+                  <JobStatusNew :job="jobDetail" />
+                </div>
+              </div>
+              <template v-else>
+                <div class="top-job-detail-bottom">
+                  <router-link :to="`/manage/applicant/${jobDetail.id}`">
+                    <button class="btn-box-manage">管理画面</button>
+                  </router-link>
+                  <div class="label-area mt-5">
+                    <JobStatusNew :job="jobDetail" />
+                  </div>
+                </div>
+              </template>
+            </template>
+            <!-- 非ログイン時 リダイレクトさせる -->
+            <template v-else>
               <div class="top-job-detail-bottom">
-                <router-link :to="`/manage/applicant/${ jobDetail.id }`">
-                  <button class="btn-box-manage">管理画面</button>
-                </router-link>
+                <button class="btn-box-apply" @click="registerRedirect">
+                  応募する
+                </button>
+                <div class="btn-box-save">
+                  <v-icon class="save-icon" @click="registerRedirect"
+                    >mdi-heart</v-icon
+                  >
+                </div>
+                <div class="label-area mt-5">
+                  <JobStatusNew :job="jobDetail" />
+                </div>
+              </div>
+            </template>
+          </div>
+          <!-- 右側案件詳細 -->
+          <div class="main-job-detail-area">
+            <div class="tag-area">
+              投稿者
+            </div>
+            <router-link :to="`/account/profile/${jobDetail.user_id}`">
+              <div class="post-user-name-area">
+                {{ jobDetail.user.user_name }}
+              </div>
+            </router-link>
+            <div class="tag-area">
+              開発言語
+            </div>
+            <div class="post-user-area">
+              <div
+                class="detail-langage"
+                v-for="langage in jobDetail.programing_language_responses.slice(
+                  0,
+                  5
+                )"
+                :key="langage.programing_language_name"
+              >
+                {{ langage.programing_language_name }}
               </div>
             </div>
-          </div>
-          <!-- 非ログイン時 リダイレクトさせる -->
-          <div v-else>
-            <div class="top-job-detail-bottom">
-              <button class="btn-box-apply" @click="registerRedirect">応募する</button>
-              <div class="btn-box-save">
-                <v-icon class="save-icon" @click="registerRedirect">mdi-heart</v-icon>
+            <div class="tag-area">
+              フレームワーク
+            </div>
+            <div class="post-user-area">
+              <div
+                class="detail-framework"
+                v-for="framework in jobDetail.programing_framework_responses.slice(
+                  0,
+                  5
+                )"
+                :key="framework.programing_framework_name"
+              >
+                {{ framework.programing_framework_name }}
               </div>
+            </div>
+            <div class="tag-area">
+              その他スキル
+            </div>
+            <div class="post-user-area">
+              <div
+                class="detail-skill"
+                v-for="skill in jobDetail.skill_responses.slice(0, 5)"
+                :key="skill.skill_name"
+              >
+                {{ skill.skill_name }}
+              </div>
+            </div>
+            <div class="tag-area">
+              開発期間
+            </div>
+            <div class="post-user-area">
+              {{ day(jobDetail.dev_start_date, "YYYY年 M月 D日") }} ~
+              {{ day(jobDetail.dev_end_date, "YYYY年 M月 D日") }}
+            </div>
+            <div class="tag-area">
+              募集人数
+            </div>
+            <div class="post-user-area">
+              {{ jobDetail.recruitment_numbers }} 人
+            </div>
+            <div class="tag-area">
+              開発詳細
+            </div>
+            <div class="post-user-area">
+              {{ jobDetail.job_description }}
+            </div>
+            <div class="jobDetail-time-area">
+              投稿期日 {{ day(jobDetail.created_at, "YYYY年 M月 D日") }}
             </div>
           </div>
         </div>
-        <!-- 右側案件詳細 -->
-        <div class="main-job-detail-area">
-          <div class="tag-area">
-            投稿者
-          </div>
-          <router-link :to="`/account/profile/${ jobDetail.userId }`"> 
-            <div class="post-user-name-area">
-              {{ jobDetail.user.userName }}
-            </div>
-          </router-link>
-          <div class="tag-area">
-            開発言語
-          </div>
-          <div class="post-user-area">
-            <div 
-              class="detail-langage" 
-              v-for="langage in jobDetail.programingLanguage.slice(0,5)" 
-              :key="langage.id">
-              {{ langage.programingLanguageName }}
-            </div>
-          </div>
-          <div class="tag-area">
-            フレームワーク
-          </div>
-          <div class="post-user-area">
-            <div class="detail-framework" 
-              v-for="framework in jobDetail.programingFramework.slice(0,5)" 
-              :key="framework.programingFrameworkName">
-              {{ framework.programingFrameworkName }}
-            </div>
-          </div>
-          <div class="tag-area">
-            その他スキル
-          </div>
-          <div class="post-user-area">
-            <div 
-              class="detail-skill" 
-              v-for="skill in jobDetail.skill.slice(0,5)" 
-              :key="skill.skillName"
-            >
-              {{ skill.skillName }}
-            </div>
-          </div>
-          <div class="tag-area">
-            開発期間
-          </div>
-          <div class="post-user-area">
-            {{ day(jobDetail.devStartDate , "YYYY年 M月 D日") }}  ~  {{ day(jobDetail.devEndDate, "YYYY年 M月 D日")}}
-          </div>
-          <div class="tag-area">
-            募集人数
-          </div>
-          <div class="post-user-area">
-            {{ jobDetail.recruitmentNumbers }} 人
-          </div>
-          <div class="tag-area">
-            開発詳細
-          </div>
-          <div class="post-user-area">
-            {{ jobDetail.jobDescription }}
-          </div>
-          <div class="jobDetail-time-area">
-            投稿期日   {{ day(jobDetail.createdAt, "YYYY年 M月 D日") }}
-          </div>
+      </template>
+      <template v-else>
+        <div class="job-wrapper-right-false">
+          <!-- 右側の登録コンポーネント -->
+          <JobRegisterFalse v-if="!userId" />
+          <JobRightLogin v-else />
         </div>
-      </div>
-      <div class="job-wrapper-right-false" v-else>
-        <!-- 右側の登録コンポーネント -->
-        <JobRegisterFalse v-if="!userId" />
-        <JobRightLogin v-else />
-      </div>
+      </template>
       <!-- ページネーション -->
       <v-main>
         <div class="text-center">
@@ -592,19 +671,17 @@ export default defineComponent({
             v-model="page"
             :length="paginationLength"
             circle
-            @input = "pageChange"
+            @input="pageChange"
           ></v-pagination>
-        </div>     
+        </div>
       </v-main>
     </div>
-    <Loading v-show="loading">
-    </Loading>
+    <Loading v-show="loading"> </Loading>
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .job-cards.sample-active {
   border-bottom: 4px solid #ff0800;
@@ -615,7 +692,7 @@ export default defineComponent({
   background-color: red;
 }
 
-// * 詳細検索 
+// * 詳細検索
 .search-area {
   width: 100%;
   height: 48px;
@@ -638,13 +715,13 @@ export default defineComponent({
     cursor: pointer;
     font-weight: bold;
     margin-left: 0.7rem;
-    transition: .3s;
+    transition: 0.3s;
     outline: none;
 
     &:hover {
       @include primary-border_color;
       color: $primary-color;
-      transition: .3s;
+      transition: 0.3s;
     }
   }
 
@@ -658,13 +735,13 @@ export default defineComponent({
     cursor: pointer;
     font-weight: bold;
     margin-left: 0.7rem;
-    transition: .3s;
+    transition: 0.3s;
     outline: none;
 
     &:hover {
       @include primary-border_color;
       color: $primary-color;
-      transition: .3s;
+      transition: 0.3s;
     }
   }
 
@@ -679,7 +756,7 @@ export default defineComponent({
     width: 28%;
     margin-top: 0.23rem;
     // border: solid 1px #E0E0E0;
-    background-color: #E0E0E0;
+    background-color: #e0e0e0;
     border-radius: 50rem;
     padding: 0.5rem 1rem;
     position: absolute;
@@ -694,7 +771,7 @@ export default defineComponent({
   }
 }
 
-//* 全体 
+//* 全体
 .job-wrapper {
   width: 100%;
   margin: 0 auto;
@@ -709,7 +786,7 @@ export default defineComponent({
     position: fixed;
     right: 0;
     bottom: 0;
-    background: #2196F3;
+    background: #2196f3;
     opacity: 0.6;
     border-radius: 50%;
     margin-right: 20px;
@@ -731,7 +808,7 @@ export default defineComponent({
       }
     }
 
-    a::before{
+    a::before {
       font-weight: 900;
       font-size: 25px;
       color: #fff;
@@ -770,10 +847,10 @@ export default defineComponent({
   }
 }
 
-// * 案件詳細画面 
+// * 案件詳細画面
 .job-wrapper-right {
   width: 52%;
-  height: 88vh;
+  height: 90vh;
   margin-left: 2rem;
   margin-top: 1rem;
   background-color: $white;
@@ -804,6 +881,20 @@ export default defineComponent({
       display: inline-block;
       position: relative;
       margin-top: 0.8rem;
+
+      .label-area {
+        float: right;
+
+        .label {
+          width: 146px;
+          font-size: 14px;
+          background-color: $third-dark;
+          color: $white;
+          border-radius: 8px;
+          font-weight: bold;
+          text-decoration: none;
+        }
+      }
     }
   }
 }
@@ -870,7 +961,7 @@ export default defineComponent({
 
   &:hover {
     color: $primary-color;
-    transition: .3s;
+    transition: 0.3s;
   }
 }
 
@@ -934,7 +1025,7 @@ export default defineComponent({
   outline: none;
 }
 
-// * 応募するボタン 
+// * 応募するボタン
 .btn-box-apply {
   @include red-btn;
   @include neumorphism;
@@ -953,11 +1044,11 @@ export default defineComponent({
   margin-top: 4px;
   appearance: none;
   border: none;
-  transition: .3s;
+  transition: 0.3s;
   outline: none;
 }
 
-// * 応募済みボタン 
+// * 応募済みボタン
 .btn-box-apply-false {
   @include grey-btn;
   display: block;
@@ -974,7 +1065,7 @@ export default defineComponent({
   display: inline-block;
 }
 
-// * モーダル内のキャンセルボタン 
+// * モーダル内のキャンセルボタン
 .modal-btn {
   @include neumorphismGrey;
   color: $red;
@@ -994,7 +1085,7 @@ export default defineComponent({
   outline: none;
 }
 
-// * 保存アイコン 
+// * 保存アイコン
 .save-icon {
   font-size: 20px;
   width: 42px;
@@ -1006,7 +1097,7 @@ export default defineComponent({
   border-radius: 5px / 5px;
 }
 
-// * 右側 詳細を表示しない際に 
+// * 右側 詳細を表示しない際に
 .job-wrapper-right-false {
   width: 52%;
   // height: 40vh;
@@ -1022,9 +1113,9 @@ export default defineComponent({
   text-align: left;
 }
 
-// * 案件カード側 
+// * 案件カード側
 .job-wrapper-left {
-  width: 43%;
+  width: 44%;
   flex: 1 0 auto;
   align-items: center;
   justify-content: center;
@@ -1098,7 +1189,7 @@ label.checkbox {
   padding: 1.1rem 4rem;
   border-radius: 25px;
   border: none;
-  font-size: .875rem;
+  font-size: 0.875rem;
   font-weight: 600;
   line-height: 1;
   text-align: center;
@@ -1108,7 +1199,7 @@ label.checkbox {
   float: right;
   margin-top: 1.5rem;
   cursor: pointer;
-  transition: .3s;
+  transition: 0.3s;
   outline: none;
 }
 
@@ -1132,7 +1223,7 @@ label.checkbox {
     width: 100%;
     padding: 0;
   }
-  // * 右側案件をdisplaynone 
+  // * 右側案件をdisplaynone
   .job-wrapper-right {
     display: none;
   }
@@ -1141,7 +1232,8 @@ label.checkbox {
     display: block;
   }
 
-  .job-wrapper-left, .job-wrapper-right-false {
+  .job-wrapper-left,
+  .job-wrapper-right-false {
     display: none;
   }
 

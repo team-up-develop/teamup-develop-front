@@ -1,23 +1,19 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
   computed,
-  ref
-} from '@vue/composition-api';
-import Vuex from '@/store/index'
-import axios from 'axios'
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import ChatGroups from '@/components/Organisms/Chats/ChatGroups.vue'
-import SendMessage from '@/components/Organisms/Chats/SendMessage.vue'
-import { Message } from '@/types/chat'
-import {
-  m, 
-  API_URL, 
-  truncate
-} from '@/master'
+  ref,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
+import axios from "axios";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
+import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
+import { Message } from "@/types/index";
+import { m, API_URL, truncate, catchError } from "@/master";
 
 type State = {
   chats: Message[];
@@ -28,7 +24,7 @@ type State = {
   loading: boolean;
   jobTitle: string;
   clickJobId: number;
-}
+};
 
 const initialState = (): State => ({
   chats: [],
@@ -38,65 +34,68 @@ const initialState = (): State => ({
   hasError: false,
   loading: true,
   jobTitle: "",
-  clickJobId: 0
+  clickJobId: 0,
 });
 
 export default defineComponent({
   components: {
     Loading,
     ChatGroups,
-    SendMessage
+    SendMessage,
   },
   props: {
     // * job.idを受け取る
-    id: { type: Number , required: true },
+    id: { type: Number, required: true },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
-    let root: any = ref(null)
+    let root: any = ref(null);
     const limit = (value: string, num: number) => truncate(value, num);
 
     const scrollChat = () => {
       setTimeout(() => {
-        const a = Number(root.value.scrollHeight)
-        const b = Number(root.value.clientHeight)
-        const bottom = a - b
-        if(root.value.scrollTop === bottom) {
-          return 
+        const a = Number(root.value.scrollHeight);
+        const b = Number(root.value.clientHeight);
+        const bottom = a - b;
+        if (root.value.scrollTop === bottom) {
+          return;
         } else {
           root.value.scrollTop = bottom;
         }
       }, 2000);
-    }
+    };
 
     const getJob = async () => {
       try {
-        const response = await axios.get(`${API_URL}/job/${props.id}`)
-        state.jobTitle = response.data.jobTitle
-        state.clickJobId = response.data.id
+        const res = await axios.get(`${API_URL}/job/${props.id}`);
+        state.jobTitle = res.data.jobTitle;
+        state.clickJobId = res.data.id;
       } catch (error) {
-        console.log(error)
+        catchError(error);
       }
-    }
+    };
     // * チャット内容を取得 setInterval
     const getChatMessage = async () => {
       let chatLength = 0;
-      setInterval(async() => {
-        try { 
-          const response = await axios.get<Message[]>(`${API_URL}/chat_message/?job_id=${props.id}`)
+      setInterval(async () => {
+        try {
+          const res = await axios.get<Message[]>(
+            `${API_URL}/chat_message/?job_id=${props.id}`
+          );
           state.loading = false;
-          state.chats = response.data
-          if(chatLength === state.chats.length) { return console.log("chatLengt が一緒なのでスクロールしません。") } 
-          else {
-            console.log("chatLengt の更新がかかりました。")
-            chatLength = state.chats.length
+          state.chats = res.data;
+          if (chatLength === state.chats.length) {
+            return console.log("chatLengt が一緒なのでスクロールしません。");
+          } else {
+            console.log("chatLengt の更新がかかりました。");
+            chatLength = state.chats.length;
             scrollChat();
           }
         } catch (error) {
-          console.log(error)
+          catchError(error);
         }
-      }, 1500)
-    }
+      }, 1500);
+    };
 
     onMounted(() => {
       scrollChat();
@@ -111,9 +110,9 @@ export default defineComponent({
       scrollChat,
       getChatMessage,
       getJob,
-      limit
-    }
-  }
+      limit,
+    };
+  },
 });
 </script>
 
@@ -128,7 +127,7 @@ export default defineComponent({
       </div>
       <div class="chat-card__right">
         <div class="main" ref="target" v-show="!loading">
-          <router-link :to="`/jobs/${ clickJobId }`" class="router">
+          <router-link :to="`/jobs/${clickJobId}`" class="router">
             <header class="header">{{ limit(jobTitle, 60) }}</header>
           </router-link>
           <section class="room" ref="root">
@@ -147,16 +146,15 @@ export default defineComponent({
         </div>
         <Loading v-show="loading" />
         <div class="bottom">
-          <SendMessage :id="id"/>
+          <SendMessage :id="id" />
         </div>
       </div>
     </v-sheet>
   </div>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .active {
   text-decoration: none;
@@ -175,8 +173,7 @@ export default defineComponent({
   color: $primary-color;
 }
 
-
-.wrapper{
+.wrapper {
   width: 90%;
   height: 90vh;
   margin: 0 auto;
@@ -252,7 +249,7 @@ export default defineComponent({
               border-radius: 8px;
               appearance: none;
               border: none;
-              transition: .3s;
+              transition: 0.3s;
               outline: none;
             }
 
@@ -266,7 +263,7 @@ export default defineComponent({
               font-size: 0.8em;
               border-radius: 8px;
               appearance: none;
-              transition: .3s;
+              transition: 0.3s;
               outline: none;
             }
 
@@ -333,7 +330,7 @@ export default defineComponent({
       }
 
       .bottom {
-        background-color:$light-grey;
+        background-color: $light-grey;
         z-index: 10;
         position: absolute;
         bottom: 0;
@@ -349,7 +346,7 @@ export default defineComponent({
 
 // * v-card の boxshadowを消します
 .v-sheet.v-card:not(.v-sheet--outlined) {
-  box-shadow: none; 
+  box-shadow: none;
 }
 
 // * ここからトーク周り
@@ -357,12 +354,14 @@ export default defineComponent({
   margin-bottom: 2em;
   position: relative;
 }
-.balloon:before,.balloon:after {
+.balloon:before,
+.balloon:after {
   clear: both;
   content: "";
   display: block;
 }
-.balloon-image-left,.balloon-image-right {
+.balloon-image-left,
+.balloon-image-right {
   width: 68px;
   height: 68px;
 }
@@ -393,7 +392,8 @@ export default defineComponent({
   text-align: center;
   background-color: $light-grey;
 }
-.balloon-text-right,.balloon-text-left {
+.balloon-text-right,
+.balloon-text-left {
   position: relative;
   padding: 0.8rem 1.4rem;
   // border: 1px solid #aaa;
@@ -416,7 +416,7 @@ export default defineComponent({
 /* 三角部分 */
 .balloon-text-right:before {
   position: absolute;
-  content: '';
+  content: "";
   // border: 10px solid transparent;
   border-right: 10px solid #aaa;
   top: 15px;
@@ -424,7 +424,7 @@ export default defineComponent({
 }
 .balloon-text-right:after {
   position: absolute;
-  content: '';
+  content: "";
   border: 10px solid transparent;
   border-right: 10px solid$light-grey;
   top: 15px;
@@ -432,7 +432,7 @@ export default defineComponent({
 }
 .balloon-text-left:before {
   position: absolute;
-  content: '';
+  content: "";
   background-color: $light-grey;
   border: 10px solid transparent;
   border-left: 10px solid #aaa;
@@ -441,7 +441,7 @@ export default defineComponent({
 }
 .balloon-text-left:after {
   position: absolute;
-  content: '';
+  content: "";
   border: 10px solid transparent;
   border-left: 10px solid #f2f2f2;
   top: 15px;
@@ -451,23 +451,22 @@ export default defineComponent({
 // * ここまでトーク周り
 
 @media screen and (max-width: 1200px) {
-  .wrapper{
+  .wrapper {
     width: 100%;
   }
 }
 
 @media (max-width: 868px) {
-  .wrapper{
+  .wrapper {
     .chat-card {
       width: 95%;
 
       &__left {
         display: none;
-
       }
       &__right {
         width: 100%;
-        
+
         .room {
           padding: 1rem 0.5rem 1rem 1rem;
         }
@@ -477,7 +476,7 @@ export default defineComponent({
 }
 
 @media (max-width: 500px) {
-  .wrapper .chat-card__right .bottom { 
+  .wrapper .chat-card__right .bottom {
     padding: 1rem 0 1rem 0.1rem;
   }
 }

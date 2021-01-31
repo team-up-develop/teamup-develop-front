@@ -1,19 +1,19 @@
 <script lang="ts">
-import Vue, { PropType } from 'vue';
-import { API_URL } from '@/master'
-import axios from 'axios'
-import CompliteModal from '@/components/Organisms/Modals/Applications/CompliteModal.vue'
-import { ApplyParams } from '@/types/job';
+import Vue, { PropType } from "vue";
+import { m, API_URL, catchError } from "@/master";
+import axios from "axios";
+import CompliteModal from "@/components/Organisms/Modals/Applications/CompliteModal.vue";
+import { ApplyParams } from "@/types/params";
 
 type DataType = {
   userId: number;
   compliteModal: boolean;
   applyFlag: boolean;
-}
+};
 
-export default Vue.extend({ 
+export default Vue.extend({
   props: {
-    jobId: { type: Number as PropType<number>, default: 0 }
+    jobId: { type: Number as PropType<number>, default: 0 },
   },
   data(): DataType {
     return {
@@ -26,20 +26,21 @@ export default Vue.extend({
     // * 応募する
     applyJob() {
       const params: ApplyParams = {
-        jobId: this.jobId,
-        userId: this.userId,
-        applyStatusId: 1  
+        job_id: this.jobId,
+        user_id: this.userId,
+        apply_status_id: m.APPLY_STATUS_APPLY,
       };
-      axios.post<ApplyParams>(`${API_URL}/apply_job/`, params)
-      .then(response => {
-        this.compliteModal = true;
-        this.applyFlag = false;
-        this.$emit('compliteEntry');
-        return response
-      })
-      .catch(error =>{
-        console.log(error);
-      });
+      axios
+        .post<ApplyParams>(`${API_URL}/apply_job`, params)
+        .then((res) => {
+          this.compliteModal = true;
+          this.applyFlag = false;
+          this.$emit("compliteEntry");
+          return res;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
     },
     openCompliteModal() {
       this.compliteModal = true;
@@ -49,11 +50,10 @@ export default Vue.extend({
     },
   },
   components: {
-    CompliteModal
-  }
+    CompliteModal,
+  },
 });
 </script>
-
 
 <template>
   <div class="modal-apply-area">
@@ -62,22 +62,21 @@ export default Vue.extend({
     </div>
     <complite-modal @close="closeCompliteModal" v-if="compliteModal">
       <p>応募が完了しました。</p>
-      <template v-slot:footer>
-      </template>
+      <template v-slot:footer> </template>
     </complite-modal>
   </div>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .modal-apply-area {
   width: 160px;
 }
 
 .btn-apply {
-  @include neumorphism ;
-  @include red-btn ;
+  @include neumorphism;
+  @include red-btn;
   display: block;
   padding: 1rem 3rem;
   border-radius: 50px;
