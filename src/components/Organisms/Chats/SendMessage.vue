@@ -38,8 +38,8 @@ export default defineComponent({
     const postMessage = async () => {
       const params: messageParams = {
         message: state.chatMessage,
-        userID: state.userId,
-        jobID: props.id,
+        user_id: state.userId,
+        job_id: props.id,
       };
       // ? 空のメッセージは送信させない
       if (params.message == "") {

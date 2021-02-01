@@ -6,6 +6,7 @@ import {
   Language,
   Framework,
   Skill,
+  Message,
 } from "@/types/index";
 
 export type FetchJobs = {
@@ -47,5 +48,11 @@ export type FetchFrameworks = {
 export type FetchSkills = {
   msg: string;
   response: Skill[];
+  status: string;
+};
+
+export type FetchMessage = {
+  msg: string;
+  response: Message[];
   status: string;
 };

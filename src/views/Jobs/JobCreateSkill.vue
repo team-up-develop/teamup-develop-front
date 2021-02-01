@@ -7,6 +7,7 @@ import {
 } from "@vue/composition-api";
 import UserCard from "@/components/Organisms/Manages/UserCard.vue";
 import JobCreateSkillCard from "@/components/Organisms/Jobs/JobCreateSkillCard.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { JobCreateSession1 as State } from "@/components/Organisms/Jobs/JobCreateCard.vue";
 
 const initialState = (): State => ({
@@ -20,9 +21,22 @@ export default defineComponent({
   components: {
     UserCard,
     JobCreateSkillCard,
+    Breadcrumbs,
   },
   setup: () => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "案件作成",
+        disabled: true,
+      },
+    ]);
 
     state.jobTitle = sessionStorage.getItem("jobTitle");
     state.devStartDate = sessionStorage.getItem("devStartDate");
@@ -38,6 +52,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       isValue,
     };
   },
@@ -46,6 +61,7 @@ export default defineComponent({
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <v-container class="wrapper">
       <v-row v-if="isValue">
         <UserCard />

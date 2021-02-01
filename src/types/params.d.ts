@@ -52,6 +52,6 @@ export interface RegisterSessionParams {
 
 export interface messageParams {
   message: string;
-  userID: number;
-  jobID: number;
+  user_id: number;
+  job_id: number;
 }

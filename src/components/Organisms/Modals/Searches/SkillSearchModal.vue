@@ -91,7 +91,7 @@ export default Vue.extend({
                   v-model="selectedSkill"
                   v-bind:value="skill.id"
                 />
-                <span>{{ skill.skill_name }}</span>
+                <span>{{ skill.name }}</span>
               </label>
             </v-row>
           </div>

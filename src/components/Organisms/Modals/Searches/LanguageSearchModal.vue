@@ -90,7 +90,7 @@ export default Vue.extend({
                   v-model="selectedLang"
                   v-bind:value="language.id"
                 />
-                <span>{{ language.programing_language_name }}</span>
+                <span>{{ language.name }}</span>
               </label>
             </v-row>
           </div>

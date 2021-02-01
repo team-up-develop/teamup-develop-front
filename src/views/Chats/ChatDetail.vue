@@ -12,7 +12,9 @@ import axios from "axios";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
 import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { Message } from "@/types/index";
+import { FetchMessage } from "@/types/fetch";
 import { m, API_URL, truncate, catchError } from "@/master";
 
 type State = {
@@ -42,6 +44,7 @@ export default defineComponent({
     Loading,
     ChatGroups,
     SendMessage,
+    Breadcrumbs,
   },
   props: {
     // * job.idを受け取る
@@ -50,6 +53,19 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive<State>(initialState());
     let root: any = ref(null);
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "チャット",
+        disabled: true,
+      },
+    ]);
+
     const limit = (value: string, num: number) => truncate(value, num);
 
     const scrollChat = () => {
@@ -68,8 +84,8 @@ export default defineComponent({
     const getJob = async () => {
       try {
         const res = await axios.get(`${API_URL}/job/${props.id}`);
-        state.jobTitle = res.data.jobTitle;
-        state.clickJobId = res.data.id;
+        state.jobTitle = res.data.response.job_title;
+        state.clickJobId = res.data.response.id;
       } catch (error) {
         catchError(error);
       }
@@ -79,11 +95,11 @@ export default defineComponent({
       let chatLength = 0;
       setInterval(async () => {
         try {
-          const res = await axios.get<Message[]>(
-            `${API_URL}/chat_message/?job_id=${props.id}`
+          const res = await axios.get<FetchMessage>(
+            `${API_URL}/chat_messages?job_id=${props.id}`
           );
           state.loading = false;
-          state.chats = res.data;
+          state.chats = res.data.response;
           if (chatLength === state.chats.length) {
             return console.log("chatLengt が一緒なのでスクロールしません。");
           } else {
@@ -98,7 +114,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      scrollChat();
+      // scrollChat();
       getChatMessage();
       getJob();
     });
@@ -107,6 +123,7 @@ export default defineComponent({
       ...toRefs(state),
       m: computed(() => m),
       root,
+      breadcrumbs,
       scrollChat,
       getChatMessage,
       getJob,
@@ -117,40 +134,43 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper">
-    <v-sheet class="chat-card">
-      <div class="chat-card__left">
-        <div class="title">
-          チャットグループ
+  <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <div class="wrapper">
+      <v-sheet class="chat-card">
+        <div class="chat-card__left">
+          <div class="title">
+            チャットグループ
+          </div>
+          <ChatGroups :userId="userId" />
         </div>
-        <ChatGroups :userId="userId" />
-      </div>
-      <div class="chat-card__right">
-        <div class="main" ref="target" v-show="!loading">
-          <router-link :to="`/jobs/${clickJobId}`" class="router">
-            <header class="header">{{ limit(jobTitle, 60) }}</header>
-          </router-link>
-          <section class="room" ref="root">
-            <div class="balloon" v-for="chat in chats" :key="chat.id">
-              <div class="balloon-image-left">
-                <div class="balloon-img"></div>
+        <div class="chat-card__right">
+          <div class="main" ref="target" v-show="!loading">
+            <router-link :to="`/jobs/${clickJobId}`" class="router">
+              <header class="header">{{ limit(jobTitle, 60) }}</header>
+            </router-link>
+            <section class="room" ref="root">
+              <div class="balloon" v-for="chat in chats" :key="chat.id">
+                <div class="balloon-image-left">
+                  <div class="balloon-img"></div>
+                </div>
+                <div class="user-name">
+                  {{ chat.user.user_name }}
+                </div>
+                <div class="balloon-text-right">
+                  <p>{{ chat.message }}</p>
+                </div>
               </div>
-              <div class="user-name">
-                {{ chat.user.userName }}
-              </div>
-              <div class="balloon-text-right">
-                <p>{{ chat.message }}</p>
-              </div>
-            </div>
-          </section>
+            </section>
+          </div>
+          <Loading v-show="loading" />
+          <div class="bottom">
+            <SendMessage :id="id" />
+          </div>
         </div>
-        <Loading v-show="loading" />
-        <div class="bottom">
-          <SendMessage :id="id" />
-        </div>
-      </div>
-    </v-sheet>
-  </div>
+      </v-sheet>
+    </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>

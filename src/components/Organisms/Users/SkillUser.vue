@@ -19,7 +19,7 @@ export default defineComponent({
             v-for="langage in user.programing_languages"
             :key="langage.id"
           >
-            {{ langage.programing_language_name }}
+            {{ langage.name }}
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@ export default defineComponent({
             :key="framework.id"
             class="flame-tag"
           >
-            {{ framework.programing_framework_name }}
+            {{ framework.name }}
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@ export default defineComponent({
         <label for="name" class="name-tag">その他関連スキル</label>
         <div class="lang-box">
           <div class="other-tag" v-for="skill in user.skills" :key="skill.id">
-            {{ skill.skill_name }}
+            {{ skill.name }}
           </div>
         </div>
       </div>

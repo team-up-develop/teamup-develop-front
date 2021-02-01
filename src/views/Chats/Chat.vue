@@ -9,6 +9,7 @@ import {
 import Vuex from "@/store/index";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
 import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 
 type State = {
   userId: number;
@@ -22,9 +23,22 @@ export default defineComponent({
   components: {
     ChatGroups,
     SendMessage,
+    Breadcrumbs,
   },
   setup: () => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "チャット",
+        disabled: true,
+      },
+    ]);
 
     const isLogin = computed(() => {
       if (state.userId) {
@@ -41,6 +55,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       isLogin,
     };
   },
@@ -48,25 +63,28 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper">
-    <v-sheet class="chat-card" v-if="isLogin">
-      <div class="chat-card__left">
-        <div class="title">
-          チャットグループ
+  <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <div class="wrapper">
+      <v-sheet class="chat-card" v-if="isLogin">
+        <div class="chat-card__left">
+          <div class="title">
+            チャットグループ
+          </div>
+          <ChatGroups :userId="userId" />
         </div>
-        <ChatGroups :userId="userId" />
-      </div>
-      <div class="chat-card__right">
-        <div class="main" ref="target"></div>
-        <div class="bottom">
-          <SendMessage :id="0" />
+        <div class="chat-card__right">
+          <div class="main" ref="target"></div>
+          <div class="bottom">
+            <SendMessage :id="0" />
+          </div>
         </div>
-      </div>
-    </v-sheet>
-    <template v-else>
-      ログインが必要です
-    </template>
-  </div>
+      </v-sheet>
+      <template v-else>
+        ログインが必要です
+      </template>
+    </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>

@@ -135,7 +135,7 @@ export default Vue.extend({
                   :key="language.id"
                   @click="languageClick(language)"
                 >
-                  {{ language.programing_language_name }}
+                  {{ language.name }}
                 </div>
               </div>
             </div>
@@ -149,7 +149,7 @@ export default Vue.extend({
                   :key="framwork.id"
                   @click="framworkClick(framwork)"
                 >
-                  {{ framwork.programing_framework_name }}
+                  {{ framwork.name }}
                 </div>
               </div>
             </div>
@@ -163,7 +163,7 @@ export default Vue.extend({
                   :key="skill.id"
                   @click="skillClick(skill)"
                 >
-                  {{ skill.skill_name }}
+                  {{ skill.name }}
                 </div>
               </div>
             </div>

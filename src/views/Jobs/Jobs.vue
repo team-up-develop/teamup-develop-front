@@ -596,13 +596,10 @@ export default defineComponent({
             <div class="post-user-area">
               <div
                 class="detail-langage"
-                v-for="langage in jobDetail.programing_language_responses.slice(
-                  0,
-                  5
-                )"
-                :key="langage.programing_language_name"
+                v-for="langage in jobDetail.programing_languages.slice(0, 5)"
+                :key="langage.name"
               >
-                {{ langage.programing_language_name }}
+                {{ langage.name }}
               </div>
             </div>
             <div class="tag-area">
@@ -611,13 +608,10 @@ export default defineComponent({
             <div class="post-user-area">
               <div
                 class="detail-framework"
-                v-for="framework in jobDetail.programing_framework_responses.slice(
-                  0,
-                  5
-                )"
-                :key="framework.programing_framework_name"
+                v-for="framework in jobDetail.programing_frameworks.slice(0, 5)"
+                :key="framework.name"
               >
-                {{ framework.programing_framework_name }}
+                {{ framework.name }}
               </div>
             </div>
             <div class="tag-area">
@@ -626,10 +620,10 @@ export default defineComponent({
             <div class="post-user-area">
               <div
                 class="detail-skill"
-                v-for="skill in jobDetail.skill_responses.slice(0, 5)"
-                :key="skill.skill_name"
+                v-for="skill in jobDetail.skills.slice(0, 5)"
+                :key="skill.name"
               >
-                {{ skill.skill_name }}
+                {{ skill.name }}
               </div>
             </div>
             <div class="tag-area">

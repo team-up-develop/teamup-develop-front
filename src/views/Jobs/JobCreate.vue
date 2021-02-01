@@ -1,18 +1,38 @@
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, computed } from "@vue/composition-api";
 import JobCreateCard from "@/components/Organisms/Jobs/JobCreateCard.vue";
 import UserCard from "@/components/Organisms/Manages/UserCard.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     JobCreateCard,
     UserCard,
+    Breadcrumbs,
+  },
+  setup: () => {
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "案件作成",
+        disabled: true,
+      },
+    ]);
+
+    return {
+      breadcrumbs,
+    };
   },
 });
 </script>
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <v-container class="wrapper">
       <v-row>
         <UserCard />
