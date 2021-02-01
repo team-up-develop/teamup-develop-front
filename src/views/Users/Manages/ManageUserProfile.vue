@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  computed,
 } from "@vue/composition-api";
 import axios from "axios";
 import Vuex from "@/store/index";
@@ -12,6 +13,7 @@ import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
 import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { User } from "@/types/index";
 import { API_URL, truncate, catchError } from "@/master";
 // import Logout from '@/components/button/Logout'
@@ -43,6 +45,7 @@ export default defineComponent({
     SkillUser,
     IntroduceUser,
     StatusChangeBtnArea,
+    Breadcrumbs,
   },
   props: {
     id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
@@ -50,6 +53,28 @@ export default defineComponent({
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "管理案件",
+        href: "/manage",
+        disabled: false,
+      },
+      {
+        text: "応募者一覧",
+        disabled: false,
+        href: `/manage/applicant/${props.jobId}`,
+      },
+      {
+        text: "ユーザー詳細",
+        disabled: true,
+      },
+    ]);
 
     const limit = (value: string, num: number) => truncate(value, num);
 
@@ -67,22 +92,16 @@ export default defineComponent({
     };
     getUser();
 
-    const getJobTitle = async () => {
-      const res = await axios.get(`${API_URL}/job/${props.jobId}`);
-      state.jobTitle = res.data.response.job_title;
-    };
-
     onMounted(() => {
       if (!state.userId) {
         return;
       }
-      getJobTitle();
     });
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       limit,
-      getJobTitle,
     };
   },
 });
@@ -90,12 +109,8 @@ export default defineComponent({
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper" v-if="loading == false">
-      <div class="back-space">
-        <router-link :to="`/manage/applicant/${jobId}`">
-          <p>＜ {{ limit(jobTitle, 40) }}に戻る</p>
-        </router-link>
-      </div>
       <section class="user-area">
         <div class="user-area__post">
           <PostUser
@@ -163,14 +178,6 @@ export default defineComponent({
   padding: 3.5rem 0rem 0 0;
   position: relative;
 
-  .back-space {
-    text-align: left;
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin-top: 1rem;
-    padding: 0 2rem;
-  }
   .user-area {
     width: 88%;
     margin: 0 auto;

@@ -10,6 +10,7 @@ import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import UserCard from "@/components/Organisms/Manages/UserCard.vue";
 import JobCreateCompleteCard from "@/components/Organisms/Jobs/JobCreateCompleteCard.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 
 type State = {
   loading: boolean;
@@ -26,9 +27,22 @@ export default defineComponent({
     Loading,
     UserCard,
     JobCreateCompleteCard,
+    Breadcrumbs,
   },
   setup: () => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "案件作成",
+        disabled: true,
+      },
+    ]);
 
     const isLogin = computed(() => {
       if (state.userId) {
@@ -49,6 +63,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       Loading,
       isLogin,
     };
@@ -58,6 +73,7 @@ export default defineComponent({
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <v-container class="wrapper" v-show="!loading">
       <v-row v-if="isLogin">
         <UserCard />

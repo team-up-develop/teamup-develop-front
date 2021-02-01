@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  computed,
 } from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import Vuex from "@/store/index";
@@ -13,6 +14,7 @@ import PostUser from "@/components/Organisms/Jobs/JobDetails/PostUser.vue";
 import SkillJob from "@/components/Organisms/Jobs/JobDetails/SkillJob.vue";
 import DetailJob from "@/components/Organisms/Jobs/JobDetails/DetailJob.vue";
 import BtnArea from "@/components/Organisms/Jobs/JobDetails/BtnArea.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 // import { Job } from '@/types/job';
 import { FavoriteJob } from "@/types/index";
 import { FetchFavoriteJob } from "@/types/fetch";
@@ -35,12 +37,30 @@ export default defineComponent({
     SkillJob,
     DetailJob,
     BtnArea,
+    Breadcrumbs,
   },
   props: {
     id: { type: Number, default: 0 },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "保存案件",
+        href: "/manage/favorite_job",
+        disabled: false,
+      },
+      {
+        text: "案件詳細",
+        disabled: true,
+      },
+    ]);
 
     // * 詳細画面情報を取得
     const getJobDetail = async () => {
@@ -64,37 +84,36 @@ export default defineComponent({
     return {
       ...toRefs(state),
       getJobDetail,
+      breadcrumbs,
     };
   },
 });
 </script>
 
 <template>
-  <div class="detail-wrapper">
-    <div class="back-space">
-      <router-link :to="`/manage/favorite_job`">
-        <p>＜ 管理画面に戻る</p>
-      </router-link>
-    </div>
-    <section v-if="loading == false">
-      <div class="detail-post-user-area">
-        <div class="detail-tag">投稿者</div>
-        <PostUser :job="job" />
-      </div>
-      <div class="detail-post-skill-area">
-        <div class="detail-tag">開発技術</div>
-        <SkillJob :job="job" />
-      </div>
-      <div class="detail-post-detail-area">
-        <div class="detail-area">
-          <div class="detail-tag">開発詳細</div>
-          <DetailJob :job="job" />
+  <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <div class="detail-wrapper">
+      <section v-if="loading == false">
+        <div class="detail-post-user-area">
+          <div class="detail-tag">投稿者</div>
+          <PostUser :job="job" />
         </div>
-      </div>
-      <BtnArea :id="id" :job="job" />
-    </section>
-    <Loading v-else> </Loading>
-  </div>
+        <div class="detail-post-skill-area">
+          <div class="detail-tag">開発技術</div>
+          <SkillJob :job="job" />
+        </div>
+        <div class="detail-post-detail-area">
+          <div class="detail-area">
+            <div class="detail-tag">開発詳細</div>
+            <DetailJob :job="job" />
+          </div>
+        </div>
+        <BtnArea :id="id" :job="job" />
+      </section>
+      <Loading v-else> </Loading>
+    </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
@@ -110,13 +129,6 @@ export default defineComponent({
   padding: 3.5rem 0rem;
   margin: 0 auto;
   position: relative;
-
-  .back-space {
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin-top: 1rem;
-  }
 
   .detail-post-user-area {
     width: 80%;

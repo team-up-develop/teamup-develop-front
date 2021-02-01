@@ -167,7 +167,7 @@ export default Vue.extend({
             class="input-area"
             multiple
             :options="languages"
-            label="programing_language_name"
+            label="name"
             v-model="selectedLang"
             :reduce="(languages) => languages.id"
             :selectable="() => selectedLang.length < 5"
@@ -189,7 +189,7 @@ export default Vue.extend({
             class="input-area"
             multiple
             :options="framworks"
-            label="programing_framework_name"
+            label="name"
             v-model="selectedFramwork"
             :reduce="(framworks) => framworks.id"
             :selectable="() => selectedFramwork.length < 5"
@@ -211,7 +211,7 @@ export default Vue.extend({
             class="input-area"
             multiple
             :options="skills"
-            label="skill_name"
+            label="name"
             v-model="selectedSkill"
             :reduce="(skills) => skills.id"
             :selectable="() => selectedSkill.length < 5"

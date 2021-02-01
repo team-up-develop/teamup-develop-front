@@ -20,14 +20,29 @@ export default defineComponent({
   <section>
     <v-sheet class="card">
       <v-row class="card__skill">
-        <div class="lang">
-          TypeScript
+        <div
+          class="lang"
+          v-for="(langage, index) in user.user.programing_languages.slice(0, 3)"
+          :key="`langage-${index}`"
+        >
+          {{ langage.name }}
         </div>
-        <div class="fram">
-          Vue.js
+        <div
+          class="fram"
+          v-for="(framework, index) in user.user.programing_frameworks.slice(
+            0,
+            3
+          )"
+          :key="`framework-${index}`"
+        >
+          {{ framework.name }}
         </div>
-        <div class="skill">
-          Docker
+        <div
+          class="skill"
+          v-for="(skill, index) in user.user.skills.slice(0, 2)"
+          :key="`skill-${index}`"
+        >
+          {{ skill.name }}
         </div>
       </v-row>
       <div class="card__user">

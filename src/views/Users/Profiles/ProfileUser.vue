@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  computed,
 } from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
@@ -11,6 +12,7 @@ import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModa
 import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 // import Logout from '@/components/button/Logout'
 import { User } from "@/types/index";
 import Vuex from "@/store/index";
@@ -36,12 +38,25 @@ export default defineComponent({
     PostUser,
     SkillUser,
     IntroduceUser,
+    Breadcrumbs,
   },
   props: {
     id: { type: Number, default: 0 },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "ユーザー詳細",
+        disabled: true,
+      },
+    ]);
 
     const fetchUser = async () => {
       // * ユーザー情報取得
@@ -82,6 +97,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       openModal,
       doSend,
       compliteEdit,
@@ -93,6 +109,7 @@ export default defineComponent({
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper">
       <!-- 編集 モーダル画面 -->
       <ProfileEditModal

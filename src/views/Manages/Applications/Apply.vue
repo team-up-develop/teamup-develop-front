@@ -13,6 +13,7 @@ import { FetchManageJobs } from "@/types/fetch";
 import UserCard from "@/components/Organisms/Manages/UserCard.vue";
 import JobsCard from "@/components/Organisms/Manages/JobsCard.vue";
 import Vuex from "@/store/index";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 
 type State = {
   applyJob: ManageJob[];
@@ -28,9 +29,22 @@ export default defineComponent({
   components: {
     UserCard,
     JobsCard,
+    Breadcrumbs,
   },
   setup: () => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "応募案件",
+        disabled: true,
+      },
+    ]);
 
     const isLogin = computed(() => {
       if (state.userId) {
@@ -69,6 +83,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       isLogin,
       getApplyJobs,
     };
@@ -78,6 +93,7 @@ export default defineComponent({
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <v-container class="wrapper" v-if="isLogin">
       <v-row>
         <UserCard />

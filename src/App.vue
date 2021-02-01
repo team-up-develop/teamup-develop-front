@@ -69,7 +69,7 @@ export default defineComponent({
   min-height: 112vh;
   width: 100%;
   position: relative;
-  margin-top: 0.7rem;
+  // margin-top: 0.7rem;
   padding-bottom: 15rem;
 
   @media screen and (max-width: 600px) {

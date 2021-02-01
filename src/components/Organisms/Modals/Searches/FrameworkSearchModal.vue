@@ -96,7 +96,7 @@ export default Vue.extend({
                   v-model="selectedFramework"
                   v-bind:value="framework.id"
                 />
-                <span>{{ framework.programing_framework_name }}</span>
+                <span>{{ framework.name }}</span>
               </label>
             </v-row>
           </div>

@@ -13,55 +13,49 @@ export default Vue.extend({
   <div>
     <div
       class="langage"
-      v-for="(langage, index) in job.programing_language_responses.slice(0, 3)"
+      v-for="(langage, index) in job.programing_languages.slice(0, 3)"
       :key="`language-${index}`"
     >
-      {{ langage.programing_language_name }}
+      {{ langage.name }}
     </div>
     <!-- レスポンシブ 言語 360px-->
     <div
       class="langage-responsive"
-      v-for="(langage, index) in job.programing_language_responses.slice(0, 2)"
+      v-for="(langage, index) in job.programing_languages.slice(0, 2)"
       :key="`language-responsive-${index}`"
     >
-      {{ langage.programing_language_name }}
+      {{ langage.name }}
     </div>
     <div
       class="framework"
-      v-for="(framework, index) in job.programing_framework_responses.slice(
-        0,
-        3
-      )"
+      v-for="(framework, index) in job.programing_frameworks.slice(0, 3)"
       :key="`framework-${index}`"
     >
-      {{ framework.programing_framework_name }}
+      {{ framework.name }}
     </div>
     <!-- レスポンシブ フレームワーク 360px -->
     <div
       class="framework-responsive"
-      v-for="(framework, index) in job.programing_framework_responses.slice(
-        0,
-        2
-      )"
+      v-for="(framework, index) in job.programing_frameworks.slice(0, 2)"
       :key="`framework-responsive-${index}`"
     >
-      {{ framework.programing_framework_name }}
+      {{ framework.name }}
     </div>
 
     <div
       class="skill"
-      v-for="(skill, index) in job.skill_responses.slice(0, 4)"
+      v-for="(skill, index) in job.skills.slice(0, 4)"
       :key="`skill-${index}`"
     >
-      {{ skill.skill_name }}
+      {{ skill.name }}
     </div>
     <!-- レスポンシブ その他スキル 360px-->
     <div
       class="skill-responsive"
-      v-for="(skill, index) in job.skill_responses.slice(0, 3)"
+      v-for="(skill, index) in job.skills.slice(0, 3)"
       :key="`skill-responsive-${index}`"
     >
-      {{ skill.skill_name }}
+      {{ skill.name }}
     </div>
   </div>
 </template>
