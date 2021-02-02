@@ -12,17 +12,18 @@ type State = {
   applyNum: number;
   rejectNum: number;
   participateNum: number;
+  jobTitle: string;
 };
 
 const initialState = (): State => ({
   applyNum: Vuex.state.statusUser.userApplyNum,
   participateNum: Vuex.state.statusUser.userParticipateNum,
   rejectNum: Vuex.state.statusUser.userRejectNum,
+  jobTitle: Vuex.state.statusUser.jobTitle,
 });
 
 export default defineComponent({
   props: {
-    jobTitle: { type: String, default: "", require: true },
     jobId: { type: Number, default: 0, require: true },
   },
   setup: (props) => {
@@ -37,6 +38,7 @@ export default defineComponent({
         state.applyNum = Vuex.state.statusUser.userApplyNum;
         state.participateNum = Vuex.state.statusUser.userParticipateNum;
         state.rejectNum = Vuex.state.statusUser.userRejectNum;
+        state.jobTitle = Vuex.state.statusUser.jobTitle;
       }, 500);
     });
 

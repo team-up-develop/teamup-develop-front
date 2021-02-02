@@ -13,6 +13,7 @@ import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 // import Logout from '@/components/button/Logout'
 import { User } from "@/types/index";
 import Vuex from "@/store/index";
@@ -22,6 +23,7 @@ type State = {
   userInfo: User;
   userId: number;
   modal: boolean;
+  loading: boolean;
 };
 
 const initialState = (): State => ({
@@ -29,6 +31,7 @@ const initialState = (): State => ({
   userInfo: {},
   userId: Vuex.state.auth.userId,
   modal: false,
+  loading: true,
 });
 
 export default defineComponent({
@@ -39,6 +42,7 @@ export default defineComponent({
     SkillUser,
     IntroduceUser,
     Breadcrumbs,
+    Loading,
   },
   props: {
     id: { type: Number, default: 0 },
@@ -61,8 +65,11 @@ export default defineComponent({
     const fetchUser = async () => {
       // * ユーザー情報取得
       try {
-        const res = await axios.get(`${API_URL}/user/${props.id}`);
-        state.userInfo = res.data.response;
+        setTimeout(async () => {
+          const res = await axios.get(`${API_URL}/user/${props.id}`);
+          state.loading = false;
+          state.userInfo = res.data.response;
+        }, 700);
       } catch (error) {
         catchError(error);
       }
@@ -141,24 +148,27 @@ export default defineComponent({
           </v-row>
         </div>
       </section>
-      <v-col class="skill">
-        <div class="skill__card">
-          <div class="detail-tag">開発スキル</div>
-          <SkillUser :user="userInfo" />
+      <template v-if="!loading">
+        <v-col class="skill">
+          <div class="skill__card">
+            <div class="detail-tag">開発スキル</div>
+            <SkillUser :user="userInfo" />
+          </div>
+        </v-col>
+        <v-col class="pr">
+          <div class="pr__card">
+            <div class="detail-tag">自己紹介</div>
+            <IntroduceUser :user="userInfo" />
+          </div>
+        </v-col>
+        <div class="button-area">
+          <div v-if="myselfFlag" class="button-action-area">
+            <button @click="openModal" class="btn-box-edit">編集する</button>
+          </div>
+          <div class="button-action-area" v-else></div>
         </div>
-      </v-col>
-      <v-col class="pr">
-        <div class="pr__card">
-          <div class="detail-tag">自己紹介</div>
-          <IntroduceUser :user="userInfo" />
-        </div>
-      </v-col>
-      <div class="button-area">
-        <div v-if="myselfFlag" class="button-action-area">
-          <button @click="openModal" class="btn-box-edit">編集する</button>
-        </div>
-        <div class="button-action-area" v-else></div>
-      </div>
+      </template>
+      <Loading v-else />
     </div>
   </section>
 </template>

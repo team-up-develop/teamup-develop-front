@@ -8,14 +8,15 @@ import {
 } from "@vue/composition-api";
 import axios from "axios";
 import Vuex from "@/store/index";
-import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+// import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
 import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { User } from "@/types/index";
-import { API_URL, truncate, catchError } from "@/master";
+import { API_URL, truncate, catchError, m } from "@/master";
 // import Logout from '@/components/button/Logout'
 
 type State = {
@@ -35,21 +36,21 @@ const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
   loading: true,
   doneStatusFlag: false,
-  statusId: 1,
+  statusId: m.APPLY_STATUS_APPLY,
 });
 
 export default defineComponent({
   components: {
-    Loading,
     PostUser,
     SkillUser,
     IntroduceUser,
     StatusChangeBtnArea,
     Breadcrumbs,
+    Loading,
   },
   props: {
-    id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
-    jobId: { type: Number, default: 0 },
+    id: { type: Number, default: 0, require: true }, //? 詳細を見るユーザーのID
+    jobId: { type: Number, default: 0, require: true },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
@@ -79,7 +80,7 @@ export default defineComponent({
     const limit = (value: string, num: number) => truncate(value, num);
 
     // * ユーザー情報取得
-    const getUser = async () => {
+    const fetchUser = async () => {
       try {
         setTimeout(async () => {
           const res = await axios.get(`${API_URL}/user/${props.id}`);
@@ -90,12 +91,12 @@ export default defineComponent({
         catchError(error);
       }
     };
-    getUser();
 
     onMounted(() => {
       if (!state.userId) {
         return;
       }
+      fetchUser();
     });
 
     return {
@@ -110,7 +111,7 @@ export default defineComponent({
 <template>
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
-    <div class="detail-wrapper" v-if="loading == false">
+    <div class="detail-wrapper">
       <section class="user-area">
         <div class="user-area__post">
           <PostUser
@@ -134,26 +135,28 @@ export default defineComponent({
           </v-row>
         </div>
       </section>
-      <v-col class="skill">
-        <div class="skill__card">
-          <div class="detail-tag">自己紹介</div>
-          <SkillUser :user="userInfo" />
+      <template v-if="!loading">
+        <v-col class="skill">
+          <div class="skill__card">
+            <div class="detail-tag">自己紹介</div>
+            <SkillUser :user="userInfo" />
+          </div>
+        </v-col>
+        <v-col class="pr">
+          <div class="pr__card">
+            <div class="detail-tag">自己紹介</div>
+            <IntroduceUser :user="userInfo" />
+          </div>
+        </v-col>
+        <div class="button-area">
+          <!-- 案件管理からきたら -->
+          <section v-if="jobId">
+            <StatusChangeBtnArea :id="id" :jobId="jobId" />
+          </section>
         </div>
-      </v-col>
-      <v-col class="pr">
-        <div class="pr__card">
-          <div class="detail-tag">自己紹介</div>
-          <IntroduceUser :user="userInfo" />
-        </div>
-      </v-col>
-      <div class="button-area">
-        <!-- 案件管理からきたら -->
-        <section v-if="jobId">
-          <StatusChangeBtnArea :id="id" :jobId="jobId" />
-        </section>
-      </div>
+      </template>
+      <Loading v-else />
     </div>
-    <Loading v-else> </Loading>
   </section>
 </template>
 

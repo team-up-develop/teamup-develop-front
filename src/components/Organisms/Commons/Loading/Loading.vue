@@ -23,9 +23,9 @@ export default Vue.extend({
     <div class="fullview">
       <div class="loading-spacer"></div>
       <vue-loading
-        type="spiningDubbles"
-        color="#2196F3"
-        :size="{ width: '200px', height: '105px' }"
+        type="spin"
+        color="#666666"
+        :size="{ width: '120px', height: '65px' }"
       >
       </vue-loading>
     </div>
