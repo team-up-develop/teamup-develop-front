@@ -1,99 +1,120 @@
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed,
+} from "@vue/composition-api";
 import axios from "axios";
-import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import Vuex from "@/store/index";
 import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { ManageJob } from "@/types/index";
 import { User } from "@/types/index";
-import { API_URL, truncate, catchError } from "@/master";
+import { API_URL, catchError, m } from "@/master";
 // import Logout from '@/components/button/Logout'
 
-type DataType = {
+type State = {
   myselfFlag: boolean;
   userInfo: User;
   jobTitle: string;
   userId: number;
   loading: boolean;
-  doneStatusFlag: boolean;
   statusId: number;
   manageJobs: ManageJob[];
 };
 
-export default Vue.extend({
+const initialState = (): State => ({
+  myselfFlag: false,
+  userInfo: {},
+  jobTitle: "",
+  userId: Vuex.state.auth.userId,
+  loading: true,
+  statusId: m.APPLY_STATUS_APPLY,
+  manageJobs: [],
+});
+
+export default defineComponent({
   components: {
-    Loading,
     PostUser,
     CardJob,
     StatusChangeBtnArea,
+    Breadcrumbs,
+    Loading,
   },
   props: {
-    id: { type: Number as PropType<number>, default: 0 }, //? 詳細を見るユーザーのID
-    jobId: { type: Number as PropType<number>, default: 0 },
+    id: { type: Number, default: 0, require: true }, //? 詳細を見るユーザーのID
+    jobId: { type: Number, default: 0, require: true },
   },
-  data(): DataType {
-    return {
-      myselfFlag: false,
-      userInfo: {},
-      jobTitle: "",
-      userId: this.$store.state.auth.userId,
-      loading: true, //? ローディング
-      doneStatusFlag: false,
-      statusId: 1,
-      manageJobs: [],
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "管理案件",
+        href: "/manage",
+        disabled: false,
+      },
+      {
+        text: "応募者一覧",
+        disabled: false,
+        href: `/manage/applicant/${props.jobId}`,
+      },
+      {
+        text: "ユーザー詳細",
+        disabled: true,
+      },
+    ]);
+
+    const fetchManageJob = async () => {
+      try {
+        setTimeout(async () => {
+          const res = await axios.get(`${API_URL}/jobs?user_id=${props.id}`);
+          state.loading = false;
+          state.manageJobs = res.data.response;
+        }, 700);
+      } catch (error) {
+        catchError(error);
+      }
     };
-  },
-  created() {
-    // * ユーザー情報取得
-    axios
-      .get(`${API_URL}/user/${this.id}`)
-      .then((res) => {
-        setTimeout(() => {
-          this.loading = false;
-          this.userInfo = res.data.response;
-        }, 1000);
-      })
-      .catch((error) => {
-        catchError(error);
-      });
 
-    // *  案件タイトル取得
-    axios
-      .get(`${API_URL}/job/${this.jobId}`)
-      .then((res) => {
-        this.jobTitle = res.data.response.job_title;
-      })
-      .catch((error) => {
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
+      } catch (error) {
         catchError(error);
-      });
+      }
+    };
 
-    // *詳細を見ているユーザーの投稿案件
-    axios
-      .get(`${API_URL}/jobs?user_id=${this.id}`)
-      .then((res) => {
-        this.manageJobs = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
-      });
-  },
-  methods: {
-    limit(value: string, num: number) {
-      return truncate(value, num);
-    },
+    onMounted(() => {
+      fetchManageJob();
+      fetchUser();
+    });
+
+    return {
+      ...toRefs(state),
+      breadcrumbs,
+      fetchManageJob,
+      fetchUser,
+    };
   },
 });
 </script>
 
 <template>
   <section>
-    <div class="detail-wrapper" v-if="loading == false">
-      <div class="back-space">
-        <router-link :to="`/manage/applicant/${jobId}`">
-          <p>＜ {{ limit(jobTitle, 40) }}に戻る</p>
-        </router-link>
-      </div>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <div class="detail-wrapper">
       <section class="user-area">
         <div class="user-area__post">
           <PostUser
@@ -117,24 +138,26 @@ export default Vue.extend({
           </v-row>
         </div>
       </section>
-      <v-row class="jobs">
-        <router-link
-          :to="`/jobs/${jobs.id}`"
-          v-for="jobs in manageJobs"
-          :key="jobs.id"
-          class="jobs__card"
-        >
-          <CardJob :job="jobs" />
-        </router-link>
-      </v-row>
-      <div class="button-area">
-        <!-- 案件管理からきたら -->
-        <section v-if="jobId">
-          <StatusChangeBtnArea :id="id" :jobId="jobId" />
-        </section>
-      </div>
+      <template v-if="!loading">
+        <v-row class="jobs">
+          <router-link
+            :to="`/jobs/${jobs.id}`"
+            v-for="jobs in manageJobs"
+            :key="jobs.id"
+            class="jobs__card"
+          >
+            <CardJob :job="jobs" />
+          </router-link>
+        </v-row>
+        <div class="button-area">
+          <!-- 案件管理からきたら -->
+          <section v-if="jobId">
+            <StatusChangeBtnArea :id="id" :jobId="jobId" />
+          </section>
+        </div>
+      </template>
+      <Loading v-else />
     </div>
-    <Loading v-else> </Loading>
   </section>
 </template>
 
@@ -158,12 +181,6 @@ export default Vue.extend({
   padding: 3.5rem 0rem 0 0;
   position: relative;
 
-  .back-space {
-    position: absolute;
-    left: 0;
-    top: 0;
-    margin-top: 1rem;
-  }
   .user-area {
     width: 88%;
     margin: 0 auto;

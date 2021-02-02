@@ -18,13 +18,11 @@ import Vuex from "@/store/index";
 type State = {
   rejectUsers: ManageJob[];
   userId: number;
-  jobTitle: string;
 };
 
 const initialState = (): State => ({
   rejectUsers: [],
   userId: Vuex.state.auth.userId,
-  jobTitle: "",
 });
 
 export default defineComponent({
@@ -75,18 +73,8 @@ export default defineComponent({
       }
     };
 
-    const getJobTitle = async () => {
-      try {
-        const res = await axios.get<any>(`${API_URL}/job/${props.id}`);
-        state.jobTitle = res.data.response.job_title;
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
     onMounted(() => {
       getRejectUser();
-      getJobTitle();
     });
 
     return {
@@ -94,7 +82,6 @@ export default defineComponent({
       breadcrumbs,
       isLogin,
       getRejectUser,
-      getJobTitle,
     };
   },
 });
@@ -105,7 +92,7 @@ export default defineComponent({
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <v-container class="wrapper" v-if="isLogin">
       <v-row>
-        <JobsCard :jobTitle="jobTitle" :jobId="id" />
+        <JobsCard :jobId="id" />
         <v-sheet class="manage">
           <v-row class="manage__header">
             <router-link :to="`/manage/applicant/${id}`" class="router-link">

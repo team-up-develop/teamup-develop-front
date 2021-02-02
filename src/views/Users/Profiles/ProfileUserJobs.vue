@@ -1,92 +1,132 @@
 <script lang="ts">
-import Vue from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed,
+} from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
+import Vuex from "@/store/index";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import PostUser from "@/components/Organisms/Users/PostUser.vue";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { ManageJob, User } from "@/types/index";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 // import Logout from '@/components/button/Logout'
 
-type DataType = {
+type State = {
   myselfFlag: boolean;
   userInfo: User;
   userId: number;
   modal: boolean;
   manageJobs: ManageJob[];
+  loading: boolean;
 };
 
-export default Vue.extend({
-  props: {
-    id: Number,
-  },
-  data(): DataType {
-    return {
-      myselfFlag: false,
-      userInfo: {},
-      userId: this.$store.state.auth.userId,
-      modal: false,
-      manageJobs: [],
-    };
-  },
-  created() {
-    if (this.userId == this.id) {
-      this.myselfFlag = true;
-    }
-    // * 投稿案件取得
-    axios
-      .get(`${API_URL}/jobs?user_id=${this.id}`)
-      .then((res) => {
-        this.manageJobs = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
-      });
-    // * ユーザー情報取得
-    axios
-      .get(`${API_URL}/user/${this.id}`)
-      .then((res) => {
-        this.userInfo = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
-      });
-  },
-  methods: {
-    // * モーダル
-    openModal() {
-      this.modal = true;
-    },
-    closeModal() {
-      this.modal = false;
-    },
-    // * 編集完了 emit
-    compliteEdit() {
-      this.closeModal();
-      // * ユーザー情報取得
-      axios
-        .get(`${API_URL}/user/${this.id}`)
-        .then((res) => {
-          this.userInfo = res.data;
-        })
-        .catch((error) => {
-          catchError(error);
-        });
-    },
-    editEmit() {
-      this.openModal();
-    },
-  },
+const initialState = (): State => ({
+  myselfFlag: false,
+  userInfo: {},
+  userId: Vuex.state.auth.userId,
+  modal: false,
+  manageJobs: [],
+  loading: true,
+});
+
+export default defineComponent({
   components: {
     ProfileEditModal,
     PostUser,
     CardJob,
+    Breadcrumbs,
+    Loading,
+  },
+  props: {
+    id: Number,
+  },
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "ユーザー詳細",
+        disabled: true,
+      },
+    ]);
+
+    if (state.userId == props.id) {
+      state.myselfFlag = true;
+    }
+    const fetchManageJob = async () => {
+      try {
+        setTimeout(async () => {
+          const res = await axios.get(`${API_URL}/jobs?user_id=${props.id}`);
+          state.loading = false;
+          state.manageJobs = res.data.response;
+        }, 700);
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    onMounted(() => {
+      fetchManageJob();
+      fetchUser();
+    });
+
+    const openModal = () => {
+      state.modal = true;
+    };
+    const closeModal = () => {
+      state.modal = false;
+    };
+
+    const compliteEdit = async () => {
+      closeModal();
+      // * ユーザー情報取得
+      try {
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    const editEmit = () => {
+      openModal();
+    };
+
+    return {
+      ...toRefs(state),
+      breadcrumbs,
+      openModal,
+      closeModal,
+      compliteEdit,
+      editEmit,
+    };
   },
 });
 </script>
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper">
       <!-- 編集 モーダル画面 -->
       <ProfileEditModal
@@ -115,23 +155,26 @@ export default Vue.extend({
           </v-row>
         </div>
       </section>
-      <v-row class="jobs">
-        <router-link
-          :to="`/jobs/${jobs.id}`"
-          v-for="jobs in manageJobs"
-          :key="jobs.id"
-          class="jobs__card"
-        >
-          <CardJob :job="jobs" />
-        </router-link>
-      </v-row>
-      <div class="button-area">
-        <div v-if="myselfFlag === true" class="button-action-area">
-          <button @click="openModal" class="btn-box-edit">編集する</button>
+      <template v-if="!loading">
+        <v-row class="jobs">
+          <router-link
+            :to="`/jobs/${jobs.id}`"
+            v-for="jobs in manageJobs"
+            :key="jobs.id"
+            class="jobs__card"
+          >
+            <CardJob :job="jobs" />
+          </router-link>
+        </v-row>
+        <div class="button-area">
+          <div v-if="myselfFlag === true" class="button-action-area">
+            <button @click="openModal" class="btn-box-edit">編集する</button>
+          </div>
+          <!-- 非ログイン時 リダイレクトさせる -->
+          <div class="button-action-area" v-else></div>
         </div>
-        <!-- 非ログイン時 リダイレクトさせる -->
-        <div class="button-action-area" v-else></div>
-      </div>
+      </template>
+      <Loading v-else />
     </div>
   </section>
 </template>
