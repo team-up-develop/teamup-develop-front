@@ -51,8 +51,12 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0, require: true }, //? 詳細を見るユーザーのID
     jobId: { type: Number, default: 0, require: true },
+    applyId: { type: Number, default: 0, require: true },
   },
   setup: (props) => {
+    console.log("sakamotokazuiya");
+    console.log(props);
+    console.log("sakamotokazuiya");
     const state = reactive<State>(initialState());
 
     const breadcrumbs = computed(() => [
@@ -151,7 +155,7 @@ export default defineComponent({
         <div class="button-area">
           <!-- 案件管理からきたら -->
           <section v-if="jobId">
-            <StatusChangeBtnArea :id="id" :jobId="jobId" />
+            <StatusChangeBtnArea :id="id" :jobId="jobId" :applyId="applyId" />
           </section>
         </div>
       </template>
