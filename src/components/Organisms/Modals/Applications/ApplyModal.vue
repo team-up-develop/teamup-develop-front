@@ -63,6 +63,7 @@
 .modal-content {
   position: relative;
   padding: 5rem 6rem 4rem 6rem;
+  margin: 0 auto;
 }
 
 .modal-footer {
