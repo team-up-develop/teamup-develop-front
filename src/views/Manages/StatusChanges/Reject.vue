@@ -110,7 +110,7 @@ export default defineComponent({
           </v-row>
           <v-col>
             <router-link
-              :to="`/manage/profile/${id}/${user.user_id}/${user.id}`"
+              :to="`/manage/profile/${id}/${user.user_id}`"
               v-for="user in rejectUsers"
               :key="user.id"
               class="users"

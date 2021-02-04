@@ -93,12 +93,11 @@ const routes: Array<RouteConfig> = [
   },
   // * 管理案件 ユーザー
   {
-    path: "/manage/profile/:jobId/:id/:applyId",
+    path: "/manage/profile/:jobId/:id/",
     component: ManageUserProfile,
     props: (route) => ({
       id: Number(route.params.id),
       jobId: Number(route.params.jobId),
-      applyId: Number(route.params.applyId),
     }),
   },
   {

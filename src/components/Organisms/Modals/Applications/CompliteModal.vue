@@ -3,9 +3,13 @@
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <div class="modal-content">
-          <v-icon class="icon">mdi-check-underline-circle-outline</v-icon>
           <slot />
         </div>
+        <footer class="modal-footer">
+          <slot name="footer">
+            <!-- <button @click="$emit('close')">Close</button> -->
+          </slot>
+        </footer>
       </div>
     </div>
   </transition>
@@ -36,14 +40,7 @@
 }
 
 .modal-content {
-  padding: 4rem 4rem;
-  margin: 0 auto;
-
-  .icon {
-    color: $primary-color;
-    margin-right: 6rem;
-    font-size: 6em;
-  }
+  padding: 4rem 6rem;
 }
 
 .modal-footer {

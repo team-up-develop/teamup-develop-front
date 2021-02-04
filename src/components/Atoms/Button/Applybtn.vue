@@ -60,11 +60,10 @@ export default Vue.extend({
     <div class="btn-apply" @click="applyJob">
       応募する
     </div>
-    <CompliteModal @close="closeCompliteModal" v-if="compliteModal">
-      <p class="mt-2 mx-auto text-center">応募が完了しました</p>
-      <span>投稿者から参加許可をされたらチャットが自動的に作成されます。</span>
-      <template v-slot:footer></template>
-    </CompliteModal>
+    <complite-modal @close="closeCompliteModal" v-if="compliteModal">
+      <p>応募が完了しました。</p>
+      <template v-slot:footer> </template>
+    </complite-modal>
   </div>
 </template>
 
@@ -91,11 +90,5 @@ export default Vue.extend({
   display: inline-block;
   cursor: pointer;
   outline: none;
-}
-
-span {
-  color: $text-sub-color;
-  font-size: 0.5rem;
-  text-align: center;
 }
 </style>

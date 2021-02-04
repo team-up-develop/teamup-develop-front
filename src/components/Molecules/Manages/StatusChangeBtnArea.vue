@@ -13,7 +13,6 @@ export default defineComponent({
     id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
     jobId: { type: Number, default: 0 },
     updatedAt: { type: String, defalut: new Date() },
-    applyId: { type: Number, default: 0 },
   },
   setup: (_, context) => {
     const participate = () => {
@@ -36,14 +35,12 @@ export default defineComponent({
       :id="id"
       :jobId="jobId"
       :updatedAt="updatedAt"
-      :applyId="applyId"
       @participate="participate"
     />
     <RejectBtn
       :id="id"
       :jobId="jobId"
       :updatedAt="updatedAt"
-      :applyId="applyId"
       @reject="reject"
     />
   </v-row>

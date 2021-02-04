@@ -10,7 +10,7 @@ import axios from "axios";
 import { Job } from "@/types/index";
 import { ManageJob } from "@/types/index";
 import { m, dayJs, API_URL, truncate, catchError } from "@/master";
-import { FetchManageJobs } from "@/types/fetch";
+import { FetchJobs, FetchManageJobs } from "@/types/fetch";
 
 type State = {
   chatGroups: Job[] | {};
@@ -57,8 +57,20 @@ export default defineComponent({
       }
     };
 
-    onMounted(async () => {
-      await getChatGroups();
+    const getMyselfGroupes = async () => {
+      try {
+        const res = await axios.get<FetchJobs>(
+          `${API_URL}/jobs?user_id=${props.userId}`
+        );
+        state.myselfJobs = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    onMounted(() => {
+      getChatGroups();
+      getMyselfGroupes();
     });
 
     return {
@@ -97,6 +109,21 @@ export default defineComponent({
             >参加案件</label
           >
           <section>{{ day(chatGroup.created_at, "YYYY年 M月 D日") }}</section>
+        </v-row>
+      </div>
+    </v-card>
+    <v-card
+      :to="`/chat/${myselfJob.id}`"
+      v-for="myselfJob in myselfJobs"
+      :key="myselfJob.id"
+      v-bind:class="{ active: isActive, 'text-danger': hasError }"
+      class="group"
+    >
+      <div class="group__area">
+        <p>{{ limit(myselfJob.job_title, 36) }}</p>
+        <v-row class="row">
+          <label for="name" class="selfPost">投稿案件</label>
+          <section>{{ day(myselfJob.created_at, "YYYY年 M月 D日") }}</section>
         </v-row>
       </div>
     </v-card>

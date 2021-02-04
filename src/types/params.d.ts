@@ -38,10 +38,9 @@ export interface ParticipateParams {
 }
 
 export interface RejectParams {
-  job_id: number;
-  user_id: number;
-  apply_status_id: 3;
-  updated_at: string;
+  jobId: number;
+  userId: number;
+  applyStatusId: 3;
 }
 
 export interface RegisterSessionParams {
