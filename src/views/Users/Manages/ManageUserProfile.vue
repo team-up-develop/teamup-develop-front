@@ -22,7 +22,6 @@ import { API_URL, truncate, catchError, m } from "@/master";
 type State = {
   myselfFlag: boolean;
   userInfo: User;
-  jobTitle: string;
   userId: number;
   loading: boolean;
   doneStatusFlag: boolean;
@@ -32,7 +31,6 @@ type State = {
 const initialState = (): State => ({
   myselfFlag: false,
   userInfo: {},
-  jobTitle: "",
   userId: Vuex.state.auth.userId,
   loading: true,
   doneStatusFlag: false,
@@ -54,9 +52,6 @@ export default defineComponent({
     applyId: { type: Number, default: 0, require: true },
   },
   setup: (props) => {
-    console.log("sakamotokazuiya");
-    console.log(props);
-    console.log("sakamotokazuiya");
     const state = reactive<State>(initialState());
 
     const breadcrumbs = computed(() => [
@@ -125,13 +120,13 @@ export default defineComponent({
           />
           <v-row class="header">
             <router-link
-              :to="`/manage/profile/${jobId}/${id}`"
+              :to="`/manage/profile/${jobId}/${id}/${applyId}`"
               class="router-link-active-click"
             >
               <span>プロフィール</span>
             </router-link>
             <router-link
-              :to="`/manage/profile/${jobId}/${id}/jobs`"
+              :to="`/manage/profile/${jobId}/${id}/${applyId}/jobs`"
               class="router-link"
             >
               <span>投稿案件</span>

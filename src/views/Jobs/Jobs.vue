@@ -587,7 +587,7 @@ export default defineComponent({
             </div>
             <router-link :to="`/account/profile/${jobDetail.user_id}`">
               <div class="post-user-name-area">
-                {{ jobDetail.user.user_name }}
+                {{ limit(jobDetail.user.login_name, 55) }}
               </div>
             </router-link>
             <div class="tag-area">

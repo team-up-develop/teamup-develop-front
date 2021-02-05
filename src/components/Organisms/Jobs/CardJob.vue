@@ -57,7 +57,7 @@ export default defineComponent({
         <div class="post-user-image"></div>
         <div class="post-user-name-area">
           <div class="post-user-name">
-            {{ job.user.user_name }}
+            {{ limit(job.user.login_name, 12) }}
           </div>
         </div>
         <div class="label-area mt-5">
@@ -187,6 +187,7 @@ export default defineComponent({
       }
 
       .post-user-name-area {
+        max-width: 180px;
         text-align: left;
         padding: 1.5rem 0rem;
         position: relative;

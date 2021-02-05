@@ -98,14 +98,8 @@ export default defineComponent({
     };
 
     const compliteEdit = async () => {
-      closeModal();
-      // * ユーザー情報取得
-      try {
-        const res = await axios.get(`${API_URL}/user/${props.id}`);
-        state.userInfo = res.data.response;
-      } catch (error) {
-        catchError(error);
-      }
+      await fetchUser();
+      await closeModal();
     };
 
     const editEmit = () => {

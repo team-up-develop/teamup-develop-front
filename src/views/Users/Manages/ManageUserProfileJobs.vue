@@ -21,7 +21,6 @@ import { API_URL, catchError, m } from "@/master";
 type State = {
   myselfFlag: boolean;
   userInfo: User;
-  jobTitle: string;
   userId: number;
   loading: boolean;
   statusId: number;
@@ -31,7 +30,6 @@ type State = {
 const initialState = (): State => ({
   myselfFlag: false,
   userInfo: {},
-  jobTitle: "",
   userId: Vuex.state.auth.userId,
   loading: true,
   statusId: m.APPLY_STATUS_APPLY,
@@ -49,6 +47,7 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0, require: true }, //? 詳細を見るユーザーのID
     jobId: { type: Number, default: 0, require: true },
+    applyId: { type: Number, default: 0, require: true },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
@@ -124,13 +123,13 @@ export default defineComponent({
           />
           <v-row class="header">
             <router-link
-              :to="`/manage/profile/${jobId}/${id}`"
+              :to="`/manage/profile/${jobId}/${id}/${applyId}`"
               class="router-link"
             >
               <span>プロフィール</span>
             </router-link>
             <router-link
-              :to="`/account/profile/${id}/jobs`"
+              :to="`/account/profile/${jobId}/${id}/${applyId}/jobs`"
               class="router-link-active-click"
             >
               <span>投稿案件</span>

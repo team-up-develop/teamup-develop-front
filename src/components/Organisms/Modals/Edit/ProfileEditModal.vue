@@ -1,6 +1,7 @@
 <script lang="ts">
 import Vue from "vue";
 import { API_URL, catchError } from "@/master";
+import { EditProfileParams } from "@/types/params";
 import axios from "axios";
 
 type DataType = {
@@ -10,19 +11,6 @@ type DataType = {
   bio: string | null;
   githubAccount: string | null;
   twitterAccount: string | null;
-};
-
-type EditParams = {
-  id: number;
-  user_name: string;
-  learning_start_date: Date;
-  bio: string | null;
-  github_account: string | null;
-  twitter_account: string | null;
-  update_at: Date;
-  birthday: Date;
-  login_name: string;
-  login_password: string;
 };
 
 export default Vue.extend({
@@ -42,6 +30,9 @@ export default Vue.extend({
       twitterAccount: this.userInfo.twitter_account,
     };
   },
+  created() {
+    console.log(this.userInfo);
+  },
   methods: {
     // * 編集する
     profileEdit() {
@@ -53,21 +44,36 @@ export default Vue.extend({
       // //* 開始日
       const learningStart = this.learningStartDate;
       const learningStartDate = toDate(learningStart, "-");
-      const params: EditParams = {
+      const params: EditProfileParams = {
         id: this.id,
+        updated_at: this.userInfo.updated_at,
         user_name: this.userName,
-        learning_start_date: learningStartDate,
+        birthday: this.userInfo.birthday,
         bio: this.bio,
         github_account: this.githubAccount,
         twitter_account: this.twitterAccount,
-        update_at: new Date(),
-        birthday: new Date(),
-        login_name: "変更しましたUser",
+        learning_start_date: learningStartDate,
+        login_name: this.userInfo.login_name,
         login_password: "password",
+        programing_language_ids: [
+          {
+            id: 1,
+          },
+        ],
+        programing_framework_ids: [
+          {
+            id: 1,
+          },
+        ],
+        skill_ids: [
+          {
+            id: 1,
+          },
+        ],
       };
       console.log(params);
       axios
-        .put<EditParams>(`${API_URL}/user/${this.id}`, params)
+        .put<EditProfileParams>(`${API_URL}/user/${this.id}`, params)
         .then((res) => {
           this.$emit("compliteEdit");
           return res;
