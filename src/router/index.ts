@@ -102,11 +102,12 @@ const routes: Array<RouteConfig> = [
     }),
   },
   {
-    path: "/manage/profile/:jobId/:id/jobs",
+    path: "/manage/profile/:jobId/:id/:applyId/jobs",
     component: ManageUserProfileJobs,
     props: (route) => ({
       id: Number(route.params.id),
       jobId: Number(route.params.jobId),
+      applyId: Number(route.params.applyId),
     }),
   },
   {

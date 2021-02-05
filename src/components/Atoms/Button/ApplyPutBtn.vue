@@ -14,7 +14,7 @@ export default defineComponent({
   setup: (props, context) => {
     // console.log(props);
 
-    const applyUserPut = async () => {
+    const putApply = async () => {
       const params: ParticipateParams = {
         id: props.applyId,
         job_id: props.jobId,
@@ -32,7 +32,7 @@ export default defineComponent({
       }
     };
     return {
-      applyUserPut,
+      putApply,
     };
   },
 });
@@ -40,7 +40,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <button class="btn-applicant" @click="applyUserPut">一緒に開発する</button>
+    <button class="btn-applicant" @click="putApply">一緒に開発する</button>
   </div>
 </template>
 

@@ -95,8 +95,8 @@ export default defineComponent({
 
     // * 編集完了 emit
     const compliteEdit = async () => {
-      closeModal();
-      fetchUser();
+      await fetchUser();
+      await closeModal();
     };
     const editEmit = () => {
       openModal();
@@ -106,6 +106,7 @@ export default defineComponent({
       ...toRefs(state),
       breadcrumbs,
       openModal,
+      closeModal,
       doSend,
       compliteEdit,
       editEmit,

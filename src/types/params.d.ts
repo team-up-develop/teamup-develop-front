@@ -56,3 +56,19 @@ export interface messageParams {
   user_id: number;
   job_id: number;
 }
+
+export interface EditProfileParams {
+  id: number;
+  user_name: string;
+  learning_start_date: Date;
+  bio: string | null;
+  github_account: string | null;
+  twitter_account: string | null;
+  updated_at: Date;
+  birthday: Date;
+  login_name: string;
+  login_password: string;
+  programing_language_ids: {}[];
+  programing_framework_ids: {}[];
+  skill_ids: {}[];
+}

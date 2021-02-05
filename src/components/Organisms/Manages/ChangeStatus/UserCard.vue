@@ -136,6 +136,7 @@ export default defineComponent({
     &__name {
       margin-left: 1rem;
       font-weight: bold;
+      word-wrap: break-word; //* 折り返し
     }
 
     &__name:hover {

@@ -69,9 +69,9 @@ export default Vue.extend({
     }
 
     .lang-box {
-      width: 95%;
+      width: 100%;
       text-align: left;
-      padding: 10px 20px 30px 0;
+      padding: 10px 0px 30px 0;
 
       .skill-tag {
         @include detail-language;
