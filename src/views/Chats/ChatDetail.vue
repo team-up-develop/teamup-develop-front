@@ -414,6 +414,7 @@ export default defineComponent({
 }
 .balloon-text-right,
 .balloon-text-left {
+  word-wrap: break-word;
   position: relative;
   padding: 0.8rem 1.4rem;
   // border: 1px solid #aaa;
