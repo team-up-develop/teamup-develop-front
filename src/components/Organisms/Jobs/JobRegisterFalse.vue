@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import RegisteForm from "@/components/Molecules/Jobs/JobRegisterFalses/RegisteForm.vue";
+import RegisteForm from "@/components/Molecules/Jobs/RegisteForm.vue";
 
 export default defineComponent({
   components: {

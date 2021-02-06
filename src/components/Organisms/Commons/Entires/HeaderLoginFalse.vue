@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
 import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
-import BtnArea from "@/components/Molecules/Commons/Entires/BtnArea.vue";
+import BtnArea from "@/components/Molecules/Commons/BtnArea.vue";
 
 export default Vue.extend({
   components: {

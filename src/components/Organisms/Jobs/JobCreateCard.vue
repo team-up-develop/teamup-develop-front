@@ -5,9 +5,9 @@ import {
   toRefs,
   computed,
 } from "@vue/composition-api";
-import JobTitleInput from "@/components/Atoms/Forms/JobTitleInput.vue";
 import DatePicker from "@/components/Atoms/Forms/DatePicker.vue";
-import JobDescriptionInput from "@/components/Atoms/Forms/JobDescriptionInput.vue";
+import JobTitleInputArea from "@/components/Molecules/Jobs/JobTitleInputArea.vue";
+import JobDescriptionInputArea from "@/components/Molecules/Jobs/JobDescriptionInputArea.vue";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsFirst } from "@/types/params";
 
@@ -27,10 +27,10 @@ const initialState = (): JobCreateSession1 => ({
 
 export default defineComponent({
   components: {
-    JobTitleInput,
     DatePicker,
-    JobDescriptionInput,
     Session,
+    JobTitleInputArea,
+    JobDescriptionInputArea,
   },
   setup: () => {
     const state = reactive<JobCreateSession1>(initialState());
@@ -104,9 +104,17 @@ export default defineComponent({
       <Session :num="1" />
       <section>
         <div class="title">
-          <label for="name" class="label">案件タイトル</label
-          ><label for="name" class="label-required">必須</label>
-          <JobTitleInput v-model="jobTitle" type="text" />
+          <JobTitleInputArea
+            v-model="jobTitle"
+            type="text"
+            name="jobTitle"
+            textLabel="案件タイトル"
+            :mandatory="true"
+            mandatoryText=""
+            placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)"
+            maxlength="60"
+            :remaining="true"
+          />
         </div>
         <div class="time">
           <label for="name" class="label">開発開始時期</label
@@ -122,8 +130,17 @@ export default defineComponent({
           <DatePicker v-model="devEndDate" type="text" />
         </div>
         <div class="detail">
-          <label for="name" class="label">概要</label>
-          <JobDescriptionInput v-model="jobDescription" type="text" />
+          <JobDescriptionInputArea
+            v-model="jobDescription"
+            type="text"
+            name="jobDescription"
+            textLabel="概要"
+            :mandatory="false"
+            mandatoryText=""
+            placeholder="詳しい内容や現在の状況を記載してください(500文字以内)"
+            maxlength="500"
+            :remaining="true"
+          />
         </div>
       </section>
       <router-link

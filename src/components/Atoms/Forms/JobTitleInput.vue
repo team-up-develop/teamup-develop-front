@@ -1,29 +1,19 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "@vue/composition-api";
-
-type State = {
-  titleLimit: number;
-};
-
-const initialState = (): State => ({
-  titleLimit: 0,
-});
+import { defineComponent } from "@vue/composition-api";
 
 export default defineComponent({
   props: {
     type: { type: String, required: true },
     value: { type: String, required: false, default: null },
+    placeholder: { type: String, required: false },
+    maxlength: { type: String, required: true },
   },
   setup: (_, ctx) => {
-    const state = reactive<State>(initialState());
-
     const onInputTitle = (e: any) => {
-      state.titleLimit = e.target.value.length;
       ctx.emit("input", e.target.value);
     };
 
     return {
-      ...toRefs(state),
       onInputTitle,
     };
   },
@@ -36,10 +26,9 @@ export default defineComponent({
       type="text"
       :value="value"
       @input="onInputTitle"
-      placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)"
-      maxlength="60"
+      :placeholder="placeholder"
+      :maxlength="maxlength"
     />
-    <small id="rem">残り{{ 60 - titleLimit }}文字</small>
   </section>
 </template>
 
@@ -62,12 +51,5 @@ input[type="text"] {
   &:focus {
     @include form-hover;
   }
-}
-
-#rem {
-  color: $text-sub-color;
-  margin-top: 2px;
-  font-size: 12px;
-  font-weight: bold;
 }
 </style>

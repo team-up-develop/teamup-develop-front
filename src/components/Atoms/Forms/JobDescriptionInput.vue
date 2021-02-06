@@ -13,12 +13,13 @@ export default defineComponent({
   props: {
     type: { type: String, required: true },
     value: { type: String, required: false, default: null },
+    placeholder: { type: String, required: false },
+    maxlength: { type: String, required: true },
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState());
 
     const onInputJobDescription = (e: any) => {
-      state.jobDescriptionLimit = e.target.value.length;
       ctx.emit("input", e.target.value);
     };
 
@@ -31,15 +32,14 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
+  <section class="mt-2">
     <textarea
       type="text"
       :value="value"
       @input="onInputJobDescription"
-      placeholder="詳しい内容や現在の状況を記載してください(250文字以内)"
-      maxlength="500"
+      :placeholder="placeholder"
+      :maxlength="maxlength"
     />
-    <small id="rem">残り{{ 500 - jobDescriptionLimit }}文字</small>
   </section>
 </template>
 
@@ -64,12 +64,5 @@ textarea[type="text"] {
   &:focus {
     @include form-hover;
   }
-}
-
-#rem {
-  color: $text-sub-color;
-  margin-top: 2px;
-  font-size: 12px;
-  font-weight: bold;
 }
 </style>
