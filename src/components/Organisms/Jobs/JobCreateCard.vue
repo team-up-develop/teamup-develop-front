@@ -116,6 +116,9 @@ export default defineComponent({
             :remaining="true"
           />
         </div>
+        <label v-if="minStartDate" class="error-message mb-5">{{
+          "開始日が終了日より前です。"
+        }}</label>
         <div class="time">
           <label for="name" class="label">開発開始時期</label
           ><label for="name" class="label-required">必須</label>
@@ -123,10 +126,7 @@ export default defineComponent({
         </div>
         <div class="time">
           <label for="name" class="label">開発終了時期</label
-          ><label for="name" class="label-required">必須</label
-          ><label v-if="minStartDate" class="error-message">{{
-            "開始日が終了日より前です。"
-          }}</label>
+          ><label for="name" class="label-required">必須</label>
           <DatePicker v-model="devEndDate" type="text" />
         </div>
         <div class="detail">
@@ -194,6 +194,10 @@ export default defineComponent({
   padding: 0.25rem 0.9rem;
   text-align: center;
   margin-left: 10px;
+}
+.error-message {
+  color: $error-message-color;
+  font-weight: bold;
 }
 
 section {

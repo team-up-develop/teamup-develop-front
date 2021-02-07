@@ -205,6 +205,7 @@ export default defineComponent({
       // TODO: 修正
       .label-area {
         margin-left: 1rem;
+        width: 140px;
 
         @media screen and (max-width: 1100px) {
           margin-left: 0.2rem;

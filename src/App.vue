@@ -71,6 +71,7 @@ export default defineComponent({
   position: relative;
   // margin-top: 0.7rem;
   padding-bottom: 15rem;
+  // background-color: #f3f2f2;
 
   @media screen and (max-width: 600px) {
     padding: 1rem 0;

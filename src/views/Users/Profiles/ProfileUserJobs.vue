@@ -236,7 +236,7 @@ export default defineComponent({
   }
 
   .jobs {
-    width: 80%;
+    width: 85%;
     margin: 2rem auto;
 
     @media screen and (max-width: 480px) {
