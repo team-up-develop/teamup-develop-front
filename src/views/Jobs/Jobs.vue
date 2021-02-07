@@ -73,7 +73,7 @@ const initialState = (): State => ({
   buttonActive: false,
   page: 1,
   displayJobs: [],
-  jobsPageSize: 8,
+  jobsPageSize: 10,
   paginationLength: 0,
   scroll: null,
   newJobLabel: false,
@@ -117,8 +117,10 @@ export default defineComponent({
           //* トップページから フリーワード 検索をした際の処理
           for (const i in res.data.response) {
             const jobs: any = res.data.response[i]; //FIXME: any
-            if (jobs.job_description.indexOf(state.freeWord) !== -1) {
-              posts.push(jobs);
+            if (jobs.job_description) {
+              if (jobs.job_description.indexOf(state.freeWord) !== -1) {
+                posts.push(jobs);
+              }
             }
           }
           state.jobs = posts;

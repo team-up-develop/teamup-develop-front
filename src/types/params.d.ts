@@ -1,21 +1,21 @@
 // * 案件作成時 session1 ここは API通信しないので キャメルケース
 export interface JobCreateParamsFirst {
-  jobTitle: string | null; //? タイトル
-  jobDescription: string | null; //? 詳細
-  devStartDate: string | null; //? 開発開始
-  devEndDate: string | null; //? 開発終了
+  jobTitle: string;
+  jobDescription: string | null;
+  devStartDate: string;
+  devEndDate: string;
 }
 
 export interface JobCreateParamsSecond {
-  user_id: number; //? ログインUserId
-  job_title: string | null; //? タイトル
-  job_description: string | null; //? 詳細
-  dev_start_date: Date; //? 開始日
-  dev_end_date: Date; //? 終了日
-  programing_language_ids: {}[]; //? プログラミング言語
-  programing_framework_ids: {}[]; //? フレームワーク
-  skill_ids: {}[]; //? その他開発スキル,
-  recruitment_numbers: number; //?募集人数
+  user_id: number;
+  job_title: string;
+  job_description: string | null;
+  dev_start_date: Date;
+  dev_end_date: Date;
+  programing_language_ids: {}[];
+  programing_framework_ids: {}[];
+  skill_ids: {}[];
+  recruitment_numbers: number;
   job_status_id: number;
 }
 

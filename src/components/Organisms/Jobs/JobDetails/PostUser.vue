@@ -30,7 +30,7 @@ export default defineComponent({
             <div class="user-name-tag">名前</div>
             <router-link :to="`/account/profile/${job.user_id}`">
               <div class="user-name">
-                {{ limit(job.user.login_name, 35) }}
+                {{ limit(job.user.login_name, 27) }}
               </div>
             </router-link>
           </div>
