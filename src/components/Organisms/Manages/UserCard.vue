@@ -40,7 +40,7 @@ export default defineComponent({
 
 <template>
   <section>
-    <v-sheet class="card">
+    <v-card class="card">
       <v-col>
         <v-row class="card__top">
           <div class="user-image"></div>
@@ -66,7 +66,7 @@ export default defineComponent({
           </v-row>
         </v-row>
       </v-col>
-    </v-sheet>
+    </v-card>
   </section>
 </template>
 
@@ -80,7 +80,6 @@ section {
   }
 }
 .card {
-  @include card-border-color;
   width: 360px;
   height: 235px;
   padding: 1rem 1.2rem;
@@ -122,8 +121,8 @@ section {
     position: relative;
 
     .btn {
-      @include box-shadow-btn;
-      background-color: $primary-dark;
+      @include neumorphism;
+      background-color: $secondary-color;
       color: $white;
       padding: 0.5rem 4rem;
       position: absolute;

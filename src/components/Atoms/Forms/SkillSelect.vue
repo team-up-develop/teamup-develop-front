@@ -50,7 +50,7 @@ export default Vue.extend({
   letter-spacing: 1px;
   color: $text-main-color;
   border-radius: 4px;
-  background-color: $white;
+  border: none;
   background-color: $dark-white;
 }
 </style>

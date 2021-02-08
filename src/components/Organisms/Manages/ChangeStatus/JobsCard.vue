@@ -51,7 +51,7 @@ export default defineComponent({
 </script>
 <template>
   <section>
-    <v-sheet class="card">
+    <v-card class="card">
       <v-col>
         <v-row class="card__top">
           {{ limit(jobTitle, 60) }}
@@ -76,7 +76,7 @@ export default defineComponent({
           </v-row>
         </v-row>
       </v-col>
-    </v-sheet>
+    </v-card>
   </section>
 </template>
 
@@ -90,7 +90,6 @@ section {
   }
 }
 .card {
-  @include card-border-color;
   width: 360px;
   height: 248px;
   padding: 1rem 1.2rem;
@@ -121,8 +120,8 @@ section {
     position: relative;
 
     .detail-btn {
-      @include box-shadow-btn;
-      background-color: $primary-dark;
+      @include neumorphism;
+      background-color: $secondary-color;
       color: $white;
       padding: 0.5rem 4rem;
       position: absolute;

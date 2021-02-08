@@ -29,7 +29,7 @@ export default defineComponent({
       <v-row>
         <v-radio
           :label="option.label"
-          color="primary"
+          color="blue lighten-1"
           class="ml-8 mb-0"
           type="radio"
           :name="name"

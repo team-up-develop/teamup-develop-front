@@ -53,7 +53,7 @@ export default defineComponent({
 <template>
   <section>
     <div class="login-wrapper">
-      <div class="login-container">
+      <v-card class="login-container">
         <div class="login-title">LOGIN</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
@@ -80,7 +80,7 @@ export default defineComponent({
           </p>
           <button @click="login" class="login-btn">ログイン</button>
         </div>
-      </div>
+      </v-card>
     </div>
   </section>
 </template>
@@ -105,7 +105,6 @@ section {
     max-width: 500px;
     height: 620px;
     margin: 2rem auto 3rem auto;
-    border: solid 1px #b9b9b9;
     border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
@@ -161,9 +160,8 @@ section {
       // background-color: #B9B9B9;
 
       .login-btn {
-        @include blue-btn;
-        @include neumorphism;
-        color: $white;
+        @include neumorphismGrey;
+        color: $primary-color;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;

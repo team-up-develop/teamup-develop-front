@@ -13,24 +13,34 @@ export default defineComponent({
     job: { type: Object, defalut: null, require: true },
   },
   setup: (props: any) => {
-    const day = (value: string, format: string) => dayJs(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
-
-    const isStatusNew = computed(() => {
-      if (props.job.job_status_id == m.JOB_STATUS_NEW) {
-        return true;
-      }
-      return false;
-    });
-
     return {
-      limit,
-      day,
-      m: computed(() => m),
-      isStatusNew,
+      ...useUtils(),
+      ...useJobStatus(props),
     };
   },
 });
+
+const useUtils = () => {
+  const day = (value: string, format: string) => dayJs(value, format);
+  const limit = (value: string, num: number) => truncate(value, num);
+  return {
+    m: computed(() => m),
+    day,
+    limit,
+  };
+};
+
+const useJobStatus = (props: any) => {
+  const isStatusNew = computed(() => {
+    if (props.job.job_status_id == m.JOB_STATUS_NEW) {
+      return true;
+    }
+    return false;
+  });
+  return {
+    isStatusNew,
+  };
+};
 </script>
 
 <template>
@@ -74,7 +84,6 @@ export default defineComponent({
 .job-cards {
   width: 97%;
   margin: 10px 0.5%;
-  border: solid 1px $card-border-color;
   background-color: $white;
   border-radius: 8px;
   transition: 0.3s;

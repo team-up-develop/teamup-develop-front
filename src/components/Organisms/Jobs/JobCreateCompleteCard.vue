@@ -12,7 +12,7 @@ export default Vue.extend({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="3" />
+      <Session :num="4.4" />
       <section>
         <div class="image-area">
           <img

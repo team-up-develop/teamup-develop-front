@@ -101,7 +101,7 @@ export default defineComponent({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="1" />
+      <Session :num="2" />
       <section>
         <div class="title">
           <JobTitleInputArea

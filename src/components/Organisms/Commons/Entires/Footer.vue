@@ -11,12 +11,12 @@ export default {
 };
 </script>
 <template>
-  <v-footer color="grey darken-1 white--text text-center" padless>
+  <v-footer color="white darken-1 white--text text-center" padless>
     <v-row justify="center" no-gutters>
       <v-btn
         v-for="link in links"
         :key="link.name"
-        color="white"
+        color="black"
         text
         rounded
         class="my-2"
@@ -25,8 +25,10 @@ export default {
           <span>{{ link.name }}</span>
         </router-link>
       </v-btn>
-      <v-col class="grey darken-1 py-4 text-center white--text" cols="12">
-        {{ new Date().getFullYear() }} — <strong>TeamUp</strong>
+      <v-col class="white darken-1 py-4 text-center balck--text" cols="12">
+        <span class="text"
+          >{{ new Date().getFullYear() }} — <strong>TeamUp</strong></span
+        >
       </v-col>
     </v-row>
   </v-footer>
@@ -36,7 +38,10 @@ export default {
 @import "@/assets/scss/_variables.scss";
 
 .router-link {
-  color: $white;
+  color: $text-main-color;
   text-decoration: none;
+}
+.text {
+  color: $text-main-color;
 }
 </style>

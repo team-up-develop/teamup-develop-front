@@ -47,7 +47,6 @@ export default defineComponent({
 @import "@/assets/scss/_variables.scss";
 
 .dev-detail-area {
-  @include card-border-color;
   border-radius: 4px;
   padding: 1.5rem 4rem 1rem 4rem;
   margin-bottom: 2rem;

@@ -77,11 +77,11 @@ export default defineComponent({
     <v-container class="wrapper" v-show="!loading">
       <v-row v-if="isLogin">
         <UserCard />
-        <v-sheet class="create">
+        <v-card class="create">
           <v-col>
             <JobCreateCompleteCard />
           </v-col>
-        </v-sheet>
+        </v-card>
       </v-row>
       <template v-else>
         ログインが必要です
@@ -105,11 +105,10 @@ export default defineComponent({
 }
 
 .create {
-  @include card-border-color;
   width: 60%;
   border-radius: 8px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: $white;
   position: relative;
   font-size: 14px;
   padding: 0 2rem 2rem 2rem;
