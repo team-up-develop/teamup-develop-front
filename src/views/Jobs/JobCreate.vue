@@ -60,11 +60,10 @@ export default defineComponent({
 }
 
 .create {
-  @include card-border-color;
   width: 60%;
   border-radius: 8px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: $white;
   position: relative;
   font-size: 14px;
   padding: 0 2rem 2rem 2rem;

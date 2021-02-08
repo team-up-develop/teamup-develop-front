@@ -36,7 +36,6 @@ export default defineComponent({
 @import "@/assets/scss/_variables.scss";
 
 input[type="text"] {
-  @include input-border-color;
   background-color: $dark-white;
   color: $text-main-color;
   font: 16px/24px sans-serif;

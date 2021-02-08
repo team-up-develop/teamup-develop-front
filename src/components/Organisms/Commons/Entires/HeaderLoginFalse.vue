@@ -33,15 +33,16 @@ export default Vue.extend({
 @import "@/assets/scss/_variables.scss";
 
 .header-wrapper {
-  background-color: #ffffff;
+  background-color: $white;
   width: 100%;
-  height: 58px;
+  height: 62px;
   margin-bottom: 2px;
   top: 0px;
   top: -100px;
   left: 0;
   z-index: 2;
   transition: 0.3s ease-in-out;
+  box-shadow: 0px 1px 3px rgba(0, 0, 0, 0.6);
 
   .header-wrapper-area {
     width: 100%;
@@ -58,20 +59,20 @@ export default Vue.extend({
       .header-main-left {
         width: 180px;
         height: 100%;
-        padding: 1rem 0 0rem 2rem;
+        padding: 1.2rem 0 0rem 2rem;
 
         @media screen and (max-width: 768px) {
           width: 100px;
         }
 
         @media screen and (max-width: 500px) {
-          padding: 1rem 0 0rem 0.5rem;
+          padding: 1.2rem 0 0rem 0.5rem;
         }
       }
 
       .header-main-right {
         width: 440px;
-        padding: 0.7rem 0rem 0 0;
+        padding: 0.9rem 0rem 0 0;
         position: absolute;
         right: 0;
         top: 0;

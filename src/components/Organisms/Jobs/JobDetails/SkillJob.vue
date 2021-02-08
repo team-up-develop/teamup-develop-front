@@ -51,7 +51,6 @@ export default Vue.extend({
 @import "@/assets/scss/_variables.scss";
 
 .skill-detail-area {
-  @include card-border-color;
   border-radius: 4px;
   padding: 1.5rem 4rem 1rem 4rem;
   margin-bottom: 2rem;

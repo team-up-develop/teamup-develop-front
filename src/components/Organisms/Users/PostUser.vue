@@ -52,7 +52,7 @@ export default defineComponent({
 
 <template>
   <section>
-    <v-sheet class="post">
+    <div class="post">
       <v-row>
         <div class="left">
           <div class="user-image"></div>
@@ -93,7 +93,7 @@ export default defineComponent({
           編集する
         </button>
       </div>
-    </v-sheet>
+    </div>
   </section>
 </template>
 
@@ -105,6 +105,7 @@ export default defineComponent({
   padding: 2rem 4rem;
   margin-bottom: 2rem;
   position: relative;
+  background-color: none;
 
   .left {
     .user-image {

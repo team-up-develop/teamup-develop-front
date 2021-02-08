@@ -144,7 +144,6 @@ export default defineComponent({
 }
 
 .manage {
-  @include card-border-color;
   width: 60%;
   border-radius: 8px;
   margin: 0 auto;

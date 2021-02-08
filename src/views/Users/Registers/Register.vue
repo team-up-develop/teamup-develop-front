@@ -57,7 +57,7 @@ export default Vue.extend({
 <template>
   <section>
     <div class="login-wrapper">
-      <div class="login-container">
+      <v-card class="login-container">
         <div class="login-title">REGISTER</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
@@ -103,7 +103,7 @@ export default Vue.extend({
           </p>
           <div @click="register" class="login-btn">新規登録</div>
         </div>
-      </div>
+      </v-card>
     </div>
   </section>
 </template>
@@ -118,7 +118,7 @@ section {
   text-decoration: none;
 
   span {
-    color: $secondary-dark;
+    color: $primary-color;
   }
 }
 
@@ -127,13 +127,11 @@ section {
   width: 100%;
   height: 100%;
   margin: 0;
-  // background-color: #EBF5FF;
 
   .login-container {
     max-width: 500px;
     height: 620px;
     margin: 2rem auto 3rem auto;
-    border: solid 1px #b9b9b9;
     border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
@@ -141,13 +139,13 @@ section {
 
     //* ログインタイトル
     .login-title {
-      color: $secondary-dark;
+      color: $primary-color;
       font-size: 1.8rem;
       font-weight: bold;
       height: 50px;
       margin-top: 1rem;
       width: 100%;
-      border-bottom: solid 3px $secondary-dark;
+      border-bottom: solid 3px $primary-color;
     }
 
     // * メールフォーム
@@ -188,7 +186,7 @@ section {
       padding: 2rem 0;
 
       .login-btn {
-        @include purple-btn;
+        @include blue-btn;
         @include neumorphism;
         color: $white;
         display: block;

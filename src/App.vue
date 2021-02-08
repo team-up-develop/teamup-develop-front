@@ -55,6 +55,8 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/_variables.scss";
+
 .app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -71,7 +73,7 @@ export default defineComponent({
   position: relative;
   // margin-top: 0.7rem;
   padding-bottom: 15rem;
-  // background-color: #f3f2f2;
+  background-color: $light-grey;
 
   @media screen and (max-width: 600px) {
     padding: 1rem 0;

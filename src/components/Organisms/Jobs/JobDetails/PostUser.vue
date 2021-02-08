@@ -50,7 +50,6 @@ export default defineComponent({
 @import "@/assets/scss/_variables.scss";
 
 .post-user-area {
-  @include card-border-color;
   border-radius: 4px;
   padding: 2rem 4rem;
   margin-bottom: 2rem;

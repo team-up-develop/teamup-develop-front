@@ -496,7 +496,7 @@ export default defineComponent({
         <input
           type="text"
           v-model="freeWord"
-          placeholder="フリーワード"
+          placeholder="フリーワードで探す"
           class="search-area__freewrod"
           @keyup.enter="searchFreeword"
         />
@@ -531,7 +531,7 @@ export default defineComponent({
         <CardJob :job="job" />
       </router-link>
       <template v-if="detailFlag">
-        <div class="job-wrapper-right">
+        <v-card class="job-wrapper-right">
           <div class="top-job-detail-area">
             <div class="top-job-detail-area__title">
               {{ limit(jobDetail.job_title, 60) }}
@@ -651,7 +651,7 @@ export default defineComponent({
               投稿期日 {{ day(jobDetail.created_at, "YYYY年 M月 D日") }}
             </div>
           </div>
-        </div>
+        </v-card>
       </template>
       <template v-else>
         <div class="job-wrapper-right-false">
@@ -679,20 +679,10 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-.job-cards.sample-active {
-  border-bottom: 4px solid #ff0800;
-  font-weight: bold;
-}
-
-.className {
-  background-color: red;
-}
-
 // * 詳細検索
 .search-area {
   width: 100%;
   height: 48px;
-  background-color: $white;
   position: absolute;
   top: 0;
   position: sticky;
@@ -752,7 +742,7 @@ export default defineComponent({
     width: 28%;
     margin-top: 0.23rem;
     // border: solid 1px #E0E0E0;
-    background-color: #e0e0e0;
+    background-color: $input-background-color;
     border-radius: 50rem;
     padding: 0.5rem 1rem;
     position: absolute;
@@ -856,14 +846,12 @@ export default defineComponent({
   bottom: 0;
   border-radius: 8px;
   color: #111111;
-  border: solid 1px $card-border-color;
   text-align: left;
 
   .top-job-detail-area {
-    border-bottom: solid 1px $card-border-color;
     font-weight: bold;
     padding: 1.5rem 2rem 1rem 2rem;
-    box-shadow: 0 3px 3px -2px rgba(3, 29, 41, 0.15);
+    box-shadow: 2px 4px 3px -2px rgba(3, 29, 41, 0.15);
 
     &__title {
       width: 100%;

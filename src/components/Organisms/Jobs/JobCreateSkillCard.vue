@@ -166,7 +166,7 @@ export default defineComponent({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="2.5" />
+      <Session :num="2.1" />
       <section>
         <div class="create-area">
           <SkillSelectArea

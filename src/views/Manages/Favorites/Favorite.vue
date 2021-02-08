@@ -131,11 +131,10 @@ export default defineComponent({
 }
 
 .manage {
-  @include card-border-color;
   width: 60%;
   border-radius: 8px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: $white;
   position: relative;
   font-size: 14px;
   padding: 2rem;
