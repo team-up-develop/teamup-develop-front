@@ -78,7 +78,7 @@ export default defineComponent({
                   width="35"
                 />
                 <img
-                  class="img"
+                  class="twitter-img"
                   @click="twitterTab"
                   src="@/assets/images/twitter.png"
                   width="35"
@@ -137,6 +137,22 @@ export default defineComponent({
       .img {
         cursor: pointer;
         padding: 0 0 0 0.5rem;
+        width: 35px;
+        height: 30px;
+
+        &:hover {
+          opacity: 0.8;
+        }
+      }
+      .twitter-img {
+        cursor: pointer;
+        padding: 0 0 0 0.5rem;
+        width: 37px;
+        height: 32px;
+
+        &:hover {
+          opacity: 0.8;
+        }
       }
     }
   }

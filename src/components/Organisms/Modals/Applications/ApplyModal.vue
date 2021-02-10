@@ -64,6 +64,13 @@
   position: relative;
   padding: 5rem 6rem 4rem 6rem;
   margin: 0 auto;
+
+  @media screen and (max-width: 500px) {
+    padding: 5rem 4rem 4rem 4rem;
+  }
+  @media screen and (max-width: 500px) {
+    padding: 5rem 2rem 4rem 2rem;
+  }
 }
 
 .modal-footer {
@@ -76,6 +83,9 @@
 
   @media screen and (max-width: 500px) {
     width: 100%;
+  }
+  @media screen and (max-width: 400px) {
+    padding: 1rem 0rem;
   }
 }
 
