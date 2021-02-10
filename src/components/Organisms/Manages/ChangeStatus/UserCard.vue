@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import { dayJs } from "@/master";
+import { dayJs, truncate } from "@/master";
 
 export default defineComponent({
   props: {
@@ -8,9 +8,10 @@ export default defineComponent({
   },
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);
-
+    const limit = (value: string, num: number) => truncate(value, num);
     return {
       day,
+      limit,
     };
   },
 });
@@ -50,7 +51,7 @@ export default defineComponent({
           <div class="card__user__image"></div>
           <v-col>
             <div class="card__user__name">
-              {{ user.user.login_name }}
+              {{ limit(user.user.login_name, 26) }}
             </div>
             <div class="card__user__study">
               {{ day(user.user.learning_start_date, "YYYY年 M月 D日") }}

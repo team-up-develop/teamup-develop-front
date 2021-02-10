@@ -7,13 +7,12 @@ export default Vue.extend({});
 <template>
   <v-row class="header">
     <v-col class="left">
-      <div class="left__title">
+      <div class="left__title mb-2">
         チーム開発をすぐに始めれる
       </div>
       <div>
-        本気でキャリアを変えようと努力している未経験エンジニア同士が
-        オンラインでの「チーム開発」を通じて相互に成長し、
-        エンジニアとしてスタートを切る。
+        本気でキャリアを変えようと努力している未経験エンジニア同士がオンラインでの「チーム開発」を通じて相互に成長し、エンジニアとしてスタートを切る。
+        本気でキャリアを変えようと努力している未経験エンジニア同士がオンラインでの「チーム開発」を通じて相互に成長し、エンジニアとしてスタートを切る。
       </div>
     </v-col>
     <div class="right">
@@ -34,17 +33,17 @@ export default Vue.extend({});
   position: relative;
 
   @media (max-width: 786px) {
-    min-height: 250px;
+    min-height: 340px;
   }
 
   @media (max-width: 500px) {
-    min-height: 320px;
+    min-height: 410px;
   }
 }
 
 .left {
   text-align: left;
-  max-width: 750px;
+  max-width: 800px;
 
   &__title {
     color: #1142e2;

@@ -210,8 +210,10 @@ export default defineComponent({
         const res = await axios.get(`${API_URL}/jobs`);
         for (const i in res.data.response) {
           const jobs: any = res.data.response[i]; //FIXME: any
-          if (jobs.job_description.indexOf(state.freeWord) !== -1) {
-            posts.push(jobs);
+          if (jobs.job_description) {
+            if (jobs.job_description.indexOf(state.freeWord) !== -1) {
+              posts.push(jobs);
+            }
           }
         }
         // * フリーワード 検索語 Vuexに値を格納する

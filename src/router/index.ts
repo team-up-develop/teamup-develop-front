@@ -127,17 +127,17 @@ const routes: Array<RouteConfig> = [
   },
   // * 本登録登録
   {
-    path: "/step/1",
+    path: "/register/step/1",
     name: "RegisterStep1",
     component: RegisterStep1,
   },
   {
-    path: "/step/2",
+    path: "/register/step/2",
     name: "RegisterStep2",
     component: RegisterStep2,
   },
   {
-    path: "/step/3",
+    path: "/register/step/3",
     name: "RegisterStep3",
     component: RegisterStep3,
   },

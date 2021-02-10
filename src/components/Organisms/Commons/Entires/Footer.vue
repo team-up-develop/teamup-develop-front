@@ -11,12 +11,12 @@ export default {
 };
 </script>
 <template>
-  <v-footer color="white darken-1 white--text text-center" padless>
+  <v-footer color="white darken-1 lighten-2 white--text text-center" padless>
     <v-row justify="center" no-gutters>
       <v-btn
         v-for="link in links"
         :key="link.name"
-        color="black"
+        color="white"
         text
         rounded
         class="my-2"
@@ -25,7 +25,7 @@ export default {
           <span>{{ link.name }}</span>
         </router-link>
       </v-btn>
-      <v-col class="white darken-1 py-4 text-center balck--text" cols="12">
+      <v-col class="white darken-1  py-4 text-center balck--text" cols="12">
         <span class="text"
           >{{ new Date().getFullYear() }} — <strong>TeamUp</strong></span
         >
@@ -40,8 +40,10 @@ export default {
 .router-link {
   color: $text-main-color;
   text-decoration: none;
+  font-weight: bold;
 }
 .text {
   color: $text-main-color;
+  font-weight: bold;
 }
 </style>

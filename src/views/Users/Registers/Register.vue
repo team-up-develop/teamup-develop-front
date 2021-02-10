@@ -216,7 +216,7 @@ section {
     width: 100%;
 
     .login-container {
-      width: 98%;
+      width: 95%;
       padding: 1rem;
 
       .btn-area {
