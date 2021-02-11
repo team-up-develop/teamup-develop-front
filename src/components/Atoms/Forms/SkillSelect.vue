@@ -11,6 +11,7 @@ export default Vue.extend({
     value: { type: Array, required: true },
     options: { type: Array, required: true },
     name: { type: String, required: true },
+    max: { type: Number, required: true },
   },
   methods: {
     onInput(e: []) {
@@ -29,7 +30,7 @@ export default Vue.extend({
       label="name"
       @input="onInput"
       :reduce="(options) => options.id"
-      :selectable="() => value.length < 5"
+      :selectable="() => value.length < max"
     />
   </section>
 </template>

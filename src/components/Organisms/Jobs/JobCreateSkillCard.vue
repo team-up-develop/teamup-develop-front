@@ -175,6 +175,7 @@ export default defineComponent({
             name="languages"
             textLabel="開発言語"
             :mandatory="true"
+            :max="5"
             mandatoryText="5つまで"
           />
         </div>
@@ -185,6 +186,7 @@ export default defineComponent({
             name="framworks"
             textLabel="フレームワーク"
             :mandatory="true"
+            :max="5"
             mandatoryText="5つまで"
           />
         </div>
@@ -195,6 +197,7 @@ export default defineComponent({
             name="skills"
             textLabel="その他技術"
             :mandatory="true"
+            :max="5"
             mandatoryText="5つまで"
           />
         </div>

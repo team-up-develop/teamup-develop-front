@@ -13,6 +13,7 @@ export default defineComponent({
     textLabel: { type: String, required: true },
     mandatory: { type: Boolean, required: true, defalut: false },
     mandatoryText: { type: String },
+    max: { type: Number, required: true },
   },
   setup: (props, ctx) => {
     const mandatoryLabel = computed(() => {
@@ -41,6 +42,7 @@ export default defineComponent({
     <SkillSelect
       :value="value"
       :options="options"
+      :max="max"
       name="jobStatusId"
       @input="input"
     />

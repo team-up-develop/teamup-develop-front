@@ -6,9 +6,10 @@
         <div class="container text-left">
           <div>
             <img class="img" src="@/assets/images/register.jpg" width="100%" />
-            <v-col class="message">
+            <v-col class="message text-center">
               <label for="name" class="register-label"
-                >登録が完了しました。早速、下のボタンから始めてみよう！</label
+                >登録が完了しました。<br />
+                早速、下のボタンから始めてみよう！</label
               >
             </v-col>
           </div>
