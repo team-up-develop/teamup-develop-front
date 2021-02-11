@@ -9,8 +9,8 @@ import {
 import { API_URL, catchError, md } from "@/master";
 import axios from "axios";
 import Session from "@/components/Atoms/Commons/Session.vue";
-import SkillSelectArea from "@/components/Molecules/Jobs/SkillSelectArea.vue";
-import RadioArea from "@/components/Molecules/Jobs/RadioArea.vue";
+import SkillSelectArea from "@/components/Molecules/Forms/SkillSelectArea.vue";
+import RadioArea from "@/components/Molecules/Forms/RadioArea.vue";
 import { JobCreateParamsSecond } from "@/types/params";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";

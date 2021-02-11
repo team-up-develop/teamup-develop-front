@@ -5,10 +5,10 @@ import {
   toRefs,
   computed,
 } from "@vue/composition-api";
-import DatePicker from "@/components/Atoms/Forms/DatePicker.vue";
 import InputArea from "@/components/Molecules/Forms/InputArea.vue";
 import DescriptionArea from "@/components/Molecules/Forms/DescriptionArea.vue";
 import Session from "@/components/Atoms/Commons/Session.vue";
+import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import { JobCreateParamsFirst } from "@/types/params";
 
 export type JobCreateSession1 = {
@@ -27,10 +27,10 @@ const initialState = (): JobCreateSession1 => ({
 
 export default defineComponent({
   components: {
-    DatePicker,
     Session,
     InputArea,
     DescriptionArea,
+    DatePickerArea,
   },
   setup: () => {
     const state = reactive<JobCreateSession1>(initialState());
@@ -120,21 +120,25 @@ export default defineComponent({
           "開始日が終了日より前です。"
         }}</label>
         <div class="time">
-          <label for="name" class="label">開発開始時期</label
-          ><label for="name" class="label-required">必須</label>
-          <DatePicker
+          <DatePickerArea
             v-model="devStartDate"
-            placeholder="開発開始時期"
+            placeholder="開発を開始した日"
+            name="devStartDate"
             type="text"
+            textLabel="開発開始時期"
+            :mandatory="true"
+            mandatoryText=""
           />
         </div>
         <div class="time">
-          <label for="name" class="label">開発終了時期</label
-          ><label for="name" class="label-required">必須</label>
-          <DatePicker
+          <DatePickerArea
             v-model="devEndDate"
-            placeholder="開発終了時期"
+            placeholder="開発を終了する予定日"
+            name="devEndDate"
             type="text"
+            textLabel="開発終了時期"
+            :mandatory="true"
+            mandatoryText=""
           />
         </div>
         <div class="detail">

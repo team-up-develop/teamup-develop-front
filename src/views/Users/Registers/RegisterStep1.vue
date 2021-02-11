@@ -1,34 +1,47 @@
 <script lang="ts">
 import Vue from "vue";
-import { RegisterSessionParams } from "@/types/params";
+// import { RegisterSessionParams } from "@/types/params";
 import Session from "@/components/Atoms/Commons/Session.vue";
-import DatePicker from "@/components/Atoms/Forms/DatePicker.vue";
+import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import InputArea from "@/components/Molecules/Forms/InputArea.vue";
 
 type DataType = {
-  userName: string;
-  nickName: string;
-  userBirthday: string;
-  learningStartDate: string;
+  userName: string | null;
+  nickName: string | null;
+  userBirthday: string | null;
+  learningStartDate: string | null;
   dialog: boolean;
-  Password: string;
+  password: string | null;
 };
 
 export default Vue.extend({
   components: {
     Session,
-    DatePicker,
+    DatePickerArea,
     InputArea,
   },
   data(): DataType {
     return {
       userName: "",
       nickName: "",
-      Password: "",
+      password: "",
       userBirthday: "",
       learningStartDate: "",
       dialog: false,
     };
+  },
+  created() {
+    // * セッションストレージの値をフォームに格納する
+    const userName = sessionStorage.getItem("userName");
+    const nickName = sessionStorage.getItem("nickName");
+    const password = sessionStorage.getItem("password");
+    const userBirthday = sessionStorage.getItem("userBirthday");
+    const learningStartDate = sessionStorage.getItem("learningStartDate");
+    this.userName = userName;
+    this.nickName = nickName;
+    this.password = password;
+    this.userBirthday = userBirthday;
+    this.learningStartDate = learningStartDate;
   },
   methods: {
     nextStep2() {
@@ -36,21 +49,24 @@ export default Vue.extend({
         this.userName &&
         this.nickName &&
         this.userBirthday &&
-        this.learningStartDate
+        this.learningStartDate &&
+        this.password
       ) {
-        const params: RegisterSessionParams = {
+        const params = {
           userName: this.userName,
           nickName: this.nickName,
           userBirthday: this.userBirthday,
           learningStartDate: this.learningStartDate,
+          password: this.password,
         };
         console.log("入力された値は" + params + "です。");
         sessionStorage.setItem("userName", params.userName);
         sessionStorage.setItem("nickName", params.nickName);
         sessionStorage.setItem("userBirthday", params.userBirthday);
         sessionStorage.setItem("learningStartDate", params.learningStartDate);
+        sessionStorage.setItem("password", params.password);
 
-        return this.$router.push("/step/2");
+        return this.$router.push("/register/step/2");
       } else {
         console.log("必須が入力されていません");
       }
@@ -99,32 +115,32 @@ export default Vue.extend({
             ><label for="name" class="label-required">必須</label>
             <input
               type="password"
-              v-model="Password"
+              v-model="password"
               placeholder="パスワード"
               maxlength="30"
             />
           </div>
           <div class="input-area">
-            <label for="name" class="label">生年月日</label
-            ><label for="name" class="label-required">必須</label>
-            <div class="datepicker">
-              <DatePicker
-                v-model="userBirthday"
-                placeholder="生年月日"
-                type="text"
-              />
-            </div>
+            <DatePickerArea
+              v-model="userBirthday"
+              placeholder="生年月日"
+              name="userBirthday"
+              type="text"
+              textLabel="生年月日"
+              :mandatory="true"
+              mandatoryText=""
+            />
           </div>
           <div class="input-area">
-            <label for="name" class="label">学習開始日</label
-            ><label for="name" class="label-required">必須</label>
-            <div class="datepicker">
-              <DatePicker
-                v-model="learningStartDate"
-                placeholder="学習開始日"
-                type="text"
-              />
-            </div>
+            <DatePickerArea
+              v-model="learningStartDate"
+              placeholder="学習開始日"
+              name="learningStartDate"
+              type="text"
+              textLabel="学習開始日"
+              :mandatory="true"
+              mandatoryText=""
+            />
           </div>
           <div class="btn">
             <div class="btn__next" @click="nextStep2">次へ1/3</div>
