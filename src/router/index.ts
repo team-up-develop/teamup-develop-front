@@ -17,6 +17,7 @@ import SentMailComplete from "@/views/Users/Registers/SentMailComplete.vue";
 import RegisterStep1 from "@/views/Users/Registers/RegisterStep1.vue";
 import RegisterStep2 from "@/views/Users/Registers/RegisterStep2.vue";
 import RegisterStep3 from "@/views/Users/Registers/RegisterStep3.vue";
+import RegisterConfirm from "@/views/Users/Registers/RegisterConfirm.vue";
 import Manage from "@/views/Manages/Manage.vue";
 import Participate from "@/views/Manages/StatusChanges/Participate.vue";
 import Applicant from "@/views/Manages/StatusChanges/Applicant.vue";
@@ -140,6 +141,11 @@ const routes: Array<RouteConfig> = [
     path: "/register/step/3",
     name: "RegisterStep3",
     component: RegisterStep3,
+  },
+  {
+    path: "/register/step/confirm",
+    name: "RegisterConfirm",
+    component: RegisterConfirm,
   },
   // * 管理
   // ? 管理 管理

@@ -2,28 +2,22 @@
   <section>
     <div class="wrapper">
       <div class="title">登録完了</div>
-      <div class="container">
-        <div class="container__box">
-          <div class="box-top">
-            <span>STEP3/3</span>
-            <!-- STEP グラフ -->
-            <div class="step-graph">
-              <div class="step-graph__line"></div>
-            </div>
-          </div>
-          <!-- 中央 -->
-          <div class="box-center">
-            <label for="name" class="register-label"
-              >登録が完了しました。</label
-            >
+      <v-card class="container">
+        <div class="container text-left">
+          <div>
             <img class="img" src="@/assets/images/register.jpg" width="100%" />
+            <v-col class="message">
+              <label for="name" class="register-label"
+                >登録が完了しました。早速、下のボタンから始めてみよう！</label
+              >
+            </v-col>
           </div>
-          <div class="box-bottom">
-            <div class="job-search-btn">案件を探してみる</div>
-            <div class="job-create-btn">案件を募集してみる</div>
+          <div class="bottom">
+            <div class="job-search-btn">案件を探す</div>
+            <div class="job-create-btn">人を募集する</div>
           </div>
         </div>
-      </div>
+      </v-card>
     </div>
   </section>
 </template>
@@ -31,14 +25,14 @@
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-section {
-  height: 95vh;
-}
-
 .wrapper {
-  width: 45%;
+  width: 550px;
   height: 90%;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 
   .title {
     color: $primary-color;
@@ -48,117 +42,92 @@ section {
     padding: 1rem 2rem;
     margin-top: 1rem;
   }
-  .container {
-    max-width: 500px;
-    height: 90%;
-    margin: 0rem auto 3rem auto;
-    border: solid 1px #b9b9b9;
-    border-radius: 20px;
-    padding: 2rem;
+  .card {
+    min-height: 615px;
 
-    &__box {
-      width: 90%;
-      height: 100%;
-      margin: 0 auto;
-      position: relative;
+    .session {
+      height: 80px;
+    }
 
-      .box-top {
-        width: 100%;
-        height: 12%;
+    .container {
+      padding: 0 2rem;
 
-        span {
-          font-weight: bold;
-          color: $primary-color;
-        }
-
-        .step-graph {
-          width: 100%;
-          height: 8px;
-          margin: 0 auto;
-          border-radius: 35px;
-          background-color: $white;
-          border: solid 1px $text-sub-color;
-
-          &__line {
-            width: 100%;
-            height: 100%;
-            border-radius: 35px;
-            background-color: $primary-color;
-          }
-        }
+      @media (max-width: 500px) {
+        padding: 0 1rem;
       }
+    }
+  }
+}
 
-      .box-center {
-        width: 100%;
-        // height: 70%;
-        // background-color: blueviolet;
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-        color: $text-main-color;
+.message {
+  min-height: 120px;
+}
 
-        .register-label {
-          font-weight: bold;
-        }
-      }
+.bottom {
+  width: 80%;
+  height: 100px;
+  margin: 0 auto;
 
-      .box-bottom {
-        width: 100%;
-        height: 12%;
-        position: absolute;
-        bottom: 0;
+  @media (max-width: 500px) {
+    width: 100%;
+  }
 
-        .job-search-btn {
-          @include box-shadow-btn;
-          @include blue-btn;
-          color: $white;
-          text-align: left;
-          display: block;
-          padding: 1.1rem 1.7rem;
-          border-radius: 28px;
-          border: none;
-          font-size: 0.875rem;
-          font-weight: 600;
-          line-height: 1;
-          text-align: center;
-          max-width: 280px;
-          margin: auto;
-          font-size: 1rem;
-          float: left;
-          margin-top: 1.5rem;
-          cursor: pointer;
-          transition: 0.3s;
-          outline: none;
+  .job-search-btn {
+    @include box-shadow-btn;
+    @include blue-btn;
+    color: $white;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 2.4rem;
+    border-radius: 28px;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: left;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
 
-          &:hover {
-            @include box-shadow-btn;
-          }
-        }
+    @media (max-width: 400px) {
+      padding: 1.1rem 1.7rem;
+    }
 
-        .job-create-btn {
-          @include blue-cancel-btn;
-          text-align: left;
-          display: block;
-          padding: 1.1rem 1.2rem;
-          border-radius: 28px;
-          font-size: 0.875rem;
-          font-weight: 600;
-          line-height: 1;
-          text-align: center;
-          max-width: 280px;
-          margin: auto;
-          font-size: 1rem;
-          float: right;
-          margin-top: 1.5rem;
-          cursor: pointer;
-          transition: 0.3s;
-          outline: none;
+    &:hover {
+      @include box-shadow-btn;
+    }
+  }
 
-          &:hover {
-            @include box-shadow-btn;
-          }
-        }
-      }
+  .job-create-btn {
+    @include blue-cancel-btn;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 2rem;
+    border-radius: 28px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: right;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
+
+    @media (max-width: 400px) {
+      padding: 1.1rem 1rem;
+    }
+
+    &:hover {
+      @include box-shadow-btn;
     }
   }
 }
