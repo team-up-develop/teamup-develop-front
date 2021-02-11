@@ -1,7 +1,36 @@
 <script lang="ts">
-import Vue from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  computed,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
 
-export default Vue.extend({});
+type State = {
+  userId: number;
+};
+
+const initialState = (): State => ({
+  userId: Vuex.state.auth.userId,
+});
+
+export default defineComponent({
+  setup() {
+    const state = reactive<State>(initialState());
+
+    const isLogin = computed(() => {
+      if (state.userId) {
+        return true;
+      }
+      return false;
+    });
+    return {
+      ...toRefs(state),
+      isLogin,
+    };
+  },
+});
 </script>
 
 <template>
@@ -15,7 +44,15 @@ export default Vue.extend({});
         本気でキャリアを変えようと努力している未経験エンジニア同士がオンラインでの「チーム開発」を通じて相互に成長し、エンジニアとしてスタートを切る。
       </div>
     </v-col>
-    <div class="right">
+    <div class="right" v-if="isLogin">
+      <button class="register-btn" @click="$router.push('/job_create/1')">
+        案件を作る
+      </button>
+      <button class="search-btn" @click="$router.push('/jobs')">
+        案件を探す
+      </button>
+    </div>
+    <div class="right" v-else>
       <button class="register-btn" @click="$router.push('/register')">
         登録する
       </button>
@@ -68,16 +105,32 @@ export default Vue.extend({});
 
   .register-btn {
     @include purple-btn;
+    @include neumorphism;
     color: $white;
     padding: 1.1rem 3rem;
     border-radius: 8px;
   }
 
   .login-btn {
+    @include neumorphism;
     border: solid 1px #673ab7;
     color: #673ab7;
     background-color: $white;
     padding: 1.1rem 2rem;
+    border-radius: 8px;
+    margin-left: 1rem;
+
+    @media (max-width: 508px) {
+      margin-left: 0.5rem;
+    }
+  }
+
+  .search-btn {
+    @include neumorphism;
+    border: solid 1px #673ab7;
+    color: #673ab7;
+    background-color: $white;
+    padding: 1.1rem 2.7rem;
     border-radius: 8px;
     margin-left: 1rem;
 

@@ -5,7 +5,7 @@ import {
   reactive,
   toRefs,
 } from "@vue/composition-api";
-import JobTitleInput from "@/components/Atoms/Forms/JobTitleInput.vue";
+import Input from "@/components/Atoms/Forms/Input.vue";
 
 type State = {
   titleLimit: number;
@@ -17,7 +17,7 @@ const initialState = (): State => ({
 
 export default defineComponent({
   components: {
-    JobTitleInput,
+    Input,
   },
   props: {
     value: { type: String },
@@ -66,13 +66,14 @@ export default defineComponent({
     ><label for="name" class="label-required" v-if="mandatoryLabel"
       >必須 {{ mandatoryText }}</label
     >
-    <JobTitleInput
+    <Input
       :value="value"
       type="text"
       :name="name"
       @input="input"
       :placeholder="placeholder"
       :maxlength="maxlength"
+      class="mt-1"
     />
     <small id="rem" v-if="remainingLabel">残り{{ 60 - titleLimit }}文字</small>
   </section>
