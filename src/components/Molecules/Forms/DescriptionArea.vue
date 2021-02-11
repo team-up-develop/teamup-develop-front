@@ -5,7 +5,7 @@ import {
   reactive,
   toRefs,
 } from "@vue/composition-api";
-import JobDescriptionInput from "@/components/Atoms/Forms/JobDescriptionInput.vue";
+import Description from "@/components/Atoms/Forms/Description.vue";
 
 type State = {
   jobDescriptionLimit: number;
@@ -17,7 +17,7 @@ const initialState = (): State => ({
 
 export default defineComponent({
   components: {
-    JobDescriptionInput,
+    Description,
   },
   props: {
     value: { type: String },
@@ -67,7 +67,7 @@ export default defineComponent({
     ><label for="name" class="label-required" v-if="mandatoryLabel"
       >必須 {{ mandatoryText }}</label
     >
-    <JobDescriptionInput
+    <Description
       :value="value"
       type="text"
       :name="name"

@@ -74,6 +74,7 @@ export default defineComponent({
 
 .search-freeword-btn {
   @include blue-btn;
+  @include neumorphism;
   text-align: left;
   display: block;
   padding: 1.3rem 3.5rem;

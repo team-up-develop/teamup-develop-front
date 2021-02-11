@@ -4,9 +4,10 @@ import { API_URL, catchError } from "@/master";
 import axios from "axios";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import HeaderArea from "@/components/Organisms/TopPage/HeaderArea.vue";
-import TopSkill from "@/components/Organisms/Commons/Entires/TopSkill.vue";
-import TopFreeword from "@/components/Organisms/Commons/Entires/TopFreeword.vue";
-import TopHowto from "@/components/Organisms/Commons/Entires/TopHowto.vue";
+import TopSkill from "@/components/Organisms/TopPage/TopSkill.vue";
+import TopFreeword from "@/components/Organisms/TopPage/TopFreeword.vue";
+import TopHowto from "@/components/Organisms/TopPage/TopHowto.vue";
+import TopPageNewJobCard from "@/components/Organisms/TopPage/TopPageNewJobCard.vue";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 
@@ -25,6 +26,7 @@ export default Vue.extend({
     TopSkill,
     TopFreeword,
     TopHowto,
+    TopPageNewJobCard,
   },
   data(): DataType {
     return {
@@ -88,7 +90,9 @@ export default Vue.extend({
             <TopFreeword />
           </div>
           <div class="search-area mt-5">
-            <label for="name" class="keyword-tag">おすすめキーワード</label>
+            <h2>
+              おすすめキーワード
+            </h2>
             <div class="language-area">
               <!-- 開発言語 -->
               <label for="name" class="label">開発言語</label>
@@ -115,8 +119,22 @@ export default Vue.extend({
       </section>
       <section>
         <div class="wrapper__center">
-          <h2>サービスの利用仕方</h2>
+          <h2>
+            サービスの利用仕方
+            <div class="under" />
+          </h2>
           <TopHowto />
+        </div>
+      </section>
+      <section>
+        <div class="wrapper__bottom">
+          <h2>
+            新着案件
+            <div class="under" />
+          </h2>
+          <!-- <v-row> -->
+          <TopPageNewJobCard />
+          <!-- </v-row> -->
         </div>
       </section>
     </div>
@@ -130,6 +148,12 @@ export default Vue.extend({
 .label {
   font-size: 1em;
   font-weight: bold;
+}
+.under {
+  height: 6px;
+  width: 120px;
+  margin: 0 auto;
+  background-color: $primary-color;
 }
 
 .wrapper {
@@ -170,11 +194,6 @@ export default Vue.extend({
       flex-direction: column;
       margin: 2rem 0;
 
-      .keyword-tag {
-        font-size: 1.1em;
-        font-weight: bold;
-      }
-
       .language-area {
         margin-top: 1rem;
         display: inline-block;
@@ -211,6 +230,10 @@ export default Vue.extend({
   }
 
   &__center {
+    padding: 2rem 0;
+  }
+  &__bottom {
+    background-color: $light-grey;
     padding: 2rem 0;
   }
 }

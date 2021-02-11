@@ -78,7 +78,7 @@ export default defineComponent({
               ><span>こちら</span></router-link
             >
           </p>
-          <button @click="login" class="login-btn">ログイン</button>
+          <button @click="login" class="login-btn">ログインする</button>
         </div>
       </v-card>
     </div>

@@ -101,7 +101,7 @@ export default Vue.extend({
               ><span>こちら</span></router-link
             >
           </p>
-          <div @click="register" class="login-btn">新規登録</div>
+          <div @click="register" class="login-btn">新規登録する</div>
         </div>
       </v-card>
     </div>

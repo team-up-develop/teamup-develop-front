@@ -6,8 +6,8 @@ import {
   computed,
 } from "@vue/composition-api";
 import DatePicker from "@/components/Atoms/Forms/DatePicker.vue";
-import JobTitleInputArea from "@/components/Molecules/Jobs/JobTitleInputArea.vue";
-import JobDescriptionInputArea from "@/components/Molecules/Jobs/JobDescriptionInputArea.vue";
+import InputArea from "@/components/Molecules/Forms/InputArea.vue";
+import DescriptionArea from "@/components/Molecules/Forms/DescriptionArea.vue";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsFirst } from "@/types/params";
 
@@ -29,8 +29,8 @@ export default defineComponent({
   components: {
     DatePicker,
     Session,
-    JobTitleInputArea,
-    JobDescriptionInputArea,
+    InputArea,
+    DescriptionArea,
   },
   setup: () => {
     const state = reactive<JobCreateSession1>(initialState());
@@ -104,7 +104,7 @@ export default defineComponent({
       <Session :num="2" />
       <section>
         <div class="title">
-          <JobTitleInputArea
+          <InputArea
             v-model="jobTitle"
             type="text"
             name="jobTitle"
@@ -122,15 +122,23 @@ export default defineComponent({
         <div class="time">
           <label for="name" class="label">開発開始時期</label
           ><label for="name" class="label-required">必須</label>
-          <DatePicker v-model="devStartDate" type="text" />
+          <DatePicker
+            v-model="devStartDate"
+            placeholder="開発開始時期"
+            type="text"
+          />
         </div>
         <div class="time">
           <label for="name" class="label">開発終了時期</label
           ><label for="name" class="label-required">必須</label>
-          <DatePicker v-model="devEndDate" type="text" />
+          <DatePicker
+            v-model="devEndDate"
+            placeholder="開発終了時期"
+            type="text"
+          />
         </div>
         <div class="detail">
-          <JobDescriptionInputArea
+          <DescriptionArea
             v-model="jobDescription"
             type="text"
             name="jobDescription"

@@ -15,35 +15,45 @@ export default {
   <section>
     <div class="wrapper">
       <div class="card-title">登録確認メール送信完了</div>
-      <div class="container">
+      <v-card class="container">
         <div class="card">
           <img class="img" src="@/assets/images/mail-comp.png" />
           <div>
             <span>
-              チームアップに登録ありがとうございます。<br />
+              チームアップにご登録ありがとうございます。<br />
               メールを確認してください。 <br />
-              <span>まだ登録は完了しておりません。<br /></span>
+              <v-row class="alert d-block"
+                ><img class="alert__img" src="@/assets/images/alert.png"/>
+                まだ登録は完了しておりません。<br
+              /></v-row>
             </span>
           </div>
           <div class="btn-area">
             <button class="btn-top" @click="topRedirect">TOPへ</button>
           </div>
         </div>
-      </div>
+      </v-card>
     </div>
   </section>
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
-
 .wrapper {
   width: 45%;
   height: 77vh;
   margin: 2rem auto 0 auto;
 
+  @media (max-width: 1100px) {
+    width: 50%;
+  }
+
+  @media (max-width: 768px) {
+    width: 100%;
+  }
+
   .card-title {
-    color: #673ab7;
+    color: $primary-color;
     font-size: 1.4rem;
     font-weight: bold;
     padding: 1rem 2rem;
@@ -55,9 +65,19 @@ export default {
     max-width: 500px;
     height: 98%;
     margin: 0rem auto 3rem auto;
-    border: solid 1px #b9b9b9;
-    border-radius: 20px;
+    background-color: $white;
+    border-radius: 8px;
     padding: 0 2rem 2rem 2rem;
+
+    @media (max-width: 500px) {
+      margin: 0 auto 2rem auto;
+      width: 95%;
+    }
+
+    @media (max-width: 420px) {
+      margin: 0rem auto 3rem auto;
+      padding: 2rem 1rem;
+    }
   }
 
   .card {
@@ -69,6 +89,10 @@ export default {
     img {
       width: 90%;
       max-width: 450px;
+
+      @media (max-width: 900px) {
+        width: 80%;
+      }
     }
 
     span {
@@ -77,9 +101,15 @@ export default {
       text-align: center;
       font-weight: bold;
 
-      span {
+      .alert {
         line-height: 3;
-        color: rgb(177, 14, 136);
+        color: $error-message-color;
+
+        &__img {
+          width: 20px;
+          height: 20px;
+          margin: 1rem 0.2rem 0 0;
+        }
       }
     }
 
@@ -88,15 +118,19 @@ export default {
       bottom: 0;
       width: 100%;
 
+      @media (max-width: 1440px) {
+        padding: 15% 0 0 0;
+      }
+
       .btn-top {
+        @include blue-btn;
+        @include neumorphism;
+        color: $white;
         display: block;
         padding: 1.2rem 5rem;
-        border: #673ab7 1px solid;
-        background-color: #ffffff;
         border-radius: 50px;
         font-size: 0.875rem;
         font-weight: 600;
-        color: #673ab7;
         line-height: 1;
         text-align: center;
         max-width: 280px;
@@ -110,60 +144,6 @@ export default {
         outline: none;
       }
     }
-  }
-}
-
-@media (max-width: 1440px) {
-  .wrapper .container {
-    .card .btn-area {
-      padding: 15% 0 0 0;
-    }
-  }
-}
-
-@media (max-width: 1100px) {
-  .wrapper {
-    width: 50%;
-  }
-}
-
-/* タブレット */
-@media (max-width: 900px) {
-  .wrapper {
-    width: 75%;
-  }
-  .container .card {
-    img {
-      width: 80%;
-      max-width: 450px;
-    }
-  }
-}
-
-@media (max-width: 768px) {
-  .wrapper {
-    width: 100%;
-  }
-}
-
-/* スマホではだいたいこのピクセルから */
-@media (max-width: 500px) {
-  .wrapper {
-    width: 100%;
-
-    .container {
-      margin: 0 auto 2rem auto;
-      width: 98%;
-    }
-  }
-}
-
-@media (max-width: 420px) {
-  .wrapper .container {
-    margin: 0rem auto 3rem auto;
-    border: solid 1px $card-border-color;
-    border-radius: 20px;
-    padding: 2rem 1rem;
   }
 }
 </style>

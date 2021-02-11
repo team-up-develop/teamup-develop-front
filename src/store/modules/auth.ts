@@ -46,9 +46,9 @@ const actions: ActionTree<State, LoginData> = {
     };
     try {
       const res = await axios.post(`${API_URL}/login`, params);
-      router.push("/jobs");
       commit("loginUserId", res.data.response.id);
       commit("loginUserName", res.data.response.login_name);
+      router.push("/jobs");
     } catch (error) {
       const errorFlag = true;
       catchError(error);
