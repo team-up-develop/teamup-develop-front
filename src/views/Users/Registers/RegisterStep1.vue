@@ -1,11 +1,16 @@
 <script lang="ts">
-import Vue from "vue";
-// import { RegisterSessionParams } from "@/types/params";
+import {
+  defineComponent,
+  computed,
+  reactive,
+  toRefs,
+} from "@vue/composition-api";
+import { RegisterSessionFirstParams } from "@/types/params";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import InputArea from "@/components/Molecules/Forms/InputArea.vue";
 
-type DataType = {
+type State = {
   userName: string | null;
   nickName: string | null;
   userBirthday: string | null;
@@ -14,63 +19,86 @@ type DataType = {
   password: string | null;
 };
 
-export default Vue.extend({
+const initialState = (): State => ({
+  userName: "",
+  nickName: "",
+  password: "",
+  userBirthday: "",
+  learningStartDate: "",
+  dialog: false,
+});
+
+export default defineComponent({
   components: {
     Session,
     DatePickerArea,
     InputArea,
   },
-  data(): DataType {
-    return {
-      userName: "",
-      nickName: "",
-      password: "",
-      userBirthday: "",
-      learningStartDate: "",
-      dialog: false,
+  setup(_, ctx: any) {
+    const state = reactive<State>(initialState());
+    const router = ctx.root.$router;
+
+    const strageGet = () => {
+      const userName = sessionStorage.getItem("userName");
+      const nickName = sessionStorage.getItem("nickName");
+      const password = sessionStorage.getItem("password");
+      const userBirthday = sessionStorage.getItem("userBirthday");
+      const learningStartDate = sessionStorage.getItem("learningStartDate");
+      state.userName = userName;
+      state.nickName = nickName;
+      state.password = password;
+      state.userBirthday = userBirthday;
+      state.learningStartDate = learningStartDate;
     };
-  },
-  created() {
-    // * セッションストレージの値をフォームに格納する
-    const userName = sessionStorage.getItem("userName");
-    const nickName = sessionStorage.getItem("nickName");
-    const password = sessionStorage.getItem("password");
-    const userBirthday = sessionStorage.getItem("userBirthday");
-    const learningStartDate = sessionStorage.getItem("learningStartDate");
-    this.userName = userName;
-    this.nickName = nickName;
-    this.password = password;
-    this.userBirthday = userBirthday;
-    this.learningStartDate = learningStartDate;
-  },
-  methods: {
-    nextStep2() {
+
+    const isForm = computed(() => {
       if (
-        this.userName &&
-        this.nickName &&
-        this.userBirthday &&
-        this.learningStartDate &&
-        this.password
+        state.userName &&
+        state.nickName &&
+        state.userBirthday &&
+        state.learningStartDate &&
+        state.password
       ) {
-        const params = {
-          userName: this.userName,
-          nickName: this.nickName,
-          userBirthday: this.userBirthday,
-          learningStartDate: this.learningStartDate,
-          password: this.password,
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    const nextStep2 = () => {
+      if (
+        state.userName &&
+        state.nickName &&
+        state.userBirthday &&
+        state.learningStartDate &&
+        state.password
+      ) {
+        const params: RegisterSessionFirstParams = {
+          userName: state.userName,
+          nickName: state.nickName,
+          userBirthday: state.userBirthday,
+          learningStartDate: state.learningStartDate,
+          password: state.password,
         };
-        console.log("入力された値は" + params + "です。");
         sessionStorage.setItem("userName", params.userName);
         sessionStorage.setItem("nickName", params.nickName);
         sessionStorage.setItem("userBirthday", params.userBirthday);
         sessionStorage.setItem("learningStartDate", params.learningStartDate);
         sessionStorage.setItem("password", params.password);
 
-        return this.$router.push("/register/step/2");
+        return router.push({ name: "RegisterStep2" });
       } else {
         console.log("必須が入力されていません");
       }
-    },
+    };
+
+    strageGet();
+
+    return {
+      ...toRefs(state),
+      nextStep2,
+      isForm,
+    };
   },
 });
 </script>
@@ -142,8 +170,18 @@ export default Vue.extend({
               mandatoryText=""
             />
           </div>
-          <div class="btn">
-            <div class="btn__next" @click="nextStep2">次へ1/3</div>
+          <div class="bottom" v-if="isForm">
+            <div class="next-btn" @click="nextStep2">次へ1/3</div>
+          </div>
+          <div class="bottom" v-else>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <div class="next-btn-false" v-on="on" v-bind="attrs">
+                  次へ1/3
+                </div>
+              </template>
+              <span>必須項目が入力されていません</span>
+            </v-tooltip>
           </div>
         </v-col>
       </v-card>
@@ -225,17 +263,22 @@ input[type="password"] {
   height: 100px;
 }
 
-.btn {
-  width: 100%;
+.bottom {
+  width: 80%;
   height: 100px;
+  margin: 0 auto;
 
-  &__next {
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+
+  .next-btn {
     @include box-shadow-btn;
     @include blue-btn;
     color: $white;
     text-align: left;
     display: block;
-    padding: 1.1rem 4rem;
+    padding: 1.1rem 3rem;
     border-radius: 25px;
     border: none;
     font-size: 0.875rem;
@@ -254,6 +297,28 @@ input[type="password"] {
     &:hover {
       @include box-shadow-btn;
     }
+  }
+  .next-btn-false {
+    @include box-shadow-btn;
+    @include grey-btn;
+    color: $white;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 3rem;
+    border-radius: 25px;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: right;
+    margin-top: 1.5rem;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
   }
 }
 </style>

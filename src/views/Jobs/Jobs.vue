@@ -1280,7 +1280,7 @@ label.checkbox {
   }
 
   .job-wrapper .job-wrapper-center {
-    width: 98%;
+    width: 95%;
   }
 
   .search-area {

@@ -1,14 +1,17 @@
 <script lang="ts">
-import Vue from "vue";
-// import { API_URL, catchError } from "@/master";
-// import axios from "axios";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  computed,
+  // watch,
+  // onMounted,
+} from "@vue/composition-api";
 import Session from "@/components/Atoms/Commons/Session.vue";
-// import SkillSelectArea from "@/components/Molecules/Forms/SkillSelectArea.vue";
-// import InputArea from "@/components/Molecules/Forms/InputArea.vue";
-// import 'vue-select/dist/vue-select.css';
 import { Language, Framework, Skill } from "@/types/index";
+import { dayJs } from "@/master";
 
-type DataType = {
+type State = {
   selectedLang: any | null;
   languages: Language[];
   selectedFramwork: any | null;
@@ -22,60 +25,104 @@ type DataType = {
   password: string | null;
   userBirthday: string | null;
   learningStartDate: string | null;
+  passwordModal: boolean;
 };
 
-export default Vue.extend({
+const initialState = (): State => ({
+  selectedLang: null,
+  languages: [],
+  selectedFramwork: null,
+  framworks: [],
+  selectedSkill: null,
+  skills: [],
+  github: "",
+  twitter: "",
+  userName: "",
+  nickName: "",
+  password: "",
+  userBirthday: "",
+  learningStartDate: "",
+  passwordModal: false,
+});
+
+export default defineComponent({
   components: {
     Session,
-    // SkillSelectArea,
-    // InputArea,
   },
-  data(): DataType {
+  setup(_, ctx: any) {
+    const state = reactive<State>(initialState());
+    const router = ctx.root.$router;
+    const day = (value: string, format: string) => dayJs(value, format);
+
+    const strageGet = () => {
+      const userName = sessionStorage.getItem("userName");
+      const nickName = sessionStorage.getItem("nickName");
+      const password = sessionStorage.getItem("password");
+      const userBirthday = sessionStorage.getItem("userBirthday");
+      const learningStartDate = sessionStorage.getItem("learningStartDate");
+      const programingLanguage = sessionStorage.getItem("programingLanguage");
+      const programingFramework = sessionStorage.getItem("programingFramework");
+      const skill = sessionStorage.getItem("skill");
+      const github = sessionStorage.getItem("github");
+      const twitter = sessionStorage.getItem("twitter");
+      state.userName = userName;
+      state.nickName = nickName;
+      state.password = password;
+      state.userBirthday = userBirthday;
+      state.learningStartDate = learningStartDate;
+      state.selectedLang = programingLanguage;
+      state.selectedFramwork = programingFramework;
+      state.selectedSkill = skill;
+      state.github = github;
+      state.twitter = twitter;
+    };
+    strageGet();
+
+    const isForm = computed(() => {
+      if (
+        state.userName &&
+        state.nickName &&
+        state.password &&
+        state.userBirthday &&
+        state.learningStartDate &&
+        state.selectedLang &&
+        state.selectedFramwork &&
+        state.selectedSkill
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+
+    const isOpenPassword = computed(() => {
+      if (state.passwordModal) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    const openPassword = () => {
+      state.passwordModal = true;
+    };
+    const closePassword = () => {
+      state.passwordModal = false;
+    };
+
+    const backStep = () => {
+      return router.push({ name: "RegisterStep2" });
+    };
+
     return {
-      selectedLang: null, //? プログラミング言語
-      languages: [],
-      selectedFramwork: null, //? フレームワーク
-      framworks: [],
-      selectedSkill: null, //? その他開発スキル
-      skills: [],
-      github: "",
-      twitter: "",
-      userName: "",
-      nickName: "",
-      password: "",
-      userBirthday: "",
-      learningStartDate: "",
+      ...toRefs(state),
+      day,
+      backStep,
+      isForm,
+      openPassword,
+      closePassword,
+      isOpenPassword,
     };
   },
-  created() {
-    // * セッションストレージの値をフォームに格納する
-    const userName = sessionStorage.getItem("userName");
-    const nickName = sessionStorage.getItem("nickName");
-    const password = sessionStorage.getItem("password");
-    const userBirthday = sessionStorage.getItem("userBirthday");
-    const learningStartDate = sessionStorage.getItem("learningStartDate");
-    const programingLanguage = sessionStorage.getItem("programingLanguage");
-    const programingFramework = sessionStorage.getItem("programingFramework");
-    const skill = sessionStorage.getItem("skill");
-    const github = sessionStorage.getItem("github");
-    const twitter = sessionStorage.getItem("twitter");
-    this.userName = userName;
-    this.nickName = nickName;
-    this.password = password;
-    this.userBirthday = userBirthday;
-    this.learningStartDate = learningStartDate;
-    this.selectedLang = programingLanguage;
-    this.selectedFramwork = programingFramework;
-    this.selectedSkill = skill;
-    this.github = github;
-    this.twitter = twitter;
-
-    console.log("sakamoto");
-    console.log(this.selectedLang);
-    console.log("sakamoto");
-  },
-  mounted() {},
-  methods: {},
 });
 </script>
 
@@ -87,7 +134,7 @@ export default Vue.extend({
         <div class="session">
           <Session :num="4" />
         </div>
-        <v-col class="container text-left">
+        <v-col class="container text-left" v-if="isForm">
           <div class="input-area">
             <label for="name" class="label">氏名</label>
             <p>{{ userName }}</p>
@@ -98,15 +145,24 @@ export default Vue.extend({
           </div>
           <div class="input-area">
             <label for="name" class="label">パスワード</label>
-            <p>{{ password }}</p>
+            <section v-if="!isOpenPassword">
+              <button @click="openPassword" class="password-btn">開く</button>
+              <p>*********</p>
+            </section>
+            <section v-else>
+              <button @click="closePassword" class="password-btn">
+                閉じる
+              </button>
+              <p>{{ password }}</p>
+            </section>
           </div>
           <div class="input-area">
             <label for="name" class="label">誕生日</label>
-            <p>{{ userBirthday }}</p>
+            <p>{{ day(userBirthday, "YYYY年 M月 D日") }}</p>
           </div>
           <div class="input-area">
             <label for="name" class="label">学習開始日</label>
-            <p>{{ learningStartDate }}</p>
+            <p>{{ day(learningStartDate, "YYYY年 M月 D日") }}</p>
           </div>
           <div class="input-area">
             <label for="name" class="label">開発言語</label>
@@ -121,11 +177,11 @@ export default Vue.extend({
             <p>{{ selectedSkill }}</p>
           </div>
           <div class="input-area">
-            <label for="name" class="label">GitHub</label>
+            <label for="name" class="label">GitHub URL</label>
             <p>{{ github }}</p>
           </div>
           <div class="input-area">
-            <label for="name" class="label">Twitter</label>
+            <label for="name" class="label">Twitter URL</label>
             <p>{{ twitter }}</p>
           </div>
           <div class="alert-message">
@@ -133,8 +189,24 @@ export default Vue.extend({
               >こちらで登録を完了させ、案件を作成、又は応募がすることができます。※今後はプロフィールからも変更ができます。</span
             >
           </div>
-          <div class="box-bottom">
+          <div class="bottom">
+            <div class="back-btn" @click="backStep">内容修正する</div>
             <div class="next-btn">登録完了する</div>
+          </div>
+        </v-col>
+        <v-col v-else>
+          <div class="false-card">
+            <img class="alert-img py-4" src="@/assets/images/alert.png" />
+            <div class="alert-message">
+              <span
+                >入力されていない項目があるようです。 <br />
+                一旦戻って確認してください。
+              </span>
+            </div>
+          </div>
+          <div class="bottom">
+            <div class="back-btn" @click="backStep">内容修正する</div>
+            <div class="next-btn-false">登録完了する</div>
           </div>
         </v-col>
       </v-card>
@@ -191,9 +263,51 @@ export default Vue.extend({
     font-weight: bold;
   }
 }
-.box-bottom {
-  width: 100%;
+.false-card {
+  min-height: 380px;
+}
+.password-btn {
+  background-color: $error-message-color;
+  color: $white;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  font-size: 12px;
+  float: right;
+  outline: none;
+}
+.bottom {
+  width: 80%;
   height: 100px;
+  margin: 2rem auto 0 auto;
+
+  @media (max-width: 500px) {
+    width: 100%;
+  }
+
+  .back-btn {
+    @include neumorphismGrey;
+    color: $primary-color;
+    font-weight: 600;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 2rem;
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: left;
+    transition: 0.3s;
+    outline: none;
+    text-decoration: none;
+
+    @media (max-width: 400px) {
+      padding: 1.1rem 1.2rem;
+    }
+  }
 
   .next-btn {
     @include box-shadow-btn;
@@ -201,7 +315,7 @@ export default Vue.extend({
     color: $white;
     text-align: left;
     display: block;
-    padding: 1.1rem 4rem;
+    padding: 1.1rem 2rem;
     border-radius: 25px;
     border: none;
     font-size: 0.875rem;
@@ -212,14 +326,39 @@ export default Vue.extend({
     margin: auto;
     font-size: 1rem;
     float: right;
-    margin-top: 1.5rem;
     cursor: pointer;
     transition: 0.3s;
     outline: none;
 
+    @media (max-width: 400px) {
+      padding: 1.1rem 1rem;
+    }
+
     &:hover {
       @include box-shadow-btn;
     }
+  }
+
+  .next-btn-false {
+    @include box-shadow-btn;
+    @include grey-btn;
+    color: $white;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 2rem;
+    border-radius: 25px;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: right;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
   }
 }
 </style>

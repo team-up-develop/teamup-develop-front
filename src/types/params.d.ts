@@ -44,11 +44,20 @@ export interface RejectParams {
   updated_at: string;
 }
 
-export interface RegisterSessionParams {
+export interface RegisterSessionFirstParams {
   userName: string;
+  password: string;
   nickName: string;
   userBirthday: string;
   learningStartDate: string;
+}
+
+export interface RegisterSessionSecondParams {
+  programingLanguage: {}[];
+  programingFramework: {}[];
+  skill: {}[];
+  github: string | null;
+  twitter: string | null;
 }
 
 export interface messageParams {
