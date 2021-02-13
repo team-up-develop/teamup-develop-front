@@ -176,22 +176,20 @@ export default Vue.extend({
 
 .modal-content {
   padding: 2rem 2rem;
-  width: 52vw;
+  min-width: 660px;
   height: 74vh;
   text-align: left;
   overflow: scroll;
 
-  @media screen and (max-width: 1000px) {
-    width: 60vw;
+  @media screen and (max-width: $me) {
+    min-width: 80vw;
   }
-  @media screen and (max-width: 768px) {
-    width: 75vw;
+  @media screen and (max-width: $sm) {
+    width: 50vh;
   }
-  @media screen and (max-width: 500px) {
-    width: 85vw;
-  }
-  @media screen and (max-width: 400px) {
-    width: 92vw;
+  @media screen and (max-width: $ti) {
+    padding: 2rem 1rem;
+    width: 43vh;
   }
 
   // * モーダル
@@ -243,7 +241,6 @@ export default Vue.extend({
 }
 
 .modal-footer {
-  /* background: #ccc; */
   width: 100%;
   padding: 2rem 0 1rem 0;
   text-align: right;

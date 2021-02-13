@@ -55,11 +55,8 @@ export default defineComponent({
   margin-bottom: 2rem;
   position: relative;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     padding: 2.5rem 1rem;
-  }
-  @media screen and (max-width: 768px) {
-    padding: 2rem;
   }
 
   .left-user-area {
@@ -71,7 +68,7 @@ export default defineComponent({
       width: 130px;
       height: 130px;
 
-      @media screen and (max-width: 500px) {
+      @media screen and (max-width: $sm) {
         width: 100px;
         height: 100px;
       }
@@ -86,13 +83,10 @@ export default defineComponent({
     padding: 1.8rem 2rem 0 2rem;
     text-align: left;
 
-    @media screen and (max-width: 1100px) {
+    @media screen and (max-width: $la) {
       width: 70%;
     }
-    @media screen and (max-width: 500px) {
-      padding: 1.5rem 1.2rem 0px;
-    }
-    @media screen and (max-width: 450px) {
+    @media screen and (max-width: $ti) {
       width: 64%;
     }
 
@@ -124,7 +118,7 @@ export default defineComponent({
       .user-introduce-area {
         margin-top: 2rem;
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: $sm) {
           margin-top: 0.5rem;
         }
 

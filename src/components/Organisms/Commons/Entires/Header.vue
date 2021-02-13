@@ -150,11 +150,11 @@ export default defineComponent({
         height: 100%;
         padding: 1.2rem 0 0rem 2rem;
 
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: $me) {
           width: 100px;
         }
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: $sm) {
           padding: 1.2rem 0 0rem 0.5rem;
         }
       }
@@ -166,11 +166,11 @@ export default defineComponent({
         right: 0;
         top: 0;
 
-        @media screen and (max-width: 768px) {
+        @media screen and (max-width: $me) {
           width: 250px;
         }
 
-        @media screen and (max-width: 500px) {
+        @media screen and (max-width: $sm) {
           width: 210px;
         }
 
@@ -194,17 +194,10 @@ export default defineComponent({
           height: 100%;
           display: inline-block;
           font-weight: bold;
-          color: #ffffff;
+          color: $white;
         }
       }
     }
-  }
-}
-
-/* スマホ */
-@media (max-width: 500px) {
-  .header-wrapper .header-logo-area {
-    padding: 0 0 0 0.3rem;
   }
 }
 </style>

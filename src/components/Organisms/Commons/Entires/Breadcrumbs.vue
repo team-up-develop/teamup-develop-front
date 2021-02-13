@@ -39,7 +39,7 @@ export default defineComponent({
 .v-breadcrumbs {
   padding: 0 1rem 1rem 2rem;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     padding: 0 1rem 1rem 1rem;
   }
 }

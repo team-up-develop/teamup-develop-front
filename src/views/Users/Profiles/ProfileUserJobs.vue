@@ -203,11 +203,19 @@ export default defineComponent({
     width: 88%;
     margin: 0 auto;
 
+    @media screen and (max-width: $la) {
+      width: 100%;
+    }
+
     &__post {
       width: 85%;
       display: flex;
       flex-direction: column;
       margin: 0 auto;
+
+      @media screen and (max-width: $la) {
+        width: 95%;
+      }
 
       .header {
         border-bottom: $dark-grey 2px solid;
@@ -239,8 +247,8 @@ export default defineComponent({
     width: 85%;
     margin: 2rem auto;
 
-    @media screen and (max-width: 480px) {
-      width: 98%;
+    @media screen and (max-width: $sm) {
+      width: 95%;
     }
 
     &__card {
@@ -251,62 +259,10 @@ export default defineComponent({
   }
 }
 
-//* スキル カード
-.detail-wrapper .skill {
-  width: 100%;
-  background-color: #f1f5f9;
-
-  &__card {
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin: 2rem auto 2rem auto;
-  }
-}
-
-//* 開発詳細 カード
-.detail-wrapper .pr {
-  width: 100%;
-  background-color: #f1f5f9;
-
-  &__card {
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin: 0rem auto 2rem auto;
-  }
-}
-
 .button-area {
   display: none;
-}
 
-/* タブレットレスポンシブ */
-@media screen and (max-width: 900px) {
-  .detail-wrapper {
-    .user-area {
-      width: 100%;
-      &__post {
-        width: 95%;
-      }
-    }
-    .skill {
-      &__card {
-        width: 95%;
-      }
-    }
-    .pr {
-      &__card {
-        width: 95%;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 650px) {
-  .button-area {
+  @media screen and (max-width: $me) {
     width: 100%;
     display: flex;
     align-items: center;
@@ -315,44 +271,32 @@ export default defineComponent({
     position: sticky;
     left: 0;
     bottom: 0;
-
-    //* 編集するボタン
-    .btn-box-edit {
-      @include box-shadow-btn;
-      background-color: $secondary-color;
-      color: $white;
-      padding: 1.2rem 8rem;
-      transition: 0.3s;
-      border-radius: 50px;
-      font-weight: 600;
-      line-height: 1;
-      text-align: center;
-      margin: auto;
-      font-size: 1.3rem;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-      border: none;
-
-      &:hover {
-        @include btn-hover;
-      }
-    }
   }
-}
 
-/* スマホレスポンシブ */
-@media screen and (max-width: 500px) {
-  .detail-wrapper {
-    .skill {
-      &__card {
-        width: 100%;
-      }
+  //* 編集するボタン
+  .btn-box-edit {
+    @include box-shadow-btn;
+    background-color: $secondary-color;
+    color: $white;
+    padding: 1.2rem 8rem;
+    transition: 0.3s;
+    border-radius: 50px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    margin: auto;
+    font-size: 1.3rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    border: none;
+
+    @media screen and (max-width: $ti) {
+      padding: 1.2rem 6.5rem;
     }
-    .pr {
-      &__card {
-        width: 100%;
-      }
+
+    &:hover {
+      @include btn-hover;
     }
   }
 }

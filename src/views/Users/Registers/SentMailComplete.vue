@@ -44,11 +44,11 @@ export default {
   height: 77vh;
   margin: 2rem auto 0 auto;
 
-  @media (max-width: 1100px) {
+  @media (max-width: $gr) {
     width: 50%;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: $me) {
     width: 100%;
   }
 
@@ -69,12 +69,12 @@ export default {
     border-radius: 8px;
     padding: 0 2rem 2rem 2rem;
 
-    @media (max-width: 500px) {
+    @media (max-width: $sm) {
       margin: 0 auto 2rem auto;
       width: 95%;
     }
 
-    @media (max-width: 420px) {
+    @media (max-width: $ti) {
       margin: 0rem auto 3rem auto;
       padding: 2rem 1rem;
     }
@@ -90,7 +90,7 @@ export default {
       width: 90%;
       max-width: 450px;
 
-      @media (max-width: 900px) {
+      @media (max-width: $la) {
         width: 80%;
       }
     }
@@ -118,7 +118,7 @@ export default {
       bottom: 0;
       width: 100%;
 
-      @media (max-width: 1440px) {
+      @media (max-width: $gr) {
         padding: 15% 0 0 0;
       }
 

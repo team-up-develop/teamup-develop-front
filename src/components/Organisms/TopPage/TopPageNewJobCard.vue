@@ -56,7 +56,7 @@ section {
   margin: 0 auto;
   max-width: 420px;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     max-width: 90%;
   }
 }

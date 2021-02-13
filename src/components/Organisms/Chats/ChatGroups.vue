@@ -129,13 +129,13 @@ export default defineComponent({
     margin-top: 0.2rem;
     position: relative;
 
-    @media (max-width: 868px) {
+    @media (max-width: $me) {
       padding: 0.7rem 0 0.5rem 1rem;
       margin: 0;
     }
 
     .row {
-      padding: 0rem 0 1rem 1rem;
+      padding: 0rem 0 1.2rem 1rem;
       position: absolute;
       bottom: 0;
       width: 100%;
@@ -176,6 +176,7 @@ export default defineComponent({
         position: absolute;
         right: 0;
         top: 0;
+        margin: 0.1rem 0 0 0;
       }
     }
     p {

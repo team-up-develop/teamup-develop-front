@@ -83,8 +83,8 @@ export default defineComponent({
   max-width: 800px;
 
   &__title {
-    color: #1142e2;
-    background: -webkit-linear-gradient(0deg, #1142e2, #19bde6);
+    color: $primary-dark;
+    background: -webkit-linear-gradient(0deg, $primary-dark, $primary-color);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     font-weight: bold;
@@ -99,7 +99,7 @@ export default defineComponent({
   margin: 0 auto;
   font-weight: bold;
 
-  @media (max-width: 768px) {
+  @media (max-width: $me) {
     width: 100%;
   }
 
@@ -113,8 +113,8 @@ export default defineComponent({
 
   .login-btn {
     @include neumorphism;
-    border: solid 1px #673ab7;
-    color: #673ab7;
+    border: solid 1px $secondary-color;
+    color: $secondary-color;
     background-color: $white;
     padding: 1.1rem 2rem;
     border-radius: 8px;
@@ -127,8 +127,8 @@ export default defineComponent({
 
   .search-btn {
     @include neumorphism;
-    border: solid 1px #673ab7;
-    color: #673ab7;
+    border: solid 1px $secondary-color;
+    color: $secondary-color;
     background-color: $white;
     padding: 1.1rem 2.7rem;
     border-radius: 8px;

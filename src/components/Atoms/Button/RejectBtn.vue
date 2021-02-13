@@ -58,17 +58,15 @@ export default defineComponent({
   display: inline-block;
   cursor: pointer;
 
-  @media screen and (max-width: 590px) {
-    padding: 1.2rem 4.5rem;
-  }
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     padding: 1.2rem 3.2rem;
     margin-left: 0.3rem;
   }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: $ti) {
     padding: 1.2rem 2.8rem;
     font-size: 1rem;
   }
+  // TODO: px指定をしなくてもstyleがずれないようにする
   @media screen and (max-width: 352px) {
     padding: 1.2rem 2.2rem;
   }

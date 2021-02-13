@@ -341,7 +341,7 @@ export default defineComponent({
 }
 
 /* スマホ */
-@media (max-width: 500px) {
+@media (max-width: $sm) {
   .btn-area {
     display: flex;
     flex-direction: column;

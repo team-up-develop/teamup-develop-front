@@ -138,7 +138,7 @@ export default defineComponent({
   width: 90%;
   max-width: none;
 
-  @media screen and (max-width: 1100px) {
+  @media screen and (max-width: $la) {
     width: 97%;
   }
 }
@@ -147,26 +147,21 @@ export default defineComponent({
   width: 60%;
   border-radius: 8px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: $white;
   position: relative;
   font-size: 14px;
   padding: 2rem;
   color: $text-main-color;
 
-  @media screen and (max-width: 1000px) {
-    width: 50%;
-  }
-
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     width: 85%;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: $me) {
     width: 95%;
   }
 
-  @media screen and (max-width: 450px) {
-    width: 98%;
+  @media screen and (max-width: $sm) {
     padding: 1rem;
   }
 

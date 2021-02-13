@@ -67,16 +67,14 @@ export default defineComponent({
     @include red-btn-hover;
   }
 
-  @media screen and (max-width: 590px) {
-    padding: 1.2rem 4rem;
-  }
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     padding: 1.2rem 3rem;
   }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: $ti) {
     padding: 1.2rem 2.4rem;
     font-size: 1rem;
   }
+  // TODO: px指定をしなくてもstyleがずれないようにする
   @media screen and (max-width: 352px) {
     padding: 1.2rem 1.5rem;
   }

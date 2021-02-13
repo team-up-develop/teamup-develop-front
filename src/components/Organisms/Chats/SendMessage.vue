@@ -148,13 +148,13 @@ export default defineComponent({
     outline: none;
     margin-left: 1rem;
 
-    @media (max-width: 868px) {
+    @media (max-width: $me) {
       width: 70%;
     }
-    @media (max-width: 500px) {
+    @media (max-width: $sm) {
       width: 65%;
     }
-    @media (max-width: 380px) {
+    @media (max-width: $ti) {
       width: 60%;
     }
   }

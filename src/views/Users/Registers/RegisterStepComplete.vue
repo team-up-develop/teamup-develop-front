@@ -31,7 +31,7 @@
   height: 90%;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: $me) {
     width: 95%;
   }
 
@@ -53,7 +53,7 @@
     .container {
       padding: 0 2rem;
 
-      @media (max-width: 500px) {
+      @media (max-width: $sm) {
         padding: 0 1rem;
       }
     }
@@ -69,7 +69,7 @@
   height: 100px;
   margin: 0 auto;
 
-  @media (max-width: 500px) {
+  @media (max-width: $sm) {
     width: 100%;
   }
 
@@ -95,7 +95,7 @@
     transition: 0.3s;
     outline: none;
 
-    @media (max-width: 400px) {
+    @media (max-width: $ti) {
       padding: 1.1rem 1.7rem;
     }
 
@@ -123,7 +123,7 @@
     transition: 0.3s;
     outline: none;
 
-    @media (max-width: 400px) {
+    @media (max-width: $ti) {
       padding: 1.1rem 1rem;
     }
 

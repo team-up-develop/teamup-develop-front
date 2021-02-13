@@ -75,28 +75,25 @@ export default defineComponent({
 section {
   width: 30%;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     width: 100%;
   }
 }
 .card {
   width: 360px;
+  min-width: 300px;
   height: 235px;
   padding: 1rem 1.2rem;
   border-radius: 8px;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     margin: 0 auto;
     width: 85%;
     margin-bottom: 1.5rem;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: $me) {
     width: 95%;
-  }
-
-  @media screen and (max-width: 450px) {
-    width: 98%;
   }
 
   &__top {

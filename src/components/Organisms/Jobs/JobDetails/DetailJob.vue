@@ -53,6 +53,10 @@ export default defineComponent({
   position: relative;
   line-height: 1.8;
 
+  @media screen and (max-width: $sm) {
+    padding: 1.5rem 1rem;
+  }
+
   .detail-leff-area {
     display: inline-block;
     width: 100%;
@@ -73,13 +77,6 @@ export default defineComponent({
         font-size: 14px;
       }
     }
-  }
-}
-
-//* スマホレスポンシブ
-@media screen and (max-width: 500px) {
-  .dev-detail-area {
-    padding: 1.5rem 1rem;
   }
 }
 </style>

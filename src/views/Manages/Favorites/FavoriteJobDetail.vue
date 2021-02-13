@@ -130,12 +130,32 @@ export default defineComponent({
   margin: 0 auto;
   position: relative;
 
+  @media screen and (max-width: $la) {
+    width: 90%;
+  }
+
+  @media screen and (max-width: $sm) {
+    width: 95%;
+  }
+
   .detail-post-user-area {
     width: 80%;
     display: flex;
     flex-direction: column;
     text-align: left;
     margin: 0 auto;
+
+    @media screen and (max-width: $la) {
+      width: 85%;
+    }
+
+    @media screen and (max-width: $me) {
+      width: 95%;
+    }
+
+    @media screen and (max-width: $me) {
+      width: 100%;
+    }
   }
 
   .detail-post-skill-area {
@@ -144,6 +164,18 @@ export default defineComponent({
     flex-direction: column;
     text-align: left;
     margin: 0 auto 2rem auto;
+
+    @media screen and (max-width: $la) {
+      width: 85%;
+    }
+
+    @media screen and (max-width: $me) {
+      width: 95%;
+    }
+
+    @media screen and (max-width: $me) {
+      width: 100%;
+    }
   }
 
   .detail-post-detail-area {
@@ -152,6 +184,18 @@ export default defineComponent({
     flex-direction: column;
     text-align: left;
     margin: 0 auto;
+
+    @media screen and (max-width: $la) {
+      width: 85%;
+    }
+
+    @media screen and (max-width: $me) {
+      width: 95%;
+    }
+
+    @media screen and (max-width: $me) {
+      width: 100%;
+    }
   }
 }
 
@@ -161,83 +205,5 @@ export default defineComponent({
   font-size: 17px;
   font-weight: bold;
   margin-bottom: 0.7rem;
-}
-
-/* タブレットレスポンシブ */
-@media screen and (max-width: 900px) {
-  .detail-wrapper {
-    width: 90%;
-
-    .detail-post-user-area {
-      width: 85%;
-    }
-    //* スキル カード
-    .detail-post-skill-area {
-      width: 85%;
-    }
-    //* 詳細 カード
-    .detail-post-detail-area {
-      width: 85%;
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .detail-wrapper {
-    .detail-post-user-area {
-      width: 95%;
-    }
-
-    //* スキル カード
-    .detail-post-skill-area {
-      width: 95%;
-    }
-
-    //* 詳細 カード
-    .detail-post-detail-area {
-      width: 95%;
-    }
-  }
-}
-
-//* スマホレスポンシブ
-@media screen and (max-width: 500px) {
-  .detail-wrapper {
-    width: 97%;
-
-    .detail-post-detail-area .dev-detail-area {
-      padding: 1.5rem 1rem;
-    }
-
-    .detail-post-user-area {
-      width: 100%;
-    }
-
-    //** スキル カード
-    .detail-post-skill-area {
-      width: 100%;
-    }
-
-    //* 詳細 カード
-    .detail-post-detail-area {
-      width: 100%;
-    }
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .detail-wrapper {
-    .detail-post-user-area {
-      width: 100%;
-    }
-    //* スキル カード */
-    .detail-post-skill-area {
-      width: 100%;
-    }
-    //* 詳細 カード */
-    .detail-post-detail-area {
-      width: 100%;
-    }
-  }
 }
 </style>

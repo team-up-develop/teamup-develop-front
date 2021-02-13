@@ -49,7 +49,7 @@ export default Vue.extend({
   display: inline-block;
   font-weight: bold;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: $me) {
     width: 45%;
     margin-right: 1rem;
   }
