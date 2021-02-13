@@ -110,6 +110,11 @@ section {
     position: relative;
     background-color: $white;
 
+    @media (max-width: $sm) {
+      width: 95%;
+      padding: 1rem;
+    }
+
     //* ログインタイトル
     .login-title {
       color: $primary-color;
@@ -157,7 +162,10 @@ section {
       position: absolute;
       bottom: 0;
       padding: 2rem 0;
-      // background-color: #B9B9B9;
+
+      @media (max-width: $sm) {
+        width: 90%;
+      }
 
       .login-btn {
         @include neumorphismGrey;
@@ -179,21 +187,6 @@ section {
         transition: 0.3s;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
         outline: none;
-      }
-    }
-  }
-}
-
-@media (max-width: 500px) {
-  .login-wrapper {
-    width: 100%;
-
-    .login-container {
-      width: 95%;
-      padding: 1rem;
-
-      .btn-area {
-        width: 90%;
       }
     }
   }

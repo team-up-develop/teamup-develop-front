@@ -96,6 +96,10 @@ export default defineComponent({
   margin: 0 auto;
   position: relative;
 
+  @media screen and (max-width: $gr) {
+    width: 100%;
+  }
+
   .chat-card {
     @include card-border-color;
     background-color: $white;
@@ -108,6 +112,10 @@ export default defineComponent({
     height: 93%;
     position: relative;
 
+    @media (max-width: $me) {
+      width: 95%;
+    }
+
     &__left {
       width: 285px;
       height: 100%;
@@ -118,6 +126,10 @@ export default defineComponent({
       overflow: scroll;
       z-index: 10;
       position: relative;
+
+      @media (max-width: $me) {
+        width: 100%;
+      }
 
       .title {
         width: 100%;
@@ -145,6 +157,10 @@ export default defineComponent({
       right: 0;
       border-radius: 0 20px 20px 0;
 
+      @media (max-width: $me) {
+        display: none;
+      }
+
       .main {
         margin-top: 0.5rem;
         height: 85%;
@@ -156,7 +172,7 @@ export default defineComponent({
       }
 
       .bottom {
-        background-color: #f5f5f5;
+        background-color: $light-grey;
         z-index: 10;
         position: absolute;
         bottom: 0;
@@ -190,27 +206,6 @@ export default defineComponent({
           transition: 0.3s;
           outline: none;
         }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .wrapper {
-    width: 100%;
-  }
-}
-
-@media (max-width: 868px) {
-  .wrapper {
-    .chat-card {
-      width: 95%;
-
-      &__left {
-        width: 100%;
-      }
-      &__right {
-        display: none;
       }
     }
   }

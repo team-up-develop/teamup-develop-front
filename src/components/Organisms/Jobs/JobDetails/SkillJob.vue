@@ -56,6 +56,10 @@ export default Vue.extend({
   margin-bottom: 2rem;
   position: relative;
 
+  @media screen and (max-width: $sm) {
+    padding: 1.5rem 1rem;
+  }
+
   .lang-area {
     width: 100%;
     position: relative;
@@ -84,13 +88,6 @@ export default Vue.extend({
         @include detail-skill;
       }
     }
-  }
-}
-
-//* スマホレスポンシブ
-@media screen and (max-width: 500px) {
-  .skill-detail-area {
-    padding: 1.5rem 1rem;
   }
 }
 </style>

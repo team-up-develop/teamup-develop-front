@@ -58,16 +58,16 @@ export default defineComponent({
   padding: 1rem 2rem;
   outline: none;
 
-  @media screen and (max-width: 800px) {
+  @media screen and (max-width: $la) {
     width: 70%;
   }
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: $me) {
     padding: 1rem;
     font-size: 1rem;
   }
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: $ti) {
     width: 63%;
   }
 }
@@ -95,7 +95,7 @@ export default defineComponent({
   position: absolute;
   right: 0;
 
-  @media screen and (max-width: 700px) {
+  @media screen and (max-width: $me) {
     padding: 1rem 1.5rem;
   }
 }

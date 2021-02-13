@@ -197,7 +197,7 @@ export default defineComponent({
   height: 90%;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: $me) {
     width: 95%;
   }
 
@@ -268,7 +268,7 @@ input[type="password"] {
   height: 100px;
   margin: 0 auto;
 
-  @media (max-width: 500px) {
+  @media (max-width: $sm) {
     width: 100%;
   }
 

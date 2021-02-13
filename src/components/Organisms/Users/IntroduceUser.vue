@@ -38,6 +38,10 @@ export default defineComponent({
     width: 100%;
     height: 100%;
 
+    @media screen and (max-width: $sm) {
+      padding: 1.5rem 1rem;
+    }
+
     .detail-information {
       margin-top: 1px;
       padding: 1rem 0;
@@ -53,13 +57,6 @@ export default defineComponent({
         font-size: 14px;
       }
     }
-  }
-}
-
-/* スマホレスポンシブ */
-@media screen and (max-width: 500px) {
-  .dev-detail-area {
-    padding: 1.5rem 1rem;
   }
 }
 </style>

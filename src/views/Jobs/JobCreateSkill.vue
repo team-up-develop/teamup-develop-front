@@ -91,8 +91,8 @@ export default defineComponent({
   max-width: none;
   margin-bottom: 1rem;
 
-  @media screen and (max-width: 1100px) {
-    width: 97%;
+  @media screen and (max-width: $la) {
+    width: 95%;
   }
 
   .not-value {
@@ -110,21 +110,16 @@ export default defineComponent({
   padding: 0 2rem 2rem 2rem;
   color: $text-main-color;
 
-  @media screen and (max-width: 1000px) {
-    width: 50%;
-  }
-
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     width: 85%;
     padding: 0 1rem 2rem 1rem;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: $me) {
     width: 95%;
   }
 
-  @media screen and (max-width: 450px) {
-    width: 98%;
+  @media screen and (max-width: $sm) {
     padding: 1rem;
   }
 }

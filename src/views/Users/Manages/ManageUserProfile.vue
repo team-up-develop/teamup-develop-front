@@ -184,11 +184,19 @@ export default defineComponent({
     width: 88%;
     margin: 0 auto;
 
+    @media screen and (max-width: $la) {
+      width: 100%;
+    }
+
     &__post {
       width: 85%;
       display: flex;
       flex-direction: column;
       margin: 0 auto;
+
+      @media screen and (max-width: $la) {
+        width: 95%;
+      }
 
       .header {
         border-bottom: $dark-grey 2px solid;
@@ -227,6 +235,14 @@ export default defineComponent({
     flex-direction: column;
     text-align: left;
     margin: 2rem auto 2rem auto;
+
+    @media screen and (max-width: $la) {
+      width: 95%;
+    }
+
+    @media screen and (max-width: $sm) {
+      width: 100%;
+    }
   }
 }
 
@@ -240,6 +256,14 @@ export default defineComponent({
     flex-direction: column;
     text-align: left;
     margin: 0rem auto 2rem auto;
+
+    @media screen and (max-width: $la) {
+      width: 95%;
+    }
+
+    @media screen and (max-width: $sm) {
+      width: 100%;
+    }
   }
 }
 
@@ -253,59 +277,5 @@ export default defineComponent({
   position: sticky;
   left: 0;
   bottom: 0;
-}
-
-//* タブレットレスポンシブ
-@media screen and (max-width: 900px) {
-  .detail-wrapper {
-    .user-area {
-      width: 100%;
-      &__post {
-        width: 95%;
-      }
-    }
-    .skill {
-      &__card {
-        width: 95%;
-      }
-    }
-    .pr {
-      &__card {
-        width: 95%;
-      }
-    }
-  }
-}
-
-//* スマホレスポンシブ
-@media screen and (max-width: 500px) {
-  .detail-wrapper {
-    .skill {
-      &__card {
-        width: 100%;
-      }
-    }
-
-    .pr {
-      &__card {
-        width: 100%;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 400px) {
-  //* ボタン エリア
-  .button-area section .button-action-area {
-    .btn-applicant {
-      padding: 1.2rem 2rem;
-      font-size: 1rem;
-    }
-
-    .btn-reject {
-      padding: 1.2rem 2rem;
-      font-size: 1rem;
-    }
-  }
 }
 </style>

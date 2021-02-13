@@ -1203,7 +1203,7 @@ label.checkbox {
   }
 }
 
-@media screen and (max-width: 999px) {
+@media screen and (max-width: $la) {
   .search-area {
     overflow-x: auto;
     width: 100%;
@@ -1232,7 +1232,7 @@ label.checkbox {
   }
 }
 
-@media screen and (max-width: 700px) {
+@media screen and (max-width: $me) {
   .search-area {
     &__freewrod {
       position: relative;
@@ -1255,7 +1255,7 @@ label.checkbox {
   }
 
   .job-wrapper .job-wrapper-center {
-    width: 80%;
+    width: 95%;
   }
 
   // * モーダル
@@ -1274,13 +1274,9 @@ label.checkbox {
   }
 }
 
-@media screen and (max-width: 580px) {
+@media screen and (max-width: $sm) {
   .job-wrapper-left {
     width: 100%;
-  }
-
-  .job-wrapper .job-wrapper-center {
-    width: 95%;
   }
 
   .search-area {

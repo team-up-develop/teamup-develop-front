@@ -199,6 +199,10 @@ export default defineComponent({
   margin: 0 auto;
   position: relative;
 
+  @media screen and (max-width: $gr) {
+    width: 100%;
+  }
+
   .chat-card {
     @include card-border-color;
     background-color: $white;
@@ -211,6 +215,10 @@ export default defineComponent({
     height: 93%;
     position: relative;
 
+    @media (max-width: $me) {
+      width: 95%;
+    }
+
     &__left {
       width: 285px;
       height: 100%;
@@ -221,6 +229,10 @@ export default defineComponent({
       overflow: scroll;
       z-index: 10;
       position: relative;
+
+      @media (max-width: $me) {
+        display: none;
+      }
 
       .title {
         width: 100%;
@@ -322,6 +334,10 @@ export default defineComponent({
       right: 0;
       border-radius: 0 20px 20px 0;
 
+      @media (max-width: $me) {
+        width: 100%;
+      }
+
       .main {
         height: 85%;
         display: flex;
@@ -346,6 +362,10 @@ export default defineComponent({
         .room {
           padding: 1rem 2rem;
           overflow: scroll;
+
+          @media (max-width: $me) {
+            padding: 1rem 0.5rem 1rem 1rem;
+          }
         }
       }
 
@@ -359,6 +379,10 @@ export default defineComponent({
         border-radius: 0 0px 8px 0;
         box-shadow: 0 -3px 2px #00000020;
         padding: 1.5rem 0 1.5rem 1rem;
+
+        @media (max-width: $sm) {
+          padding: 1rem 0 1rem 0.1rem;
+        }
       }
     }
   }
@@ -468,37 +492,5 @@ export default defineComponent({
   top: 15px;
   right: -19px;
   background-color: #ffffff;
-}
-// * ここまでトーク周り
-
-@media screen and (max-width: 1200px) {
-  .wrapper {
-    width: 100%;
-  }
-}
-
-@media (max-width: 868px) {
-  .wrapper {
-    .chat-card {
-      width: 95%;
-
-      &__left {
-        display: none;
-      }
-      &__right {
-        width: 100%;
-
-        .room {
-          padding: 1rem 0.5rem 1rem 1rem;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 500px) {
-  .wrapper .chat-card__right .bottom {
-    padding: 1rem 0 1rem 0.1rem;
-  }
 }
 </style>

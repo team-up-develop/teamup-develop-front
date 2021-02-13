@@ -179,7 +179,7 @@ export default defineComponent({
   }
 }
 
-@media screen and (max-width: 650px) {
+@media screen and (max-width: $me) {
   .post {
     padding: 2rem 2rem;
 
@@ -208,7 +208,7 @@ export default defineComponent({
   }
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: $sm) {
   .post {
     padding: 1rem 1rem;
 
@@ -218,7 +218,7 @@ export default defineComponent({
   }
 }
 
-@media screen and (max-width: 420px) {
+@media screen and (max-width: $ti) {
   .post {
     .left {
       width: 100%;

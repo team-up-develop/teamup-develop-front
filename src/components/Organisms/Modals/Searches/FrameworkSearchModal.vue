@@ -145,16 +145,16 @@ export default Vue.extend({
   position: relative;
   width: 58%;
 
-  @media screen and (max-width: 1200px) {
+  @media screen and (max-width: $gr) {
     width: 78%;
   }
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: $me) {
     width: 88%;
   }
 
-  @media screen and (max-width: 520px) {
-    width: 100%;
+  @media screen and (max-width: $sm) {
+    width: 95%;
   }
 }
 

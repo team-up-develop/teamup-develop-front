@@ -90,7 +90,7 @@ const useJobStatus = (props: any) => {
   color: $text-main-color;
   cursor: pointer;
 
-  @media screen and (max-width: 999px) {
+  @media screen and (max-width: $la) {
     width: 100%;
   }
 
@@ -103,7 +103,7 @@ const useJobStatus = (props: any) => {
     font-size: 18px;
     text-decoration: underline;
 
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       padding: 2rem 0.5rem 0rem 1.5rem;
       min-height: none;
     }
@@ -111,11 +111,11 @@ const useJobStatus = (props: any) => {
     p {
       display: none;
 
-      @media screen and (max-width: 420px) {
+      @media screen and (max-width: $me) {
         display: block;
       }
     }
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       span {
         display: none;
       }
@@ -128,7 +128,7 @@ const useJobStatus = (props: any) => {
     text-align: left;
     pointer-events: none;
 
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       padding: 0 0.5rem 0 1.1rem;
     }
   }
@@ -138,7 +138,7 @@ const useJobStatus = (props: any) => {
     pointer-events: none;
     margin-top: 0.2rem;
 
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       padding: 0.5rem 0px 1.1rem 0;
     }
 
@@ -149,7 +149,7 @@ const useJobStatus = (props: any) => {
       text-align: left;
       pointer-events: none;
 
-      @media screen and (max-width: 420px) {
+      @media screen and (max-width: $me) {
         padding: 0rem 0px 0 1.1rem;
       }
 
@@ -158,7 +158,7 @@ const useJobStatus = (props: any) => {
         pointer-events: none;
         font-size: 14px;
 
-        @media screen and (max-width: 420px) {
+        @media screen and (max-width: $me) {
           display: none;
         }
       }

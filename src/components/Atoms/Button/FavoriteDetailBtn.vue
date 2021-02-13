@@ -152,7 +152,7 @@ export default Vue.extend({
 }
 
 //* スマホレスポンシブ
-@media screen and (max-width: 500px) {
+@media screen and (max-width: $sm) {
   .icon {
     width: 48px;
     height: 48px;

@@ -224,7 +224,7 @@ export default defineComponent({
   height: 90%;
   margin: 0 auto;
 
-  @media (max-width: 768px) {
+  @media (max-width: $me) {
     width: 95%;
   }
 
@@ -246,7 +246,7 @@ export default defineComponent({
     .container {
       padding: 0 2rem;
 
-      @media (max-width: 500px) {
+      @media (max-width: $sm) {
         padding: 0 1rem;
       }
     }
@@ -280,7 +280,7 @@ export default defineComponent({
   height: 100px;
   margin: 2rem auto 0 auto;
 
-  @media (max-width: 500px) {
+  @media (max-width: $sm) {
     width: 100%;
   }
 

@@ -164,7 +164,7 @@ export default Vue.extend({
     width: 88%;
     margin: 0 auto;
 
-    @media screen and (max-width: 500px) {
+    @media screen and (max-width: $sm) {
       width: 95%;
     }
   }
@@ -181,7 +181,7 @@ export default Vue.extend({
       margin: 4rem 0;
       position: relative;
 
-      @media screen and (max-width: 500px) {
+      @media screen and (max-width: $sm) {
         min-height: 70px;
       }
     }

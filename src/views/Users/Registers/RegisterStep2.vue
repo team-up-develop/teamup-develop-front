@@ -270,7 +270,7 @@ export default defineComponent({
     .container {
       padding: 0 2rem;
 
-      @media (max-width: 500px) {
+      @media (max-width: $sm) {
         padding: 0 1rem;
       }
     }
@@ -284,7 +284,7 @@ export default defineComponent({
   height: 100px;
   margin: 1rem auto 0 auto;
 
-  @media (max-width: 500px) {
+  @media (max-width: $sm) {
     width: 100%;
   }
 
@@ -308,7 +308,7 @@ export default defineComponent({
     outline: none;
     text-decoration: none;
 
-    @media (max-width: 400px) {
+    @media (max-width: $ti) {
       padding: 1.1rem 3rem;
     }
   }
@@ -334,7 +334,7 @@ export default defineComponent({
     transition: 0.3s;
     outline: none;
 
-    @media (max-width: 400px) {
+    @media (max-width: $ti) {
       padding: 1.1rem 2rem;
     }
 

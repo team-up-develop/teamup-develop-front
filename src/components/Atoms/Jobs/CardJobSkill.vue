@@ -107,7 +107,7 @@ export default Vue.extend({
   display: none;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: $sm) {
   .job-cards {
     height: 45vh;
     background-color: rgba(0, 255, 238, 0.163);
@@ -169,7 +169,7 @@ export default Vue.extend({
     pointer-events: none;
   }
 }
-@media screen and (max-width: 390px) {
+@media screen and (max-width: $ti) {
   .langage-responsive {
     padding: 7px 0.8rem;
   }

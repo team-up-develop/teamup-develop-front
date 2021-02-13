@@ -44,7 +44,7 @@ export default defineComponent({
   font-weight: bold;
   text-decoration: none;
 
-  @media screen and (max-width: 370px) {
+  @media screen and (max-width: $ti) {
     display: none;
   }
 }
