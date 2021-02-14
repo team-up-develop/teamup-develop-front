@@ -79,12 +79,12 @@ export default Vue.extend({
   <transition name="modal" appear>
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
-        <v-card-title class="headline grey lighten-2">
-          <span>その他スキル</span>
-        </v-card-title>
+        <v-card class="headline grey lighten-2 text-left py-3 pl-4">
+          <span class="title">その他スキルで探す</span>
+        </v-card>
         <v-card-text class="modal-content">
           <div class="modal-content">
-            <v-row>
+            <v-row class="row-area">
               <label v-for="skill in skills" v-bind:key="skill.id">
                 <input
                   type="checkbox"
@@ -120,6 +120,11 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
+.title {
+  font-size: 0.8em;
+  font-weight: bold;
+}
+
 .modal-overlay {
   display: flex;
   align-items: center;
@@ -138,29 +143,38 @@ export default Vue.extend({
   border-radius: 8px;
   overflow: hidden;
   position: relative;
-  width: 58%;
-
-  @media screen and (max-width: $gr) {
-    width: 78%;
-  }
+  width: 700px;
 
   @media screen and (max-width: $me) {
     width: 88%;
   }
-
-  @media screen and (max-width: $sm) {
-    width: 95%;
-  }
 }
 
 .modal-content {
-  padding: 1rem 1.7rem;
+  padding: 1rem 0.5rem;
   overflow: scroll;
   text-align: left;
   min-height: 500px;
   height: 550px;
 
+  @media screen and (max-width: $me) {
+    padding: 1rem 1.2rem;
+  }
+  @media screen and (max-width: $sm) {
+    padding: 1rem 0.7rem;
+  }
+
+  .row-area {
+    margin: 0;
+    height: 52%;
+
+    @media screen and (max-width: $me) {
+      display: block;
+    }
+  }
+
   label {
+    max-height: 30px;
     input[type="checkbox"] {
       display: none;
     }
@@ -171,21 +185,23 @@ export default Vue.extend({
       font-weight: 700;
       color: $white;
       font-size: 0.85em;
-      letter-spacing: 4px;
+      // letter-spacing: 4px;
       text-decoration: none;
       font-family: sans-serif;
       text-align: center;
-      width: 180px;
-      padding: 0.5rem 0;
+      width: 95%;
+      min-width: 160px;
+      display: inline-block;
+      // width: 50%;
+      padding: 0.5rem 1rem;
       cursor: pointer;
-      display: block;
       margin: 0 auto;
       transition: background-color 150ms ease-in;
       margin: 0.3rem 0.2rem;
     }
 
     span:hover {
-      background-color: grey;
+      background-color: #2195f39e;
     }
 
     input[type="checkbox"]:checked + span {
@@ -206,15 +222,8 @@ export default Vue.extend({
 
 .modal-footer {
   width: 100%;
-  height: 80px;
-  padding: 0.5rem 2rem 1rem 0;
-  text-align: right;
-  display: inline-block;
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  font-size: 1em;
 
+  // * モーダル内のキャンセルボタン
   .serach-btn {
     @include blue-btn;
     @include neumorphism;
@@ -228,10 +237,7 @@ export default Vue.extend({
     margin-left: 1.2rem;
     font-size: 1rem;
     cursor: pointer;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 1rem;
+    margin: 1rem auto;
     outline: none;
   }
 
@@ -273,10 +279,5 @@ export default Vue.extend({
 .modal-enter,
 .modal-leave-to {
   opacity: 0;
-}
-
-.modal-enter,
-.modal-window {
-  transform: translateY(-20px);
 }
 </style>
