@@ -33,14 +33,14 @@ export default defineComponent({
   position: relative;
   line-height: 1.8;
 
+  @media screen and (max-width: $sm) {
+    padding: 1.5rem 1rem;
+  }
+
   .detail-leff-area {
     display: inline-block;
     width: 100%;
     height: 100%;
-
-    @media screen and (max-width: $sm) {
-      padding: 1.5rem 1rem;
-    }
 
     .detail-information {
       margin-top: 1px;
