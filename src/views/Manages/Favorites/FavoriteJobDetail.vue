@@ -100,12 +100,12 @@ export default defineComponent({
           <PostUser :job="job" />
         </div>
         <div class="detail-post-skill-area">
-          <div class="detail-tag">開発技術</div>
+          <div class="detail-tag">使用技術</div>
           <SkillJob :job="job" />
         </div>
         <div class="detail-post-detail-area">
           <div class="detail-area">
-            <div class="detail-tag">開発詳細</div>
+            <div class="detail-tag">詳細内容</div>
             <DetailJob :job="job" />
           </div>
         </div>
