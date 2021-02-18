@@ -59,7 +59,11 @@ export default defineComponent({
           <label for="name">メールアドレス</label>
           <br /><br />
           <v-row cols="12" md="4">
-            <Email v-model="LoginName" type="text" />
+            <Email
+              v-model="LoginName"
+              placeholder="example@teamUp.com"
+              type="text"
+            />
           </v-row>
         </div>
         <div class="name-form-password">
@@ -74,7 +78,9 @@ export default defineComponent({
         </div>
         <div class="btn-area">
           <p>
-            登録してない方は<router-link to="/register" class="router-link"
+            登録してない方は<router-link
+              to="/register/step/1"
+              class="router-link"
               ><span>こちら</span></router-link
             >
           </p>

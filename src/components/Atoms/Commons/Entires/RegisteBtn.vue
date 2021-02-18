@@ -1,5 +1,5 @@
 <template>
-  <router-link to="/register" class="router">
+  <router-link to="/register/step/1" class="router">
     <v-btn class="create-btn">
       登録する
     </v-btn>

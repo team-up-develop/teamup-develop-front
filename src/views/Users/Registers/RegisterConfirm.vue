@@ -26,6 +26,7 @@ type State = {
   userBirthday: string | null;
   learningStartDate: string | null;
   passwordModal: boolean;
+  email: string | null;
 };
 
 const initialState = (): State => ({
@@ -43,6 +44,7 @@ const initialState = (): State => ({
   userBirthday: "",
   learningStartDate: "",
   passwordModal: false,
+  email: "",
 });
 
 export default defineComponent({
@@ -58,6 +60,7 @@ export default defineComponent({
       const userName = sessionStorage.getItem("userName");
       const nickName = sessionStorage.getItem("nickName");
       const password = sessionStorage.getItem("password");
+      const email = sessionStorage.getItem("email");
       const userBirthday = sessionStorage.getItem("userBirthday");
       const learningStartDate = sessionStorage.getItem("learningStartDate");
       const programingLanguage = sessionStorage.getItem("programingLanguage");
@@ -68,6 +71,7 @@ export default defineComponent({
       state.userName = userName;
       state.nickName = nickName;
       state.password = password;
+      state.email = email;
       state.userBirthday = userBirthday;
       state.learningStartDate = learningStartDate;
       state.selectedLang = programingLanguage;
@@ -142,6 +146,10 @@ export default defineComponent({
           <div class="input-area">
             <label for="name" class="label">ユーザー名</label>
             <p>{{ nickName }}</p>
+          </div>
+          <div class="input-area">
+            <label for="name" class="label">メールアドレス</label>
+            <p>{{ email }}</p>
           </div>
           <div class="input-area">
             <label for="name" class="label">パスワード</label>

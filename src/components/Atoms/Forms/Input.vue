@@ -23,7 +23,7 @@ export default defineComponent({
 <template>
   <section>
     <input
-      type="text"
+      :type="type"
       :value="value"
       @input="onInputTitle"
       :placeholder="placeholder"
@@ -35,7 +35,7 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-input[type="text"] {
+input {
   background-color: $dark-white;
   color: $text-main-color;
   font: 16px/24px sans-serif;
@@ -46,6 +46,7 @@ input[type="text"] {
   letter-spacing: 1px;
   border-radius: 4px;
   padding: 0.5rem;
+  margin-top: 0.1rem;
 
   &:focus {
     @include form-hover;

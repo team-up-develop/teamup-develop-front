@@ -47,6 +47,7 @@ export interface RejectParams {
 export interface RegisterSessionFirstParams {
   userName: string;
   password: string;
+  email: string;
   nickName: string;
   userBirthday: string;
   learningStartDate: string;

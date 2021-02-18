@@ -9,7 +9,6 @@ import { RegisterSessionFirstParams } from "@/types/params";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import InputArea from "@/components/Molecules/Forms/InputArea.vue";
-
 type State = {
   userName: string | null;
   nickName: string | null;
@@ -17,6 +16,7 @@ type State = {
   learningStartDate: string | null;
   dialog: boolean;
   password: string | null;
+  email: string | null;
 };
 
 const initialState = (): State => ({
@@ -25,6 +25,7 @@ const initialState = (): State => ({
   password: "",
   userBirthday: "",
   learningStartDate: "",
+  email: "",
   dialog: false,
 });
 
@@ -41,12 +42,14 @@ export default defineComponent({
     const strageGet = () => {
       const userName = sessionStorage.getItem("userName");
       const nickName = sessionStorage.getItem("nickName");
+      const email = sessionStorage.getItem("email");
       const password = sessionStorage.getItem("password");
       const userBirthday = sessionStorage.getItem("userBirthday");
       const learningStartDate = sessionStorage.getItem("learningStartDate");
       state.userName = userName;
       state.nickName = nickName;
       state.password = password;
+      state.email = email;
       state.userBirthday = userBirthday;
       state.learningStartDate = learningStartDate;
     };
@@ -57,7 +60,8 @@ export default defineComponent({
         state.nickName &&
         state.userBirthday &&
         state.learningStartDate &&
-        state.password
+        state.password &&
+        state.email
       ) {
         return true;
       } else {
@@ -71,7 +75,8 @@ export default defineComponent({
         state.nickName &&
         state.userBirthday &&
         state.learningStartDate &&
-        state.password
+        state.password &&
+        state.email
       ) {
         const params: RegisterSessionFirstParams = {
           userName: state.userName,
@@ -79,12 +84,14 @@ export default defineComponent({
           userBirthday: state.userBirthday,
           learningStartDate: state.learningStartDate,
           password: state.password,
+          email: state.email,
         };
         sessionStorage.setItem("userName", params.userName);
         sessionStorage.setItem("nickName", params.nickName);
         sessionStorage.setItem("userBirthday", params.userBirthday);
         sessionStorage.setItem("learningStartDate", params.learningStartDate);
         sessionStorage.setItem("password", params.password);
+        sessionStorage.setItem("email", params.email);
 
         return router.push({ name: "RegisterStep2" });
       } else {
@@ -139,13 +146,29 @@ export default defineComponent({
             />
           </div>
           <div class="input-area">
-            <label for="name" class="label">パスワード</label
-            ><label for="name" class="label-required">必須</label>
-            <input
-              type="password"
+            <InputArea
+              v-model="email"
+              type="email"
+              name="email"
+              textLabel="メールアドレス"
+              :mandatory="true"
+              mandatoryText="ログイン時必要"
+              placeholder="example@teamUp.com"
+              maxlength="100"
+              :remaining="false"
+            />
+          </div>
+          <div class="input-area">
+            <InputArea
               v-model="password"
-              placeholder="パスワード"
-              maxlength="30"
+              type="password"
+              name="email"
+              textLabel="パスワード"
+              :mandatory="true"
+              mandatoryText="ログイン時必要"
+              placeholder="パスワードを入力してください"
+              maxlength="100"
+              :remaining="false"
             />
           </div>
           <div class="input-area">

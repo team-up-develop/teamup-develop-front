@@ -22,6 +22,7 @@ export default defineComponent({
   props: {
     value: { type: String },
     name: { type: String, required: true },
+    type: { type: String, required: true },
     textLabel: { type: String, required: true },
     mandatory: { type: Boolean, required: true, defalut: false },
     mandatoryText: { type: String },
@@ -68,7 +69,7 @@ export default defineComponent({
     >
     <Input
       :value="value"
-      type="text"
+      :type="type"
       :name="name"
       @input="input"
       :placeholder="placeholder"
