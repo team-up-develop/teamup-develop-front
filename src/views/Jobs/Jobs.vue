@@ -101,7 +101,7 @@ export default defineComponent({
 
     // * 非ログイン時 登録リダイレクト
     const registerRedirect = () => {
-      router.push({ name: "register" });
+      router.push({ name: "RegisterStep1" });
     };
 
     const fetchData = async () => {

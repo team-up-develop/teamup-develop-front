@@ -50,7 +50,7 @@ export default defineComponent({
   <section>
     <div class="register-form-area">
       <label for="name" class="label">メールアドレス</label>
-      <Email v-model="LoginName" type="text" />
+      <Email v-model="LoginName" type="text" placeholder="example@teamUp.com" />
       <label for="name" class="label">パスワード</label>
       <Password v-model="LoginPassword" type="password" />
     </div>

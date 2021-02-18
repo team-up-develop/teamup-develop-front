@@ -53,7 +53,7 @@ export default defineComponent({
       </button>
     </div>
     <div class="right" v-else>
-      <button class="register-btn" @click="$router.push('/register')">
+      <button class="register-btn" @click="$router.push('/register/step/1')">
         登録する
       </button>
       <button class="login-btn" @click="$router.push('/login')">
