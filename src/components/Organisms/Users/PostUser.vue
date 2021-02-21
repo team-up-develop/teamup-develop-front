@@ -1,12 +1,8 @@
-
 <script lang="ts">
-import { 
-  defineComponent,
-  computed
-} from '@vue/composition-api';
-import { dayJs } from '@/master';
+import { defineComponent, computed } from "@vue/composition-api";
+import { dayJs } from "@/master";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
     user: { type: Object, require: true, defalut: {} },
     myselfFlag: { type: Boolean, require: true, defalut: false },
@@ -15,42 +11,42 @@ export default defineComponent({
     const day = (value: string, format: string) => dayJs(value, format);
 
     const enabledBtn = computed(() => {
-      if(props.myselfFlag == true) {
+      if (props.myselfFlag == true) {
         return true;
       }
       return false;
     });
 
     const twitterTab = () => {
-      if(props.user.twitterAccount == null) {
-        return props.user.twitterAccount;
+      if (props.user.twitter_account == null) {
+        return props.user.twitter_account;
       } else {
-        const url: string = props.user.twitterAccount;
+        const url: string = props.user.twitter_account;
         return window.open(url);
       }
     };
 
     const gitTab = () => {
-      if(props.user.githubAccount == null) {
-        return props.user.githubAccount;
+      if (props.user.github_account == null) {
+        return props.user.github_account;
       } else {
-        const url: string = props.user.githubAccount;
+        const url: string = props.user.github_account;
         return window.open(url);
       }
     };
 
     const editEmit = () => {
-      context.emit('editEmit')
-    }
+      context.emit("editEmit");
+    };
 
     return {
       day,
       enabledBtn,
       twitterTab,
       gitTab,
-      editEmit
-    }
-  }
+      editEmit,
+    };
+  },
 });
 </script>
 
@@ -65,34 +61,44 @@ export default defineComponent({
           <div class="profile-area">
             <v-col class="name-are">
               <div class="user-name">
-                {{ user.userName }}
+                {{ user.login_name }}
               </div>
             </v-col>
             <v-col class="introduce-area" style="padding: none">
               <div class="introduce">
-                {{ day(user.learningStartDate, "YYYY年 M月 D日")}}
+                {{ day(user.learning_start_date, "YYYY年 M月 D日") }}
               </div>
             </v-col>
             <v-col class="url-area">
               <v-row>
-                <img class="img" @click="gitTab" src="@/assets/github.png" width="35" />
-                <img class="img" @click="twitterTab" src="@/assets/images/twitter.png" width="35" />
+                <img
+                  class="img"
+                  @click="gitTab"
+                  src="@/assets/github.png"
+                  width="35"
+                />
+                <img
+                  class="img"
+                  @click="twitterTab"
+                  src="@/assets/images/twitter.png"
+                  width="35"
+                />
               </v-row>
             </v-col>
           </div>
         </div>
       </v-row>
       <div class="btn-area">
-        <button class="edit-btn" @click="editEmit" v-if="enabledBtn">編集する</button>
+        <button class="edit-btn" @click="editEmit" v-if="enabledBtn">
+          編集する
+        </button>
       </div>
     </v-sheet>
-
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .post {
   border-radius: 4px;
@@ -109,21 +115,18 @@ export default defineComponent({
   }
 
   .right {
-    width: 50%;
+    width: 68%;
     text-align: left;
 
     .profile-area {
-      width: 80%;
-      padding: 0.5rem 0 0 1rem ;
+      padding: 0.5rem 0 0 1rem;
 
-      .name-are
-      .user-name {
+      .name-are .user-name {
         font-size: 18px;
         font-weight: bold;
       }
 
-      .introduce-area 
-      .introduce {
+      .introduce-area .introduce {
         font-size: 12px;
       }
     }
@@ -153,7 +156,7 @@ export default defineComponent({
       font-size: 1em;
       appearance: none;
       border: none;
-      transition: .3s;
+      transition: 0.3s;
       outline: none;
     }
   }
@@ -176,7 +179,7 @@ export default defineComponent({
 
       .profile-area {
         width: 100%;
-        padding: 0.5rem 0 0 0rem ;
+        padding: 0.5rem 0 0 0rem;
       }
     }
 
@@ -198,7 +201,6 @@ export default defineComponent({
   }
 }
 
-
 @media screen and (max-width: 420px) {
   .post {
     .left {
@@ -215,5 +217,4 @@ export default defineComponent({
     }
   }
 }
-
 </style>

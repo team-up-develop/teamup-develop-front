@@ -13,8 +13,10 @@
           </div>
           <!-- 中央 -->
           <div class="box-center">
-            <label for="name" class="register-label">登録が完了しました。</label>
-            <img class="img"  src="@/assets/images/register.jpg" width="100%" />
+            <label for="name" class="register-label"
+              >登録が完了しました。</label
+            >
+            <img class="img" src="@/assets/images/register.jpg" width="100%" />
           </div>
           <div class="box-bottom">
             <div class="job-search-btn">案件を探してみる</div>
@@ -27,7 +29,7 @@
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 section {
   height: 95vh;
@@ -50,7 +52,7 @@ section {
     max-width: 500px;
     height: 90%;
     margin: 0rem auto 3rem auto;
-    border: solid 1px #B9B9B9;
+    border: solid 1px #b9b9b9;
     border-radius: 20px;
     padding: 2rem;
 
@@ -115,7 +117,7 @@ section {
           padding: 1.1rem 1.7rem;
           border-radius: 28px;
           border: none;
-          font-size: .875rem;
+          font-size: 0.875rem;
           font-weight: 600;
           line-height: 1;
           text-align: center;
@@ -125,7 +127,7 @@ section {
           float: left;
           margin-top: 1.5rem;
           cursor: pointer;
-          transition: .3s;
+          transition: 0.3s;
           outline: none;
 
           &:hover {
@@ -139,7 +141,7 @@ section {
           display: block;
           padding: 1.1rem 1.2rem;
           border-radius: 28px;
-          font-size: .875rem;
+          font-size: 0.875rem;
           font-weight: 600;
           line-height: 1;
           text-align: center;
@@ -149,7 +151,7 @@ section {
           float: right;
           margin-top: 1.5rem;
           cursor: pointer;
-          transition: .3s;
+          transition: 0.3s;
           outline: none;
 
           &:hover {
@@ -159,6 +161,5 @@ section {
       }
     }
   }
-
 }
 </style>

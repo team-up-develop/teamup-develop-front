@@ -1,42 +1,52 @@
 <script lang="ts">
-import Vue, { PropType }  from 'vue';
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 
-export default Vue.extend({ 
+type State = {
+  titleLimit: number;
+};
+
+const initialState = (): State => ({
+  titleLimit: 0,
+});
+
+export default defineComponent({
   props: {
-    type: { type: String as PropType<string>, required: true },
-    value: { type: String as PropType<string>, required: false, default: null },
+    type: { type: String, required: true },
+    value: { type: String, required: false, default: null },
   },
-  data() {
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState());
+
+    const onInputTitle = (e: any) => {
+      state.titleLimit = e.target.value.length;
+      ctx.emit("input", e.target.value);
+    };
+
     return {
-      titleLimit: 0,
-    }
+      ...toRefs(state),
+      onInputTitle,
+    };
   },
-  methods: {
-    onInputTitle(e: any) {
-      this.titleLimit = e.target.value.length;
-      this.$emit("input", e.target.value);
-    }
-  }
 });
 </script>
 
 <template>
   <section>
-    <input 
+    <input
       type="text"
       :value="value"
-      @input="onInputTitle" 
-      placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)" 
-      maxlength="60" 
-      />
-    <small id="rem">残り{{60 - titleLimit }}文字</small>
+      @input="onInputTitle"
+      placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)"
+      maxlength="60"
+    />
+    <small id="rem">残り{{ 60 - titleLimit }}文字</small>
   </section>
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
-input[type='text'] {
+input[type="text"] {
   @include input-border-color;
   background-color: $dark-white;
   color: $text-main-color;
@@ -55,8 +65,9 @@ input[type='text'] {
 }
 
 #rem {
-  color: #7c7c7c;
+  color: $text-sub-color;
   margin-top: 2px;
   font-size: 12px;
+  font-weight: bold;
 }
 </style>

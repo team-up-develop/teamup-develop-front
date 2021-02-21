@@ -1,13 +1,13 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
-  computed
-} from '@vue/composition-api';
-import UserCard from '@/components/Organisms/Manages/UserCard.vue'
-import JobCreateSkillCard from '@/components/Organisms/Jobs/JobCreateSkillCard.vue'
-import { JobCreateSession1 as State } from '@/components/Organisms/Jobs/JobCreateCard.vue'
+  computed,
+} from "@vue/composition-api";
+import UserCard from "@/components/Organisms/Manages/UserCard.vue";
+import JobCreateSkillCard from "@/components/Organisms/Jobs/JobCreateSkillCard.vue";
+import { JobCreateSession1 as State } from "@/components/Organisms/Jobs/JobCreateCard.vue";
 
 const initialState = (): State => ({
   jobTitle: "",
@@ -16,31 +16,31 @@ const initialState = (): State => ({
   jobDescription: "",
 });
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
     UserCard,
-    JobCreateSkillCard
+    JobCreateSkillCard,
   },
   setup: () => {
     const state = reactive<State>(initialState());
 
-    state.jobTitle = sessionStorage.getItem('jobTitle');
-    state.devStartDate = sessionStorage.getItem('devStartDate');
-    state.devEndDate = sessionStorage.getItem('devEndDate');
-    state.jobDescription = sessionStorage.getItem('jobDescription');
+    state.jobTitle = sessionStorage.getItem("jobTitle");
+    state.devStartDate = sessionStorage.getItem("devStartDate");
+    state.devEndDate = sessionStorage.getItem("devEndDate");
+    state.jobDescription = sessionStorage.getItem("jobDescription");
 
     const isValue = computed(() => {
-      if(state.jobTitle && state.devStartDate && state.devEndDate) {
-        return true
+      if (state.jobTitle && state.devStartDate && state.devEndDate) {
+        return true;
       }
-      return false
+      return false;
     });
 
     return {
       ...toRefs(state),
-      isValue
-    }
-  }
+      isValue,
+    };
+  },
 });
 </script>
 
@@ -51,7 +51,7 @@ export default defineComponent({
         <UserCard />
         <v-sheet class="create">
           <v-col>
-            <JobCreateSkillCard 
+            <JobCreateSkillCard
               :jobTitle="jobTitle"
               :devStartDate="devStartDate"
               :devEndDate="devEndDate"
@@ -67,9 +67,8 @@ export default defineComponent({
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .wrapper {
   width: 90%;
@@ -81,7 +80,7 @@ export default defineComponent({
   }
 
   .not-value {
-    min-height: 100vh
+    min-height: 100vh;
   }
 }
 

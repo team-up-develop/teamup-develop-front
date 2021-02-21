@@ -1,113 +1,133 @@
 <script lang="ts">
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import Vue from 'vue';
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import Vue from "vue";
 
 export default Vue.extend({
   components: {
-    Loading
+    Loading,
   },
   data() {
     return {
-      loading: true, 
-    }
+      loading: true,
+    };
   },
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 1000)
-  }
+    }, 1000);
+  },
 });
 </script>
-
 
 <template>
   <section>
     <div class="wrapper" v-show="!loading">
-      <div class="container">
-        <div class="top-area">
-          <div class="top-area__left">
-            <div class="top-title">
+      <div class="top-area">
+        <div class="top-area__left">
+          <div class="top-title">
+            <div class="top-title__upper">
               <span>チーム開発で誰にも負けないスキルを</span>
+            </div>
+            <div class="top-title__lower">
               <p>
                 本気でキャリアを変えようと努力している未経験エンジニア同士が
                 オンラインでの「チーム開発」を通じて相互に成長し、
                 エンジニアとしてスタートを切る。
               </p>
             </div>
-            <div class="top-btn">
-              <button class="login">ログインする</button>
-              <button class="register">登録する</button>
-            </div>
           </div>
-          <div class="top-area__right">
-            <img class="img" src="@/assets/images/teamup.jpg" width="100%" height="350px"/> 
+          <div class="top-img">
+            <img class="img" src="@/assets/images/teamup.jpg" width="80%" height="230px"/> 
           </div>
-        </div>
-        <div class="middle-area">
-          <div class="middle-titlle">
-            チームアップが可能にすること
-          </div>
-          <div class="middle-btn-area">
-            <div class="middle-btn">
-              <button class="login">ログインする</button>
-              <button class="register">登録する</button>
-            </div>
+          <div class="top-btn">
+            <button class="login">ログインする</button>
+            <button class="register">登録する</button>
           </div>
         </div>
-        <div class="bottom-area">
-          <div class="bottom-title">
-            チームアップはスキルアップの手助けをします
-          </div>
-          <div class="bottom_contents">
-            <div class="bottom_contents_left">
-              <div class="bottom_contents_left__top">
-                <h3>チームの『知』を自分の『知』にできる</h3>
-              </div>
-              <div class="bottom_contents_left__upper">
-                <p>個人で得る情報には、偏りがまれやすい。
-                    しかし、チーム開発を行うことで、<br>その偏りを技ない、知識の幅を広げることができる。<br>
-                    チーム内の誰かが発した聞きなれない聞き慣れないワードは,<br>やがて自分の『知』となり<br>
-                    チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。</p>
-              </div>
-              <div class="bottom_contents_left__top">
-                <h3>チームの『知』を自分の『知』にできる</h3>
-              </div>
-              <div class="bottom_contents_left__upper">
-                <p>個人で得る情報には、偏りがまれやすい。
-                    しかし、チーム開発を行うことで、その偏りを技ない、知識の幅を広げることができる。
-                    チーム内の誰かが発した聞きなれない聞き慣れないワードはやがて自分の『知』』となり
-                    チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。</p>
-              </div>
-              <div class="bottom_contents_left__top">
-                <h3>チームの『知』を自分の『知』にできる</h3>
-              </div>
-              <div class="bottom_contents_left__upper">
-                <p>個人で得る情報には、偏りがまれやすい。
-                しかし、チーム開発を行うことで、その偏りを技ない、知識の幅を広げることができる。
-                チーム内の誰かが発した聞きなれない聞き慣れないワードは<br>やがて自分の『知』』となり
-                チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。</p>
-              </div>
-            </div>
-            <div class="bottom_contents_right">
-
-            </div>
-          </div>
+        <div class="top-area__right">
+          <img class="img" src="@/assets/images/teamup.jpg" width="100%" height="350px"/> 
         </div>
-        <div class="image">
-          <div class="image_inner">
-            <p>チームアップはスキル向上の手助けをします</p>
+      </div>
+      <div class="middle-area">
+        <div class="middle-titlle">
+          チームアップが可能にすること
+        </div>
+        <div class="card-area">
+          <v-card elevation="6" >
+            <div class="circle"></div>
+            <div class="card-inner">
+              <p>未経験のエンジニア同士エンジニア同士がオンラインで繋がり<br>
+              ゼロからチーム開発を体験する事ができます。</p>
+            </div>
+          </v-card>
+          <v-card elevation="6">
+            <div class= "circle"></div>
+          </v-card>
+          <v-card elevation="6">
+            <div class= "circle"></div>
+          </v-card>
+        </div>
+        <div class="middle-btn-area">
+          <div class="middle-btn">
+            <button class="login">ログインする</button>
+            <button class="register">登録する</button>
           </div>
         </div>
       </div>
+      <div class="bottom-area">
+        <div class="bottom-title">
+          チームアップはスキルアップの手助けをします
+        </div>
+        <div class="bottom-img">
+          <img class="img" src="@/assets/images/botom-area-logo.jpg" width="100%" height="500px"/>
+        </div>
+        <div class="bottom_contents">
+          <div class="bottom_contents_left">
+            <div class="bottom_contents_left__top">
+              <h3>チームの『知』を自分の『知』にできる</h3>
+            </div>
+            <div class="bottom_contents_left__upper">
+              <p>個人で得る情報には、偏りがまれやすい。
+                  しかし、チーム開発を行うことで、<br>その偏りを技ない、知識の幅を広げることができる。<br>
+                  チーム内の誰かが発した聞きなれない聞き慣れないワードは,<br>やがて自分の『知』となり<br>
+                  チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。</p>
+            </div>
+            <div class="bottom_contents_left__top">
+              <h3>チームの『知』を自分の『知』にできる</h3>
+            </div>
+            <div class="bottom_contents_left__upper">
+              <p>個人で得る情報には、偏りがまれやすい。
+                  しかし、チーム開発を行うことで、その偏りを技ない、知識の幅を広げることができる。
+                  チーム内の誰かが発した聞きなれない聞き慣れないワードはやがて自分の『知』』となり
+                  チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。</p>
+            </div>
+            <div class="bottom_contents_left__top">
+              <h3>チームの『知』を自分の『知』にできる</h3>
+            </div>
+            <div class="bottom_contents_left__upper">
+              <p>個人で得る情報には、偏りがまれやすい。
+              しかし、チーム開発を行うことで、その偏りを技ない、知識の幅を広げることができる。
+              チーム内の誰かが発した聞きなれない聞き慣れないワードは<br>やがて自分の『知』』となり
+              チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。</p>
+            </div>
+          </div>
+          <div class="bottom_contents_right">
+            <img class="img" src="@/assets/images/botom-area-logo.jpg" width="100%" height="700px"/> 
+          </div>
+        </div>
+      </div>
+      <div class="image">
+        <div class="image_inner">
+          <p>チームアップはスキル向上の手助けをします</p>
+        </div>
+      </div>
     </div>
-    <Loading v-show="loading">
-    </Loading>
+    <Loading v-show="loading"> </Loading>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 
 // * 背景 波 
@@ -122,27 +142,25 @@ export default Vue.extend({
   .wrapper {
     width: 100%;
 
-    .container {
-      width: 90%;
-      margin: 0 auto;
 
       // * トップ エリア
       .top-area {
         height: 60vh;
-        width: 100%;
-        margin-top: 2rem;
+        width: 80%;
+        margin: 2rem auto;
         position: relative;
 
         &__left {
-          padding: 2rem 0 2rem 0;
+          //padding: 2rem 0 2rem 0;
           width: 50%;
-          height: calc(100% - 5rem);
-          // background-color: rgb(175, 175, 175);
+          height: 90%;
+          //background-color: rgb(175, 175, 175);
           position: absolute;
           left: 0;
           top: 0;
 
           .top-title {
+            margin: 2rem 0;
             text-align: left;
             height: 50%;
             line-height: 1.8;
@@ -161,12 +179,16 @@ export default Vue.extend({
             }
           }
 
+          .top-img{
+            display: none;
+          }
+
           .top-btn {
             width: 430px;
-            height: 30%;
+            height: 20%;
             margin: 3rem auto;
             position: relative;
-            // background-color: yellowgreen;
+            //background-color: yellowgreen;
 
             .login {
               border: solid 1px #2196F3;
@@ -225,36 +247,70 @@ export default Vue.extend({
           // background-color: rgba(204, 52, 52, 0.739);
           position: absolute;
           right: 0;
+          display: flex;
           top: 0;
         }
       }
       //* できることエリア
       .middle-area {
         width: 100%;
+        position: relative;
+        
+
         .middle-titlle {
           font-weight: bold;
           font-size: 2em;
           }
 
+        .card-area{
+          width: 90%;
+          margin: 3rem auto;
+          display: flex;
+          justify-content: space-between;
+          position: relative;
+          
+
+          .v-card{
+            height: 500px;
+            width: 30%;
+            
+
+            .circle{
+              height: 7rem;
+              width: 7rem;
+              background-color: $dark-white;
+              position:  relative; 
+              margin: 2rem auto;
+              border-radius: 50%;
+              }
+            
+            .card-inner{
+              margin: 2rem;
+            }
+
+            }
+        }
+        
+
         .middle-btn-area{
           width: 100%;
-          height: 15vh;
+          height: 20vh;
           margin: 5rem auto;
           position: relative;
-          background-color: rgba(6, 6, 129, 0.788);
+          display: flex;
+          background-color: $primary-dark;
           
         
           .middle-btn{
             width: 430px;
             height:100px;
             position:  relative; 
-            margin:  auto;
+            margin: 1rem auto;
+            //background-color: saddlebrown;
             
-          
-
             .login {
-              border: solid 1px #2196F3;
-              color: #2196F3;
+              border: solid 1px $primary-color;
+              color: $primary-color;
               background-color: #ffffff;
               text-align: left;
               display: block;
@@ -277,7 +333,7 @@ export default Vue.extend({
             }
             .register {
               //@include purple-btn;
-              background-color:  #1f22f3;
+              background-color:  $primary-color;
               text-align: left;
               display: block;
               padding: 1.1rem 4rem;
@@ -304,19 +360,25 @@ export default Vue.extend({
       }
 
       .bottom-area{
+        width: 80%;
         position:  relative; 
-        margin-top: 150px;
+        margin: 3rem auto;
+        //height: 100%;
         //background-color: burlywood;
       
         .bottom-title{
           font-weight: bold;
           font-size: 2em;
         }
+
+        .bottom-img{
+          display: none;
+        }
         
         .bottom_contents{
           position:  relative; 
           height: 100vh;
-          margin-top: 4rem;
+          margin-top: 3rem;
         
           .bottom_contents_left{
             position:absolute;
@@ -351,7 +413,7 @@ export default Vue.extend({
 
           .bottom_contents_right{
             //background-color: yellow;
-            height: 300px;
+            height: 0;
             width: 50%;
             float: right;
             position:absolute;
@@ -362,28 +424,255 @@ export default Vue.extend({
       
       .image_inner{
         background-color: navy;
-        height: 30vh;
+        //height: 30vh;
         width: 100%;
+        margin-top: 8rem;
+        p{
+            color: white;
+          }
       }
-    }
   }
 
 
 @media screen and (max-width: 1100px) {
   .wrapper {
-    width: 100%;
-    .container {
-      width: calc(100% - 0rem);
-      //padding: 2.5rem 0rem;
+    .top-area{
+      width: 90%;
+      margin: auto;
+
+      &__left{
+        height: 90%;
+      }
+
+      .top-btn{
+        width: 100%;
+        }
+      }
+    .middle-area {
+      .card-area{
+        width: 90%;
+        margin: 4rem auto;
+
+        .v-card{
+          width: 32%;
+        }
+      }
+    }
+    .bottom-area{
+      width: 90%;
+      margin: 2rem auto;
     }
   }
 }
 
 /* タブレット */
 @media (max-width: 900px) {
-  .wrapper 
-  .container {
-    width: 100%;
+  .wrapper {
+    .top-area {
+      width: 100%;
+      //background-color: peru;
+
+      &__left {
+        height: 100%;
+        width: 55%;
+        margin: 0 1rem;
+      }
+
+      &__right {
+        width: 40%;
+      }
+
+      .top-btn{
+        //background-color: red;
+        width: 95%;
+        margin: 2rem 0rem;
+        }
+      }
+
+    .middle-area{
+      .card-area{
+        width: 95%;
+        margin: 4rem auto;
+      }
+
+      .middle-btn-area{
+        .middle-btn{
+          width: 540px;
+        }
+      }
+    }
+
+    .bottom-area{
+        width: 100%;
+        margin: 0  auto;
+
+        .bottom_contents{
+          margin: 3rem 2rem;
+        }
+      }
   }
+}
+
+@media (max-width: 768px) {
+  .wrapper {
+    .top-area{
+      height: 80vh;
+
+      &__left{
+        width: 100%;
+        margin: 2rem 0;
+        padding: 0;
+        
+
+        .top-title{
+          margin: 1rem auto;
+          text-align: center;
+          width: 80%;
+          height: 30%;
+
+          &__upper{
+            height: 60%;
+          }
+
+          &__lower{
+            height: 30%;
+          }
+          
+          p{
+            margin-top: 0rem;
+          }
+        }
+        .top-img{
+          display: inline;
+          height: 40%;
+          width: 90%;
+          margin: 0rem auto;
+          
+        }
+
+        .top-btn{
+          width: 80%;
+          height: 3rem;
+          margin: 1rem auto;
+        }
+      }
+      &__right{
+        display: none;
+      }
+    }
+
+    .bottom-area{
+
+      .bottom-img{
+        display: inline;
+      }
+
+      .bottom_contents{
+        margin-top: 0;
+
+        .bottom_contents_left{
+          width: 100%;
+          height: 90vh;
+        }
+        .bottom_contents_right{
+          display: none;
+        }
+      }
+    }
+  }
+}
+
+@media (max-width: 500px) {
+  .wrapper{
+    .top-area{
+      height: 80vh;
+
+      .top-area__left{
+        margin: 2rem 0 0 0;
+        height: 90%;
+        .top-title{
+          height: 40%;
+          margin: 0 auto;
+
+          .top-title__upper{
+            height:50%;
+          }
+
+          .top-title__lower{
+            height: 50%;
+
+            p{
+              margin: 0;
+            }
+          }
+        }
+      }
+
+      .top-btn{
+        width: 95%;
+        margin: 1rem auto;
+      }
+    }
+
+    .middle-area{
+      .card-area{
+        display:flex;
+        flex-flow: column;
+        justify-content: space-between;
+
+        .v-card{
+          width: 80%;
+          margin: 2rem auto;
+        }
+      }
+    }
+
+  }
+}
+
+@media (max-width: 420px) {
+  .wrapper{
+    .top-area{
+      height: 100vh;
+      .top-area__left{
+        .top-title{
+          height: 50%;
+        }
+      }
+      .top-btn{
+        .login{
+          max-width: 200px;
+          padding: 1rem 2rem;
+        }
+        .register{
+          max-width: 200px;
+          padding: 1rem 3rem;
+        }
+      }
+    }
+
+    .middle-area{
+      .middle-btn-area{
+        margin: 3rem auto;
+
+          .middle-btn{
+            .login{
+              padding: 1.1rem 2rem;
+            }
+            .register{
+              padding: 1.1rem 3rem;
+            }
+          }
+      }
+    }
+
+    .bottom-area{
+      margin: 3rem auto;
+      .bottom_contents{
+        height: 120vh;
+      }
+    }
+  }
+
 }
 </style>

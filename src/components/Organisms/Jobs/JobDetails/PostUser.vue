@@ -1,16 +1,16 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import { dayJs } from '@/master'
+import { defineComponent } from "@vue/composition-api";
+import { dayJs } from "@/master";
 
-export default defineComponent({ 
+export default defineComponent({
   props: {
-    job: { type: Object, require: true, defalut: {} }
+    job: { type: Object, require: true, defalut: {} },
   },
   setup: (props: any) => {
     const day = (value: string, format: string) => dayJs(value, format);
     // * Twitter をタブで開く
     const twitterTab = () => {
-      if(props.job.user.twitterAccount == null) {
+      if (props.job.user.twitterAccount == null) {
         return props.job.user.twitterAccount;
       } else {
         const url: string = props.job.user.twitterAccount;
@@ -19,7 +19,7 @@ export default defineComponent({
     };
     // * Github をタブで開く
     const gitTab = () => {
-      if(props.job.user.githubAccount == null) {
+      if (props.job.user.githubAccount == null) {
         return props.job.user.githubAccount;
       } else {
         const url: string = props.job.user.githubAccount;
@@ -29,9 +29,9 @@ export default defineComponent({
     return {
       day,
       twitterTab,
-      gitTab
-    }
-  }
+      gitTab,
+    };
+  },
 });
 </script>
 
@@ -45,26 +45,26 @@ export default defineComponent({
         <div class="user-profile-area">
           <div class="user-name-are">
             <div class="user-name-tag">名前</div>
-            <router-link :to="`/account/profile/${ job.userId }`"> 
+            <router-link :to="`/account/profile/${job.user_id}`">
               <div class="user-name">
-                {{ job.user.userName }} 
+                {{ job.user.user_name }}
               </div>
             </router-link>
           </div>
           <div class="user-introduce-area">
             <div class="introduce-tag">学習開始</div>
             <div class="introduce">
-              {{ day(job.user.learningStartDate, "YYYY年 M月 D日") }}
+              {{ day(job.user.learning_start_date, "YYYY年 M月 D日") }}
             </div>
           </div>
         </div>
         <div class="user-url-area">
           <section>
             <div class="user-github" @click="gitTab">
-              <img class="img" src="@/assets/github.png" width="50" />
-              </div>
+              <img class="img" src="@/assets/github.png" width="30" />
+            </div>
             <div class="user-twtter" @click="twitterTab">
-              <img class="img" src="@/assets/images/twitter.png" width="52" />
+              <img class="img" src="@/assets/images/twitter.png" width="32" />
             </div>
           </section>
         </div>
@@ -74,7 +74,7 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .post-user-area {
   @include card-border-color;
@@ -82,6 +82,13 @@ export default defineComponent({
   padding: 2rem 4rem;
   margin-bottom: 2rem;
   position: relative;
+
+  @media screen and (max-width: 500px) {
+    padding: 2.5rem 1rem;
+  }
+  @media screen and (max-width: 768px) {
+    padding: 2rem;
+  }
 
   .left-user-area {
     width: 20%;
@@ -91,6 +98,11 @@ export default defineComponent({
       @include user-image;
       width: 130px;
       height: 130px;
+
+      @media screen and (max-width: 500px) {
+        width: 100px;
+        height: 100px;
+      }
     }
   }
 
@@ -102,10 +114,26 @@ export default defineComponent({
     padding: 1.8rem 2rem 0 2rem;
     text-align: left;
 
+    @media screen and (max-width: 1100px) {
+      width: 70%;
+    }
+    @media screen and (max-width: 500px) {
+      padding: 1.8rem 1.2rem 0px;
+    }
+    @media screen and (max-width: 450px) {
+      width: 64%;
+    }
+
     .user-profile-area {
       width: 65%;
       height: 100%;
       display: inline-block;
+
+      @media screen and (max-width: 1200px) {
+        width: 65%;
+        height: 100%;
+        display: inline-block;
+      }
 
       .user-name-are {
         width: 45%;
@@ -138,6 +166,10 @@ export default defineComponent({
       .user-introduce-area {
         margin-top: 2rem;
 
+        @media screen and (max-width: 500px) {
+          margin-top: 0.5rem;
+        }
+
         .introduce-tag {
           font-weight: bold;
         }
@@ -151,7 +183,8 @@ export default defineComponent({
 
     .user-url-area {
       display: inline-block;
-      width: 120px;
+      width: 80px;
+      height: 60px;
       position: absolute;
       top: 0;
       right: 0;
@@ -175,7 +208,6 @@ export default defineComponent({
           position: absolute;
           right: 0;
           top: 0;
-          margin-top: 0.1rem;
           font-weight: bold;
           cursor: pointer;
 
@@ -183,68 +215,6 @@ export default defineComponent({
             opacity: 0.8;
           }
         }
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 1200px) {
-  .post-user-area{
-    .right-user-area {
-      .user-profile-area {
-        width: 65%;
-        height: 100%;
-        display: inline-block;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 768px) {
-  .post-user-area {
-    padding: 2rem;
-
-    .right-user-area {
-      width: 70%;
-      .user-profile-area
-      .user-introduce-area {
-        margin-top: 2rem;
-      }
-
-      .user-url-area {
-        padding: 2.2rem 0 0 1rem;
-      }
-    }
-  }
-}
-
-//* スマホレスポンシブ 
-@media screen and (max-width: 500px) {
-  .post-user-area {
-    padding: 1.5rem 1rem;
-
-    .right-user-area{
-      padding: 1.8rem 1.2rem 0px;
-      .user-profile-area
-      .user-introduce-area {
-        margin-top: 1.3rem;
-      }
-
-      .user-url-area {
-        padding: 1rem 0 0 0.5rem;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 420px) {
-  .post-user-area{
-    padding: 2.5rem 1rem;
-
-    .left-user-area {
-      .user-image{
-        width: 100px;
-        height: 100px;
       }
     }
   }

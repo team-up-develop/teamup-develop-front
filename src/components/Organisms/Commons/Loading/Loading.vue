@@ -1,16 +1,16 @@
 <script lang="ts">
-import Vue from 'vue';
-import { VueLoading } from 'vue-loading-template'
+import Vue from "vue";
+import { VueLoading } from "vue-loading-template";
 
 type DataType = {
   loading: boolean;
-}
-export default Vue.extend({ 
-  name: 'loading',
+};
+export default Vue.extend({
+  name: "loading",
   data(): DataType {
     return {
-      loading: true
-    }
+      loading: true,
+    };
   },
   components: {
     VueLoading,
@@ -22,11 +22,11 @@ export default Vue.extend({
   <div class="container" v-show="loading">
     <div class="fullview">
       <div class="loading-spacer"></div>
-      <vue-loading 
+      <vue-loading
         type="spiningDubbles"
         color="#2196F3"
         :size="{ width: '200px', height: '105px' }"
-        >
+      >
       </vue-loading>
     </div>
   </div>

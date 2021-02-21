@@ -1,10 +1,10 @@
 <script lang="ts">
-import { defineComponent } from '@vue/composition-api';
-import RegisteForm from '@/components/Molecules/Jobs/JobRegisterFalses/RegisteForm.vue'
+import { defineComponent } from "@vue/composition-api";
+import RegisteForm from "@/components/Molecules/Jobs/JobRegisterFalses/RegisteForm.vue";
 
-export default defineComponent({ 
+export default defineComponent({
   components: {
-    RegisteForm
+    RegisteForm,
   },
 });
 </script>
@@ -21,16 +21,16 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .false-user-login {
-    @include card-border-color;
-    width: 75%;
-    background-color: $white;
-    border-radius: 8px;
-    margin-top: 3.5rem;
-    padding: 0 2rem 2rem 2rem;
-    position: sticky;
+  @include card-border-color;
+  width: 75%;
+  background-color: $white;
+  border-radius: 8px;
+  margin-top: 3.5rem;
+  padding: 0 2rem 2rem 2rem;
+  position: sticky;
 
   .top-login-title {
     width: 100%;
@@ -52,7 +52,7 @@ export default defineComponent({
       left: 0;
       width: 100%;
       height: 6px;
-      content: '';
+      content: "";
       border-radius: 3px;
     }
   }

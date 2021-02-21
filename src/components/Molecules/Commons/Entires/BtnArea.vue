@@ -1,13 +1,13 @@
 <script lang="ts">
-import Vue from 'vue';
-import LoginBtn from '@/components/Atoms/Commons/Entires/LoginBtn.vue'
-import RegisteBtn from '@/components/Atoms/Commons/Entires/RegisteBtn.vue'
+import Vue from "vue";
+import LoginBtn from "@/components/Atoms/Commons/Entires/LoginBtn.vue";
+import RegisteBtn from "@/components/Atoms/Commons/Entires/RegisteBtn.vue";
 
 export default Vue.extend({
   components: {
     LoginBtn,
-    RegisteBtn
-  }
+    RegisteBtn,
+  },
 });
 </script>
 
@@ -17,17 +17,16 @@ export default Vue.extend({
       <router-link to="/jobs" class="menu-list">
         <!-- <v-icon class="icon">mdi-magnify</v-icon> -->
       </router-link>
-      <LoginBtn/>
+      <LoginBtn />
     </v-row>
     <v-row class="right-create-btn">
-      <RegisteBtn/>
+      <RegisteBtn />
     </v-row>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .icon {
   margin-right: 0.5rem;
@@ -62,5 +61,4 @@ export default Vue.extend({
   display: inline-block;
   font-weight: bold;
 }
-
 </style>

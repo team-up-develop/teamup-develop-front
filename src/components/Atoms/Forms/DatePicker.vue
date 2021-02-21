@@ -1,11 +1,11 @@
-<script>
-// FIXME: ts ファイルにすると saveが Error
-import Vue from 'vue';
+<script lang="ts">
+// FIXME: Composition にすると $refs.dialogが取得できない？
+import Vue from "vue";
 
-export default Vue.extend({ 
+export default Vue.extend({
   props: {
     type: { type: String, required: true },
-    value: { type: String || null,  required: false },
+    value: { type: String || null, required: false },
   },
   data() {
     return {
@@ -13,25 +13,22 @@ export default Vue.extend({
       menu: false,
       modal: false,
       menu2: false,
-    }
+    };
   },
   methods: {
-    onInputTitle() {
+    onInputDialog() {
       this.modal = false;
-      this.$refs.dialog.save(this.date)
+      // @ts-ignore
+      this.$refs.dialog.save(this.date);
       this.$emit("input", this.date);
-    }
-  }
+    },
+  },
 });
 </script>
 
 <template>
   <section>
-      <v-col
-        cols="12"
-        sm="6"
-        md="4"
-      >
+    <v-col cols="12" sm="6" md="4">
       <v-dialog
         ref="dialog"
         v-model="modal"
@@ -58,21 +55,13 @@ export default Vue.extend({
           v-model="date"
           scrollable
           locale="jp-ja"
-          :day-format="date => new Date(date).getDate()"
+          :day-format="(date) => new Date(date).getDate()"
         >
           <v-spacer></v-spacer>
-          <v-btn
-            text
-            color=$primary-color
-            @click="modal = false"
-          >
+          <v-btn text color="$primary-color" @click="modal = false">
             閉じる
           </v-btn>
-          <v-btn
-            text
-            color="primary"
-            @click="onInputTitle"
-          >
+          <v-btn text color="primary" @click="onInputDialog">
             決定
           </v-btn>
         </v-date-picker>
@@ -81,8 +70,6 @@ export default Vue.extend({
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
-
+@import "@/assets/scss/_variables.scss";
 </style>

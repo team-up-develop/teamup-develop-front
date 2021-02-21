@@ -1,19 +1,19 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
   onMounted,
-} from '@vue/composition-api';
-import axios from 'axios';
-import Vuex from '@/store/index'
-import Loading from '@/components/Organisms/Commons/Loading/Loading.vue'
-import PostUser from '@/components/Organisms/Users/PostUser.vue'
-import SkillUser from '@/components/Organisms/Users/SkillUser.vue'
-import IntroduceUser from '@/components/Organisms/Users/IntroduceUser.vue'
-import StatusChangeBtnArea from '@/components/Organisms/Manages/StatusChangeBtnArea.vue'
-import { User } from '@/types/user';
-import { API_URL, truncate } from '@/master'
+} from "@vue/composition-api";
+import axios from "axios";
+import Vuex from "@/store/index";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import PostUser from "@/components/Organisms/Users/PostUser.vue";
+import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
+import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
+import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
+import { User } from "@/types/index";
+import { API_URL, truncate, catchError } from "@/master";
 // import Logout from '@/components/button/Logout'
 
 type State = {
@@ -24,30 +24,29 @@ type State = {
   loading: boolean;
   doneStatusFlag: boolean;
   statusId: number;
-}
+};
 
 const initialState = (): State => ({
   myselfFlag: false,
   userInfo: {},
   jobTitle: "",
   userId: Vuex.state.auth.userId,
-  loading: true, //? ローディング
+  loading: true,
   doneStatusFlag: false,
   statusId: 1,
 });
 
-
-export default defineComponent({ 
+export default defineComponent({
   components: {
     Loading,
     PostUser,
     SkillUser,
     IntroduceUser,
-    StatusChangeBtnArea
+    StatusChangeBtnArea,
   },
   props: {
     id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
-    jobId: { type: Number, default: 0 }
+    jobId: { type: Number, default: 0 },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
@@ -57,24 +56,26 @@ export default defineComponent({
     // * ユーザー情報取得
     const getUser = async () => {
       try {
-        setTimeout(async() => {
-          const response = await axios.get(`${API_URL}/user/${props.id}`)
+        setTimeout(async () => {
+          const res = await axios.get(`${API_URL}/user/${props.id}`);
           state.loading = false;
-          state.userInfo = response.data;
-        }, 700)
+          state.userInfo = res.data.response;
+        }, 700);
       } catch (error) {
-        console.log(error)
+        catchError(error);
       }
-    }
+    };
     getUser();
 
     const getJobTitle = async () => {
-      const response = await axios.get(`${API_URL}/job/${ props.jobId }`)
-      state.jobTitle = response.data.jobTitle
-    }
+      const res = await axios.get(`${API_URL}/job/${props.jobId}`);
+      state.jobTitle = res.data.response.job_title;
+    };
 
     onMounted(() => {
-      if(!state.userId) { return }
+      if (!state.userId) {
+        return;
+      }
       getJobTitle();
     });
 
@@ -82,41 +83,48 @@ export default defineComponent({
       ...toRefs(state),
       limit,
       getJobTitle,
-    }
-  }
+    };
+  },
 });
 </script>
 
 <template>
   <section>
     <div class="detail-wrapper" v-if="loading == false">
-    <div class="back-space">
-      <router-link :to="`/manage/applicant/${ jobId }`">
-      <p>＜ {{ limit(jobTitle, 40) }}に戻る</p>
-      </router-link>
-    </div>
-    <section class="user-area">
-      <div class="user-area__post">
-        <PostUser :user="userInfo" 
-          @editEmit="editEmit()" 
-          :myselfFlag="myselfFlag"
-        />
-        <v-row class="header">
-          <router-link :to="`/manage/profile/${ jobId }/${ id }`"  class="router-link-active-click">
-            <span>プロフィール</span>
-          </router-link>
-          <router-link :to="`/manage/profile/${ jobId }/${ id }/jobs`" class="router-link">
-            <span>投稿案件</span> 
-          </router-link>
-        </v-row>
+      <div class="back-space">
+        <router-link :to="`/manage/applicant/${jobId}`">
+          <p>＜ {{ limit(jobTitle, 40) }}に戻る</p>
+        </router-link>
       </div>
-    </section>
-    <v-col class="skill">
-      <div class="skill__card">
-        <div class="detail-tag">自己紹介</div>
-        <SkillUser />
-      </div>
-    </v-col>
+      <section class="user-area">
+        <div class="user-area__post">
+          <PostUser
+            :user="userInfo"
+            @editEmit="editEmit()"
+            :myselfFlag="myselfFlag"
+          />
+          <v-row class="header">
+            <router-link
+              :to="`/manage/profile/${jobId}/${id}`"
+              class="router-link-active-click"
+            >
+              <span>プロフィール</span>
+            </router-link>
+            <router-link
+              :to="`/manage/profile/${jobId}/${id}/jobs`"
+              class="router-link"
+            >
+              <span>投稿案件</span>
+            </router-link>
+          </v-row>
+        </div>
+      </section>
+      <v-col class="skill">
+        <div class="skill__card">
+          <div class="detail-tag">自己紹介</div>
+          <SkillUser :user="userInfo" />
+        </div>
+      </v-col>
       <v-col class="pr">
         <div class="pr__card">
           <div class="detail-tag">自己紹介</div>
@@ -130,16 +138,15 @@ export default defineComponent({
         </section>
       </div>
     </div>
-    <Loading v-else>
-    </Loading>
+    <Loading v-else> </Loading>
   </section>
 </template>
 
-
 <style lang="scss" scoped>
-@import '@/assets/scss/_variables.scss';
+@import "@/assets/scss/_variables.scss";
 
 .detail-tag {
+  color: $primary-color;
   text-align: left;
   font-size: 17px;
   font-weight: bold;
@@ -157,10 +164,12 @@ export default defineComponent({
   position: relative;
 
   .back-space {
+    text-align: left;
     position: absolute;
     left: 0;
     top: 0;
     margin-top: 1rem;
+    padding: 0 2rem;
   }
   .user-area {
     width: 88%;
@@ -199,9 +208,8 @@ export default defineComponent({
   }
 }
 
-//* スキル カード 
-.detail-wrapper 
-.skill {
+//* スキル カード
+.detail-wrapper .skill {
   width: 100%;
 
   &__card {
@@ -213,9 +221,8 @@ export default defineComponent({
   }
 }
 
-//* 開発詳細 カード 
-.detail-wrapper 
-.pr {
+//* 開発詳細 カード
+.detail-wrapper .pr {
   width: 100%;
 
   &__card {
@@ -227,7 +234,7 @@ export default defineComponent({
   }
 }
 
-//* ボタン エリア 
+//* ボタン エリア
 .button-area {
   width: 100%;
   display: flex;
@@ -261,7 +268,7 @@ export default defineComponent({
   }
 }
 
-//* スマホレスポンシブ 
+//* スマホレスポンシブ
 @media screen and (max-width: 500px) {
   .detail-wrapper {
     .skill {
@@ -279,19 +286,17 @@ export default defineComponent({
 }
 
 @media screen and (max-width: 400px) {
-    //* ボタン エリア 
-    .button-area 
-    section 
-    .button-action-area {
-      .btn-applicant {
-        padding: 1.2rem 2rem;
-        font-size: 1rem;
-      }
-
-      .btn-reject {
-        padding: 1.2rem 2rem;
-        font-size: 1rem;
-      }
+  //* ボタン エリア
+  .button-area section .button-action-area {
+    .btn-applicant {
+      padding: 1.2rem 2rem;
+      font-size: 1rem;
     }
-} 
+
+    .btn-reject {
+      padding: 1.2rem 2rem;
+      font-size: 1rem;
+    }
+  }
+}
 </style>
