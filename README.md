@@ -1,4 +1,4 @@
-## team-devlop-fornt 環境
+## fornt 環境 / version
 - node v12.12.0
 - vue/cli v4.3.1
 - vue v2.6.12 
