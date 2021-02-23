@@ -104,7 +104,7 @@ export default defineComponent({
         </div>
         <BtnArea :id="id" :job="job" />
       </section>
-      <Loading v-else> </Loading>
+      <Loading v-else />
     </div>
   </section>
 </template>

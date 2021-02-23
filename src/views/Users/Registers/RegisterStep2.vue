@@ -169,7 +169,7 @@ export default defineComponent({
               mandatoryText=""
               :max="100"
             />
-            {{ selectedLang }}
+            <!-- {{ selectedLang }} -->
           </div>
           <div class="input-area">
             <SkillSelectArea
@@ -277,7 +277,7 @@ export default defineComponent({
   }
 }
 .input-area {
-  height: 90px;
+  min-height: 90px;
 }
 .bottom {
   width: 80%;

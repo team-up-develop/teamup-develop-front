@@ -72,6 +72,8 @@ export default Vue.extend({
         ],
       };
       console.log(params);
+      const a = JSON.stringify(params);
+      console.log(a);
       axios
         .put<EditProfileParams>(`${API_URL}/user/${this.id}`, params)
         .then((res) => {
