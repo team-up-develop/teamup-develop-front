@@ -39,16 +39,10 @@ export default defineComponent({
     };
 
     const doneParticipate = computed(() => {
-      if (state.statusId == m.APPLY_STATUS_PARTICIPATE) {
-        return true;
-      }
-      return false;
+      return state.statusId == m.APPLY_STATUS_PARTICIPATE ? true : false;
     });
     const doneReject = computed(() => {
-      if (state.statusId == m.APPLY_STATUS_REJECT) {
-        return true;
-      }
-      return false;
+      return state.statusId == m.APPLY_STATUS_REJECT ? true : false;
     });
 
     // * 表示中のユーザーのステータスを格納

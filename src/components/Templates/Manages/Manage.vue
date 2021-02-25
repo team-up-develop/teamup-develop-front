@@ -15,10 +15,7 @@ export default defineComponent({
   },
   setup: (props) => {
     const isLogin = computed(() => {
-      if (props.userId) {
-        return true;
-      }
-      return false;
+      return props.userId ? true : false;
     });
 
     return {

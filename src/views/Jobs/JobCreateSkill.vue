@@ -44,10 +44,9 @@ export default defineComponent({
     state.jobDescription = sessionStorage.getItem("jobDescription");
 
     const isValue = computed(() => {
-      if (state.jobTitle && state.devStartDate && state.devEndDate) {
-        return true;
-      }
-      return false;
+      return state.jobTitle && state.devStartDate && state.devEndDate
+        ? true
+        : false;
     });
 
     return {

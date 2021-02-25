@@ -86,15 +86,11 @@ export default defineComponent({
     });
 
     const isForm = computed(() => {
-      if (
-        state.selectedLang.length !== 0 &&
+      return state.selectedLang.length !== 0 &&
         state.selectedFramwork.length !== 0 &&
         state.selectedSkill.length !== 0
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+        ? true
+        : false;
     });
 
     const backStep = () => {

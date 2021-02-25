@@ -13,9 +13,9 @@ import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import { ManageJob } from "@/types/index";
 import { User } from "@/types/index";
 import { API_URL, catchError, m } from "@/master";
+import useJobs from "@/hooks/useJobs";
 // import Logout from '@/components/button/Logout'
 
 type State = {
@@ -24,7 +24,6 @@ type State = {
   userId: number;
   loading: boolean;
   statusId: number;
-  manageJobs: ManageJob[];
 };
 
 const initialState = (): State => ({
@@ -33,7 +32,6 @@ const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
   loading: true,
   statusId: m.APPLY_STATUS_APPLY,
-  manageJobs: [],
 });
 
 export default defineComponent({
@@ -51,6 +49,7 @@ export default defineComponent({
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
+    const { manageJobs } = useJobs();
 
     const breadcrumbs = computed(() => [
       {
@@ -74,18 +73,6 @@ export default defineComponent({
       },
     ]);
 
-    const fetchManageJob = async () => {
-      try {
-        setTimeout(async () => {
-          const res = await axios.get(`${API_URL}/jobs?user_id=${props.id}`);
-          state.loading = false;
-          state.manageJobs = res.data.response;
-        }, 700);
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${API_URL}/user/${props.id}`);
@@ -95,15 +82,17 @@ export default defineComponent({
       }
     };
 
-    onMounted(() => {
-      fetchManageJob();
-      fetchUser();
+    onMounted(async () => {
+      setTimeout(() => {
+        state.loading = false;
+      }, 700);
+      await fetchUser();
     });
 
     return {
       ...toRefs(state),
       breadcrumbs,
-      fetchManageJob,
+      manageJobs,
       fetchUser,
     };
   },

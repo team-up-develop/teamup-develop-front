@@ -32,11 +32,9 @@ const useUtils = () => {
 
 const useJobStatus = (props: any) => {
   const isStatusNew = computed(() => {
-    if (props.job.job_status_id == m.JOB_STATUS_NEW) {
-      return true;
-    }
-    return false;
+    return props.job.job_status_id == m.JOB_STATUS_NEW ? true : false;
   });
+
   return {
     isStatusNew,
   };

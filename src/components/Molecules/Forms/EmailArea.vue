@@ -14,10 +14,7 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const mandatoryLabel = computed(() => {
-      if (props.mandatory == true) {
-        return true;
-      }
-      return false;
+      return props.mandatory ? true : false;
     });
 
     const input = (e: any) => {

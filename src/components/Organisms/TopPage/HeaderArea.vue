@@ -20,11 +20,9 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const isLogin = computed(() => {
-      if (state.userId) {
-        return true;
-      }
-      return false;
+      return state.userId ? true : false;
     });
+
     return {
       ...toRefs(state),
       isLogin,
