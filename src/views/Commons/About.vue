@@ -151,7 +151,6 @@ export default Vue.extend({
         position: relative;
 
         &__left {
-          //padding: 2rem 0 2rem 0;
           width: 50%;
           height: 90%;
           //background-color: rgb(175, 175, 175);
@@ -188,7 +187,6 @@ export default Vue.extend({
             height: 20%;
             margin: 3rem auto;
             position: relative;
-            //background-color: yellowgreen;
 
             .login {
               border: solid 1px #2196F3;
@@ -306,7 +304,6 @@ export default Vue.extend({
             height:100px;
             position:  relative; 
             margin: 1rem auto;
-            //background-color: saddlebrown;
             
             .login {
               border: solid 1px $primary-color;
@@ -363,8 +360,6 @@ export default Vue.extend({
         width: 80%;
         position:  relative; 
         margin: 3rem auto;
-        //height: 100%;
-        //background-color: burlywood;
       
         .bottom-title{
           font-weight: bold;
@@ -464,7 +459,6 @@ export default Vue.extend({
   .wrapper {
     .top-area {
       width: 100%;
-      //background-color: peru;
 
       &__left {
         height: 100%;
@@ -477,7 +471,6 @@ export default Vue.extend({
       }
 
       .top-btn{
-        //background-color: red;
         width: 95%;
         margin: 2rem 0rem;
         }
