@@ -382,20 +382,16 @@ export default Vue.extend({
         
           .bottom_contents_left{
             position:absolute;
-            //background-color: pink;
             width: 50%;
             float:left;
             left: 0;
 
             .bottom_contents_left__top{
-              //background-color:coral;
               float: left;
               margin-top: 1rem;
             }
 
             .bottom_contents_left__upper{
-              //background-color: crimson;
-            // margin-top:1rem;
               float:left;
               text-align: left;
               margin: 1rem 0;
@@ -412,7 +408,6 @@ export default Vue.extend({
           }
 
           .bottom_contents_right{
-            //background-color: yellow;
             height: 0;
             width: 50%;
             float: right;
@@ -424,7 +419,6 @@ export default Vue.extend({
       
       .image_inner{
         background-color: navy;
-        //height: 30vh;
         width: 100%;
         margin-top: 8rem;
         p{
