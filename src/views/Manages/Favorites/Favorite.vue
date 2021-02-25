@@ -3,24 +3,18 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
   computed,
 } from "@vue/composition-api";
-import { API_URL, catchError } from "@/master";
-import axios from "axios";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import { Job } from "@/types/index";
-import { FetchJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
 import ApplyFavorite from "@/components/Templates/Manages/ApplyFavorite.vue";
+import useJobs from "@/hooks/useJobs";
 
 type State = {
-  favoriteJobs: Job[];
   userId: number;
 };
 
 const initialState = (): State => ({
-  favoriteJobs: [],
   userId: Vuex.state.auth.userId,
 });
 
@@ -31,6 +25,7 @@ export default defineComponent({
   },
   setup: () => {
     const state = reactive<State>(initialState());
+    const { favoriteJobs } = useJobs();
 
     const breadcrumbs = computed(() => [
       {
@@ -44,25 +39,10 @@ export default defineComponent({
       },
     ]);
 
-    const fetchFavoriteJobs = async () => {
-      try {
-        const res = await axios.get<FetchJobs>(
-          `${API_URL}/favorite_jobs?user_id=${state.userId}`
-        );
-        state.favoriteJobs = res.data.response;
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
-    onMounted(() => {
-      fetchFavoriteJobs();
-    });
-
     return {
       ...toRefs(state),
       breadcrumbs,
-      fetchFavoriteJobs,
+      favoriteJobs,
     };
   },
 });

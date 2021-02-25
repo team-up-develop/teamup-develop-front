@@ -11,10 +11,7 @@ export default defineComponent({
     const day = (value: string, format: string) => dayJs(value, format);
 
     const enabledBtn = computed(() => {
-      if (props.myselfFlag == true) {
-        return true;
-      }
-      return false;
+      return props.myselfFlag ? true : false;
     });
 
     const twitterTab = () => {

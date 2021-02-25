@@ -12,9 +12,10 @@ import Vuex from "@/store/index";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import { ManageJob, User } from "@/types/index";
+import { User } from "@/types/index";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
+import useJobs from "@/hooks/useJobs";
 // import Logout from '@/components/button/Logout'
 
 type State = {
@@ -22,7 +23,6 @@ type State = {
   userInfo: User;
   userId: number;
   modal: boolean;
-  manageJobs: ManageJob[];
   loading: boolean;
 };
 
@@ -31,7 +31,6 @@ const initialState = (): State => ({
   userInfo: {},
   userId: Vuex.state.auth.userId,
   modal: false,
-  manageJobs: [],
   loading: true,
 });
 
@@ -48,6 +47,7 @@ export default defineComponent({
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
+    const { manageJobs } = useJobs();
 
     const breadcrumbs = computed(() => [
       {
@@ -64,17 +64,6 @@ export default defineComponent({
     if (state.userId == props.id) {
       state.myselfFlag = true;
     }
-    const fetchManageJob = async () => {
-      try {
-        setTimeout(async () => {
-          const res = await axios.get(`${API_URL}/jobs?user_id=${props.id}`);
-          state.loading = false;
-          state.manageJobs = res.data.response;
-        }, 700);
-      } catch (error) {
-        catchError(error);
-      }
-    };
 
     const fetchUser = async () => {
       try {
@@ -85,9 +74,11 @@ export default defineComponent({
       }
     };
 
-    onMounted(() => {
-      fetchManageJob();
-      fetchUser();
+    onMounted(async () => {
+      setTimeout(() => {
+        state.loading = false;
+      }, 700);
+      await fetchUser();
     });
 
     const openModal = () => {
@@ -113,6 +104,7 @@ export default defineComponent({
       closeModal,
       compliteEdit,
       editEmit,
+      manageJobs,
     };
   },
 });

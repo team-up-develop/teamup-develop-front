@@ -55,18 +55,14 @@ export default defineComponent({
     };
 
     const isForm = computed(() => {
-      if (
-        state.userName &&
+      return state.userName &&
         state.nickName &&
         state.userBirthday &&
         state.learningStartDate &&
         state.password &&
         state.email
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+        ? true
+        : false;
     });
 
     const nextStep2 = () => {

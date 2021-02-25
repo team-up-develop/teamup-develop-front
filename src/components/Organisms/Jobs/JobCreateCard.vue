@@ -46,21 +46,16 @@ export default defineComponent({
     state.jobDescription = jobDescription;
 
     const isForm = computed(() => {
-      if (state.jobTitle && state.devStartDate && state.devEndDate) {
-        return true;
-      } else {
-        return false;
-      }
+      return state.jobTitle && state.devStartDate && state.devEndDate
+        ? true
+        : false;
     });
 
     const minStartDate = computed(() => {
       if (state.devStartDate && state.devEndDate) {
         const a = new Date(state.devStartDate);
         const b = new Date(state.devEndDate);
-        if (a > b) {
-          return true;
-        }
-        return false;
+        return a > b ? true : false;
       }
       return false;
     });

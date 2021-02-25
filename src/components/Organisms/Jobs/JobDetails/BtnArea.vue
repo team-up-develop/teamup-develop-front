@@ -47,10 +47,7 @@ export default defineComponent({
     const router = context.root.$router;
 
     const isLogin = computed(() => {
-      if (state.userId) {
-        return true;
-      }
-      return false;
+      return state.userId ? true : false;
     });
 
     // * 自分の案件か否かを判定
@@ -95,11 +92,11 @@ export default defineComponent({
 
     const registerRedirect = () => router.push("/register");
 
-    onMounted(() => {
+    onMounted(async () => {
       if (!state.userId) {
         return;
       }
-      getCheckSelfJob();
+      await getCheckSelfJob();
       getCheckStatus();
     });
 

@@ -83,8 +83,7 @@ export default defineComponent({
     strageGet();
 
     const isForm = computed(() => {
-      if (
-        state.userName &&
+      return state.userName &&
         state.nickName &&
         state.password &&
         state.userBirthday &&
@@ -92,20 +91,14 @@ export default defineComponent({
         state.selectedLang &&
         state.selectedFramwork &&
         state.selectedSkill
-      ) {
-        return true;
-      } else {
-        return false;
-      }
+        ? true
+        : false;
     });
 
     const isOpenPassword = computed(() => {
-      if (state.passwordModal) {
-        return true;
-      } else {
-        return false;
-      }
+      return state.passwordModal ? true : false;
     });
+
     const openPassword = () => {
       state.passwordModal = true;
     };

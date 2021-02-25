@@ -34,17 +34,11 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const mandatoryLabel = computed(() => {
-      if (props.mandatory == true) {
-        return true;
-      }
-      return false;
+      return props.mandatory ? true : false;
     });
 
     const remainingLabel = computed(() => {
-      if (props.remaining == true) {
-        return true;
-      }
-      return false;
+      return props.remaining ? true : false;
     });
 
     const input = (e: any) => {

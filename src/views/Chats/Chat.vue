@@ -41,10 +41,7 @@ export default defineComponent({
     ]);
 
     const isLogin = computed(() => {
-      if (state.userId) {
-        return true;
-      }
-      return false;
+      return state.userId ? true : false;
     });
 
     onMounted(() => {

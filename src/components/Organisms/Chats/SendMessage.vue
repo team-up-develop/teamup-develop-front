@@ -27,11 +27,9 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive<State>(initialState());
 
+    // * job_id が存在するか判別
     const isChat = computed(() => {
-      if (props.id == 0) {
-        return false;
-      }
-      return true;
+      return props.id == 0 ? false : true;
     });
 
     // * メッセージの送信
