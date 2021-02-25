@@ -38,8 +38,8 @@ export default defineComponent({
     const postMessage = async () => {
       const params: messageParams = {
         message: state.chatMessage,
-        userID: state.userId,
-        jobID: props.id,
+        user_id: state.userId,
+        job_id: props.id,
       };
       // ? 空のメッセージは送信させない
       if (params.message == "") {
@@ -148,13 +148,13 @@ export default defineComponent({
     outline: none;
     margin-left: 1rem;
 
-    @media (max-width: 868px) {
+    @media (max-width: $me) {
       width: 70%;
     }
-    @media (max-width: 500px) {
+    @media (max-width: $sm) {
       width: 65%;
     }
-    @media (max-width: 380px) {
+    @media (max-width: $ti) {
       width: 60%;
     }
   }

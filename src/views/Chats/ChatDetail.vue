@@ -12,7 +12,9 @@ import axios from "axios";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
 import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { Message } from "@/types/index";
+import { FetchMessage } from "@/types/fetch";
 import { m, API_URL, truncate, catchError } from "@/master";
 
 type State = {
@@ -42,6 +44,7 @@ export default defineComponent({
     Loading,
     ChatGroups,
     SendMessage,
+    Breadcrumbs,
   },
   props: {
     // * job.idを受け取る
@@ -50,6 +53,19 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive<State>(initialState());
     let root: any = ref(null);
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "チャット",
+        disabled: true,
+      },
+    ]);
+
     const limit = (value: string, num: number) => truncate(value, num);
 
     const scrollChat = () => {
@@ -68,8 +84,8 @@ export default defineComponent({
     const getJob = async () => {
       try {
         const res = await axios.get(`${API_URL}/job/${props.id}`);
-        state.jobTitle = res.data.jobTitle;
-        state.clickJobId = res.data.id;
+        state.jobTitle = res.data.response.job_title;
+        state.clickJobId = res.data.response.id;
       } catch (error) {
         catchError(error);
       }
@@ -79,11 +95,11 @@ export default defineComponent({
       let chatLength = 0;
       setInterval(async () => {
         try {
-          const res = await axios.get<Message[]>(
-            `${API_URL}/chat_message/?job_id=${props.id}`
+          const res = await axios.get<FetchMessage>(
+            `${API_URL}/chat_messages?job_id=${props.id}`
           );
           state.loading = false;
-          state.chats = res.data;
+          state.chats = res.data.response;
           if (chatLength === state.chats.length) {
             return console.log("chatLengt が一緒なのでスクロールしません。");
           } else {
@@ -98,7 +114,7 @@ export default defineComponent({
     };
 
     onMounted(() => {
-      scrollChat();
+      // scrollChat();
       getChatMessage();
       getJob();
     });
@@ -107,6 +123,7 @@ export default defineComponent({
       ...toRefs(state),
       m: computed(() => m),
       root,
+      breadcrumbs,
       scrollChat,
       getChatMessage,
       getJob,
@@ -117,40 +134,43 @@ export default defineComponent({
 </script>
 
 <template>
-  <div class="wrapper">
-    <v-sheet class="chat-card">
-      <div class="chat-card__left">
-        <div class="title">
-          チャットグループ
+  <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <div class="wrapper">
+      <v-sheet class="chat-card">
+        <div class="chat-card__left">
+          <div class="title">
+            チャットグループ
+          </div>
+          <ChatGroups :userId="userId" />
         </div>
-        <ChatGroups :userId="userId" />
-      </div>
-      <div class="chat-card__right">
-        <div class="main" ref="target" v-show="!loading">
-          <router-link :to="`/jobs/${clickJobId}`" class="router">
-            <header class="header">{{ limit(jobTitle, 60) }}</header>
-          </router-link>
-          <section class="room" ref="root">
-            <div class="balloon" v-for="chat in chats" :key="chat.id">
-              <div class="balloon-image-left">
-                <div class="balloon-img"></div>
+        <div class="chat-card__right">
+          <div class="main" ref="target" v-show="!loading">
+            <router-link :to="`/jobs/${clickJobId}`" class="router">
+              <header class="header">{{ limit(jobTitle, 60) }}</header>
+            </router-link>
+            <section class="room" ref="root">
+              <div class="balloon" v-for="chat in chats" :key="chat.id">
+                <div class="balloon-image-left">
+                  <div class="balloon-img"></div>
+                </div>
+                <div class="user-name">
+                  {{ chat.user.login_name }}
+                </div>
+                <div class="balloon-text-right">
+                  <p>{{ chat.message }}</p>
+                </div>
               </div>
-              <div class="user-name">
-                {{ chat.user.userName }}
-              </div>
-              <div class="balloon-text-right">
-                <p>{{ chat.message }}</p>
-              </div>
-            </div>
-          </section>
+            </section>
+          </div>
+          <Loading v-show="loading" />
+          <div class="bottom">
+            <SendMessage :id="id" />
+          </div>
         </div>
-        <Loading v-show="loading" />
-        <div class="bottom">
-          <SendMessage :id="id" />
-        </div>
-      </div>
-    </v-sheet>
-  </div>
+      </v-sheet>
+    </div>
+  </section>
 </template>
 
 <style lang="scss" scoped>
@@ -179,6 +199,10 @@ export default defineComponent({
   margin: 0 auto;
   position: relative;
 
+  @media screen and (max-width: $gr) {
+    width: 100%;
+  }
+
   .chat-card {
     @include card-border-color;
     background-color: $white;
@@ -191,6 +215,10 @@ export default defineComponent({
     height: 93%;
     position: relative;
 
+    @media (max-width: $me) {
+      width: 95%;
+    }
+
     &__left {
       width: 285px;
       height: 100%;
@@ -201,6 +229,10 @@ export default defineComponent({
       overflow: scroll;
       z-index: 10;
       position: relative;
+
+      @media (max-width: $me) {
+        display: none;
+      }
 
       .title {
         width: 100%;
@@ -302,6 +334,10 @@ export default defineComponent({
       right: 0;
       border-radius: 0 20px 20px 0;
 
+      @media (max-width: $me) {
+        width: 100%;
+      }
+
       .main {
         height: 85%;
         display: flex;
@@ -326,6 +362,10 @@ export default defineComponent({
         .room {
           padding: 1rem 2rem;
           overflow: scroll;
+
+          @media (max-width: $me) {
+            padding: 1rem 0.5rem 1rem 1rem;
+          }
         }
       }
 
@@ -339,6 +379,10 @@ export default defineComponent({
         border-radius: 0 0px 8px 0;
         box-shadow: 0 -3px 2px #00000020;
         padding: 1.5rem 0 1.5rem 1rem;
+
+        @media (max-width: $sm) {
+          padding: 1rem 0 1rem 0.1rem;
+        }
       }
     }
   }
@@ -394,6 +438,7 @@ export default defineComponent({
 }
 .balloon-text-right,
 .balloon-text-left {
+  word-wrap: break-word;
   position: relative;
   padding: 0.8rem 1.4rem;
   // border: 1px solid #aaa;
@@ -447,37 +492,5 @@ export default defineComponent({
   top: 15px;
   right: -19px;
   background-color: #ffffff;
-}
-// * ここまでトーク周り
-
-@media screen and (max-width: 1200px) {
-  .wrapper {
-    width: 100%;
-  }
-}
-
-@media (max-width: 868px) {
-  .wrapper {
-    .chat-card {
-      width: 95%;
-
-      &__left {
-        display: none;
-      }
-      &__right {
-        width: 100%;
-
-        .room {
-          padding: 1rem 0.5rem 1rem 1rem;
-        }
-      }
-    }
-  }
-}
-
-@media (max-width: 500px) {
-  .wrapper .chat-card__right .bottom {
-    padding: 1rem 0 1rem 0.1rem;
-  }
 }
 </style>

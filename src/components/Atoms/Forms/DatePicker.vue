@@ -6,6 +6,7 @@ export default Vue.extend({
   props: {
     type: { type: String, required: true },
     value: { type: String || null, required: false },
+    placeholder: { type: String, required: true },
   },
   data() {
     return {
@@ -28,7 +29,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <v-col cols="12" sm="6" md="4">
+    <v-col>
       <v-dialog
         ref="dialog"
         v-model="modal"
@@ -39,7 +40,7 @@ export default Vue.extend({
         <template v-slot:activator="{ on, attrs }">
           <v-text-field
             :value="value"
-            label="開発開始日"
+            :label="placeholder"
             prepend-icon="mdi-calendar"
             readonly
             v-bind="attrs"

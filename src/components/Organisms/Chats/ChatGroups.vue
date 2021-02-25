@@ -10,7 +10,7 @@ import axios from "axios";
 import { Job } from "@/types/index";
 import { ManageJob } from "@/types/index";
 import { m, dayJs, API_URL, truncate, catchError } from "@/master";
-import { FetchJobs, FetchManageJobs } from "@/types/fetch";
+import { FetchManageJobs } from "@/types/fetch";
 
 type State = {
   chatGroups: Job[] | {};
@@ -57,20 +57,8 @@ export default defineComponent({
       }
     };
 
-    const getMyselfGroupes = async () => {
-      try {
-        const res = await axios.get<FetchJobs>(
-          `${API_URL}/jobs?user_id=${props.userId}`
-        );
-        state.myselfJobs = res.data.response;
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
-    onMounted(() => {
-      getChatGroups();
-      getMyselfGroupes();
+    onMounted(async () => {
+      await getChatGroups();
     });
 
     return {
@@ -112,21 +100,6 @@ export default defineComponent({
         </v-row>
       </div>
     </v-card>
-    <v-card
-      :to="`/chat/${myselfJob.id}`"
-      v-for="myselfJob in myselfJobs"
-      :key="myselfJob.id"
-      v-bind:class="{ active: isActive, 'text-danger': hasError }"
-      class="group"
-    >
-      <div class="group__area">
-        <p>{{ limit(myselfJob.job_title, 36) }}</p>
-        <v-row class="row">
-          <label for="name" class="selfPost">投稿案件</label>
-          <section>{{ day(myselfJob.created_at, "YYYY年 M月 D日") }}</section>
-        </v-row>
-      </div>
-    </v-card>
   </section>
 </template>
 
@@ -156,13 +129,13 @@ export default defineComponent({
     margin-top: 0.2rem;
     position: relative;
 
-    @media (max-width: 868px) {
+    @media (max-width: $me) {
       padding: 0.7rem 0 0.5rem 1rem;
       margin: 0;
     }
 
     .row {
-      padding: 0rem 0 1rem 1rem;
+      padding: 0rem 0 1.2rem 1rem;
       position: absolute;
       bottom: 0;
       width: 100%;
@@ -203,6 +176,7 @@ export default defineComponent({
         position: absolute;
         right: 0;
         top: 0;
+        margin: 0.1rem 0 0 0;
       }
     }
     p {

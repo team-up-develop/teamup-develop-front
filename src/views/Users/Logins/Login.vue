@@ -53,13 +53,17 @@ export default defineComponent({
 <template>
   <section>
     <div class="login-wrapper">
-      <div class="login-container">
+      <v-card class="login-container">
         <div class="login-title">LOGIN</div>
         <div class="name-form-mail">
           <label for="name">メールアドレス</label>
           <br /><br />
           <v-row cols="12" md="4">
-            <Email v-model="LoginName" type="text" />
+            <Email
+              v-model="LoginName"
+              placeholder="example@teamUp.com"
+              type="text"
+            />
           </v-row>
         </div>
         <div class="name-form-password">
@@ -74,13 +78,15 @@ export default defineComponent({
         </div>
         <div class="btn-area">
           <p>
-            登録してない方は<router-link to="/register" class="router-link"
+            登録してない方は<router-link
+              to="/register/step/1"
+              class="router-link"
               ><span>こちら</span></router-link
             >
           </p>
-          <button @click="login" class="login-btn">ログイン</button>
+          <button @click="login" class="login-btn">ログインする</button>
         </div>
-      </div>
+      </v-card>
     </div>
   </section>
 </template>
@@ -105,11 +111,15 @@ section {
     max-width: 500px;
     height: 620px;
     margin: 2rem auto 3rem auto;
-    border: solid 1px #b9b9b9;
     border-radius: 8px;
     padding: 1rem 3rem 2rem 3rem;
     position: relative;
     background-color: $white;
+
+    @media (max-width: $sm) {
+      width: 95%;
+      padding: 1rem;
+    }
 
     //* ログインタイトル
     .login-title {
@@ -158,12 +168,14 @@ section {
       position: absolute;
       bottom: 0;
       padding: 2rem 0;
-      // background-color: #B9B9B9;
+
+      @media (max-width: $sm) {
+        width: 90%;
+      }
 
       .login-btn {
-        @include blue-btn;
-        @include neumorphism;
-        color: $white;
+        @include neumorphismGrey;
+        color: $primary-color;
         display: block;
         width: 100%;
         padding: 1.2rem 5rem;
@@ -181,21 +193,6 @@ section {
         transition: 0.3s;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
         outline: none;
-      }
-    }
-  }
-}
-
-@media (max-width: 500px) {
-  .login-wrapper {
-    width: 100%;
-
-    .login-container {
-      width: 98%;
-      padding: 1rem;
-
-      .btn-area {
-        width: 90%;
       }
     }
   }

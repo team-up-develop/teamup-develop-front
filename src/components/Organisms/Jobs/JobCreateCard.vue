@@ -5,10 +5,10 @@ import {
   toRefs,
   computed,
 } from "@vue/composition-api";
-import JobTitleInput from "@/components/Atoms/Forms/JobTitleInput.vue";
-import DatePicker from "@/components/Atoms/Forms/DatePicker.vue";
-import JobDescriptionInput from "@/components/Atoms/Forms/JobDescriptionInput.vue";
+import InputArea from "@/components/Molecules/Forms/InputArea.vue";
+import DescriptionArea from "@/components/Molecules/Forms/DescriptionArea.vue";
 import Session from "@/components/Atoms/Commons/Session.vue";
+import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import { JobCreateParamsFirst } from "@/types/params";
 
 export type JobCreateSession1 = {
@@ -27,10 +27,10 @@ const initialState = (): JobCreateSession1 => ({
 
 export default defineComponent({
   components: {
-    JobTitleInput,
-    DatePicker,
-    JobDescriptionInput,
     Session,
+    InputArea,
+    DescriptionArea,
+    DatePickerArea,
   },
   setup: () => {
     const state = reactive<JobCreateSession1>(initialState());
@@ -101,29 +101,58 @@ export default defineComponent({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="1" />
+      <Session :num="2" />
       <section>
         <div class="title">
-          <label for="name" class="label">案件タイトル</label
-          ><label for="name" class="label-required">必須</label>
-          <JobTitleInput v-model="jobTitle" type="text" />
+          <InputArea
+            v-model="jobTitle"
+            type="text"
+            name="jobTitle"
+            textLabel="案件タイトル"
+            :mandatory="true"
+            mandatoryText=""
+            placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)"
+            maxlength="60"
+            :remaining="true"
+          />
+        </div>
+        <label v-if="minStartDate" class="error-message mb-5">{{
+          "開始日が終了日より前です。"
+        }}</label>
+        <div class="time">
+          <DatePickerArea
+            v-model="devStartDate"
+            placeholder="開発を開始した日"
+            name="devStartDate"
+            type="text"
+            textLabel="開発開始時期"
+            :mandatory="true"
+            mandatoryText=""
+          />
         </div>
         <div class="time">
-          <label for="name" class="label">開発開始時期</label
-          ><label for="name" class="label-required">必須</label>
-          <DatePicker v-model="devStartDate" type="text" />
-        </div>
-        <div class="time">
-          <label for="name" class="label">開発終了時期</label
-          ><label for="name" class="label-required">必須</label
-          ><label v-if="minStartDate" class="error-message">{{
-            "開始日が終了日より前です。"
-          }}</label>
-          <DatePicker v-model="devEndDate" type="text" />
+          <DatePickerArea
+            v-model="devEndDate"
+            placeholder="開発を終了する予定日"
+            name="devEndDate"
+            type="text"
+            textLabel="開発終了時期"
+            :mandatory="true"
+            mandatoryText=""
+          />
         </div>
         <div class="detail">
-          <label for="name" class="label">概要</label>
-          <JobDescriptionInput v-model="jobDescription" type="text" />
+          <DescriptionArea
+            v-model="jobDescription"
+            type="text"
+            name="jobDescription"
+            textLabel="概要"
+            :mandatory="false"
+            mandatoryText=""
+            placeholder="詳しい内容や現在の状況を記載してください(500文字以内)"
+            maxlength="500"
+            :remaining="true"
+          />
         </div>
       </section>
       <router-link
@@ -177,6 +206,10 @@ export default defineComponent({
   padding: 0.25rem 0.9rem;
   text-align: center;
   margin-left: 10px;
+}
+.error-message {
+  color: $error-message-color;
+  font-weight: bold;
 }
 
 section {

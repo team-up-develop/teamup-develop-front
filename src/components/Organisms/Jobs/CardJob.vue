@@ -13,24 +13,34 @@ export default defineComponent({
     job: { type: Object, defalut: null, require: true },
   },
   setup: (props: any) => {
-    const day = (value: string, format: string) => dayJs(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
-
-    const isStatusNew = computed(() => {
-      if (props.job.job_status_id == m.JOB_STATUS_NEW) {
-        return true;
-      }
-      return false;
-    });
-
     return {
-      limit,
-      day,
-      m: computed(() => m),
-      isStatusNew,
+      ...useUtils(),
+      ...useJobStatus(props),
     };
   },
 });
+
+const useUtils = () => {
+  const day = (value: string, format: string) => dayJs(value, format);
+  const limit = (value: string, num: number) => truncate(value, num);
+  return {
+    m: computed(() => m),
+    day,
+    limit,
+  };
+};
+
+const useJobStatus = (props: any) => {
+  const isStatusNew = computed(() => {
+    if (props.job.job_status_id == m.JOB_STATUS_NEW) {
+      return true;
+    }
+    return false;
+  });
+  return {
+    isStatusNew,
+  };
+};
 </script>
 
 <template>
@@ -57,7 +67,7 @@ export default defineComponent({
         <div class="post-user-image"></div>
         <div class="post-user-name-area">
           <div class="post-user-name">
-            {{ job.user.user_name }}
+            {{ limit(job.user.login_name, 12) }}
           </div>
         </div>
         <div class="label-area mt-5">
@@ -74,14 +84,13 @@ export default defineComponent({
 .job-cards {
   width: 97%;
   margin: 10px 0.5%;
-  border: solid 1px $card-border-color;
   background-color: $white;
   border-radius: 8px;
   transition: 0.3s;
   color: $text-main-color;
   cursor: pointer;
 
-  @media screen and (max-width: 999px) {
+  @media screen and (max-width: $la) {
     width: 100%;
   }
 
@@ -94,7 +103,7 @@ export default defineComponent({
     font-size: 18px;
     text-decoration: underline;
 
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       padding: 2rem 0.5rem 0rem 1.5rem;
       min-height: none;
     }
@@ -102,11 +111,11 @@ export default defineComponent({
     p {
       display: none;
 
-      @media screen and (max-width: 420px) {
+      @media screen and (max-width: $me) {
         display: block;
       }
     }
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       span {
         display: none;
       }
@@ -119,7 +128,7 @@ export default defineComponent({
     text-align: left;
     pointer-events: none;
 
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       padding: 0 0.5rem 0 1.1rem;
     }
   }
@@ -129,7 +138,7 @@ export default defineComponent({
     pointer-events: none;
     margin-top: 0.2rem;
 
-    @media screen and (max-width: 420px) {
+    @media screen and (max-width: $me) {
       padding: 0.5rem 0px 1.1rem 0;
     }
 
@@ -140,7 +149,7 @@ export default defineComponent({
       text-align: left;
       pointer-events: none;
 
-      @media screen and (max-width: 420px) {
+      @media screen and (max-width: $me) {
         padding: 0rem 0px 0 1.1rem;
       }
 
@@ -149,7 +158,7 @@ export default defineComponent({
         pointer-events: none;
         font-size: 14px;
 
-        @media screen and (max-width: 420px) {
+        @media screen and (max-width: $me) {
           display: none;
         }
       }
@@ -187,6 +196,7 @@ export default defineComponent({
       }
 
       .post-user-name-area {
+        max-width: 180px;
         text-align: left;
         padding: 1.5rem 0rem;
         position: relative;
@@ -204,6 +214,7 @@ export default defineComponent({
       // TODO: 修正
       .label-area {
         margin-left: 1rem;
+        width: 140px;
 
         @media screen and (max-width: 1100px) {
           margin-left: 0.2rem;

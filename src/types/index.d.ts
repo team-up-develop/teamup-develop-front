@@ -7,9 +7,9 @@ export type Job = {
   job_description: string | null;
   job_status_id: number;
   job_title: string;
-  programing_framework_responses: Framework[];
-  programing_language_responses: Language[];
-  skill_responses: Skill[];
+  programing_frameworks: Framework[];
+  programing_languages: Language[];
+  skills: Skill[];
   // publicationPeriod: Date;
   recruitment_numbers: number;
   updated_at: Date;
@@ -70,7 +70,7 @@ export type Language = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  programing_language_name: string;
+  name: string;
 };
 
 export type Framework = {
@@ -78,7 +78,7 @@ export type Framework = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  programing_framework_name: string;
+  name: string;
 };
 
 export type Skill = {
@@ -86,17 +86,16 @@ export type Skill = {
   createdAt: Date;
   updatedAt: Date;
   deletedAt: Date | null;
-  skill_name: string;
+  name: string;
 };
 
 export type Message = {
-  createdAt: Date;
-  deletedAt: Date | null;
   id: number;
   job: Job;
-  jobId: number;
+  job_id: number;
   message: string;
   updatedAt: Date;
   user: User;
-  userId: number;
+  user_id: number;
+  createdAt: Date;
 };

@@ -47,12 +47,15 @@ export default defineComponent({
 @import "@/assets/scss/_variables.scss";
 
 .dev-detail-area {
-  @include card-border-color;
   border-radius: 4px;
   padding: 1.5rem 4rem 1rem 4rem;
   margin-bottom: 2rem;
   position: relative;
   line-height: 1.8;
+
+  @media screen and (max-width: $sm) {
+    padding: 1.5rem 1rem;
+  }
 
   .detail-leff-area {
     display: inline-block;
@@ -74,13 +77,6 @@ export default defineComponent({
         font-size: 14px;
       }
     }
-  }
-}
-
-//* スマホレスポンシブ
-@media screen and (max-width: 500px) {
-  .dev-detail-area {
-    padding: 1.5rem 1rem;
   }
 }
 </style>

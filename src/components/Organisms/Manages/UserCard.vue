@@ -40,7 +40,7 @@ export default defineComponent({
 
 <template>
   <section>
-    <v-sheet class="card">
+    <v-card class="card">
       <v-col>
         <v-row class="card__top">
           <div class="user-image"></div>
@@ -66,7 +66,7 @@ export default defineComponent({
           </v-row>
         </v-row>
       </v-col>
-    </v-sheet>
+    </v-card>
   </section>
 </template>
 
@@ -75,29 +75,25 @@ export default defineComponent({
 section {
   width: 30%;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     width: 100%;
   }
 }
 .card {
-  @include card-border-color;
   width: 360px;
+  min-width: 300px;
   height: 235px;
   padding: 1rem 1.2rem;
   border-radius: 8px;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     margin: 0 auto;
     width: 85%;
     margin-bottom: 1.5rem;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: $me) {
     width: 95%;
-  }
-
-  @media screen and (max-width: 450px) {
-    width: 98%;
   }
 
   &__top {
@@ -122,8 +118,8 @@ section {
     position: relative;
 
     .btn {
-      @include box-shadow-btn;
-      background-color: $primary-dark;
+      @include neumorphism;
+      background-color: $secondary-color;
       color: $white;
       padding: 0.5rem 4rem;
       position: absolute;

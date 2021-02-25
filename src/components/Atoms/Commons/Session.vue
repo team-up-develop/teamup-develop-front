@@ -12,15 +12,15 @@ export default Vue.extend({
   <section>
     <v-stepper num="num">
       <v-stepper-header>
-        <v-stepper-step :complete="num > 1" step="1">
+        <v-stepper-step :complete="num > 1" step="1" color="blue lighten-1">
           STEP 1
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step :complete="num > 2" step="2">
+        <v-stepper-step :complete="num > 2" step="2" color="blue lighten-1">
           STEP 2
         </v-stepper-step>
         <v-divider></v-divider>
-        <v-stepper-step step="3">
+        <v-stepper-step step="3" color="blue lighten-1">
           STEP 3
         </v-stepper-step>
       </v-stepper-header>

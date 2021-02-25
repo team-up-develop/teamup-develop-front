@@ -4,14 +4,14 @@ export default {
     links: [
       { name: "トップ", url: "/" },
       { name: "探す", url: "/jobs" },
-      { name: "TeamUpとは？", url: "/about" },
+      { name: "チームアップとは?", url: "/about" },
       { name: "お問い合わせ", url: "/contact" },
     ],
   }),
 };
 </script>
 <template>
-  <v-footer color="blue darken-1 white--text text-center" padless>
+  <v-footer color="white darken-1 lighten-2 white--text text-center" padless>
     <v-row justify="center" no-gutters>
       <v-btn
         v-for="link in links"
@@ -25,8 +25,10 @@ export default {
           <span>{{ link.name }}</span>
         </router-link>
       </v-btn>
-      <v-col class="blue darken-1 py-4 text-center white--text" cols="12">
-        {{ new Date().getFullYear() }} — <strong>TeamUp</strong>
+      <v-col class="white darken-1  py-4 text-center balck--text" cols="12">
+        <span class="text"
+          >{{ new Date().getFullYear() }} — <strong>TeamUp</strong></span
+        >
       </v-col>
     </v-row>
   </v-footer>
@@ -36,7 +38,12 @@ export default {
 @import "@/assets/scss/_variables.scss";
 
 .router-link {
-  color: $white;
+  color: $text-main-color;
   text-decoration: none;
+  font-weight: bold;
+}
+.text {
+  color: $text-main-color;
+  font-weight: bold;
 }
 </style>

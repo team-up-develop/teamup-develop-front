@@ -1,92 +1,126 @@
 <script lang="ts">
-import Vue from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  computed,
+} from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
+import Vuex from "@/store/index";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import PostUser from "@/components/Organisms/Users/PostUser.vue";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { ManageJob, User } from "@/types/index";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 // import Logout from '@/components/button/Logout'
 
-type DataType = {
+type State = {
   myselfFlag: boolean;
   userInfo: User;
   userId: number;
   modal: boolean;
   manageJobs: ManageJob[];
+  loading: boolean;
 };
 
-export default Vue.extend({
-  props: {
-    id: Number,
-  },
-  data(): DataType {
-    return {
-      myselfFlag: false,
-      userInfo: {},
-      userId: this.$store.state.auth.userId,
-      modal: false,
-      manageJobs: [],
-    };
-  },
-  created() {
-    if (this.userId == this.id) {
-      this.myselfFlag = true;
-    }
-    // * 投稿案件取得
-    axios
-      .get(`${API_URL}/jobs?user_id=${this.id}`)
-      .then((res) => {
-        this.manageJobs = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
-      });
-    // * ユーザー情報取得
-    axios
-      .get(`${API_URL}/user/${this.id}`)
-      .then((res) => {
-        this.userInfo = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
-      });
-  },
-  methods: {
-    // * モーダル
-    openModal() {
-      this.modal = true;
-    },
-    closeModal() {
-      this.modal = false;
-    },
-    // * 編集完了 emit
-    compliteEdit() {
-      this.closeModal();
-      // * ユーザー情報取得
-      axios
-        .get(`${API_URL}/user/${this.id}`)
-        .then((res) => {
-          this.userInfo = res.data;
-        })
-        .catch((error) => {
-          catchError(error);
-        });
-    },
-    editEmit() {
-      this.openModal();
-    },
-  },
+const initialState = (): State => ({
+  myselfFlag: false,
+  userInfo: {},
+  userId: Vuex.state.auth.userId,
+  modal: false,
+  manageJobs: [],
+  loading: true,
+});
+
+export default defineComponent({
   components: {
     ProfileEditModal,
     PostUser,
     CardJob,
+    Breadcrumbs,
+    Loading,
+  },
+  props: {
+    id: Number,
+  },
+  setup: (props) => {
+    const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "ユーザー詳細",
+        disabled: true,
+      },
+    ]);
+
+    if (state.userId == props.id) {
+      state.myselfFlag = true;
+    }
+    const fetchManageJob = async () => {
+      try {
+        setTimeout(async () => {
+          const res = await axios.get(`${API_URL}/jobs?user_id=${props.id}`);
+          state.loading = false;
+          state.manageJobs = res.data.response;
+        }, 700);
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    const fetchUser = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    onMounted(() => {
+      fetchManageJob();
+      fetchUser();
+    });
+
+    const openModal = () => {
+      state.modal = true;
+    };
+    const closeModal = () => {
+      state.modal = false;
+    };
+
+    const compliteEdit = async () => {
+      await fetchUser();
+      await closeModal();
+    };
+
+    const editEmit = () => {
+      openModal();
+    };
+
+    return {
+      ...toRefs(state),
+      breadcrumbs,
+      openModal,
+      closeModal,
+      compliteEdit,
+      editEmit,
+    };
   },
 });
 </script>
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper">
       <!-- 編集 モーダル画面 -->
       <ProfileEditModal
@@ -115,23 +149,26 @@ export default Vue.extend({
           </v-row>
         </div>
       </section>
-      <v-row class="jobs">
-        <router-link
-          :to="`/jobs/${jobs.id}`"
-          v-for="jobs in manageJobs"
-          :key="jobs.id"
-          class="jobs__card"
-        >
-          <CardJob :job="jobs" />
-        </router-link>
-      </v-row>
-      <div class="button-area">
-        <div v-if="myselfFlag === true" class="button-action-area">
-          <button @click="openModal" class="btn-box-edit">編集する</button>
+      <template v-if="!loading">
+        <v-row class="jobs">
+          <router-link
+            :to="`/jobs/${jobs.id}`"
+            v-for="jobs in manageJobs"
+            :key="jobs.id"
+            class="jobs__card"
+          >
+            <CardJob :job="jobs" />
+          </router-link>
+        </v-row>
+        <div class="button-area">
+          <div v-if="myselfFlag === true" class="button-action-area">
+            <button @click="openModal" class="btn-box-edit">編集する</button>
+          </div>
+          <!-- 非ログイン時 リダイレクトさせる -->
+          <div class="button-action-area" v-else></div>
         </div>
-        <!-- 非ログイン時 リダイレクトさせる -->
-        <div class="button-action-area" v-else></div>
-      </div>
+      </template>
+      <Loading v-else />
     </div>
   </section>
 </template>
@@ -166,11 +203,19 @@ export default Vue.extend({
     width: 88%;
     margin: 0 auto;
 
+    @media screen and (max-width: $la) {
+      width: 100%;
+    }
+
     &__post {
       width: 85%;
       display: flex;
       flex-direction: column;
       margin: 0 auto;
+
+      @media screen and (max-width: $la) {
+        width: 95%;
+      }
 
       .header {
         border-bottom: $dark-grey 2px solid;
@@ -199,11 +244,11 @@ export default Vue.extend({
   }
 
   .jobs {
-    width: 80%;
+    width: 85%;
     margin: 2rem auto;
 
-    @media screen and (max-width: 480px) {
-      width: 98%;
+    @media screen and (max-width: $sm) {
+      width: 95%;
     }
 
     &__card {
@@ -214,62 +259,10 @@ export default Vue.extend({
   }
 }
 
-//* スキル カード
-.detail-wrapper .skill {
-  width: 100%;
-  background-color: #f1f5f9;
-
-  &__card {
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin: 2rem auto 2rem auto;
-  }
-}
-
-//* 開発詳細 カード
-.detail-wrapper .pr {
-  width: 100%;
-  background-color: #f1f5f9;
-
-  &__card {
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin: 0rem auto 2rem auto;
-  }
-}
-
 .button-area {
   display: none;
-}
 
-/* タブレットレスポンシブ */
-@media screen and (max-width: 900px) {
-  .detail-wrapper {
-    .user-area {
-      width: 100%;
-      &__post {
-        width: 95%;
-      }
-    }
-    .skill {
-      &__card {
-        width: 95%;
-      }
-    }
-    .pr {
-      &__card {
-        width: 95%;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 650px) {
-  .button-area {
+  @media screen and (max-width: $me) {
     width: 100%;
     display: flex;
     align-items: center;
@@ -278,44 +271,32 @@ export default Vue.extend({
     position: sticky;
     left: 0;
     bottom: 0;
-
-    //* 編集するボタン
-    .btn-box-edit {
-      @include box-shadow-btn;
-      background-color: $secondary-color;
-      color: $white;
-      padding: 1.2rem 8rem;
-      transition: 0.3s;
-      border-radius: 50px;
-      font-weight: 600;
-      line-height: 1;
-      text-align: center;
-      margin: auto;
-      font-size: 1.3rem;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-      border: none;
-
-      &:hover {
-        @include btn-hover;
-      }
-    }
   }
-}
 
-/* スマホレスポンシブ */
-@media screen and (max-width: 500px) {
-  .detail-wrapper {
-    .skill {
-      &__card {
-        width: 100%;
-      }
+  //* 編集するボタン
+  .btn-box-edit {
+    @include box-shadow-btn;
+    background-color: $secondary-color;
+    color: $white;
+    padding: 1.2rem 8rem;
+    transition: 0.3s;
+    border-radius: 50px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    margin: auto;
+    font-size: 1.3rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    border: none;
+
+    @media screen and (max-width: $ti) {
+      padding: 1.2rem 6.5rem;
     }
-    .pr {
-      &__card {
-        width: 100%;
-      }
+
+    &:hover {
+      @include btn-hover;
     }
   }
 }

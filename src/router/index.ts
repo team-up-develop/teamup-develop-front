@@ -16,7 +16,8 @@ import Register from "@/views/Users/Registers/Register.vue";
 import SentMailComplete from "@/views/Users/Registers/SentMailComplete.vue";
 import RegisterStep1 from "@/views/Users/Registers/RegisterStep1.vue";
 import RegisterStep2 from "@/views/Users/Registers/RegisterStep2.vue";
-import RegisterStep3 from "@/views/Users/Registers/RegisterStep3.vue";
+import RegisterStepComplete from "@/views/Users/Registers/RegisterStepComplete.vue";
+import RegisterConfirm from "@/views/Users/Registers/RegisterConfirm.vue";
 import Manage from "@/views/Manages/Manage.vue";
 import Participate from "@/views/Manages/StatusChanges/Participate.vue";
 import Applicant from "@/views/Manages/StatusChanges/Applicant.vue";
@@ -93,19 +94,21 @@ const routes: Array<RouteConfig> = [
   },
   // * 管理案件 ユーザー
   {
-    path: "/manage/profile/:jobId/:id/",
+    path: "/manage/profile/:jobId/:id/:applyId",
     component: ManageUserProfile,
     props: (route) => ({
       id: Number(route.params.id),
       jobId: Number(route.params.jobId),
+      applyId: Number(route.params.applyId),
     }),
   },
   {
-    path: "/manage/profile/:jobId/:id/jobs",
+    path: "/manage/profile/:jobId/:id/:applyId/jobs",
     component: ManageUserProfileJobs,
     props: (route) => ({
       id: Number(route.params.id),
       jobId: Number(route.params.jobId),
+      applyId: Number(route.params.applyId),
     }),
   },
   {
@@ -125,19 +128,24 @@ const routes: Array<RouteConfig> = [
   },
   // * 本登録登録
   {
-    path: "/step/1",
+    path: "/register/step/1",
     name: "RegisterStep1",
     component: RegisterStep1,
   },
   {
-    path: "/step/2",
+    path: "/register/step/2",
     name: "RegisterStep2",
     component: RegisterStep2,
   },
   {
-    path: "/step/3",
-    name: "RegisterStep3",
-    component: RegisterStep3,
+    path: "/register/step/confirm",
+    name: "RegisterConfirm",
+    component: RegisterConfirm,
+  },
+  {
+    path: "/register/step/complete",
+    name: "RegisterStepComplete",
+    component: RegisterStepComplete,
   },
   // * 管理
   // ? 管理 管理

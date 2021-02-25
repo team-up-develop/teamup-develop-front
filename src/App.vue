@@ -55,12 +55,14 @@ export default defineComponent({
 </template>
 
 <style lang="scss" scoped>
+@import "@/assets/scss/_variables.scss";
+
 .app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #111111;
+  color: $text-main-color;
   position: relative;
   width: 100%;
 }
@@ -69,9 +71,10 @@ export default defineComponent({
   min-height: 112vh;
   width: 100%;
   position: relative;
-  margin-top: 0.7rem;
   padding-bottom: 15rem;
+  background-color: $light-grey;
 
+  // TODO:
   @media screen and (max-width: 600px) {
     padding: 1rem 0;
     padding-bottom: 17rem;
@@ -87,7 +90,7 @@ export default defineComponent({
   }
 }
 
-@media (min-width: 960px) {
+@media (min-width: $la) {
   .container {
     max-width: none;
   }
