@@ -14,6 +14,7 @@ import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
 import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
+import useJobs from "@/hooks/useJobs";
 
 type State = {
   userId: number;
@@ -45,6 +46,7 @@ export default defineComponent({
   setup: (props, context) => {
     const state = reactive<State>(initialState());
     const router = context.root.$router;
+    const { manageJobs, fetchManageJobs } = useJobs();
 
     const isLogin = computed(() => {
       return state.userId ? true : false;
@@ -52,16 +54,11 @@ export default defineComponent({
 
     // * 自分の案件か否かを判定
     const getCheckSelfJob = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/jobs?user_id=${state.userId}`);
-        for (let i = 0; i < res.data.response.length; i++) {
-          const selfJob = res.data.response[i];
-          if (selfJob.id === props.id) {
-            state.selfJobPost = true;
-          }
+      for (let i = 0; i < manageJobs.value.length; i++) {
+        const selfJob = manageJobs.value[i];
+        if (selfJob.id === props.id) {
+          state.selfJobPost = true;
         }
-      } catch (error) {
-        catchError(error);
       }
     };
 
@@ -96,6 +93,7 @@ export default defineComponent({
       if (!state.userId) {
         return;
       }
+      await fetchManageJobs();
       await getCheckSelfJob();
       getCheckStatus();
     });

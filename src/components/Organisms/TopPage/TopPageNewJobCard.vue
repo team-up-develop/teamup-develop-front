@@ -1,30 +1,53 @@
 <script lang="ts">
-import Vue from "vue";
-import axios from "axios";
-import { API_URL } from "@/master";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted,
+  // computed,
+} from "@vue/composition-api";
+// import axios from "axios";
+// import { API_URL } from "@/master";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
+import useJobs from "@/hooks/useJobs";
 
-export default Vue.extend({
+type State = {
+  newJobsDesktop: {}[];
+  newJobs: any;
+};
+
+const initialState = (): State => ({
+  newJobsDesktop: [], //? デスクトップサイズ 案件4つ
+  newJobs: [], //? 通常 案件3つ
+});
+
+export default defineComponent({
   components: {
     CardJob,
   },
-  data() {
-    return {
-      newJobsDesktop: [], //? デスクトップサイズ 案件4つ
-      newJobs: [], //? 通常 案件3つ
-    };
-  },
-  created() {
-    axios.get(`${API_URL}/jobs`).then((res) => {
-      // this.newJobsDesktop = res.data.response.slice(0, 4);
-      if (res.data.response) {
-        if (res.data.response.length > 2) {
-          this.newJobs = res.data.response.slice(0, 3);
-        } else {
-          return;
-        }
+  setup: () => {
+    const state = reactive<State>(initialState());
+    const { jobs, fetchJobs } = useJobs();
+
+    const fetchNewJobsa = () => {
+      if (jobs.value.length > 2) {
+        state.newJobs = jobs.value.slice(0, 3);
+      } else {
+        return state.newJobs;
       }
+    };
+
+    onMounted(async () => {
+      await fetchJobs();
+      await fetchNewJobsa();
     });
+
+    return {
+      ...toRefs(state),
+      fetchNewJobsa,
+      fetchJobs,
+      jobs,
+    };
   },
 });
 </script>
@@ -32,7 +55,6 @@ export default Vue.extend({
 <template>
   <section>
     <v-row>
-      <!-- 案件カード デスクトップ -->
       <router-link
         :to="`/jobs/${newJob.id}`"
         class="card"
