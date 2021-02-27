@@ -13,18 +13,31 @@ import Vuex from "@/store/index";
 
 type State = {
   userId: number;
+  jobs: Job[];
   manageJobs: ManageJob[];
   favoriteJobs: Job[];
+  selfJobFlag?: boolean;
 };
 
 const initialState = (): any => ({
   userId: Vuex.state.auth.userId,
+  jobs: [],
   manageJobs: [],
   favoriteJobs: [],
+  selfJobFlag: false,
 });
 
 const useJobs = () => {
   const state = reactive<State>(initialState());
+
+  const fetchJobs = async () => {
+    try {
+      const res = await axios.get<FetchJobs>(`${API_URL}/jobs`);
+      state.jobs = res.data.response;
+    } catch (error) {
+      catchError(error);
+    }
+  };
 
   const fetchManageJobs = async () => {
     try {
@@ -32,6 +45,7 @@ const useJobs = () => {
         `${API_URL}/jobs?user_id=${state.userId}`
       );
       state.manageJobs = res.data.response;
+      // console.log(state.manageJobs);
     } catch (error) {
       catchError(error);
     }
@@ -48,13 +62,15 @@ const useJobs = () => {
     }
   };
 
-  onMounted(() => {
+  onMounted(async () => {
+    fetchJobs();
     fetchManageJobs();
     fetchFavoriteJobs();
   });
 
   return {
     ...toRefs(state),
+    fetchJobs,
     fetchManageJobs,
     fetchFavoriteJobs,
   };
