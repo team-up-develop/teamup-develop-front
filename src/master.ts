@@ -1,5 +1,3 @@
-// import router from './router';
-// import Vuex from '@/store/index';
 import dayjs from "dayjs";
 
 //* 応募のステータス
