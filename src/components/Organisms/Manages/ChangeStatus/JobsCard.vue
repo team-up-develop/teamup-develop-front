@@ -12,17 +12,18 @@ type State = {
   applyNum: number;
   rejectNum: number;
   participateNum: number;
+  jobTitle: string;
 };
 
 const initialState = (): State => ({
   applyNum: Vuex.state.statusUser.userApplyNum,
   participateNum: Vuex.state.statusUser.userParticipateNum,
   rejectNum: Vuex.state.statusUser.userRejectNum,
+  jobTitle: Vuex.state.statusUser.jobTitle,
 });
 
 export default defineComponent({
   props: {
-    jobTitle: { type: String, default: "", require: true },
     jobId: { type: Number, default: 0, require: true },
   },
   setup: (props) => {
@@ -37,6 +38,7 @@ export default defineComponent({
         state.applyNum = Vuex.state.statusUser.userApplyNum;
         state.participateNum = Vuex.state.statusUser.userParticipateNum;
         state.rejectNum = Vuex.state.statusUser.userRejectNum;
+        state.jobTitle = Vuex.state.statusUser.jobTitle;
       }, 500);
     });
 
@@ -49,7 +51,7 @@ export default defineComponent({
 </script>
 <template>
   <section>
-    <v-sheet class="card">
+    <v-card class="card">
       <v-col>
         <v-row class="card__top">
           {{ limit(jobTitle, 60) }}
@@ -74,7 +76,7 @@ export default defineComponent({
           </v-row>
         </v-row>
       </v-col>
-    </v-sheet>
+    </v-card>
   </section>
 </template>
 
@@ -83,29 +85,25 @@ export default defineComponent({
 section {
   width: 30%;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     width: 100%;
   }
 }
 .card {
-  @include card-border-color;
   width: 360px;
+  min-width: 300px;
   height: 248px;
   padding: 1rem 1.2rem;
   border-radius: 8px;
 
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     margin: 0 auto;
     width: 85%;
     margin-bottom: 1.5rem;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: $me) {
     width: 95%;
-  }
-
-  @media screen and (max-width: 450px) {
-    width: 98%;
   }
 
   &__top {
@@ -119,8 +117,8 @@ section {
     position: relative;
 
     .detail-btn {
-      @include box-shadow-btn;
-      background-color: $primary-dark;
+      @include neumorphism;
+      background-color: $secondary-color;
       color: $white;
       padding: 0.5rem 4rem;
       position: absolute;

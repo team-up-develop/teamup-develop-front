@@ -19,7 +19,7 @@ export default defineComponent({
             v-for="langage in user.programing_languages"
             :key="langage.id"
           >
-            {{ langage.programing_language_name }}
+            {{ langage.name }}
           </div>
         </div>
       </div>
@@ -31,7 +31,7 @@ export default defineComponent({
             :key="framework.id"
             class="flame-tag"
           >
-            {{ framework.programing_framework_name }}
+            {{ framework.name }}
           </div>
         </div>
       </div>
@@ -39,7 +39,7 @@ export default defineComponent({
         <label for="name" class="name-tag">その他関連スキル</label>
         <div class="lang-box">
           <div class="other-tag" v-for="skill in user.skills" :key="skill.id">
-            {{ skill.skill_name }}
+            {{ skill.name }}
           </div>
         </div>
       </div>
@@ -51,11 +51,14 @@ export default defineComponent({
 @import "@/assets/scss/_variables.scss";
 
 .skill-detail-area {
-  @include card-border-color;
   border-radius: 4px;
   padding: 1.5rem 4rem 1rem 4rem;
   margin-bottom: 2rem;
   position: relative;
+
+  @media screen and (max-width: $sm) {
+    padding: 1.5rem 1rem;
+  }
 
   .lang-area {
     width: 100%;
@@ -69,9 +72,9 @@ export default defineComponent({
     }
 
     .lang-box {
-      width: 95%;
+      width: 100%;
       text-align: left;
-      padding: 10px 20px 30px 0;
+      padding: 10px 0px 30px 0;
 
       .skill-tag {
         @include detail-language;
@@ -85,13 +88,6 @@ export default defineComponent({
         @include detail-skill;
       }
     }
-  }
-}
-
-/* スマホレスポンシブ */
-@media screen and (max-width: 500px) {
-  .skill-detail-area {
-    padding: 1.5rem 1rem;
   }
 }
 </style>

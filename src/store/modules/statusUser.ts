@@ -8,12 +8,14 @@ interface State {
   userApplyNum: number;
   userParticipateNum: number;
   userRejectNum: number;
+  jobTitle: string;
 }
 
 interface GetStatus {
   userApplyNum: number;
   userParticipateNum: number;
   userRejectNum: number;
+  jobTitle: string;
 }
 
 interface ActionsJob {
@@ -24,12 +26,14 @@ const state: State = {
   userApplyNum: 0,
   userParticipateNum: 0,
   userRejectNum: 0,
+  jobTitle: "",
 };
 
 const getters: GetterTree<State, GetStatus> = {
   getUserApplyNum: (state: State) => state.userApplyNum,
   getUserParticipateNum: (state: State) => state.userParticipateNum,
   getUserRejectNum: (state: State) => state.userRejectNum,
+  getJob: (state: State) => state.jobTitle,
 };
 
 const mutations: MutationTree<State> = {
@@ -41,6 +45,9 @@ const mutations: MutationTree<State> = {
   },
   getUserRejectNum(state: State, userRejectNum: number) {
     state.userRejectNum = userRejectNum;
+  },
+  getJob(state: State, jobTitle: string) {
+    state.jobTitle = jobTitle;
   },
 };
 
@@ -59,6 +66,8 @@ const actions: ActionTree<State, GetStatus> = {
         `${API_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_REJECT}`
       );
       commit("getUserRejectNum", responseReject.data.response.length);
+      const res = await axios.get(`${API_URL}/job/${jobObject.jobId}`);
+      commit("getJob", res.data.response.job_title);
     } catch (error) {
       catchError(error);
     }

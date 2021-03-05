@@ -29,7 +29,7 @@ body {
 }
 .app {
   padding: 1rem;
-  background: rgb(255, 255, 255);
+  background: $white;
   display: flex;
   height: 93vh;
   justify-content: center;

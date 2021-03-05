@@ -26,6 +26,7 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
     jobId: { type: Number, default: 0 },
+    applyId: { type: Number, default: 0 },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
@@ -38,16 +39,10 @@ export default defineComponent({
     };
 
     const doneParticipate = computed(() => {
-      if (state.statusId == m.APPLY_STATUS_PARTICIPATE) {
-        return true;
-      }
-      return false;
+      return state.statusId == m.APPLY_STATUS_PARTICIPATE ? true : false;
     });
     const doneReject = computed(() => {
-      if (state.statusId == m.APPLY_STATUS_REJECT) {
-        return true;
-      }
-      return false;
+      return state.statusId == m.APPLY_STATUS_REJECT ? true : false;
     });
 
     // * 表示中のユーザーのステータスを格納
@@ -77,15 +72,19 @@ export default defineComponent({
 <template>
   <v-container>
     <div v-if="doneParticipate">
-      <span class="btn-done">参加しています</span>
+      <span class="btn-done">
+        既に開発メンバーです <br />
+        <span>※チャットをご覧ください</span>
+      </span>
     </div>
     <div v-if="doneReject">
-      <span class="btn-done">拒否しています</span>
+      <span class="btn-done">お断りしました </span>
     </div>
     <v-row v-if="!doneParticipate && !doneReject" class="btn-area">
       <StatusChangeBtnArea
         :id="id"
         :jobId="jobId"
+        :applyId="applyId"
         :updatedAt="updatedAt"
         @participate="participate"
         @reject="reject"
@@ -103,15 +102,18 @@ export default defineComponent({
 .btn-done {
   @include grey-btn;
   color: $white;
-  padding: 1.2rem 5rem;
+  padding: 1.2rem 4rem;
   transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
   text-align: center;
   margin: auto;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
   display: inline-block;
   border: none;
+  span {
+    font-size: 0.5rem;
+  }
 }
 </style>

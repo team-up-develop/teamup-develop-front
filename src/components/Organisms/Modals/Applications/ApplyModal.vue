@@ -41,11 +41,11 @@
   overflow: hidden;
   position: relative;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     width: 90%;
   }
 
-  @media screen and (max-width: 420px) {
+  @media screen and (max-width: $ti) {
     width: 100%;
   }
 }
@@ -63,6 +63,14 @@
 .modal-content {
   position: relative;
   padding: 5rem 6rem 4rem 6rem;
+  margin: 0 auto;
+
+  @media screen and (max-width: $sm) {
+    padding: 5rem 4rem 4rem 4rem;
+  }
+  @media screen and (max-width: $ti) {
+    padding: 5rem 2rem 4rem 2rem;
+  }
 }
 
 .modal-footer {
@@ -73,8 +81,11 @@
   display: inline-block;
   position: relative;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     width: 100%;
+  }
+  @media screen and (max-width: $ti) {
+    padding: 1rem 0rem;
   }
 }
 

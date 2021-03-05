@@ -1,85 +1,122 @@
 <script lang="ts">
-import Vue from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  computed,
+  onMounted,
+} from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
-import vSelect from "vue-select";
-// import 'vue-select/dist/vue-select.css';
+import Session from "@/components/Atoms/Commons/Session.vue";
+import SkillSelectArea from "@/components/Molecules/Forms/SkillSelectArea.vue";
+import InputArea from "@/components/Molecules/Forms/InputArea.vue";
 import { Language, Framework, Skill } from "@/types/index";
+import { RegisterSessionSecondParams } from "@/types/params";
 
-type DataType = {
+type State = {
   selectedLang: [];
   languages: Language[];
   selectedFramwork: [];
   framworks: Framework[];
   selectedSkill: [];
   skills: Skill[];
+  github: string | null;
+  twitter: string | null;
 };
 
-export default Vue.extend({
+const initialState = (): State => ({
+  selectedLang: [],
+  languages: [],
+  selectedFramwork: [],
+  framworks: [],
+  selectedSkill: [],
+  skills: [],
+  github: "",
+  twitter: "",
+});
+
+export default defineComponent({
   components: {
-    vSelect,
+    Session,
+    SkillSelectArea,
+    InputArea,
   },
-  data(): DataType {
-    return {
-      selectedLang: [], //? プログラミング言語
-      languages: [],
-      selectedFramwork: [], //? フレームワーク
-      framworks: [],
-      selectedSkill: [], //? その他開発スキル
-      skills: [],
+  setup(_, ctx: any) {
+    const state = reactive<State>(initialState());
+    const router = ctx.root.$router;
+
+    const strageGet = () => {
+      // const programingLanguage = sessionStorage.getItem("programingLanguage");
+      // const programingFramework = sessionStorage.getItem("programingFramework");
+      // const skill = sessionStorage.getItem("skill");
+      const github = sessionStorage.getItem("github");
+      const twitter = sessionStorage.getItem("twitter");
+      // this.selectedLang = programingLanguage;
+      // this.selectedFramwork = programingFramework;
+      // this.selectedSkill = skill;
+      state.github = github;
+      state.twitter = twitter;
     };
-  },
-  mounted() {
-    // *開発言語
-    axios
-      .get<Language[]>(`${API_URL}/programing_language`)
-      .then((res) => {
-        this.languages = res.data;
-      })
-      .catch((error) => {
+
+    const fetchSkill = async () => {
+      try {
+        const res = await axios.get(`${API_URL}/programing_languages`);
+        state.languages = res.data.response;
+      } catch (error) {
         catchError(error);
-      });
-    // * フレームワーク
-    axios
-      .get<Framework[]>(`${API_URL}/programing_framework`)
-      .then((res) => {
-        this.framworks = res.data;
-      })
-      .catch((error) => {
+      }
+      try {
+        const res = await axios.get(`${API_URL}/programing_frameworks`);
+        state.framworks = res.data.response;
+      } catch (error) {
         catchError(error);
-      });
-    // * その他スキル
-    axios
-      .get<Skill[]>(`${API_URL}/skill`)
-      .then((res) => {
-        this.skills = res.data;
-      })
-      .catch((error) => {
+      }
+      try {
+        const res = await axios.get(`${API_URL}/skills`);
+        state.skills = res.data.response;
+      } catch (error) {
         catchError(error);
-      });
-  },
-  methods: {
-    nextStep3() {
-      // * 言語を {id: Number}に変換
+      }
+    };
+
+    strageGet();
+    onMounted(() => {
+      fetchSkill();
+    });
+
+    const isForm = computed(() => {
+      return state.selectedLang.length !== 0 &&
+        state.selectedFramwork.length !== 0 &&
+        state.selectedSkill.length !== 0
+        ? true
+        : false;
+    });
+
+    const backStep = () => {
+      return router.push({ name: "RegisterStep1" });
+    };
+
+    const nextStep = () => {
       const languageArray: {}[] = [];
-      for (let i = 0; i < this.selectedLang.length; i++) {
-        languageArray.push({ id: this.selectedLang[i] });
+      for (let i = 0; i < state.selectedLang.length; i++) {
+        languageArray.push({ id: state.selectedLang[i] });
       }
-      // * フレームワークを{id: Number}に変換
       const framworksArray: {}[] = [];
-      for (let c = 0; c < this.selectedFramwork.length; c++) {
-        framworksArray.push({ id: this.selectedFramwork[c] });
+      for (let c = 0; c < state.selectedFramwork.length; c++) {
+        framworksArray.push({ id: state.selectedFramwork[c] });
       }
-      // * その他スキルを {id: Number}に変換
       const skillArray: {}[] = [];
-      for (let d = 0; d < this.selectedSkill.length; d++) {
-        skillArray.push({ id: this.selectedSkill[d] });
+      for (let d = 0; d < state.selectedSkill.length; d++) {
+        skillArray.push({ id: state.selectedSkill[d] });
       }
 
-      const params = {
-        programingLanguage: languageArray, //? プログラミング言語
-        programingFramework: framworksArray, //? フレームワーク
-        skill: skillArray, //? その他開発スキル,
+      const params: RegisterSessionSecondParams = {
+        programingLanguage: languageArray,
+        programingFramework: framworksArray,
+        skill: skillArray,
+        github: state.github,
+        twitter: state.twitter,
       };
       sessionStorage.setItem(
         "programingLanguage",
@@ -90,8 +127,21 @@ export default Vue.extend({
         JSON.stringify(params.programingFramework)
       );
       sessionStorage.setItem("skill", JSON.stringify(params.skill));
-      return this.$router.push("/step/3");
-    },
+      if (params.github) {
+        sessionStorage.setItem("github", params.github);
+      }
+      if (params.twitter) {
+        sessionStorage.setItem("twitter", params.twitter);
+      }
+      return router.push({ name: "RegisterConfirm" });
+    };
+
+    return {
+      ...toRefs(state),
+      isForm,
+      backStep,
+      nextStep,
+    };
   },
 });
 </script>
@@ -99,61 +149,89 @@ export default Vue.extend({
 <template>
   <section>
     <div class="wrapper">
-      <div class="title">スキル情報</div>
-      <div class="container">
-        <div class="container__box">
-          <div class="box-top">
-            <span>STEP2/3</span>
-            <!-- STEP グラフ -->
-            <div class="step-graph">
-              <div class="step-graph__line"></div>
-            </div>
-          </div>
-          <!-- 中央 -->
-          <div class="box-center">
-            <div class="input-area">
-              <label for="name" class="label">経験開発言語</label>
-              <v-select
-                class="skill"
-                multiple
-                :options="languages"
-                label="programingLanguageName"
-                v-model="selectedLang"
-                :reduce="(languages) => languages.id"
-                placeholder="開発言語を入力してください"
-              />
-              <!-- <h1>Selected 言語:{{ selectedLang }}</h1> -->
-            </div>
-            <div class="input-area">
-              <label for="name" class="label">経験フレームワーク</label>
-              <v-select
-                class="skill"
-                multiple
-                :options="framworks"
-                label="programingFrameworkName"
-                v-model="selectedFramwork"
-                :reduce="(framworks) => framworks.id"
-                placeholder="フレームワークを入力してください"
-              />
-            </div>
-            <div class="input-area">
-              <label for="name" class="label">経験スキル</label>
-              <v-select
-                class="skill"
-                multiple
-                :options="skills"
-                label="skillName"
-                v-model="selectedSkill"
-                :reduce="(skills) => skills.id"
-                placeholder="その他スキルを入力してください"
-              />
-            </div>
-          </div>
-          <div class="box-bottom">
-            <div class="next-btn" @click="nextStep3">次へ2/3</div>
-          </div>
+      <div class="title">スキル情報入力</div>
+      <v-card class="pa-1 card">
+        <div class="session">
+          <Session :num="3" />
         </div>
-      </div>
+        <v-col class="container text-left">
+          <div class="input-area">
+            <SkillSelectArea
+              v-model="selectedLang"
+              :options="languages"
+              name="languages"
+              textLabel="開発言語"
+              :mandatory="true"
+              mandatoryText=""
+              :max="100"
+            />
+            <!-- {{ selectedLang }} -->
+          </div>
+          <div class="input-area">
+            <SkillSelectArea
+              v-model="selectedFramwork"
+              :options="framworks"
+              name="framworks"
+              textLabel="フレームワーク"
+              :mandatory="true"
+              mandatoryText=""
+              :max="100"
+            />
+          </div>
+          <div class="input-area">
+            <SkillSelectArea
+              v-model="selectedSkill"
+              :options="skills"
+              name="framworks"
+              textLabel="フレームワーク"
+              :mandatory="true"
+              mandatoryText=""
+              :max="100"
+            />
+          </div>
+          <div class="input-area">
+            <InputArea
+              v-model="github"
+              type="text"
+              name="GitHub"
+              textLabel="GitHub"
+              :mandatory="false"
+              mandatoryText=""
+              placeholder="URLを入力してください"
+              maxlength="100"
+              :remaining="false"
+            />
+          </div>
+          <div class="input-area">
+            <InputArea
+              v-model="twitter"
+              type="text"
+              name="Twitter"
+              textLabel="Twitter"
+              :mandatory="false"
+              mandatoryText=""
+              placeholder="URLを入力してください"
+              maxlength="100"
+              :remaining="false"
+            />
+          </div>
+          <div class="bottom" v-if="isForm">
+            <div class="back-btn" @click="backStep">戻る</div>
+            <div class="next-btn" @click="nextStep">次へ2/3</div>
+          </div>
+          <div class="bottom" v-else>
+            <v-tooltip bottom>
+              <template v-slot:activator="{ on, attrs }">
+                <div class="back-btn" @click="backStep">戻る</div>
+                <div class="next-btn-false" v-on="on" v-bind="attrs">
+                  次へ2/3
+                </div>
+              </template>
+              <span>必須項目が入力されていません</span>
+            </v-tooltip>
+          </div>
+        </v-col>
+      </v-card>
     </div>
   </section>
 </template>
@@ -161,14 +239,14 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-section {
-  height: 95vh;
-}
-
 .wrapper {
-  width: 45%;
+  width: 550px;
   height: 90%;
   margin: 0 auto;
+
+  @media (max-width: 768px) {
+    width: 95%;
+  }
 
   .title {
     color: $primary-color;
@@ -178,112 +256,108 @@ section {
     padding: 1rem 2rem;
     margin-top: 1rem;
   }
-  .container {
-    max-width: 500px;
-    height: 90%;
-    margin: 0rem auto 3rem auto;
-    border: solid 1px #b9b9b9;
-    border-radius: 20px;
-    padding: 2rem;
+  .card {
+    min-height: 615px;
 
-    &__box {
-      width: 90%;
-      height: 100%;
-      margin: 0 auto;
-      position: relative;
+    .session {
+      height: 80px;
+    }
 
-      .box-top {
-        width: 100%;
-        height: 12%;
+    .container {
+      padding: 0 2rem;
 
-        span {
-          font-weight: bold;
-          color: $primary-color;
-        }
-
-        .step-graph {
-          width: 100%;
-          height: 8px;
-          margin: 0 auto;
-          border-radius: 35px;
-          background-color: $white;
-          border: solid 1px $text-sub-color;
-
-          &__line {
-            width: 67%;
-            height: 100%;
-            border-radius: 35px;
-            background-color: $primary-color;
-          }
-        }
-      }
-
-      .box-center {
-        width: 100%;
-        height: 70%;
-        // background-color: blueviolet;
-        display: flex;
-        flex-direction: column;
-        text-align: left;
-        color: $text-main-color;
-
-        .input-area {
-          // height: 16%;
-          margin-bottom: 1.5rem;
-
-          .label {
-            font-weight: bold;
-            // margin-bottom: 1rem;
-          }
-
-          .skill {
-            margin: 0.7rem 0rem;
-            font: 16px/24px sans-serif;
-            box-sizing: border-box;
-            width: 100%;
-            transition: 0.3s;
-            letter-spacing: 1px;
-            border-radius: 4px;
-            background-color: $white;
-            background-color: $dark-white;
-          }
-        }
-      }
-
-      .box-bottom {
-        width: 100%;
-        height: 12%;
-        position: absolute;
-        bottom: 0;
-
-        .next-btn {
-          @include box-shadow-btn;
-          @include blue-btn;
-          color: $white;
-          text-align: left;
-          display: block;
-          padding: 1.1rem 4rem;
-          border-radius: 25px;
-          border: none;
-          font-size: 0.875rem;
-          font-weight: 600;
-          line-height: 1;
-          text-align: center;
-          max-width: 280px;
-          margin: auto;
-          font-size: 1rem;
-          float: right;
-          margin-top: 1.5rem;
-          cursor: pointer;
-          transition: 0.3s;
-          outline: none;
-
-          &:hover {
-            @include box-shadow-btn;
-          }
-        }
+      @media (max-width: $sm) {
+        padding: 0 1rem;
       }
     }
+  }
+}
+.input-area {
+  min-height: 90px;
+}
+.bottom {
+  width: 80%;
+  height: 100px;
+  margin: 1rem auto 0 auto;
+
+  @media (max-width: $sm) {
+    width: 100%;
+  }
+
+  .back-btn {
+    @include neumorphismGrey;
+    color: $primary-color;
+    font-weight: 600;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 4rem;
+    border-radius: 25px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: left;
+    transition: 0.3s;
+    outline: none;
+    text-decoration: none;
+
+    @media (max-width: $ti) {
+      padding: 1.1rem 3rem;
+    }
+  }
+
+  .next-btn {
+    @include box-shadow-btn;
+    @include blue-btn;
+    color: $white;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 3rem;
+    border-radius: 25px;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: right;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
+
+    @media (max-width: $ti) {
+      padding: 1.1rem 2rem;
+    }
+
+    &:hover {
+      @include box-shadow-btn;
+    }
+  }
+  .next-btn-false {
+    @include box-shadow-btn;
+    @include grey-btn;
+    color: $white;
+    text-align: left;
+    display: block;
+    padding: 1.1rem 3rem;
+    border-radius: 25px;
+    border: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    max-width: 280px;
+    margin: auto;
+    font-size: 1rem;
+    float: right;
+    cursor: pointer;
+    transition: 0.3s;
+    outline: none;
   }
 }
 </style>

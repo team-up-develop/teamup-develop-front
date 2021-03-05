@@ -23,6 +23,20 @@ export const m = {
   JOB_STATUS_NEW,
   JOB_STATUS_ADD,
 };
+
+export const md = {
+  optionsRecruitNumber: [
+    { label: "1名", value: "1" },
+    { label: "2名", value: "2" },
+    { label: "3名", value: "3" },
+    { label: "4名", value: "4" },
+    { label: "5名", value: "5" },
+  ],
+  optionsJobStatus: [
+    { label: "新規募集", value: "1" },
+    { label: "追加募集", value: "2" },
+  ],
+};
 // 移行前に接続がしたい場合
 // port: 8888
 export const API_URL = "http://localhost:8090/api/v1";

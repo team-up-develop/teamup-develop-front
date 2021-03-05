@@ -27,19 +27,17 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive<State>(initialState());
 
+    // * job_id が存在するか判別
     const isChat = computed(() => {
-      if (props.id == 0) {
-        return false;
-      }
-      return true;
+      return props.id == 0 ? false : true;
     });
 
     // * メッセージの送信
     const postMessage = async () => {
       const params: messageParams = {
         message: state.chatMessage,
-        userID: state.userId,
-        jobID: props.id,
+        user_id: state.userId,
+        job_id: props.id,
       };
       // ? 空のメッセージは送信させない
       if (params.message == "") {
@@ -148,13 +146,13 @@ export default defineComponent({
     outline: none;
     margin-left: 1rem;
 
-    @media (max-width: 868px) {
+    @media (max-width: $me) {
       width: 70%;
     }
-    @media (max-width: 500px) {
+    @media (max-width: $sm) {
       width: 65%;
     }
-    @media (max-width: 380px) {
+    @media (max-width: $ti) {
       width: 60%;
     }
   }

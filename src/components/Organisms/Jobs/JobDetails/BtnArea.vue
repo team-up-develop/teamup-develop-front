@@ -14,6 +14,7 @@ import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
 import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
+import useJobs from "@/hooks/useJobs";
 
 type State = {
   userId: number;
@@ -45,26 +46,19 @@ export default defineComponent({
   setup: (props, context) => {
     const state = reactive<State>(initialState());
     const router = context.root.$router;
+    const { manageJobs, fetchManageJobs } = useJobs();
 
     const isLogin = computed(() => {
-      if (state.userId) {
-        return true;
-      }
-      return false;
+      return state.userId ? true : false;
     });
 
     // * 自分の案件か否かを判定
     const getCheckSelfJob = async () => {
-      try {
-        const res = await axios.get(`${API_URL}/jobs?user_id=${state.userId}`);
-        for (let i = 0; i < res.data.response.length; i++) {
-          const selfJob = res.data.response[i];
-          if (selfJob.id === props.id) {
-            state.selfJobPost = true;
-          }
+      for (let i = 0; i < manageJobs.value.length; i++) {
+        const selfJob = manageJobs.value[i];
+        if (selfJob.id === props.id) {
+          state.selfJobPost = true;
         }
-      } catch (error) {
-        catchError(error);
       }
     };
 
@@ -95,11 +89,12 @@ export default defineComponent({
 
     const registerRedirect = () => router.push("/register");
 
-    onMounted(() => {
+    onMounted(async () => {
       if (!state.userId) {
         return;
       }
-      getCheckSelfJob();
+      await fetchManageJobs();
+      await getCheckSelfJob();
       getCheckStatus();
     });
 
@@ -195,19 +190,16 @@ export default defineComponent({
     width: 50%;
     position: relative;
 
-    @media screen and (max-width: 1100px) {
-      width: 55%;
+    @media screen and (max-width: $la) {
+      width: 60%;
     }
-    @media screen and (max-width: 900px) {
-      width: 65%;
-    }
-    @media screen and (max-width: 900px) {
+    @media screen and (max-width: $me) {
       min-height: 35px;
       margin: 0em auto 2rem auto;
       width: 100%;
       position: relative;
     }
-    @media screen and (max-width: 768px) {
+    @media screen and (max-width: $sm) {
       min-height: 65px;
       margin: 0em auto 0rem auto;
       width: 100%;
@@ -237,10 +229,10 @@ export default defineComponent({
   cursor: pointer;
   border: none;
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: $la) {
     width: 75%;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: $me) {
     width: 80%;
     padding: 1.2rem 2rem;
     font-size: 1rem;
@@ -267,10 +259,10 @@ export default defineComponent({
   display: inline-block;
   border: none;
 
-  @media screen and (max-width: 1000px) {
+  @media screen and (max-width: $la) {
     width: 75%;
   }
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: $me) {
     width: 80%;
     padding: 1.2rem 2rem;
     font-size: 1rem;
@@ -299,6 +291,10 @@ export default defineComponent({
   transition: 0.3s;
   outline: none;
 
+  @media screen and (max-width: $sm) {
+    font-size: 1rem;
+  }
+
   &:hover {
     @include btn-hover;
   }
@@ -310,20 +306,16 @@ export default defineComponent({
   top: 0;
   width: 20%;
 
-  .heart {
-    background-color: blue;
+  .icon {
+    font-size: 30px;
+    padding: 1.5rem;
+    width: 38px;
+    height: 38px;
+    color: $white;
+    cursor: pointer;
+    background-color: #d8d6d6;
+    border-radius: 5px / 5px;
   }
-}
-
-.icon {
-  font-size: 30px;
-  padding: 1.5rem;
-  width: 38px;
-  height: 38px;
-  color: $white;
-  cursor: pointer;
-  background-color: #d8d6d6;
-  border-radius: 5px / 5px;
 }
 
 // * モーダル内のキャンセルボタン
@@ -344,13 +336,5 @@ export default defineComponent({
   right: 0;
   margin: 1rem;
   outline: none;
-}
-
-//* スマホレスポンシブ
-@media screen and (max-width: 500px) {
-  // * 編集する
-  .edit {
-    font-size: 1rem;
-  }
 }
 </style>

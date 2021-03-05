@@ -8,16 +8,21 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
     jobId: { type: Number, default: 0 },
+    updatedAt: { type: String, defalut: String(new Date()), require: true },
+    applyId: { type: Number, default: 0 },
   },
   setup: (props, context) => {
     const applyUserReject = async () => {
       const params: RejectParams = {
-        jobId: props.jobId,
-        userId: props.id,
-        applyStatusId: m.APPLY_STATUS_REJECT,
+        id: props.applyId,
+        job_id: props.jobId,
+        user_id: props.id,
+        apply_status_id: m.APPLY_STATUS_REJECT,
+        // @ts-ignore //FIXME: 処理見直し
+        updated_at: props.updatedAt,
       };
       try {
-        await axios.put(`${API_URL}/apply_job/`, params);
+        await axios.put(`${API_URL}/apply_job/${props.jobId}`, params);
         context.emit("reject", m.APPLY_STATUS_REJECT);
       } catch (error) {
         catchError(error);
@@ -32,7 +37,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <button class="btn-reject" @click="applyUserReject">拒否する</button>
+    <button class="btn-reject" @click="applyUserReject">お断りする</button>
   </div>
 </template>
 
@@ -49,23 +54,21 @@ export default defineComponent({
   font-weight: 600;
   line-height: 1;
   text-align: center;
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   display: inline-block;
   cursor: pointer;
 
-  @media screen and (max-width: 590px) {
-    padding: 1.2rem 4.5rem;
-  }
-  @media screen and (max-width: 500px) {
-    padding: 1.2rem 3.7rem;
+  @media screen and (max-width: $sm) {
+    padding: 1.2rem 3.2rem;
     margin-left: 0.3rem;
   }
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: $ti) {
     padding: 1.2rem 2.8rem;
     font-size: 1rem;
   }
-  @media screen and (max-width: 312px) {
-    padding: 1.2rem 2.4rem;
+  // TODO: px指定をしなくてもstyleがずれないようにする
+  @media screen and (max-width: 352px) {
+    padding: 1.2rem 2.2rem;
   }
 }
 </style>

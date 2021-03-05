@@ -173,10 +173,10 @@ export default Vue.extend({
   overflow: hidden;
   overflow: scroll;
 
-  @media screen and (max-width: 768px) {
+  @media screen and (max-width: $me) {
     width: 85%;
   }
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $sm) {
     width: 92%;
   }
 }

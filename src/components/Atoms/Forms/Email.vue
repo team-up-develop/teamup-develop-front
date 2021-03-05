@@ -4,6 +4,7 @@ import Vue, { PropType } from "vue";
 export default Vue.extend({
   props: {
     type: { type: String as PropType<string>, required: true },
+    placeholder: { type: String as PropType<string>, required: true },
   },
   data() {
     return {
@@ -29,10 +30,9 @@ export default Vue.extend({
     :type="type"
     @input="updateEmail($event)"
     :rules="emailRules"
-    label="example@teamup.com"
+    :label="placeholder"
     required
     outlined
-    single-line
     filled
   />
 </template>

@@ -1,4 +1,4 @@
-## team-devlop-fornt 環境
+## fornt 環境 / version
 - node v12.12.0
 - vue/cli v4.3.1
 - vue v2.6.12 
@@ -34,7 +34,7 @@ $ npm run dev
 ```
 $ yarn build --analyze
 ```
-## Error 対応
+## error が出たとき..
 ## cache クリア
 ```
 $ npm cache verify --force
@@ -45,7 +45,7 @@ $ npm cache verify --force
 $ rm -rf node_modules package-lock.json && npm install
 ```
 
-### error が起きている時
+## モジュールを削除 再インストール
 ```
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```

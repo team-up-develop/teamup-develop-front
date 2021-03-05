@@ -8,10 +8,7 @@ export default defineComponent({
   },
   setup: (props: any) => {
     const isStatusNew = computed(() => {
-      if (props.job.job_status_id == m.JOB_STATUS_NEW) {
-        return true;
-      }
-      return false;
+      return props.job.job_status_id == m.JOB_STATUS_NEW ? true : false;
     });
 
     return {
@@ -44,7 +41,7 @@ export default defineComponent({
   font-weight: bold;
   text-decoration: none;
 
-  @media screen and (max-width: 400px) {
+  @media screen and (max-width: $ti) {
     display: none;
   }
 }

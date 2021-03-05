@@ -12,7 +12,7 @@ export default Vue.extend({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="3" />
+      <Session :num="4.4" />
       <section>
         <div class="image-area">
           <img
@@ -111,7 +111,7 @@ export default Vue.extend({
 }
 
 /* スマホ */
-@media (max-width: 500px) {
+@media (max-width: $sm) {
   .btn-area {
     display: flex;
     flex-direction: column;

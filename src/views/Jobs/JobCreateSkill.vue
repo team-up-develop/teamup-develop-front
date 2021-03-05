@@ -7,6 +7,7 @@ import {
 } from "@vue/composition-api";
 import UserCard from "@/components/Organisms/Manages/UserCard.vue";
 import JobCreateSkillCard from "@/components/Organisms/Jobs/JobCreateSkillCard.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { JobCreateSession1 as State } from "@/components/Organisms/Jobs/JobCreateCard.vue";
 
 const initialState = (): State => ({
@@ -20,9 +21,22 @@ export default defineComponent({
   components: {
     UserCard,
     JobCreateSkillCard,
+    Breadcrumbs,
   },
   setup: () => {
     const state = reactive<State>(initialState());
+
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "案件作成",
+        disabled: true,
+      },
+    ]);
 
     state.jobTitle = sessionStorage.getItem("jobTitle");
     state.devStartDate = sessionStorage.getItem("devStartDate");
@@ -30,14 +44,14 @@ export default defineComponent({
     state.jobDescription = sessionStorage.getItem("jobDescription");
 
     const isValue = computed(() => {
-      if (state.jobTitle && state.devStartDate && state.devEndDate) {
-        return true;
-      }
-      return false;
+      return state.jobTitle && state.devStartDate && state.devEndDate
+        ? true
+        : false;
     });
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       isValue,
     };
   },
@@ -46,6 +60,7 @@ export default defineComponent({
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <v-container class="wrapper">
       <v-row v-if="isValue">
         <UserCard />
@@ -75,8 +90,8 @@ export default defineComponent({
   max-width: none;
   margin-bottom: 1rem;
 
-  @media screen and (max-width: 1100px) {
-    width: 97%;
+  @media screen and (max-width: $la) {
+    width: 95%;
   }
 
   .not-value {
@@ -85,31 +100,25 @@ export default defineComponent({
 }
 
 .create {
-  @include card-border-color;
   width: 60%;
   border-radius: 8px;
   margin: 0 auto;
-  background-color: #ffffff;
+  background-color: $white;
   position: relative;
   font-size: 14px;
   padding: 0 2rem 2rem 2rem;
   color: $text-main-color;
 
-  @media screen and (max-width: 1000px) {
-    width: 50%;
-  }
-
-  @media screen and (max-width: 900px) {
+  @media screen and (max-width: $la) {
     width: 85%;
     padding: 0 1rem 2rem 1rem;
   }
 
-  @media screen and (max-width: 600px) {
+  @media screen and (max-width: $me) {
     width: 95%;
   }
 
-  @media screen and (max-width: 450px) {
-    width: 98%;
+  @media screen and (max-width: $sm) {
     padding: 1rem;
   }
 }

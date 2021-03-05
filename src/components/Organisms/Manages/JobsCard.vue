@@ -23,30 +23,24 @@ export default defineComponent({
       <v-row class="card__skill">
         <div
           class="lang"
-          v-for="(langage, index) in job.programing_language_responses.slice(
-            0,
-            3
-          )"
+          v-for="(langage, index) in job.programing_languages.slice(0, 3)"
           :key="`langage-${index}`"
         >
-          {{ langage.programing_language_name }}
+          {{ langage.name }}
         </div>
         <div
           class="fram"
-          v-for="(framework, index) in job.programing_framework_responses.slice(
-            0,
-            3
-          )"
+          v-for="(framework, index) in job.programing_frameworks.slice(0, 3)"
           :key="`framework-${index}`"
         >
-          {{ framework.programing_framework_name }}
+          {{ framework.name }}
         </div>
         <div
           class="skill"
-          v-for="(skill, index) in job.skill_responses.slice(0, 2)"
+          v-for="(skill, index) in job.skills.slice(0, 2)"
           :key="`skill-${index}`"
         >
-          {{ skill.skill_name }}
+          {{ skill.name }}
         </div>
       </v-row>
       <div class="card__title">

@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent } from "@vue/composition-api";
-import RegisteForm from "@/components/Molecules/Jobs/JobRegisterFalses/RegisteForm.vue";
+import RegisteForm from "@/components/Molecules/Jobs/RegisteForm.vue";
 
 export default defineComponent({
   components: {
@@ -11,12 +11,12 @@ export default defineComponent({
 
 <template>
   <section>
-    <div class="false-user-login">
+    <v-card class="false-user-login">
       <div class="top-login-title">
         簡単登録
       </div>
       <RegisteForm />
-    </div>
+    </v-card>
   </section>
 </template>
 
@@ -24,7 +24,6 @@ export default defineComponent({
 @import "@/assets/scss/_variables.scss";
 
 .false-user-login {
-  @include card-border-color;
   width: 75%;
   background-color: $white;
   border-radius: 8px;

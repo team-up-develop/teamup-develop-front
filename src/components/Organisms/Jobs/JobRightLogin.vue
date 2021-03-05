@@ -12,7 +12,7 @@ export default Vue.extend({
 
 <template>
   <section>
-    <div class="card">
+    <v-card class="card">
       <div class="content">
         <img class="img" src="@/assets/images/createJob.png" width="100%" />
         <p>自分が<span>開発したい環境</span>を設定して案件を作成しよう！</p>
@@ -22,7 +22,7 @@ export default Vue.extend({
           </button>
         </div>
       </div>
-    </div>
+    </v-card>
   </section>
 </template>
 
@@ -30,7 +30,6 @@ export default Vue.extend({
 @import "@/assets/scss/_variables.scss";
 
 .card {
-  @include card-border-color;
   width: 72%;
   // height: calc(44vh - 4rem);
   background-color: $white;
@@ -60,7 +59,7 @@ export default Vue.extend({
       width: 100%;
 
       .register-btn {
-        @include purple-btn;
+        @include blue-btn;
         @include neumorphism;
         display: block;
         padding: 1.2rem 4rem;

@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  computed,
 } from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
@@ -11,6 +12,8 @@ import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModa
 import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
+import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 // import Logout from '@/components/button/Logout'
 import { User } from "@/types/index";
 import Vuex from "@/store/index";
@@ -20,6 +23,7 @@ type State = {
   userInfo: User;
   userId: number;
   modal: boolean;
+  loading: boolean;
 };
 
 const initialState = (): State => ({
@@ -27,6 +31,7 @@ const initialState = (): State => ({
   userInfo: {},
   userId: Vuex.state.auth.userId,
   modal: false,
+  loading: true,
 });
 
 export default defineComponent({
@@ -36,6 +41,8 @@ export default defineComponent({
     PostUser,
     SkillUser,
     IntroduceUser,
+    Breadcrumbs,
+    Loading,
   },
   props: {
     id: { type: Number, default: 0 },
@@ -43,11 +50,26 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive<State>(initialState());
 
+    const breadcrumbs = computed(() => [
+      {
+        text: "探す",
+        disabled: false,
+        href: "/jobs",
+      },
+      {
+        text: "ユーザー詳細",
+        disabled: true,
+      },
+    ]);
+
     const fetchUser = async () => {
       // * ユーザー情報取得
       try {
-        const res = await axios.get(`${API_URL}/user/${props.id}`);
-        state.userInfo = res.data.response;
+        setTimeout(async () => {
+          const res = await axios.get(`${API_URL}/user/${props.id}`);
+          state.loading = false;
+          state.userInfo = res.data.response;
+        }, 700);
       } catch (error) {
         catchError(error);
       }
@@ -73,8 +95,8 @@ export default defineComponent({
 
     // * 編集完了 emit
     const compliteEdit = async () => {
-      closeModal();
-      fetchUser();
+      await fetchUser();
+      await closeModal();
     };
     const editEmit = () => {
       openModal();
@@ -82,7 +104,9 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
+      breadcrumbs,
       openModal,
+      closeModal,
       doSend,
       compliteEdit,
       editEmit,
@@ -93,6 +117,7 @@ export default defineComponent({
 
 <template>
   <section>
+    <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper">
       <!-- 編集 モーダル画面 -->
       <ProfileEditModal
@@ -124,24 +149,27 @@ export default defineComponent({
           </v-row>
         </div>
       </section>
-      <v-col class="skill">
-        <div class="skill__card">
-          <div class="detail-tag">開発スキル</div>
-          <SkillUser :user="userInfo" />
+      <template v-if="!loading">
+        <v-col class="skill">
+          <div class="skill__card">
+            <div class="detail-tag">開発スキル</div>
+            <SkillUser :user="userInfo" />
+          </div>
+        </v-col>
+        <v-col class="pr">
+          <div class="pr__card">
+            <div class="detail-tag">自己紹介</div>
+            <IntroduceUser :user="userInfo" />
+          </div>
+        </v-col>
+        <div class="button-area">
+          <div v-if="myselfFlag" class="button-action-area">
+            <button @click="openModal" class="btn-box-edit">編集する</button>
+          </div>
+          <div class="button-action-area" v-else></div>
         </div>
-      </v-col>
-      <v-col class="pr">
-        <div class="pr__card">
-          <div class="detail-tag">自己紹介</div>
-          <IntroduceUser :user="userInfo" />
-        </div>
-      </v-col>
-      <div class="button-area">
-        <div v-if="myselfFlag" class="button-action-area">
-          <button @click="openModal" class="btn-box-edit">編集する</button>
-        </div>
-        <div class="button-action-area" v-else></div>
-      </div>
+      </template>
+      <Loading v-else />
     </div>
   </section>
 </template>
@@ -177,11 +205,19 @@ export default defineComponent({
     width: 88%;
     margin: 0 auto;
 
+    @media screen and (max-width: $la) {
+      width: 100%;
+    }
+
     &__post {
       width: 85%;
       display: flex;
       flex-direction: column;
       margin: 0 auto;
+
+      @media screen and (max-width: $la) {
+        width: 95%;
+      }
 
       .header {
         border-bottom: $dark-grey 2px solid;
@@ -213,7 +249,6 @@ export default defineComponent({
 //* スキル カード
 .detail-wrapper .skill {
   width: 100%;
-  // background-color: #F1F5F9;
 
   &__card {
     width: 75%;
@@ -221,13 +256,20 @@ export default defineComponent({
     flex-direction: column;
     text-align: left;
     margin: 2rem auto 2rem auto;
+
+    @media screen and (max-width: $la) {
+      width: 95%;
+    }
+
+    @media screen and (max-width: $sm) {
+      width: 100%;
+    }
   }
 }
 
 //* 開発詳細 カード
 .detail-wrapper .pr {
   width: 100%;
-  // background-color: #F1F5F9;
 
   &__card {
     width: 75%;
@@ -235,37 +277,21 @@ export default defineComponent({
     flex-direction: column;
     text-align: left;
     margin: 0rem auto 2rem auto;
+
+    @media screen and (max-width: $la) {
+      width: 95%;
+    }
+
+    @media screen and (max-width: $sm) {
+      width: 100%;
+    }
   }
 }
 
 .button-area {
   display: none;
-}
 
-/* タブレットレスポンシブ */
-@media screen and (max-width: 900px) {
-  .detail-wrapper {
-    .user-area {
-      width: 100%;
-      &__post {
-        width: 95%;
-      }
-    }
-    .skill {
-      &__card {
-        width: 95%;
-      }
-    }
-    .pr {
-      &__card {
-        width: 95%;
-      }
-    }
-  }
-}
-
-@media screen and (max-width: 650px) {
-  .button-area {
+  @media screen and (max-width: $me) {
     width: 100%;
     display: flex;
     align-items: center;
@@ -274,44 +300,32 @@ export default defineComponent({
     position: sticky;
     left: 0;
     bottom: 0;
-
-    //* 編集するボタン
-    .btn-box-edit {
-      @include box-shadow-btn;
-      background-color: $secondary-color;
-      color: $white;
-      padding: 1.2rem 8rem;
-      transition: 0.3s;
-      border-radius: 50px;
-      font-weight: 600;
-      line-height: 1;
-      text-align: center;
-      margin: auto;
-      font-size: 1.3rem;
-      display: inline-block;
-      margin-bottom: 0.5rem;
-      cursor: pointer;
-      border: none;
-
-      &:hover {
-        @include btn-hover;
-      }
-    }
   }
-}
 
-/* スマホレスポンシブ */
-@media screen and (max-width: 500px) {
-  .detail-wrapper {
-    .skill {
-      &__card {
-        width: 100%;
-      }
+  //* 編集するボタン
+  .btn-box-edit {
+    @include box-shadow-btn;
+    background-color: $secondary-color;
+    color: $white;
+    padding: 1.2rem 8rem;
+    transition: 0.3s;
+    border-radius: 50px;
+    font-weight: 600;
+    line-height: 1;
+    text-align: center;
+    margin: auto;
+    font-size: 1.3rem;
+    display: inline-block;
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+    border: none;
+
+    @media screen and (max-width: $ti) {
+      padding: 1.2rem 6.5rem;
     }
-    .pr {
-      &__card {
-        width: 100%;
-      }
+
+    &:hover {
+      @include btn-hover;
     }
   }
 }
