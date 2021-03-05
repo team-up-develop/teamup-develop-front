@@ -1,5 +1,4 @@
 import dayjs from "dayjs";
-
 //* 応募のステータス
 // 1: 応募
 // 2: 参加
