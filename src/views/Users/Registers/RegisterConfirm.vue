@@ -11,22 +11,24 @@ import Session from "@/components/Atoms/Commons/Session.vue";
 import { Language, Framework, Skill } from "@/types/index";
 import { dayJs } from "@/master";
 
+type Maybe<T> = T | null;
+
 type State = {
-  selectedLang: any | null;
+  selectedLang: Maybe<any>;
   languages: Language[];
   selectedFramwork: any | null;
   framworks: Framework[];
   selectedSkill: any | null;
   skills: Skill[];
-  github: string | null;
-  twitter: string | null;
-  userName: string | null;
-  nickName: string | null;
-  password: string | null;
-  userBirthday: string | null;
-  learningStartDate: string | null;
+  github: Maybe<string>;
+  twitter: Maybe<string>;
+  userName: Maybe<string>;
+  nickName: Maybe<string>;
+  password: Maybe<string>;
+  userBirthday: Maybe<string>;
+  learningStartDate: Maybe<string>;
   passwordModal: boolean;
-  email: string | null;
+  email: Maybe<string>;
 };
 
 const initialState = (): State => ({

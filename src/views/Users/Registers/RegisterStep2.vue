@@ -14,6 +14,8 @@ import InputArea from "@/components/Molecules/Forms/InputArea.vue";
 import { Language, Framework, Skill } from "@/types/index";
 import { RegisterSessionSecondParams } from "@/types/params";
 
+type Maybe<T> = T | null;
+
 type State = {
   selectedLang: [];
   languages: Language[];
@@ -21,8 +23,8 @@ type State = {
   framworks: Framework[];
   selectedSkill: [];
   skills: Skill[];
-  github: string | null;
-  twitter: string | null;
+  github: Maybe<string>;
+  twitter: Maybe<string>;
 };
 
 const initialState = (): State => ({

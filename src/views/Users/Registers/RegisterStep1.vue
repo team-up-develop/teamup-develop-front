@@ -9,14 +9,17 @@ import { RegisterSessionFirstParams } from "@/types/params";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import InputArea from "@/components/Molecules/Forms/InputArea.vue";
+
+type Maybe<T> = T | null;
+
 type State = {
-  userName: string | null;
-  nickName: string | null;
-  userBirthday: string | null;
-  learningStartDate: string | null;
+  userName: Maybe<string>;
+  nickName: Maybe<string>;
+  userBirthday: Maybe<string>;
+  learningStartDate: Maybe<string>;
   dialog: boolean;
-  password: string | null;
-  email: string | null;
+  password: Maybe<string>;
+  email: Maybe<string>;
 };
 
 const initialState = (): State => ({

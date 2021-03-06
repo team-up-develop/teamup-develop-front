@@ -11,11 +11,13 @@ import Session from "@/components/Atoms/Commons/Session.vue";
 import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import { JobCreateParamsFirst } from "@/types/params";
 
+type Maybe<T> = T | null;
+
 export type JobCreateSession1 = {
-  jobTitle: string | null;
-  jobDescription: string | null;
-  devStartDate: string | null;
-  devEndDate: string | null;
+  jobTitle: Maybe<string>;
+  jobDescription: Maybe<string>;
+  devStartDate: Maybe<string>;
+  devEndDate: Maybe<string>;
 };
 
 const initialState = (): JobCreateSession1 => ({
