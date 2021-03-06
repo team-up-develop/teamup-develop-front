@@ -1,10 +1,12 @@
+type Maybe<T> = T | null;
+
 export type Job = {
   created_at: Date;
   deleted_at: null | Date;
   dev_end_date: Date;
   dev_start_date: Date;
   id: number;
-  job_description: string | null;
+  job_description: Maybe<string>;
   job_status_id: number;
   job_title: string;
   programing_frameworks: Framework[];
@@ -22,12 +24,12 @@ export type User =
   | {
       bio: string;
       created_at: Date;
-      deleted_at: Date | null;
+      deleted_at: Maybe<Date>;
       id: number;
       job: null;
       learning_start_date: Date;
-      twitter_account: string | null;
-      github_account: string | null;
+      twitter_account: Maybe<string>;
+      github_account: Maybe<string>;
       updatedAt: Date;
       birthday: Date;
       login_name: string;
@@ -39,7 +41,7 @@ export type User =
 export type ManageJob = {
   apply_status_id: number;
   createdAt: Date;
-  deletedAt: null | Date;
+  deletedAt: Maybe<Date>;
   id: number;
   job: Job;
   jobId: number;
@@ -69,7 +71,7 @@ export type Language = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date | null;
+  deletedAt: Maybe<Date>;
   name: string;
 };
 
@@ -77,7 +79,7 @@ export type Framework = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date | null;
+  deletedAt: Maybe<Date>;
   name: string;
 };
 
@@ -85,7 +87,7 @@ export type Skill = {
   id: number;
   createdAt: Date;
   updatedAt: Date;
-  deletedAt: Date | null;
+  deletedAt: Maybe<Date>;
   name: string;
 };
 

@@ -1,7 +1,7 @@
-// * 案件作成時 session1 ここは API通信しないので キャメルケース
+type Maybe<T> = T | null;
 export interface JobCreateParamsFirst {
   jobTitle: string;
-  jobDescription: string | null;
+  jobDescription: Maybe<string>;
   devStartDate: string;
   devEndDate: string;
 }
@@ -9,7 +9,7 @@ export interface JobCreateParamsFirst {
 export interface JobCreateParamsSecond {
   user_id: number;
   job_title: string;
-  job_description: string | null;
+  job_description: Maybe<string>;
   dev_start_date: Date;
   dev_end_date: Date;
   programing_language_ids: {}[];
@@ -57,8 +57,8 @@ export interface RegisterSessionSecondParams {
   programingLanguage: {}[];
   programingFramework: {}[];
   skill: {}[];
-  github: string | null;
-  twitter: string | null;
+  github: Maybe<string>;
+  twitter: Maybe<string>;
 }
 
 export interface messageParams {
@@ -71,9 +71,9 @@ export interface EditProfileParams {
   id: number;
   user_name: string;
   learning_start_date: Date;
-  bio: string | null;
-  github_account: string | null;
-  twitter_account: string | null;
+  bio: Maybe<string>;
+  github_account: Maybe<string>;
+  twitter_account: Maybe<string>;
   updated_at: Date;
   birthday: Date;
   login_name: string;

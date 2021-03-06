@@ -16,7 +16,7 @@ import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnA
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { User } from "@/types/index";
-import { API_URL, truncate, catchError, m } from "@/master";
+import { API_URL, catchError, m } from "@/master";
 // import Logout from '@/components/button/Logout'
 
 type State = {
@@ -76,8 +76,6 @@ export default defineComponent({
       },
     ]);
 
-    const limit = (value: string, num: number) => truncate(value, num);
-
     // * ユーザー情報取得
     const fetchUser = async () => {
       try {
@@ -101,7 +99,6 @@ export default defineComponent({
     return {
       ...toRefs(state),
       breadcrumbs,
-      limit,
     };
   },
 });
