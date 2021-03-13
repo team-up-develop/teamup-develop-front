@@ -93,3 +93,6 @@ Atomic Design 導入
 
 ## color
 <img width="612" alt="スクリーンショット 2020-12-19 10 59 58" src="https://user-images.githubusercontent.com/56709557/102679879-7673e880-41f6-11eb-8889-27143779a070.png">
+
+### Sass 定義
+https://github.com/team-up-develop/teamup-develop-front/blob/7ec7379dd1886ca19b29d75ed89b1e1cd8482e73/src/assets/scss/_variables.scss#L7
