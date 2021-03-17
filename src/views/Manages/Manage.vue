@@ -5,14 +5,11 @@ import {
   toRefs,
   computed,
 } from "@vue/composition-api";
-// import { API_URL, catchError } from "@/master";
-// import axios from "axios";
-// import { ManageJob } from "@/types/index";
-// import { FetchManageJobs } from "@/types/fetch";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import Vuex from "@/store/index";
 import Manage from "@/components/Templates/Manages/Manage.vue";
 import useJobs from "@/hooks/useJobs";
+
 type State = {
   userId: number;
 };

@@ -95,7 +95,7 @@ export default defineComponent({
       }
       await fetchManageJobs();
       await getCheckSelfJob();
-      getCheckStatus();
+      await getCheckStatus();
     });
 
     return {
@@ -131,7 +131,10 @@ export default defineComponent({
       <EditJobModal @close="closeEditModal" v-if="editModal" :job="job" />
     </div>
     <div class="button-area" v-if="isLogin">
-      <div v-if="!selfJobPost" class="button-area__action">
+      <div v-if="selfJobPost">
+        <button class="edit" @click="openEditModal">編集する</button>
+      </div>
+      <div v-else class="button-area__action">
         <button @click="openModal" class="apply" v-if="applyFlug">
           応募する
         </button>
@@ -139,9 +142,6 @@ export default defineComponent({
         <div class="favorite">
           <FavoriteDetailBtn :jobId="id" />
         </div>
-      </div>
-      <div v-if="selfJobPost">
-        <button class="edit" @click="openEditModal">編集する</button>
       </div>
     </div>
     <!-- 非ログイン時 リダイレクトさせる -->

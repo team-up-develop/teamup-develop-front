@@ -3,29 +3,23 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
   computed,
 } from "@vue/composition-api";
-import { API_URL, catchError } from "@/master";
 import Vuex from "@/store/index";
-import axios from "axios";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import PostUser from "@/components/Organisms/Jobs/JobDetails/PostUser.vue";
 import SkillJob from "@/components/Organisms/Jobs/JobDetails/SkillJob.vue";
 import DetailJob from "@/components/Organisms/Jobs/JobDetails/DetailJob.vue";
 import BtnArea from "@/components/Organisms/Jobs/JobDetails/BtnArea.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import { ApplyJob } from "@/types/index";
-import { FetchApplyJob } from "@/types/fetch";
+import useJobs from "@/hooks/useJobs";
 
 type State = {
-  job: ApplyJob | {};
   userId: number;
   loading: boolean;
 };
 
 const initialState = (): State => ({
-  job: {},
   userId: Vuex.state.auth.userId,
   loading: true,
 });
@@ -45,6 +39,10 @@ export default defineComponent({
   setup: (props) => {
     const state = reactive<State>(initialState());
 
+    const { fetchJobDetail, job, loading } = useJobs();
+
+    fetchJobDetail(props.id);
+
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -62,29 +60,11 @@ export default defineComponent({
       },
     ]);
 
-    // * 詳細画面情報を取得
-    const getJobDetail = async () => {
-      try {
-        const res = await axios.get<FetchApplyJob>(
-          `${API_URL}/job/${props.id}`
-        );
-        setTimeout(() => {
-          state.loading = false;
-          state.job = res.data.response;
-        }, 1000);
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
-    onMounted(() => {
-      getJobDetail();
-    });
-
     return {
       ...toRefs(state),
       breadcrumbs,
-      getJobDetail,
+      job,
+      loading,
     };
   },
 });
@@ -94,7 +74,7 @@ export default defineComponent({
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper">
-      <section v-if="loading == false">
+      <section v-if="!loading">
         <div class="detail-post-user-area">
           <div class="detail-tag">投稿者</div>
           <PostUser :job="job" />
