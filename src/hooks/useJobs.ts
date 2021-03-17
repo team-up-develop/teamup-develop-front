@@ -7,24 +7,31 @@ import {
 } from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
-import { ManageJob, Job } from "@/types/index";
-import { FetchManageJobs, FetchJobs } from "@/types/fetch";
+import { ManageJob, Job, ApplyJob } from "@/types/index";
+import {
+  FetchManageJobs,
+  FetchJobs,
+  FetchApplyJob,
+  FetchFavoriteJob,
+} from "@/types/fetch";
 import Vuex from "@/store/index";
 
 type State = {
   userId: number;
   jobs: Job[];
+  job: ApplyJob | Job | {};
   manageJobs: ManageJob[];
   favoriteJobs: Job[];
-  selfJobFlag?: boolean;
+  loading: boolean;
 };
 
-const initialState = (): any => ({
+const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
   jobs: [],
+  job: {},
   manageJobs: [],
   favoriteJobs: [],
-  selfJobFlag: false,
+  loading: true,
 });
 
 const useJobs = () => {
@@ -39,13 +46,26 @@ const useJobs = () => {
     }
   };
 
+  const fetchJobDetail = async (jobId: number) => {
+    try {
+      const res = await axios.get<FetchJobs | FetchApplyJob | FetchFavoriteJob>(
+        `${API_URL}/job/${jobId}`
+      );
+      state.job = res.data.response;
+      setTimeout(() => {
+        state.loading = false;
+      }, 1000);
+    } catch (error) {
+      catchError(error);
+    }
+  };
+
   const fetchManageJobs = async () => {
     try {
       const res = await axios.get<FetchManageJobs>(
         `${API_URL}/jobs?user_id=${state.userId}`
       );
       state.manageJobs = res.data.response;
-      // console.log(state.manageJobs);
     } catch (error) {
       catchError(error);
     }
@@ -63,9 +83,9 @@ const useJobs = () => {
   };
 
   onMounted(async () => {
-    fetchJobs();
-    fetchManageJobs();
-    fetchFavoriteJobs();
+    await fetchJobs();
+    await fetchManageJobs();
+    await fetchFavoriteJobs();
   });
 
   return {
@@ -73,6 +93,7 @@ const useJobs = () => {
     fetchJobs,
     fetchManageJobs,
     fetchFavoriteJobs,
+    fetchJobDetail,
   };
 };
 
