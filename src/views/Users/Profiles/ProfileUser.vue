@@ -20,7 +20,7 @@ import Vuex from "@/store/index";
 
 type State = {
   myselfFlag: boolean;
-  userInfo: User;
+  userInfo: User | {};
   userId: number;
   modal: boolean;
   loading: boolean;

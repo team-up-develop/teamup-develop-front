@@ -4,9 +4,14 @@ import {
   reactive,
   toRefs,
   onMounted,
+  PropType,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import { truncate } from "@/master";
+
+type Props = {
+  jobId: number;
+};
 
 type State = {
   applyNum: number;
@@ -24,9 +29,9 @@ const initialState = (): State => ({
 
 export default defineComponent({
   props: {
-    jobId: { type: Number, default: 0, require: true },
+    jobId: { type: Number as PropType<number>, default: 0, require: true },
   },
-  setup: (props) => {
+  setup: (props: Props) => {
     const state = reactive<State>(initialState());
     const limit = (value: string, num: number) => truncate(value, num);
 

@@ -1,20 +1,33 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, PropType } from "@vue/composition-api";
 import DatePicker from "@/components/Atoms/Forms/DatePicker.vue";
+
+type Props = {
+  value: string;
+  name: string;
+  textLabel: string;
+  mandatory: boolean;
+  mandatoryText: string;
+  placeholder: string;
+};
 
 export default defineComponent({
   components: {
     DatePicker,
   },
   props: {
-    value: { type: String },
-    name: { type: String, required: true },
-    textLabel: { type: String, required: true },
-    mandatory: { type: Boolean, required: true, defalut: false },
-    mandatoryText: { type: String },
-    placeholder: { type: String, required: true },
+    value: { type: String as PropType<string>, required: true, defalut: "" },
+    name: { type: String as PropType<string>, required: true },
+    textLabel: { type: String as PropType<string>, required: true },
+    mandatory: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+      defalut: false,
+    },
+    mandatoryText: { type: String as PropType<string> },
+    placeholder: { type: String as PropType<string>, required: true },
   },
-  setup: (props, ctx) => {
+  setup: (props: Props, ctx) => {
     const mandatoryLabel = computed(() => {
       return props.mandatory ? true : false;
     });

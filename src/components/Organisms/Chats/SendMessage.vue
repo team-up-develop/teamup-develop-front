@@ -4,12 +4,16 @@ import {
   computed,
   reactive,
   toRefs,
+  PropType,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import axios from "axios";
 import { API_URL, catchError } from "@/master";
 import { messageParams } from "@/types/params";
 
+type Props = {
+  id: number;
+};
 type State = {
   userId: number;
   chatMessage: string;
@@ -22,9 +26,9 @@ const initialState = (): State => ({
 
 export default defineComponent({
   props: {
-    id: { type: Number, defalut: 0, required: true },
+    id: { type: Number as PropType<number>, defalut: 0, required: true },
   },
-  setup: (props) => {
+  setup: (props: Props) => {
     const state = reactive<State>(initialState());
 
     // * job_id が存在するか判別

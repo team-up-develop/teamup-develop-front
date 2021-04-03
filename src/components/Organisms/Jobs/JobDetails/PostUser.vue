@@ -1,10 +1,11 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 import { dayJs, truncate } from "@/master";
+import { Job } from "@/types";
 
 export default defineComponent({
   props: {
-    job: { type: Object, require: true, defalut: {} },
+    job: { type: Object as PropType<Job>, require: true, defalut: {} },
   },
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);

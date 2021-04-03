@@ -1,17 +1,24 @@
 <script lang="ts">
-import Vue from "vue";
+import Vue, { PropType } from "vue";
 import vSelect from "vue-select";
 import "vue-select/dist/vue-select.css";
+import { Language, Framework, Skill } from "@/types/index";
 
 export default Vue.extend({
   components: {
     vSelect,
   },
   props: {
-    value: { type: Array, required: true },
-    options: { type: Array, required: true },
-    name: { type: String, required: true },
-    max: { type: Number, required: true },
+    value: {
+      type: Array as PropType<Language[] | Framework[] | Skill[]>,
+      required: true,
+    },
+    options: {
+      type: Array as PropType<Language[] | Framework[] | Skill[]>,
+      required: true,
+    },
+    name: { type: String as PropType<string>, required: true, default: "" },
+    max: { type: Number as PropType<number>, required: true, default: 0 },
   },
   methods: {
     onInput(e: []) {

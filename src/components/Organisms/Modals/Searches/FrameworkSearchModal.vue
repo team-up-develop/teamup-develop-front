@@ -12,9 +12,6 @@ type DateType = {
 };
 
 export default Vue.extend({
-  props: {
-    jobsArray: Array,
-  },
   data(): DateType {
     return {
       frameworks: [],

@@ -424,7 +424,6 @@ export default defineComponent({
       </div> -->
     </transition>
     <LanguageSearchModal
-      :jobsArray="jobs"
       @close="closeLangSearchModal"
       v-if="langModal"
       @compliteSearchLanguage="compliteSearchLanguage($event)"
@@ -432,13 +431,11 @@ export default defineComponent({
     <FrameworkSearchModal
       v-if="frameworkModal"
       @close="closeFrameworkSearchModal"
-      :jobsArray="jobs"
       @compliteSearchFramework="compliteSearchFramework($event)"
     />
     <SkillSearchModal
       @close="closeSkillSearchModal"
       v-if="skillModal"
-      :jobsArray="jobs"
       @compliteSearchSkill="compliteSearchSkill($event)"
     />
     <div class="modal-window">

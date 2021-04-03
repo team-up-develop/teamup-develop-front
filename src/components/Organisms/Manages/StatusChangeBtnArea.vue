@@ -4,10 +4,17 @@ import {
   reactive,
   toRefs,
   computed,
+  PropType,
 } from "@vue/composition-api";
 import axios from "axios";
 import { m, API_URL, catchError } from "@/master";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
+
+type Props = {
+  id: number; //? 詳細を見るユーザーのID
+  jobId: number;
+  applyId: number;
+};
 
 type State = {
   statusId: number;
@@ -24,11 +31,11 @@ export default defineComponent({
     StatusChangeBtnArea,
   },
   props: {
-    id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
-    jobId: { type: Number, default: 0 },
-    applyId: { type: Number, default: 0 },
+    id: { type: Number as PropType<number>, default: 0, require: true },
+    jobId: { type: Number as PropType<number>, default: 0, require: true },
+    applyId: { type: Number as PropType<number>, default: 0, require: true },
   },
-  setup: (props) => {
+  setup: (props: Props) => {
     const state = reactive<State>(initialState());
 
     const participate = () => {

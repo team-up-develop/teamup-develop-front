@@ -31,6 +31,7 @@ export interface FavoriteParams {
 }
 
 export interface ParticipateParams {
+  id: number;
   job_id: number;
   user_id: number;
   apply_status_id: 2;
@@ -38,6 +39,7 @@ export interface ParticipateParams {
 }
 
 export interface RejectParams {
+  id: number;
   job_id: number;
   user_id: number;
   apply_status_id: 3;

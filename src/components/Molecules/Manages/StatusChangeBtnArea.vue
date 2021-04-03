@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 import { m } from "@/master";
 import ApplyPutBtn from "@/components/Atoms/Button/ApplyPutBtn.vue";
 import RejectBtn from "@/components/Atoms/Button/RejectBtn.vue";
@@ -10,10 +10,14 @@ export default defineComponent({
     RejectBtn,
   },
   props: {
-    id: { type: Number, default: 0 }, //? 詳細を見るユーザーのID
-    jobId: { type: Number, default: 0 },
-    updatedAt: { type: String, defalut: new Date() },
-    applyId: { type: Number, default: 0 },
+    id: { type: Number as PropType<number>, default: 0, require: true }, //? 詳細を見るユーザーのID
+    jobId: { type: Number as PropType<number>, default: 0, require: true },
+    updatedAt: {
+      type: String as PropType<string>,
+      defalut: new Date(),
+      require: true,
+    },
+    applyId: { type: Number as PropType<number>, default: 0, require: true },
   },
   setup: (_, context) => {
     const participate = () => {

@@ -1,12 +1,17 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, PropType } from "@vue/composition-api";
 import { m } from "@/master";
+import { Job } from "@/types/index";
+
+type Props = {
+  job: Job;
+};
 
 export default defineComponent({
   props: {
-    job: { type: Object, defalut: null, require: true },
+    job: { type: Object as PropType<Job>, defalut: {}, require: true },
   },
-  setup: (props: any) => {
+  setup: (props: Props) => {
     const isStatusNew = computed(() => {
       return props.job.job_status_id == m.JOB_STATUS_NEW ? true : false;
     });

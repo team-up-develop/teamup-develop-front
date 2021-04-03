@@ -5,6 +5,7 @@ import {
   toRefs,
   onMounted,
   computed,
+  PropType,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import axios from "axios";
@@ -15,6 +16,12 @@ import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vu
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
 import useJobs from "@/hooks/useJobs";
+import { Job } from "@/types";
+
+type Props = {
+  id: number;
+  job: Job;
+};
 
 type State = {
   userId: number;
@@ -40,10 +47,10 @@ export default defineComponent({
     EditJobModal,
   },
   props: {
-    id: { type: Number, default: 0 },
-    job: { type: Object },
+    id: { type: Number as PropType<number>, default: 0, require: true },
+    job: { type: Object as PropType<Job>, defalut: {}, require: true },
   },
-  setup: (props, context) => {
+  setup: (props: Props, context) => {
     const state = reactive<State>(initialState());
     const router = context.root.$router;
     const { manageJobs, fetchManageJobs } = useJobs();

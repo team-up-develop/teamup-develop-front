@@ -5,12 +5,17 @@ import {
   toRefs,
   onMounted,
   computed,
+  PropType,
 } from "@vue/composition-api";
 import axios from "axios";
 import { Job } from "@/types/index";
 import { ManageJob } from "@/types/index";
 import { m, dayJs, API_URL, truncate, catchError } from "@/master";
 import { FetchManageJobs } from "@/types/fetch";
+
+type Props = {
+  userId: number;
+};
 
 type State = {
   chatGroups: Job[] | {};
@@ -28,9 +33,9 @@ const initialState = (): State => ({
 
 export default defineComponent({
   props: {
-    userId: { type: Number, defalut: 0 },
+    userId: { type: Number as PropType<number>, defalut: 0 },
   },
-  setup: (props) => {
+  setup: (props: Props) => {
     const state = reactive<State>(initialState());
 
     const day = (value: string, format: string) => dayJs(value, format);

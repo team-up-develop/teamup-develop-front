@@ -20,7 +20,7 @@ import useJobs from "@/hooks/useJobs";
 
 type State = {
   myselfFlag: boolean;
-  userInfo: User;
+  userInfo: User | {};
   userId: number;
   modal: boolean;
   loading: boolean;

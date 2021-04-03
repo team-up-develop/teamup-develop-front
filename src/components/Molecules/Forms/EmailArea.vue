@@ -1,18 +1,30 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, PropType } from "@vue/composition-api";
 import Email from "@/components/Atoms/Forms/Email.vue";
+
+type Props = {
+  type: string;
+  value: string;
+  textLabel: string;
+  mandatory: boolean;
+  placeholder: string;
+};
 export default defineComponent({
   components: {
     Email,
   },
   props: {
-    type: { type: String, required: true },
-    value: { type: String, required: false, default: null },
-    textLabel: { type: String, required: true },
-    mandatory: { type: Boolean, required: true, defalut: false },
-    placeholder: { type: String, required: false },
+    type: { type: String as PropType<string>, required: true },
+    value: { type: String as PropType<string>, required: false, default: null },
+    textLabel: { type: String as PropType<string>, required: true },
+    mandatory: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+      defalut: false,
+    },
+    placeholder: { type: String as PropType<string>, required: false },
   },
-  setup: (props, ctx) => {
+  setup: (props: Props, ctx) => {
     const mandatoryLabel = computed(() => {
       return props.mandatory ? true : false;
     });

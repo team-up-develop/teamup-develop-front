@@ -5,6 +5,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  PropType,
 } from "@vue/composition-api";
 import { API_URL, catchError, md } from "@/master";
 import axios from "axios";
@@ -15,6 +16,13 @@ import { JobCreateParamsSecond } from "@/types/params";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import Vuex from "@/store/index";
+
+type Props = {
+  jobTitle: string;
+  devStartDate: string;
+  devEndDate: string;
+  jobDescription: string;
+};
 
 type State = {
   selectedLang: number[];
@@ -45,12 +53,20 @@ export default defineComponent({
     SkillSelectArea,
   },
   props: {
-    jobTitle: { type: String, required: true, default: "" },
-    devStartDate: { type: String, required: true, default: "" },
-    devEndDate: { type: String, required: true, default: "" },
-    jobDescription: { type: String, default: "" },
+    jobTitle: { type: String as PropType<string>, required: true, default: "" },
+    devStartDate: {
+      type: String as PropType<string>,
+      required: true,
+      default: "",
+    },
+    devEndDate: {
+      type: String as PropType<string>,
+      required: true,
+      default: "",
+    },
+    jobDescription: { type: String as PropType<string>, default: "" },
   },
-  setup: (props, ctx: any) => {
+  setup: (props: Props, ctx: any) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 

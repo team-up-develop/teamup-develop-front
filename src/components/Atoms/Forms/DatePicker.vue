@@ -1,12 +1,16 @@
 <script lang="ts">
 // FIXME: Composition にすると $refs.dialogが取得できない？
-import Vue from "vue";
+import Vue, { PropType } from "vue";
 
 export default Vue.extend({
   props: {
-    type: { type: String, required: true },
-    value: { type: String || null, required: false },
-    placeholder: { type: String, required: true },
+    type: { type: String as PropType<string>, required: true, default: "" },
+    value: { type: String as PropType<string>, required: false, default: "" },
+    placeholder: {
+      type: String as PropType<string>,
+      required: true,
+      default: "",
+    },
   },
   data() {
     return {

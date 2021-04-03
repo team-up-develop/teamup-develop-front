@@ -1,14 +1,18 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import { Language, Framework, Skill } from "@/types/index";
 
 export default defineComponent({
   props: {
-    options: { type: Array, require: true, defalut: {} },
-    color: { type: Number, require: true, defalut: 0 },
+    options: {
+      type: Array as PropType<Language[] | Framework[] | Skill[]>,
+      require: true,
+      defalut: {},
+    },
+    color: { type: Number as PropType<1 | 2 | 3>, require: true, defalut: 0 }, //? 1: language 2: Framework 3: Skill
   },
-  setup: (_, ctx: any) => {
+  setup: (_, ctx) => {
     const router = ctx.root.$router;
     // * トップページ 言語検索
     const languageClick = (language: Language) => {
