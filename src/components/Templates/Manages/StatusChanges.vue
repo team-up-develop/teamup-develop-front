@@ -1,7 +1,15 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, PropType } from "@vue/composition-api";
 import JobsCard from "@/components/Organisms/Manages/ChangeStatus/JobsCard.vue";
 import UserCard from "@/components/Organisms/Manages/ChangeStatus/UserCard.vue";
+import { User } from "@/types/index";
+
+type Props = {
+  jobId: number;
+  activeCss: 1 | 2 | 3;
+  userId: number;
+  users: User[];
+};
 
 export default defineComponent({
   components: {
@@ -9,12 +17,16 @@ export default defineComponent({
     JobsCard,
   },
   props: {
-    jobId: { type: Number, defalut: 0, require: true },
-    activeCss: { type: Number, defalut: 1, require: true }, //? 1: 応募者, 2: 参加者, 3: 拒否者
-    userId: { type: Number, defalut: 0, require: true },
-    users: { type: Array, defalut: [], require: true },
+    jobId: { type: Number as PropType<number>, defalut: 0, require: true },
+    activeCss: {
+      type: Number as PropType<1 | 2 | 3>,
+      defalut: 1,
+      require: true,
+    }, //? 1: 応募者, 2: 参加者, 3: 拒否者
+    userId: { type: Number as PropType<number>, defalut: 0, require: true },
+    users: { type: Array as PropType<User[]>, defalut: [], require: true },
   },
-  setup: (props) => {
+  setup: (props: Props) => {
     const isLogin = computed(() => {
       return props.userId ? true : false;
     });

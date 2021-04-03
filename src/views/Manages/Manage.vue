@@ -9,7 +9,7 @@ import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue"
 import Vuex from "@/store/index";
 import Manage from "@/components/Templates/Manages/Manage.vue";
 import useJobs from "@/hooks/useJobs";
-
+// import ApplyFavorite from "@/components/Templates/Manages/ApplyFavorite.vue";
 type State = {
   userId: number;
 };
@@ -22,6 +22,7 @@ export default defineComponent({
   components: {
     Breadcrumbs,
     Manage,
+    // ApplyFavorite,
   },
   setup: () => {
     const state = reactive<State>(initialState());
@@ -39,6 +40,7 @@ export default defineComponent({
     ]);
 
     const { manageJobs } = useJobs();
+    // console.log(manageJobs);
 
     return {
       ...toRefs(state),
@@ -52,6 +54,7 @@ export default defineComponent({
 <template>
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <!-- <ApplyFavorite :userId="userId" :jobs="manageJobs" /> -->
     <Manage :userId="userId" :jobs="manageJobs" :activeCss="1" />
   </section>
 </template>

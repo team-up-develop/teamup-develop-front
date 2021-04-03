@@ -1,19 +1,28 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 import axios from "axios";
 import { m, API_URL, catchError } from "@/master";
 import { ParticipateParams } from "@/types/params";
 
+type Props = {
+  id: number;
+  jobId: number;
+  updatedAt: string;
+  applyId: number;
+};
+
 export default defineComponent({
   props: {
-    id: { type: Number, default: 0, require: true }, //? 詳細を見るユーザーのID
-    jobId: { type: Number, default: 0, require: true },
-    updatedAt: { type: String, defalut: String(new Date()), require: true },
-    applyId: { type: Number, default: 0, require: true },
+    id: { type: Number as PropType<number>, default: 0, require: true }, //? 詳細を見るユーザーのID
+    jobId: { type: Number as PropType<number>, default: 0, require: true },
+    updatedAt: {
+      type: String as PropType<string>,
+      defalut: String(new Date()),
+      require: true,
+    },
+    applyId: { type: Number as PropType<number>, default: 0, require: true },
   },
-  setup: (props, context) => {
-    // console.log(props);
-
+  setup: (props: Props, context) => {
     const putApply = async () => {
       const params: ParticipateParams = {
         id: props.applyId,

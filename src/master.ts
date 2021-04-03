@@ -23,6 +23,11 @@ export const m = {
   JOB_STATUS_ADD,
 };
 
+export type Md = {
+  label: string;
+  value: string;
+};
+
 export const md = {
   optionsRecruitNumber: [
     { label: "1名", value: "1" },

@@ -1,11 +1,12 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
+import { Md } from "@/master";
 
 export default defineComponent({
   props: {
-    value: { type: String, required: true },
-    options: { type: Array, required: true },
-    name: { type: String, required: true },
+    value: { type: String as PropType<string>, required: true, default: "" },
+    options: { type: Array as PropType<Md[]>, required: true, default: [{}] },
+    name: { type: String as PropType<string>, required: true, default: "" },
   },
   setup: (_, ctx) => {
     const updateValue = (e: any) => {

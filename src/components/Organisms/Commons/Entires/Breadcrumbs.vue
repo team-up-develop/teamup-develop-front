@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 
 type Bread = [
   {
@@ -19,7 +19,11 @@ const breadDefalut: Bread = [
 
 export default defineComponent({
   props: {
-    breadCrumbs: { type: Array, require: true, defalut: breadDefalut },
+    breadCrumbs: {
+      type: Array as PropType<Bread[]>,
+      require: true,
+      defalut: breadDefalut,
+    },
   },
   setup: () => {
     return {};

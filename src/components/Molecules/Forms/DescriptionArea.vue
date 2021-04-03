@@ -4,8 +4,20 @@ import {
   computed,
   reactive,
   toRefs,
+  PropType,
 } from "@vue/composition-api";
 import Description from "@/components/Atoms/Forms/Description.vue";
+
+type Props = {
+  value: string;
+  name: string;
+  textLabel: string;
+  mandatory: boolean;
+  mandatoryText: string;
+  placeholder: string;
+  maxlength: string;
+  remaining: boolean;
+};
 
 type State = {
   jobDescriptionLimit: number;
@@ -20,16 +32,24 @@ export default defineComponent({
     Description,
   },
   props: {
-    value: { type: String },
-    name: { type: String, required: true },
-    textLabel: { type: String, required: true },
-    mandatory: { type: Boolean, required: true, defalut: false },
-    mandatoryText: { type: String },
-    placeholder: { type: String, required: true },
-    maxlength: { type: String, required: true },
-    remaining: { type: Boolean, required: true, defalut: false },
+    value: { type: String as PropType<string>, required: true, defalut: "" },
+    name: { type: String as PropType<string>, required: true },
+    textLabel: { type: String as PropType<string>, required: true },
+    mandatory: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+      defalut: false,
+    },
+    mandatoryText: { type: String as PropType<string> },
+    placeholder: { type: String as PropType<string>, required: true },
+    maxlength: { type: String as PropType<string>, required: true },
+    remaining: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+      defalut: false,
+    },
   },
-  setup: (props, ctx) => {
+  setup: (props: Props, ctx) => {
     const state = reactive<State>(initialState());
 
     const input = (e: any) => {

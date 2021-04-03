@@ -1,9 +1,10 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
+import { User } from "@/types/index";
 
 export default defineComponent({
   props: {
-    user: { type: Object, require: true, defalut: {} },
+    user: { type: Object as PropType<User>, require: true, defalut: {} },
   },
 });
 </script>

@@ -5,7 +5,7 @@ import axios from "axios";
 import CompliteModal from "@/components/Organisms/Modals/Applications/CompliteModal.vue";
 import { ApplyParams } from "@/types/params";
 
-type DataType = {
+type State = {
   userId: number;
   compliteModal: boolean;
   applyFlag: boolean;
@@ -15,7 +15,7 @@ export default Vue.extend({
   props: {
     jobId: { type: Number as PropType<number>, default: 0 },
   },
-  data(): DataType {
+  data(): State {
     return {
       userId: this.$store.state.auth.userId,
       compliteModal: false,

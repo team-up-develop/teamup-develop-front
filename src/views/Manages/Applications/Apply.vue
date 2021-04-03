@@ -53,6 +53,7 @@ export default defineComponent({
         const res = await axios.get<FetchManageJobs>(
           `${API_URL}/apply_jobs?user_id=${state.userId}`
         );
+        // TODO: API改正要望
         for (let i = 0; i < res.data.response.length; i++) {
           const applyJobCorrect: ManageJob = res.data.response[i];
           if (

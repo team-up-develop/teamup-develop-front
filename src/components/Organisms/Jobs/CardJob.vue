@@ -1,8 +1,9 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, PropType } from "@vue/composition-api";
 import CardJobSkill from "@/components/Atoms/Jobs/CardJobSkill.vue";
 import { truncate, dayJs, m } from "@/master";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
+import { Job } from "@/types/index";
 
 export default defineComponent({
   components: {
@@ -10,12 +11,12 @@ export default defineComponent({
     JobStatusNew,
   },
   props: {
-    job: { type: Object, defalut: null, require: true },
+    job: { type: Object as PropType<Job[]>, defalut: null, require: true },
   },
-  setup: (props: any) => {
+  setup: () => {
     return {
       ...useUtils(),
-      ...useJobStatus(props),
+      // ...useJobStatus(props),
     };
   },
 });
@@ -30,15 +31,16 @@ const useUtils = () => {
   };
 };
 
-const useJobStatus = (props: any) => {
-  const isStatusNew = computed(() => {
-    return props.job.job_status_id == m.JOB_STATUS_NEW ? true : false;
-  });
+// const useJobStatus = (props: Job[]) => {
+//   const isStatusNew = computed(() => {
+//     console.log(props);
+//     return props.job.job_status_id == m.JOB_STATUS_NEW ? true : false;
+//   });
 
-  return {
-    isStatusNew,
-  };
-};
+//   return {
+//     isStatusNew,
+//   };
+// };
 </script>
 
 <template>

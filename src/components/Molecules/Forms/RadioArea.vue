@@ -1,19 +1,36 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, PropType } from "@vue/composition-api";
 import Radio from "@/components/Atoms/Forms/Radio.vue";
+import { Md } from "@/master";
+
+type Props = {
+  value: string;
+  options: Md[];
+  name: string;
+  textLabel: string;
+  mandatory: boolean;
+};
 
 export default defineComponent({
   components: {
     Radio,
   },
   props: {
-    value: { type: String, required: true },
-    options: { type: Array, required: true },
-    name: { type: String, required: true },
-    textLabel: { type: String, required: true },
-    mandatory: { type: Boolean, required: true, defalut: false },
+    value: { type: String as PropType<string>, required: true, default: "" },
+    options: { type: Array as PropType<Md[]>, required: true, default: [{}] },
+    name: { type: String as PropType<string>, required: true, default: "" },
+    textLabel: {
+      type: String as PropType<string>,
+      required: true,
+      default: "",
+    },
+    mandatory: {
+      type: Boolean as PropType<boolean>,
+      required: true,
+      defalut: false,
+    },
   },
-  setup: (props, ctx) => {
+  setup: (props: Props, ctx) => {
     const mandatoryLabel = computed(() => {
       return props.mandatory ? true : false;
     });

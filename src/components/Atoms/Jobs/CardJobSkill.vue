@@ -1,10 +1,10 @@
 <script lang="ts">
 import { Job } from "@/types/index";
-import Vue, { PropType } from "vue";
+import { defineComponent, PropType } from "@vue/composition-api";
 
-export default Vue.extend({
+export default defineComponent({
   props: {
-    job: Object as PropType<Job>,
+    job: { type: Object as PropType<Job>, require: true, defalut: {} },
   },
 });
 </script>

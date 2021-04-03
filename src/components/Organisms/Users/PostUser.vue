@@ -1,13 +1,23 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent, computed, PropType } from "@vue/composition-api";
 import { dayJs } from "@/master";
+import { User } from "@/types/index";
+
+type Props = {
+  user: User;
+  myselfFlag: boolean;
+};
 
 export default defineComponent({
   props: {
-    user: { type: Object, require: true, defalut: {} },
-    myselfFlag: { type: Boolean, require: true, defalut: false },
+    user: { type: Object as PropType<User>, require: true, defalut: {} },
+    myselfFlag: {
+      type: Boolean as PropType<boolean>,
+      require: true,
+      defalut: false,
+    },
   },
-  setup: (props: any, context) => {
+  setup: (props: Props, context) => {
     const day = (value: string, format: string) => dayJs(value, format);
 
     const enabledBtn = computed(() => {

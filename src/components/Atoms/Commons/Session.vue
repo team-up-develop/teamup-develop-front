@@ -3,7 +3,7 @@ import Vue, { PropType } from "vue";
 
 export default Vue.extend({
   props: {
-    num: { type: Number as PropType<number>, default: 0 },
+    num: { type: Number as PropType<1 | 2 | 3>, default: 0 },
   },
 });
 </script>

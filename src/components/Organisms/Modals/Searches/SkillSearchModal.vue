@@ -12,9 +12,6 @@ type DateType = {
 };
 
 export default Vue.extend({
-  props: {
-    jobsArray: Array,
-  },
   data(): DateType {
     return {
       selectedSkill: this.$store.state.search.skill,

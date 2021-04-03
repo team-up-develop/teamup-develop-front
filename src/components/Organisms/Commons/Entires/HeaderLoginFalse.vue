@@ -9,7 +9,7 @@ export default Vue.extend({
     BtnArea,
   },
   props: {
-    flag: Boolean as PropType<boolean>,
+    flag: { type: Boolean as PropType<boolean>, default: false },
   },
 });
 </script>

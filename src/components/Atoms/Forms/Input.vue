@@ -1,12 +1,12 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 
 export default defineComponent({
   props: {
-    type: { type: String, required: true },
-    value: { type: String, required: false, default: null },
-    placeholder: { type: String, required: false },
-    maxlength: { type: String, required: true },
+    type: { type: String as PropType<string>, required: true },
+    value: { type: String as PropType<string>, required: false, default: null },
+    placeholder: { type: String as PropType<string>, required: false },
+    maxlength: { type: String as PropType<string>, required: true },
   },
   setup: (_, ctx) => {
     const onInputTitle = (e: any) => {

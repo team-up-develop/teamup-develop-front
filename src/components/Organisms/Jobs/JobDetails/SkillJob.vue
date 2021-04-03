@@ -1,9 +1,10 @@
 <script lang="ts">
-import Vue from "vue";
+import Vue, { PropType } from "vue";
+import { Job } from "@/types";
 
 export default Vue.extend({
   props: {
-    job: Object,
+    job: { type: Object as PropType<Job> },
   },
 });
 </script>

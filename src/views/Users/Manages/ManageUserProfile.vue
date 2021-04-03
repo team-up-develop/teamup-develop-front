@@ -21,7 +21,7 @@ import { API_URL, catchError, m } from "@/master";
 
 type State = {
   myselfFlag: boolean;
-  userInfo: User;
+  userInfo: User | {};
   userId: number;
   loading: boolean;
   doneStatusFlag: boolean;
