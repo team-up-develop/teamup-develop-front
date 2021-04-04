@@ -5,6 +5,7 @@ import {
   toRefs,
   onMounted,
   computed,
+  PropType,
 } from "@vue/composition-api";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
@@ -13,17 +14,23 @@ import PostUser from "@/components/Organisms/Users/PostUser.vue";
 import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 // import Logout from '@/components/button/Logout'
+import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
 import Vuex from "@/store/index";
+import useJobs from "@/hooks/useJobs";
+
+type Props = {
+  id: number;
+};
 
 type State = {
   myselfFlag: boolean;
   userInfo: User | {};
   userId: number;
   modal: boolean;
-  loading: boolean;
+  currentTab: 0 | 1;
+  tabs: any;
 };
 
 const initialState = (): State => ({
@@ -31,7 +38,11 @@ const initialState = (): State => ({
   userInfo: {},
   userId: Vuex.state.auth.userId,
   modal: false,
-  loading: true,
+  currentTab: 0,
+  tabs: [
+    { id: 1, tabName: "プロフィール" },
+    { id: 2, tabName: "投稿案件" },
+  ],
 });
 
 export default defineComponent({
@@ -42,12 +53,12 @@ export default defineComponent({
     SkillUser,
     IntroduceUser,
     Breadcrumbs,
-    Loading,
+    CardJob,
   },
   props: {
-    id: { type: Number, default: 0 },
+    id: { type: Number as PropType<number>, default: 0, require: true },
   },
-  setup: (props) => {
+  setup: (props: Props) => {
     const state = reactive<State>(initialState());
 
     const breadcrumbs = computed(() => [
@@ -62,14 +73,13 @@ export default defineComponent({
       },
     ]);
 
+    const { manageJobs } = useJobs();
+
     const fetchUser = async () => {
       // * ユーザー情報取得
       try {
-        setTimeout(async () => {
-          const res = await axios.get(`${API_URL}/user/${props.id}`);
-          state.loading = false;
-          state.userInfo = res.data.response;
-        }, 700);
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
       } catch (error) {
         catchError(error);
       }
@@ -110,6 +120,7 @@ export default defineComponent({
       doSend,
       compliteEdit,
       editEmit,
+      manageJobs,
     };
   },
 });
@@ -119,7 +130,6 @@ export default defineComponent({
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper">
-      <!-- 編集 モーダル画面 -->
       <ProfileEditModal
         :userInfo="userInfo"
         @close="closeModal"
@@ -134,34 +144,48 @@ export default defineComponent({
             :myselfFlag="myselfFlag"
           />
           <v-row class="header">
-            <router-link
-              :to="`/account/profile/${id}`"
-              class="router-link-active-click"
-            >
-              <span>プロフィール</span>
-            </router-link>
-            <router-link
-              :to="`/account/profile/${id}/jobs`"
-              class="router-link"
-            >
-              <span>投稿案件</span>
-            </router-link>
+            <div class="tabs">
+              <div class="btn-container">
+                <button
+                  v-for="(tab, index) in tabs"
+                  :key="tab.name"
+                  :class="{ active: currentTab === index }"
+                  @click="currentTab = index"
+                >
+                  {{ tab.tabName }}
+                </button>
+              </div>
+            </div>
           </v-row>
         </div>
       </section>
-      <template v-if="!loading">
-        <v-col class="skill">
-          <div class="skill__card">
-            <div class="detail-tag">開発スキル</div>
-            <SkillUser :user="userInfo" />
-          </div>
-        </v-col>
-        <v-col class="pr">
-          <div class="pr__card">
-            <div class="detail-tag">自己紹介</div>
-            <IntroduceUser :user="userInfo" />
-          </div>
-        </v-col>
+      <template>
+        <div v-show="currentTab === 0">
+          <v-col class="skill">
+            <div class="skill__card">
+              <div class="detail-tag">開発スキル</div>
+              <SkillUser :user="userInfo" />
+            </div>
+          </v-col>
+          <v-col class="pr">
+            <div class="pr__card">
+              <div class="detail-tag">自己紹介</div>
+              <IntroduceUser :user="userInfo" />
+            </div>
+          </v-col>
+        </div>
+        <div v-show="currentTab === 1">
+          <v-row class="jobs">
+            <router-link
+              :to="`/jobs/${jobs.id}`"
+              v-for="jobs in manageJobs"
+              :key="jobs.id"
+              class="jobs__card"
+            >
+              <CardJob :job="jobs" />
+            </router-link>
+          </v-row>
+        </div>
         <div class="button-area">
           <div v-if="myselfFlag" class="button-action-area">
             <button @click="openModal" class="btn-box-edit">編集する</button>
@@ -169,7 +193,6 @@ export default defineComponent({
           <div class="button-action-area" v-else></div>
         </div>
       </template>
-      <Loading v-else />
     </div>
   </section>
 </template>
@@ -183,11 +206,6 @@ export default defineComponent({
   font-size: 17px;
   font-weight: bold;
   margin-bottom: 0.7rem;
-}
-
-.router {
-  text-decoration: none;
-  color: $white;
 }
 
 .detail-wrapper {
@@ -222,17 +240,22 @@ export default defineComponent({
       .header {
         border-bottom: $dark-grey 2px solid;
 
-        .router-link {
+        .tabs {
+          width: 100%;
+          border-radius: 10px;
+        }
+        .btn-container {
+          display: flex;
+        }
+
+        button {
           color: $text-main-color;
           text-decoration: none;
           width: 33.3%;
           padding: 0.7rem 0;
         }
-        .router-link:hover {
-          @include tab-hover;
-        }
 
-        .router-link-active-click {
+        button.active {
           font-weight: bold;
           color: $text-main-color;
           text-decoration: none;
@@ -243,6 +266,22 @@ export default defineComponent({
         }
       }
     }
+  }
+}
+
+// * 案件カード
+.jobs {
+  width: 85%;
+  margin: 2rem auto;
+
+  @media screen and (max-width: $sm) {
+    width: 95%;
+  }
+
+  &__card {
+    margin-left: 1rem;
+    width: 500px;
+    margin: 0 auto;
   }
 }
 

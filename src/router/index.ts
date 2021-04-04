@@ -8,9 +8,7 @@ import JobCreate from "@/views/Jobs/JobCreate.vue";
 import JobCreateSkill from "@/views/Jobs/JobCreateSkill.vue";
 import JobCreateComplete from "@/views/Jobs/JobCreateComplete.vue";
 import ProfileUser from "@/views/Users/Profiles/ProfileUser.vue";
-import ProfileUserJobs from "@/views/Users/Profiles/ProfileUserJobs.vue";
 import ManageUserProfile from "@/views/Users/Manages/ManageUserProfile.vue";
-import ManageUserProfileJobs from "@/views/Users/Manages/ManageUserProfileJobs.vue";
 import Login from "@/views/Users/Logins/Login.vue";
 import Register from "@/views/Users/Registers/Register.vue";
 import SentMailComplete from "@/views/Users/Registers/SentMailComplete.vue";
@@ -85,26 +83,10 @@ const routes: Array<RouteConfig> = [
       id: Number(route.params.id),
     }),
   },
-  {
-    path: "/account/profile/:id/jobs",
-    component: ProfileUserJobs,
-    props: (route) => ({
-      id: Number(route.params.id),
-    }),
-  },
   // * 管理案件 ユーザー
   {
     path: "/manage/profile/:jobId/:id/:applyId",
     component: ManageUserProfile,
-    props: (route) => ({
-      id: Number(route.params.id),
-      jobId: Number(route.params.jobId),
-      applyId: Number(route.params.applyId),
-    }),
-  },
-  {
-    path: "/manage/profile/:jobId/:id/:applyId/jobs",
-    component: ManageUserProfileJobs,
     props: (route) => ({
       id: Number(route.params.id),
       jobId: Number(route.params.jobId),
