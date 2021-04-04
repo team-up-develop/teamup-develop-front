@@ -5,6 +5,7 @@ import {
   toRefs,
   onMounted,
   computed,
+  PropType,
 } from "@vue/composition-api";
 import axios from "axios";
 import Vuex from "@/store/index";
@@ -14,27 +15,38 @@ import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
 import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
 import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
 import { API_URL, catchError, m } from "@/master";
-// import Logout from '@/components/button/Logout'
+import useJobs from "@/hooks/useJobs";
+
+type Props = {
+  id: number; //? 詳細を見るユーザーのID
+  jobId: number;
+  applyId: number;
+};
 
 type State = {
   myselfFlag: boolean;
   userInfo: User | {};
   userId: number;
-  loading: boolean;
   doneStatusFlag: boolean;
   statusId: number;
+  currentTab: 0 | 1;
+  tabs: any;
 };
 
 const initialState = (): State => ({
   myselfFlag: false,
   userInfo: {},
   userId: Vuex.state.auth.userId,
-  loading: true,
   doneStatusFlag: false,
   statusId: m.APPLY_STATUS_APPLY,
+  currentTab: 0,
+  tabs: [
+    { id: 1, tabName: "プロフィール" },
+    { id: 2, tabName: "投稿案件" },
+  ],
 });
 
 export default defineComponent({
@@ -44,14 +56,14 @@ export default defineComponent({
     IntroduceUser,
     StatusChangeBtnArea,
     Breadcrumbs,
-    Loading,
+    CardJob,
   },
   props: {
-    id: { type: Number, default: 0, require: true }, //? 詳細を見るユーザーのID
-    jobId: { type: Number, default: 0, require: true },
-    applyId: { type: Number, default: 0, require: true },
+    id: { type: Number as PropType<number>, default: 0, require: true },
+    jobId: { type: Number as PropType<number>, default: 0, require: true },
+    applyId: { type: Number as PropType<number>, default: 0, require: true },
   },
-  setup: (props) => {
+  setup: (props: Props) => {
     const state = reactive<State>(initialState());
 
     const breadcrumbs = computed(() => [
@@ -76,14 +88,13 @@ export default defineComponent({
       },
     ]);
 
+    const { manageJobs } = useJobs();
+
     // * ユーザー情報取得
     const fetchUser = async () => {
       try {
-        setTimeout(async () => {
-          const res = await axios.get(`${API_URL}/user/${props.id}`);
-          state.loading = false;
-          state.userInfo = res.data.response;
-        }, 700);
+        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        state.userInfo = res.data.response;
       } catch (error) {
         catchError(error);
       }
@@ -99,6 +110,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       breadcrumbs,
+      manageJobs,
     };
   },
 });
@@ -116,22 +128,22 @@ export default defineComponent({
             :myselfFlag="myselfFlag"
           />
           <v-row class="header">
-            <router-link
-              :to="`/manage/profile/${jobId}/${id}/${applyId}`"
-              class="router-link-active-click"
-            >
-              <span>プロフィール</span>
-            </router-link>
-            <router-link
-              :to="`/manage/profile/${jobId}/${id}/${applyId}/jobs`"
-              class="router-link"
-            >
-              <span>投稿案件</span>
-            </router-link>
+            <div class="tabs">
+              <div class="btn-container">
+                <button
+                  v-for="(tab, index) in tabs"
+                  :key="tab.name"
+                  :class="{ active: currentTab === index }"
+                  @click="currentTab = index"
+                >
+                  {{ tab.tabName }}
+                </button>
+              </div>
+            </div>
           </v-row>
         </div>
       </section>
-      <template v-if="!loading">
+      <div v-show="currentTab === 0">
         <v-col class="skill">
           <div class="skill__card">
             <div class="detail-tag">自己紹介</div>
@@ -144,14 +156,24 @@ export default defineComponent({
             <IntroduceUser :user="userInfo" />
           </div>
         </v-col>
-        <div class="button-area">
-          <!-- 案件管理からきたら -->
-          <section v-if="jobId">
-            <StatusChangeBtnArea :id="id" :jobId="jobId" :applyId="applyId" />
-          </section>
-        </div>
-      </template>
-      <Loading v-else />
+      </div>
+      <div v-show="currentTab === 1">
+        <v-row class="jobs">
+          <router-link
+            :to="`/jobs/${jobs.id}`"
+            v-for="jobs in manageJobs"
+            :key="jobs.id"
+            class="jobs__card"
+          >
+            <CardJob :job="jobs" />
+          </router-link>
+        </v-row>
+      </div>
+      <div class="button-area">
+        <section v-if="jobId">
+          <StatusChangeBtnArea :id="id" :jobId="jobId" :applyId="applyId" />
+        </section>
+      </div>
     </div>
   </section>
 </template>
@@ -165,11 +187,6 @@ export default defineComponent({
   font-size: 17px;
   font-weight: bold;
   margin-bottom: 0.7rem;
-}
-
-.router {
-  text-decoration: none;
-  color: $white;
 }
 
 .detail-wrapper {
@@ -198,17 +215,22 @@ export default defineComponent({
       .header {
         border-bottom: $dark-grey 2px solid;
 
-        .router-link {
+        .tabs {
+          width: 100%;
+          border-radius: 10px;
+        }
+        .btn-container {
+          display: flex;
+        }
+
+        button {
           color: $text-main-color;
           text-decoration: none;
           width: 33.3%;
           padding: 0.7rem 0;
         }
-        .router-link:hover {
-          @include tab-hover;
-        }
 
-        .router-link-active-click {
+        button.active {
           font-weight: bold;
           color: $text-main-color;
           text-decoration: none;
@@ -219,6 +241,23 @@ export default defineComponent({
         }
       }
     }
+  }
+}
+
+// * 案件カード
+.jobs {
+  min-height: 500px;
+  width: 80%;
+  margin: 2rem auto;
+
+  @media screen and (max-width: $sm) {
+    width: 95%;
+  }
+
+  &__card {
+    margin-left: 1rem;
+    width: 500px;
+    margin: 0 auto;
   }
 }
 
