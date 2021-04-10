@@ -67,7 +67,7 @@ const useUtils = () => {
         <div class="post-user-image"></div>
         <div class="post-user-name-area">
           <div class="post-user-name">
-            {{ limit(job.user.login_name, 12) }}
+            {{ limit(job.user.user_name, 12) }}
           </div>
         </div>
         <div class="label-area mt-5">

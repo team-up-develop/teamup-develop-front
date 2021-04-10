@@ -14,7 +14,8 @@ type Maybe<T> = T | null;
 
 type State = {
   userName: Maybe<string>;
-  nickName: Maybe<string>;
+  lastName: Maybe<string>;
+  firstName: Maybe<string>;
   userBirthday: Maybe<string>;
   learningStartDate: Maybe<string>;
   dialog: boolean;
@@ -24,7 +25,8 @@ type State = {
 
 const initialState = (): State => ({
   userName: "",
-  nickName: "",
+  lastName: "",
+  firstName: "",
   password: "",
   userBirthday: "",
   learningStartDate: "",
@@ -44,13 +46,15 @@ export default defineComponent({
 
     const strageGet = () => {
       const userName = sessionStorage.getItem("userName");
-      const nickName = sessionStorage.getItem("nickName");
+      const lastName = sessionStorage.getItem("lastName");
+      const firstName = sessionStorage.getItem("firstName");
       const email = sessionStorage.getItem("email");
       const password = sessionStorage.getItem("password");
       const userBirthday = sessionStorage.getItem("userBirthday");
       const learningStartDate = sessionStorage.getItem("learningStartDate");
       state.userName = userName;
-      state.nickName = nickName;
+      state.lastName = lastName;
+      state.firstName = firstName;
       state.password = password;
       state.email = email;
       state.userBirthday = userBirthday;
@@ -59,7 +63,8 @@ export default defineComponent({
 
     const isForm = computed(() => {
       return state.userName &&
-        state.nickName &&
+        state.firstName &&
+        state.lastName &&
         state.userBirthday &&
         state.learningStartDate &&
         state.password &&
@@ -71,7 +76,8 @@ export default defineComponent({
     const nextStep2 = () => {
       if (
         state.userName &&
-        state.nickName &&
+        state.firstName &&
+        state.lastName &&
         state.userBirthday &&
         state.learningStartDate &&
         state.password &&
@@ -79,14 +85,16 @@ export default defineComponent({
       ) {
         const params: RegisterSessionFirstParams = {
           userName: state.userName,
-          nickName: state.nickName,
+          lastName: state.lastName,
+          firstName: state.firstName,
           userBirthday: state.userBirthday,
           learningStartDate: state.learningStartDate,
           password: state.password,
           email: state.email,
         };
         sessionStorage.setItem("userName", params.userName);
-        sessionStorage.setItem("nickName", params.nickName);
+        sessionStorage.setItem("lastName", params.firstName);
+        sessionStorage.setItem("firstName", params.firstName);
         sessionStorage.setItem("userBirthday", params.userBirthday);
         sessionStorage.setItem("learningStartDate", params.learningStartDate);
         sessionStorage.setItem("password", params.password);
@@ -122,24 +130,37 @@ export default defineComponent({
             <InputArea
               v-model="userName"
               type="text"
-              name="jobTitle"
-              textLabel="氏名"
+              name="userName"
+              textLabel="ユーザー名"
               :mandatory="true"
               mandatoryText=""
-              placeholder="例) チームアップ 太郎"
+              placeholder="例) TeamUp"
               maxlength="30"
               :remaining="false"
             />
           </div>
           <div class="input-area">
             <InputArea
-              v-model="nickName"
+              v-model="lastName"
               type="text"
-              name="nickName"
-              textLabel="ユーザー名"
+              name="lastName"
+              textLabel="姓"
               :mandatory="true"
               mandatoryText=""
-              placeholder="例) Tarou"
+              placeholder="例) チームアップ"
+              maxlength="30"
+              :remaining="false"
+            />
+          </div>
+          <div class="input-area">
+            <InputArea
+              v-model="firstName"
+              type="text"
+              name="firstName"
+              textLabel="名"
+              :mandatory="true"
+              mandatoryText=""
+              placeholder="例) 太郎"
               maxlength="30"
               :remaining="false"
             />
@@ -151,7 +172,7 @@ export default defineComponent({
               name="email"
               textLabel="メールアドレス"
               :mandatory="true"
-              mandatoryText="ログイン時必要"
+              mandatoryText=""
               placeholder="example@teamUp.com"
               maxlength="100"
               :remaining="false"
@@ -164,7 +185,7 @@ export default defineComponent({
               name="email"
               textLabel="パスワード"
               :mandatory="true"
-              mandatoryText="ログイン時必要"
+              mandatoryText=""
               placeholder="パスワードを入力してください"
               maxlength="100"
               :remaining="false"

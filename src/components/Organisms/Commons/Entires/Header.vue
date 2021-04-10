@@ -12,7 +12,7 @@ type State = {
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
-  userName: Vuex.state.auth.loginName,
+  userName: Vuex.state.auth.userName,
 });
 
 export default defineComponent({

@@ -9,7 +9,7 @@ import {
 import Input from "@/components/Atoms/Forms/Input.vue";
 
 type Props = {
-  value: string;
+  value: string | null;
   name: string;
   type: string;
   textLabel: string;

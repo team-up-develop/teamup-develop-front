@@ -6,12 +6,12 @@ import Email from "@/components/Atoms/Forms/Email.vue";
 import Password from "@/components/Atoms/Forms/Password.vue";
 
 type State = {
-  LoginName: string;
+  email: string;
   LoginPassword: string;
 };
 
 const initialState = (): State => ({
-  LoginName: "",
+  email: "",
   LoginPassword: "",
 });
 
@@ -25,13 +25,13 @@ export default defineComponent({
 
     const register = async () => {
       const params = {
-        LoginName: state.LoginName,
+        email: state.email,
         LoginPassword: state.LoginPassword,
       };
       try {
         const res = await axios.post(`${API_URL}/signup`, params);
         console.log(res);
-        state.LoginName = "";
+        state.email = "";
         state.LoginPassword = "";
       } catch (error) {
         catchError(error);
@@ -50,7 +50,7 @@ export default defineComponent({
   <section>
     <div class="register-form-area">
       <label for="name" class="label">メールアドレス</label>
-      <Email v-model="LoginName" type="text" placeholder="example@teamUp.com" />
+      <Email v-model="email" type="text" placeholder="example@teamUp.com" />
       <label for="name" class="label">パスワード</label>
       <Password v-model="LoginPassword" type="password" />
     </div>

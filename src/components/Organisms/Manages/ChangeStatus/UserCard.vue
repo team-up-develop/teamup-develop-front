@@ -52,7 +52,7 @@ export default defineComponent({
           <div class="card__user__image"></div>
           <v-col>
             <div class="card__user__name">
-              {{ limit(user.user.login_name, 26) }}
+              {{ limit(user.user.user_name, 26) }}
             </div>
             <div class="card__user__study">
               {{ day(user.user.learning_start_date, "YYYY年 M月 D日") }}
