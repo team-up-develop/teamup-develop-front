@@ -48,9 +48,10 @@ export interface RejectParams {
 
 export interface RegisterSessionFirstParams {
   userName: string;
+  lastName: string;
+  firstName: string;
   password: string;
   email: string;
-  nickName: string;
   userBirthday: string;
   learningStartDate: string;
 }
@@ -72,13 +73,14 @@ export interface messageParams {
 export interface EditProfileParams {
   id: number;
   user_name: string;
+  first_name: string;
+  last_name: string;
   learning_start_date: Date;
   bio: Maybe<string>;
   github_account: Maybe<string>;
   twitter_account: Maybe<string>;
   updated_at: Date;
   birthday: Date;
-  login_name: string;
   login_password: string;
   programing_language_ids: {}[];
   programing_framework_ids: {}[];

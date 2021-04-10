@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, computed, PropType } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 import { dayJs } from "@/master";
 import { User } from "@/types/index";
 
@@ -19,10 +19,6 @@ export default defineComponent({
   },
   setup: (props: Props, context) => {
     const day = (value: string, format: string) => dayJs(value, format);
-
-    const enabledBtn = computed(() => {
-      return props.myselfFlag ? true : false;
-    });
 
     const twitterTab = () => {
       if (props.user.twitter_account == null) {
@@ -48,7 +44,6 @@ export default defineComponent({
 
     return {
       day,
-      enabledBtn,
       twitterTab,
       gitTab,
       editEmit,
@@ -68,7 +63,7 @@ export default defineComponent({
           <div class="profile-area">
             <v-col class="name-are">
               <div class="user-name">
-                {{ user.login_name }}
+                {{ user.user_name }}
               </div>
             </v-col>
             <v-col class="introduce-area" style="padding: none">
@@ -96,7 +91,7 @@ export default defineComponent({
         </div>
       </v-row>
       <div class="btn-area">
-        <button class="edit-btn" @click="editEmit" v-if="enabledBtn">
+        <button v-if="myselfFlag" class="edit-btn" @click="editEmit">
           編集する
         </button>
       </div>

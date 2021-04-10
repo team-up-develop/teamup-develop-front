@@ -5,14 +5,14 @@ import Email from "@/components/Atoms/Forms/Email.vue";
 import Password from "@/components/Atoms/Forms/Password.vue";
 
 type State = {
-  LoginName: string;
-  LoginPassword: string;
+  email: string;
+  password: string;
   loginErrorFlag: boolean;
 };
 
 const initialState = (): State => ({
-  LoginName: "",
-  LoginPassword: "",
+  email: "",
+  password: "",
   loginErrorFlag: false,
 });
 
@@ -31,8 +31,8 @@ export default defineComponent({
 
     const login = () => {
       Vuex.dispatch("login", {
-        login_name: state.LoginName,
-        login_password: state.LoginPassword,
+        email: state.email,
+        login_password: state.password,
       });
       setTimeout(() => {
         if (Vuex.state.auth.errorFlag === true) {
@@ -60,7 +60,7 @@ export default defineComponent({
           <br /><br />
           <v-row cols="12" md="4">
             <Email
-              v-model="LoginName"
+              v-model="email"
               placeholder="example@teamUp.com"
               type="text"
             />
@@ -70,7 +70,7 @@ export default defineComponent({
           <label for="name">パスワード</label>
           <br /><br />
           <v-row cols="12" md="4">
-            <Password v-model="LoginPassword" type="password" />
+            <Password v-model="password" type="password" />
           </v-row>
         </div>
         <div class="error-flag" v-if="loginErrorFlag == true">

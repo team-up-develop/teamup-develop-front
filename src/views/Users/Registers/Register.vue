@@ -4,7 +4,7 @@ import axios from "axios";
 import { API_URL, catchError } from "@/master";
 
 type DataType = {
-  LoginName: string;
+  email: string;
   LoginPassword: string;
   emailRules: any[];
   show2: boolean;
@@ -14,7 +14,7 @@ type DataType = {
 export default Vue.extend({
   data(): DataType {
     return {
-      LoginName: "",
+      email: "",
       LoginPassword: "",
       show2: true,
       rules: {
@@ -34,7 +34,7 @@ export default Vue.extend({
   methods: {
     register() {
       const params = {
-        LoginName: this.LoginName,
+        email: this.email,
         LoginPassword: this.LoginPassword,
       };
 
@@ -47,7 +47,7 @@ export default Vue.extend({
         .catch((error) => {
           catchError(error);
         });
-      this.LoginName = "";
+      this.email = "";
       this.LoginPassword = "";
     },
   },
@@ -65,7 +65,7 @@ export default Vue.extend({
           <v-row cols="12" md="4">
             <v-text-field
               class="textholder"
-              v-model="LoginName"
+              v-model="email"
               :rules="emailRules"
               label="example@teamup.com"
               required

@@ -155,7 +155,7 @@ export default defineComponent({
                   <div class="balloon-img"></div>
                 </div>
                 <div class="user-name">
-                  {{ chat.user.login_name }}
+                  {{ chat.user.user_name }}
                 </div>
                 <div class="balloon-text-right">
                   <p>{{ chat.message }}</p>

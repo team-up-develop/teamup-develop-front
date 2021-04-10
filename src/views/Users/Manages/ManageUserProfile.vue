@@ -19,6 +19,7 @@ import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
 import { API_URL, catchError, m } from "@/master";
 import useJobs from "@/hooks/useJobs";
+import UserTabs from "@/components/Organisms/Users/UserTabs.vue";
 
 type Props = {
   id: number; //? 詳細を見るユーザーのID
@@ -33,7 +34,6 @@ type State = {
   doneStatusFlag: boolean;
   statusId: number;
   currentTab: 0 | 1;
-  tabs: any;
 };
 
 const initialState = (): State => ({
@@ -43,10 +43,6 @@ const initialState = (): State => ({
   doneStatusFlag: false,
   statusId: m.APPLY_STATUS_APPLY,
   currentTab: 0,
-  tabs: [
-    { id: 1, tabName: "プロフィール" },
-    { id: 2, tabName: "投稿案件" },
-  ],
 });
 
 export default defineComponent({
@@ -57,6 +53,7 @@ export default defineComponent({
     StatusChangeBtnArea,
     Breadcrumbs,
     CardJob,
+    UserTabs,
   },
   props: {
     id: { type: Number as PropType<number>, default: 0, require: true },
@@ -88,9 +85,9 @@ export default defineComponent({
       },
     ]);
 
-    const { manageJobs } = useJobs();
+    const { fetchProfileJobs, profileJobs } = useJobs();
+    fetchProfileJobs(props.id);
 
-    // * ユーザー情報取得
     const fetchUser = async () => {
       try {
         const res = await axios.get(`${API_URL}/user/${props.id}`);
@@ -98,6 +95,10 @@ export default defineComponent({
       } catch (error) {
         catchError(error);
       }
+    };
+
+    const clickTabs = (emitValue: 0 | 1) => {
+      state.currentTab = emitValue;
     };
 
     onMounted(() => {
@@ -110,7 +111,8 @@ export default defineComponent({
     return {
       ...toRefs(state),
       breadcrumbs,
-      manageJobs,
+      profileJobs,
+      clickTabs,
     };
   },
 });
@@ -128,18 +130,11 @@ export default defineComponent({
             :myselfFlag="myselfFlag"
           />
           <v-row class="header">
-            <div class="tabs">
-              <div class="btn-container">
-                <button
-                  v-for="(tab, index) in tabs"
-                  :key="tab.name"
-                  :class="{ active: currentTab === index }"
-                  @click="currentTab = index"
-                >
-                  {{ tab.tabName }}
-                </button>
-              </div>
-            </div>
+            <UserTabs
+              :myselfFlag="false"
+              :currentTab="currentTab"
+              @clickTab="clickTabs($event)"
+            />
           </v-row>
         </div>
       </section>
@@ -161,7 +156,7 @@ export default defineComponent({
         <v-row class="jobs">
           <router-link
             :to="`/jobs/${jobs.id}`"
-            v-for="jobs in manageJobs"
+            v-for="jobs in profileJobs"
             :key="jobs.id"
             class="jobs__card"
           >
@@ -214,31 +209,6 @@ export default defineComponent({
 
       .header {
         border-bottom: $dark-grey 2px solid;
-
-        .tabs {
-          width: 100%;
-          border-radius: 10px;
-        }
-        .btn-container {
-          display: flex;
-        }
-
-        button {
-          color: $text-main-color;
-          text-decoration: none;
-          width: 33.3%;
-          padding: 0.7rem 0;
-        }
-
-        button.active {
-          font-weight: bold;
-          color: $text-main-color;
-          text-decoration: none;
-          width: 33.3%;
-          padding: 0.7rem 0;
-          border-bottom: $dark-grey 1px solid;
-          background-color: $dark-grey;
-        }
       }
     }
   }

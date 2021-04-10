@@ -31,7 +31,9 @@ export type User = {
   github_account: Maybe<string>;
   updatedAt: Date;
   birthday: Date;
-  login_name: string;
+  user_name: string;
+  first_name: string;
+  last_name: string;
   login_password: string;
   user_name: string;
 };

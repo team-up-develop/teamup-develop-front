@@ -40,8 +40,8 @@ export default defineComponent({
     const state = reactive<State>(initialState());
 
     const { fetchJobDetail, job, loading } = useJobs();
-
     fetchJobDetail(props.id);
+
     const breadcrumbs = computed(() => [
       {
         text: "探す",

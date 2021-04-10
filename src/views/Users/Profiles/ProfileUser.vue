@@ -19,6 +19,8 @@ import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
 import Vuex from "@/store/index";
 import useJobs from "@/hooks/useJobs";
+import UserTabs from "@/components/Organisms/Users/UserTabs.vue";
+import UserBasicInfo from "@/components/Organisms/Users/UserBasicInfo.vue";
 
 type Props = {
   id: number;
@@ -29,8 +31,7 @@ type State = {
   userInfo: User | {};
   userId: number;
   modal: boolean;
-  currentTab: 0 | 1;
-  tabs: any;
+  currentTab: 0 | 1 | 2;
 };
 
 const initialState = (): State => ({
@@ -39,10 +40,6 @@ const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
   modal: false,
   currentTab: 0,
-  tabs: [
-    { id: 1, tabName: "プロフィール" },
-    { id: 2, tabName: "投稿案件" },
-  ],
 });
 
 export default defineComponent({
@@ -54,6 +51,8 @@ export default defineComponent({
     IntroduceUser,
     Breadcrumbs,
     CardJob,
+    UserTabs,
+    UserBasicInfo,
   },
   props: {
     id: { type: Number as PropType<number>, default: 0, require: true },
@@ -73,7 +72,8 @@ export default defineComponent({
       },
     ]);
 
-    const { manageJobs } = useJobs();
+    const { fetchProfileJobs, profileJobs } = useJobs();
+    fetchProfileJobs(props.id);
 
     const fetchUser = async () => {
       // * ユーザー情報取得
@@ -112,6 +112,10 @@ export default defineComponent({
       openModal();
     };
 
+    const clickTabs = (emitValue: 0 | 1 | 2) => {
+      state.currentTab = emitValue;
+    };
+
     return {
       ...toRefs(state),
       breadcrumbs,
@@ -120,7 +124,8 @@ export default defineComponent({
       doSend,
       compliteEdit,
       editEmit,
-      manageJobs,
+      profileJobs,
+      clickTabs,
     };
   },
 });
@@ -144,31 +149,24 @@ export default defineComponent({
             :myselfFlag="myselfFlag"
           />
           <v-row class="header">
-            <div class="tabs">
-              <div class="btn-container">
-                <button
-                  v-for="(tab, index) in tabs"
-                  :key="tab.name"
-                  :class="{ active: currentTab === index }"
-                  @click="currentTab = index"
-                >
-                  {{ tab.tabName }}
-                </button>
-              </div>
-            </div>
+            <UserTabs
+              :myselfFlag="myselfFlag"
+              :currentTab="currentTab"
+              @clickTab="clickTabs($event)"
+            />
           </v-row>
         </div>
       </section>
       <template>
         <div v-show="currentTab === 0">
-          <v-col class="skill">
-            <div class="skill__card">
+          <v-col class="area">
+            <div class="area__card">
               <div class="detail-tag">開発スキル</div>
               <SkillUser :user="userInfo" />
             </div>
           </v-col>
-          <v-col class="pr">
-            <div class="pr__card">
+          <v-col class="area">
+            <div class="area__card">
               <div class="detail-tag">自己紹介</div>
               <IntroduceUser :user="userInfo" />
             </div>
@@ -178,7 +176,7 @@ export default defineComponent({
           <v-row class="jobs">
             <router-link
               :to="`/jobs/${jobs.id}`"
-              v-for="jobs in manageJobs"
+              v-for="jobs in profileJobs"
               :key="jobs.id"
               class="jobs__card"
             >
@@ -186,11 +184,21 @@ export default defineComponent({
             </router-link>
           </v-row>
         </div>
+        <template v-if="myselfFlag">
+          <div v-show="currentTab === 2">
+            <v-col class="area">
+              <div class="area__card">
+                <div class="detail-tag">基本情報</div>
+                <UserBasicInfo :user="userInfo" />
+              </div>
+            </v-col>
+          </div>
+        </template>
         <div class="button-area">
           <div v-if="myselfFlag" class="button-action-area">
             <button @click="openModal" class="btn-box-edit">編集する</button>
           </div>
-          <div class="button-action-area" v-else></div>
+          <div class="button-action-area" v-else />
         </div>
       </template>
     </div>
@@ -239,31 +247,6 @@ export default defineComponent({
 
       .header {
         border-bottom: $dark-grey 2px solid;
-
-        .tabs {
-          width: 100%;
-          border-radius: 10px;
-        }
-        .btn-container {
-          display: flex;
-        }
-
-        button {
-          color: $text-main-color;
-          text-decoration: none;
-          width: 33.3%;
-          padding: 0.7rem 0;
-        }
-
-        button.active {
-          font-weight: bold;
-          color: $text-main-color;
-          text-decoration: none;
-          width: 33.3%;
-          padding: 0.7rem 0;
-          border-bottom: $dark-grey 1px solid;
-          background-color: $dark-grey;
-        }
       }
     }
   }
@@ -285,8 +268,8 @@ export default defineComponent({
   }
 }
 
-//* スキル カード
-.detail-wrapper .skill {
+//* カード
+.detail-wrapper .area {
   width: 100%;
 
   &__card {
@@ -294,28 +277,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin: 2rem auto 2rem auto;
-
-    @media screen and (max-width: $la) {
-      width: 95%;
-    }
-
-    @media screen and (max-width: $sm) {
-      width: 100%;
-    }
-  }
-}
-
-//* 開発詳細 カード
-.detail-wrapper .pr {
-  width: 100%;
-
-  &__card {
-    width: 75%;
-    display: flex;
-    flex-direction: column;
-    text-align: left;
-    margin: 0rem auto 2rem auto;
+    margin: 1.3rem auto 2rem auto;
 
     @media screen and (max-width: $la) {
       width: 95%;

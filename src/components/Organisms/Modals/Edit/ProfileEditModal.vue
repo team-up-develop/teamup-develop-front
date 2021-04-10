@@ -35,6 +35,7 @@ export default Vue.extend({
   },
   methods: {
     // * 編集する
+    // TODO: 編集処理 見直し
     profileEdit() {
       // * date型に変換のための data用意
       function toDate(str: any, delim: string) {
@@ -48,12 +49,13 @@ export default Vue.extend({
         id: this.id,
         updated_at: this.userInfo.updated_at,
         user_name: this.userName,
+        first_name: "",
+        last_name: "",
         birthday: this.userInfo.birthday,
         bio: this.bio,
         github_account: this.githubAccount,
         twitter_account: this.twitterAccount,
         learning_start_date: learningStartDate,
-        login_name: this.userInfo.login_name,
         login_password: "password",
         programing_language_ids: [
           {

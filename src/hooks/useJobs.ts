@@ -1,6 +1,5 @@
 import {
   reactive,
-  // SetupContext,
   toRefs,
   onMounted,
   // onUnmounted,
@@ -21,6 +20,7 @@ type State = {
   jobs: Job[];
   job: ApplyJob | Job | {};
   manageJobs: ManageJob[];
+  profileJobs: ManageJob[];
   favoriteJobs: Job[];
   loading: boolean;
 };
@@ -30,6 +30,7 @@ const initialState = (): State => ({
   jobs: [],
   job: {},
   manageJobs: [],
+  profileJobs: [],
   favoriteJobs: [],
   loading: true,
 });
@@ -71,6 +72,17 @@ const useJobs = () => {
     }
   };
 
+  const fetchProfileJobs = async (userId: number) => {
+    try {
+      const res = await axios.get<FetchManageJobs>(
+        `${API_URL}/jobs?user_id=${userId}`
+      );
+      state.profileJobs = res.data.response;
+    } catch (error) {
+      catchError(error);
+    }
+  };
+
   const fetchFavoriteJobs = async () => {
     try {
       const res = await axios.get<FetchJobs>(
@@ -94,6 +106,7 @@ const useJobs = () => {
     fetchManageJobs,
     fetchFavoriteJobs,
     fetchJobDetail,
+    fetchProfileJobs,
   };
 };
 

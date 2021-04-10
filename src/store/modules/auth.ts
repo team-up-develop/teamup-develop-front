@@ -5,32 +5,32 @@ import router from "@/router/index.ts";
 
 interface State {
   userId: number | null;
-  loginName: string;
+  userName: string;
   errorFlag: boolean;
 }
 
 interface LoginData {
-  login_name: string;
+  email: string;
   login_password: string;
 }
 
 const state: State = {
   userId: null,
-  loginName: "",
+  userName: "",
   errorFlag: false,
 };
 
 const getters: GetterTree<State, LoginData> = {
   userId: (state: State) => state.userId,
-  loginName: (state: State) => state.loginName,
+  userName: (state: State) => state.userName,
 };
 
 const mutations: MutationTree<State> = {
   loginUserId(state: State, userId: number) {
     state.userId = userId;
   },
-  loginUserName(state: State, loginName: string) {
-    state.loginName = loginName;
+  loginUserName(state: State, userName: string) {
+    state.userName = userName;
   },
   loginError(state: State, errorFlag: boolean) {
     state.errorFlag = errorFlag;
@@ -41,13 +41,14 @@ const actions: ActionTree<State, LoginData> = {
   // * ログイン
   async login({ commit }, authData: LoginData) {
     const params: LoginData = {
-      login_name: authData.login_name,
+      email: authData.email,
       login_password: authData.login_password,
     };
     try {
       const res = await axios.post(`${API_URL}/login`, params);
+      console.log(res);
       commit("loginUserId", res.data.response.id);
-      commit("loginUserName", res.data.response.login_name);
+      commit("loginUserName", res.data.response.user_name);
       router.push("/jobs");
     } catch (error) {
       const errorFlag = true;

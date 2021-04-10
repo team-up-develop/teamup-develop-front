@@ -32,7 +32,7 @@ export default defineComponent({
     Description,
   },
   props: {
-    value: { type: String as PropType<string>, required: true, defalut: "" },
+    value: { type: String as PropType<string>, defalut: "" },
     name: { type: String as PropType<string>, required: true },
     textLabel: { type: String as PropType<string>, required: true },
     mandatory: {
