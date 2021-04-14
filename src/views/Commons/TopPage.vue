@@ -3,11 +3,13 @@ import Vue from "vue";
 import { API_URL, catchError } from "@/master";
 import axios from "axios";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import HeaderArea from "@/components/Organisms/TopPage/HeaderArea.vue";
-import TopSkill from "@/components/Organisms/TopPage/TopSkill.vue";
-import TopFreeword from "@/components/Organisms/TopPage/TopFreeword.vue";
-import TopHowto from "@/components/Organisms/TopPage/TopHowto.vue";
-import TopPageNewJobCard from "@/components/Organisms/TopPage/TopPageNewJobCard.vue";
+import {
+  HeaderArea,
+  TopSkill,
+  TopFreeword,
+  TopHowto,
+  TopPageNewJobCard,
+} from "@/components/Organisms/TopPage";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 

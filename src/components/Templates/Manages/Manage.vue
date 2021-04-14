@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from "@vue/composition-api";
-import UserCard from "@/components/Organisms/Manages/UserCard.vue";
-import JobsCard from "@/components/Organisms/Manages/JobsCard.vue";
+import { UserCard, JobsCard } from "@/components/Organisms/Manages";
 import { ManageJob } from "@/types/index";
 
 type Props = {

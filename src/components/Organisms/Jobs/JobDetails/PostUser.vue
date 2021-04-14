@@ -10,7 +10,6 @@ export default defineComponent({
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
-
     return {
       day,
       limit,

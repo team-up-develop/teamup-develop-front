@@ -10,16 +10,18 @@ import {
 import axios from "axios";
 import Vuex from "@/store/index";
 // import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import PostUser from "@/components/Organisms/Users/PostUser.vue";
-import SkillUser from "@/components/Organisms/Users/SkillUser.vue";
-import IntroduceUser from "@/components/Organisms/Users/IntroduceUser.vue";
-import StatusChangeBtnArea from "@/components/Organisms/Manages/StatusChangeBtnArea.vue";
+import {
+  PostUser,
+  SkillUser,
+  IntroduceUser,
+  UserTabs,
+} from "@/components/Organisms/Users";
+import { StatusChangeBtnArea } from "@/components/Organisms/Manages";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
 import { API_URL, catchError, m } from "@/master";
 import useJobs from "@/hooks/useJobs";
-import UserTabs from "@/components/Organisms/Users/UserTabs.vue";
 
 type Props = {
   id: number; //? 詳細を見るユーザーのID

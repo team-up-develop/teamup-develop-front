@@ -5,10 +5,12 @@ import {
   toRefs,
   computed,
 } from "@vue/composition-api";
-import InputArea from "@/components/Molecules/Forms/InputArea.vue";
-import DescriptionArea from "@/components/Molecules/Forms/DescriptionArea.vue";
+import {
+  InputArea,
+  DescriptionArea,
+  DatePickerArea,
+} from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
-import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import { JobCreateParamsFirst } from "@/types/params";
 
 type Maybe<T> = T | null;

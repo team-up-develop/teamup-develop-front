@@ -13,9 +13,11 @@ import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import JobRegisterFalse from "@/components/Organisms/Jobs/JobRegisterFalse.vue";
 import JobRightLogin from "@/components/Organisms/Jobs/JobRightLogin.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
-import LanguageSearchModal from "@/components/Organisms/Modals/Searches/LanguageSearchModal.vue";
-import FrameworkSearchModal from "@/components/Organisms/Modals/Searches/FrameworkSearchModal.vue";
-import SkillSearchModal from "@/components/Organisms/Modals/Searches/SkillSearchModal.vue";
+import {
+  LanguageSearchModal,
+  FrameworkSearchModal,
+  SkillSearchModal,
+} from "@/components/Organisms/Modals/Searches";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { dayJs, truncate } from "@/master";
@@ -93,7 +95,7 @@ export default defineComponent({
     FavoriteBtn,
     JobStatusNew,
   },
-  setup: (_, ctx: any) => {
+  setup: (_, ctx) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
     const day = (value: string, format: string) => dayJs(value, format);
@@ -151,7 +153,10 @@ export default defineComponent({
       }
     };
 
-    const skillQueryParameter = async (searchLang: any, urlParams: string) => {
+    const skillQueryParameter = async <T extends number[], U>(
+      searchLang: T,
+      urlParams: U
+    ) => {
       const arrayLanguage: string[] = [];
       const languageNum: number[] = searchLang;
       for (let s = 0; s < languageNum.length; s++) {
@@ -263,7 +268,7 @@ export default defineComponent({
       }, 1000);
     };
     // * click して案件を取得 === 詳細
-    const getJob = async (job: any) => {
+    const getJob = async (job: Job) => {
       // FIXME: any
       state.jobDetail = job; //? clickした案件を取得
       state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
