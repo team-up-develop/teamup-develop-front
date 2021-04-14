@@ -24,6 +24,7 @@
     "tests/**/*.ts",
     "tests/**/*.tsx",
     "src/store/modules/search.js"
+    // "src/components/Organisms/Jobs/JobDetails/index.ts"
   ],
   "exclude": ["node_modules"]
 }

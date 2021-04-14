@@ -7,10 +7,12 @@ import {
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import PostUser from "@/components/Organisms/Jobs/JobDetails/PostUser.vue";
-import SkillJob from "@/components/Organisms/Jobs/JobDetails/SkillJob.vue";
-import DetailJob from "@/components/Organisms/Jobs/JobDetails/DetailJob.vue";
-import BtnArea from "@/components/Organisms/Jobs/JobDetails/BtnArea.vue";
+import {
+  BtnArea,
+  PostUser,
+  SkillJob,
+  DetailJob,
+} from "@/components/Organisms/Jobs/JobDetails";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import useJobs from "@/hooks/useJobs";
 

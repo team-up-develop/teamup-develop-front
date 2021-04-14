@@ -14,7 +14,7 @@ import { FetchManageJobs } from "@/types/fetch";
 import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
 import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
-import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
+// import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
 import useJobs from "@/hooks/useJobs";
 import { Job } from "@/types";
 
@@ -44,7 +44,7 @@ export default defineComponent({
     FavoriteDetailBtn,
     ApplyModal,
     Applybtn,
-    EditJobModal,
+    // EditJobModal,
   },
   props: {
     id: { type: Number as PropType<number>, default: 0, require: true },
@@ -62,7 +62,7 @@ export default defineComponent({
     // * 自分の案件か否かを判定
     const getCheckSelfJob = async () => {
       for (let i = 0; i < manageJobs.value.length; i++) {
-        const selfJob = manageJobs.value[i];
+        const selfJob = await manageJobs.value[i];
         if (selfJob.id === props.id) {
           state.selfJobPost = true;
         }
@@ -134,23 +134,23 @@ export default defineComponent({
       </ApplyModal>
     </div>
     <!-- 編集 モーダル画面 -->
-    <div class="example-modal-window">
+    <!-- <div class="example-modal-window">
       <EditJobModal @close="closeEditModal" v-if="editModal" :job="job" />
-    </div>
+    </div> -->
     <div class="button-area" v-if="isLogin">
-      <div v-if="selfJobPost">
-        <button class="edit" @click="openEditModal">編集する</button>
-      </div>
-      <div v-else class="button-area__action">
+      <div class="button-area__action" v-if="!selfJobPost">
         <button @click="openModal" class="apply" v-if="applyFlug">
           応募する
         </button>
-        <div class="apply-false" v-if="applyFlug == false">応募済み</div>
+        <div class="apply-false" v-else>応募済み</div>
         <div class="favorite">
           <FavoriteDetailBtn :jobId="id" />
         </div>
       </div>
     </div>
+    <!-- <div v-else>
+        <button class="edit" @click="openEditModal">編集する</button>
+      </div> -->
     <!-- 非ログイン時 リダイレクトさせる -->
     <div class="button-area" v-else>
       <div class="button-area__action" @click="registerRedirect">

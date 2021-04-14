@@ -7,15 +7,14 @@ import {
   onMounted,
   PropType,
 } from "@vue/composition-api";
-import { API_URL, catchError, md } from "@/master";
 import axios from "axios";
+import Vuex from "@/store/index";
+import { API_URL, catchError, md } from "@/master";
+import { SkillSelectArea, RadioArea } from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
-import SkillSelectArea from "@/components/Molecules/Forms/SkillSelectArea.vue";
-import RadioArea from "@/components/Molecules/Forms/RadioArea.vue";
 import { JobCreateParamsSecond } from "@/types/params";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
-import Vuex from "@/store/index";
 
 type Props = {
   jobTitle: string;
@@ -212,6 +211,7 @@ export default defineComponent({
             :max="5"
             mandatoryText="5つまで"
           />
+          {{ selectedSkill }}
         </div>
         <div class="create-area">
           <RadioArea

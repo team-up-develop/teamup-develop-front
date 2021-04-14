@@ -6,9 +6,11 @@ import {
   onMounted,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
-import Header from "@/components/Organisms/Commons/Entires/Header.vue";
-import Footer from "@/components/Organisms/Commons/Entires/Footer.vue";
-import HeaderLoginFalse from "@/components/Organisms/Commons/Entires/HeaderLoginFalse.vue";
+import {
+  Header,
+  Footer,
+  HeaderLoginFalse,
+} from "@/components/Organisms/Commons/Entires";
 
 type State = {
   loginFlag: boolean;

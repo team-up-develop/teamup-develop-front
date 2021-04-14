@@ -1,20 +1,28 @@
 <script lang="ts">
 import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
+import {
   defineComponent,
   reactive,
   toRefs,
   computed,
-  PropType,
 } from "@vue/composition-api";
 import axios from "axios";
 import { m, API_URL, catchError } from "@/master";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
 
-type Props = {
-  id: number; //? 詳細を見るユーザーのID
-  jobId: number;
-  applyId: number;
-};
+const propsOption = {
+  id: { type: Number as PropType<number>, default: 0, require: true }, //? 詳細を見るユーザーのID
+  jobId: { type: Number as PropType<number>, default: 0, require: true },
+  applyId: { type: Number as PropType<number>, default: 0, require: true },
+} as const;
+
+type PropsOption = typeof propsOption;
+
+export type StatusChangeProps = OutsidePropsType<PropsOption>;
 
 type State = {
   statusId: number;
@@ -26,16 +34,12 @@ const initialState = (): State => ({
   updatedAt: "",
 });
 
-export default defineComponent({
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     StatusChangeBtnArea,
   },
-  props: {
-    id: { type: Number as PropType<number>, default: 0, require: true },
-    jobId: { type: Number as PropType<number>, default: 0, require: true },
-    applyId: { type: Number as PropType<number>, default: 0, require: true },
-  },
-  setup: (props: Props) => {
+  props: propsOption,
+  setup: (props) => {
     const state = reactive<State>(initialState());
 
     const participate = () => {
