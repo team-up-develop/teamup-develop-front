@@ -23,29 +23,28 @@ $ docker-compose exec app sh
 $ npm i
 ```
 
-### runserver
+### runServer
 ```
 $ npm run dev
 ```
 
-## その他コマンド
+## Tips
 ### bundle size 
 
 ```
 $ yarn build --analyze
+$ open dist/report.html 
 ```
-## error が出たとき..
-## cache クリア
+
+<img width="800" alt="スクリーンショット 2021-04-14 20 37 17" src="https://user-images.githubusercontent.com/56709557/114704374-7ed1cf80-9d61-11eb-8902-82385d1d0214.png">
+
+
+### cache クリア
 ```
 $ npm cache verify --force
 ```
 
-### vue cli not found と出た場合
-```
-$ rm -rf node_modules package-lock.json && npm install
-```
-
-## モジュールを削除 再インストール
+### モジュールを削除 再インストール
 ```
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
