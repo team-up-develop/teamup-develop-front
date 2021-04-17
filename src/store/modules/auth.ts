@@ -1,7 +1,6 @@
 import { ActionTree, GetterTree, MutationTree } from "vuex";
-import axios from "axios";
-import { API_URL, catchError } from "@/master";
-import router from "@/router/index.ts";
+import { $post, API_URL, catchError } from "@/master";
+import router from "@/router";
 
 interface State {
   userId: number | null;
@@ -45,7 +44,8 @@ const actions: ActionTree<State, LoginData> = {
       login_password: authData.login_password,
     };
     try {
-      const res = await axios.post(`${API_URL}/login`, params);
+      // TODO: type fix any
+      const res = await $post<any>(`${API_URL}/login`, params);
       console.log(res);
       commit("loginUserId", res.data.response.id);
       commit("loginUserName", res.data.response.user_name);

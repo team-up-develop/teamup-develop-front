@@ -1,4 +1,6 @@
 import dayjs from "dayjs";
+import axios from "axios";
+
 //* 応募のステータス
 // 1: 応募
 // 2: 参加
@@ -45,14 +47,21 @@ export const md = {
 // port: 8888
 export const API_URL = "http://localhost:8090/api/v1";
 
-export const catchError = (error: any) => {
+//* axios モジュール
+const $fetch = axios.get;
+const $post = axios.post;
+const $put = axios.put;
+const $delete = axios.delete;
+export { $fetch, $post, $put, $delete };
+
+const catchError = (error: any) => {
   const { status, statusText } = error.response;
   return console.log(
     `エラーが発生しました。お問合せください。\n HTTP Status: ${status} ${statusText} \n メッセージ: ${error.response.data.message}`
   );
 };
 
-export const truncate = (value: string, num: number) => {
+const truncate = (value: string, num: number) => {
   const over = "...";
   if (value.length <= num) {
     return value;
@@ -60,6 +69,8 @@ export const truncate = (value: string, num: number) => {
   return value.substring(0, num) + over;
 };
 
-export const dayJs = (value: string, format: string) => {
+const dayJs = (value: string, format: string) => {
   return dayjs(value).format(format);
 };
+
+export { catchError, truncate, dayJs };

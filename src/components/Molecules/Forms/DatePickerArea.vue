@@ -1,33 +1,34 @@
 <script lang="ts">
-import { defineComponent, computed, PropType } from "@vue/composition-api";
+import { defineComponent, computed } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import DatePicker from "@/components/Atoms/Forms/DatePicker.vue";
 
-type Props = {
-  value: string;
-  name: string;
-  textLabel: string;
-  mandatory: boolean;
-  mandatoryText: string;
-  placeholder: string;
-};
+const propsOption = {
+  value: { type: String as PropType<string>, defalut: "" },
+  name: { type: String as PropType<string>, required: true },
+  textLabel: { type: String as PropType<string>, required: true },
+  mandatory: {
+    type: Boolean as PropType<boolean>,
+    required: true,
+    defalut: false,
+  },
+  mandatoryText: { type: String as PropType<string> },
+  placeholder: { type: String as PropType<string>, required: true },
+} as const;
 
-export default defineComponent({
+type PropsOption = typeof propsOption;
+export type DatePickerAreaProps = OutsidePropsType<PropsOption>;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     DatePicker,
   },
-  props: {
-    value: { type: String as PropType<string>, defalut: "" },
-    name: { type: String as PropType<string>, required: true },
-    textLabel: { type: String as PropType<string>, required: true },
-    mandatory: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-      defalut: false,
-    },
-    mandatoryText: { type: String as PropType<string> },
-    placeholder: { type: String as PropType<string>, required: true },
-  },
-  setup: (props: Props, ctx) => {
+  props: propsOption,
+  setup: (props, ctx) => {
     const mandatoryLabel = computed(() => {
       return props.mandatory ? true : false;
     });

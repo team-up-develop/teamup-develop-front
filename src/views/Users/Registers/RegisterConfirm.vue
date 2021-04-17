@@ -10,6 +10,7 @@ import {
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { Language, Framework, Skill } from "@/types/index";
 import { dayJs } from "@/master";
+import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
 
 type Maybe<T> = T | null;
 
@@ -23,12 +24,14 @@ type State = {
   github: Maybe<string>;
   twitter: Maybe<string>;
   userName: Maybe<string>;
-  nickName: Maybe<string>;
+  lastName: Maybe<string>;
+  firstName: Maybe<string>;
   password: Maybe<string>;
   userBirthday: Maybe<string>;
   learningStartDate: Maybe<string>;
   passwordModal: boolean;
   email: Maybe<string>;
+  confirmModal: boolean;
 };
 
 const initialState = (): State => ({
@@ -41,17 +44,20 @@ const initialState = (): State => ({
   github: "",
   twitter: "",
   userName: "",
-  nickName: "",
+  lastName: "",
+  firstName: "",
   password: "",
   userBirthday: "",
   learningStartDate: "",
   passwordModal: false,
   email: "",
+  confirmModal: false,
 });
 
 export default defineComponent({
   components: {
     Session,
+    Confirme,
   },
   setup(_, ctx: any) {
     const state = reactive<State>(initialState());
@@ -60,7 +66,8 @@ export default defineComponent({
 
     const strageGet = () => {
       const userName = sessionStorage.getItem("userName");
-      const nickName = sessionStorage.getItem("nickName");
+      const lastName = sessionStorage.getItem("lastName");
+      const firstName = sessionStorage.getItem("firstName");
       const password = sessionStorage.getItem("password");
       const email = sessionStorage.getItem("email");
       const userBirthday = sessionStorage.getItem("userBirthday");
@@ -71,7 +78,8 @@ export default defineComponent({
       const github = sessionStorage.getItem("github");
       const twitter = sessionStorage.getItem("twitter");
       state.userName = userName;
-      state.nickName = nickName;
+      state.lastName = lastName;
+      state.firstName = firstName;
       state.password = password;
       state.email = email;
       state.userBirthday = userBirthday;
@@ -85,16 +93,20 @@ export default defineComponent({
     strageGet();
 
     const isForm = computed(() => {
-      return state.userName &&
-        state.nickName &&
+      if (
+        state.userName &&
+        state.lastName &&
+        state.firstName &&
         state.password &&
         state.userBirthday &&
         state.learningStartDate &&
         state.selectedLang &&
         state.selectedFramwork &&
         state.selectedSkill
-        ? true
-        : false;
+      ) {
+        return true;
+      }
+      return false;
     });
 
     const isOpenPassword = computed(() => {
@@ -109,9 +121,24 @@ export default defineComponent({
     };
 
     const backStep = () => {
-      return router.push({ name: "RegisterStep2" });
+      return router.push({ name: "RegisterStepSkill" });
     };
 
+    const registerConfirm = () => {
+      state.confirmModal = true;
+    };
+
+    const closeConfirm = () => {
+      state.confirmModal = false;
+    };
+
+    const register = () => {
+      console.log("register");
+    };
+
+    const redirectProfile = () => {
+      return router.push({ name: "Jobs" });
+    };
     return {
       ...toRefs(state),
       day,
@@ -120,6 +147,10 @@ export default defineComponent({
       openPassword,
       closePassword,
       isOpenPassword,
+      registerConfirm,
+      closeConfirm,
+      register,
+      redirectProfile,
     };
   },
 });
@@ -127,6 +158,16 @@ export default defineComponent({
 
 <template>
   <section>
+    <Confirme
+      v-if="confirmModal"
+      :onFunction="register"
+      confirmModalTitle="登録完了しますか？"
+      compliteModalTitle="登録完了しました。"
+      mainBtnText="登録する"
+      subBtnText="閉じる"
+      @close="closeConfirm"
+      @complite="redirectProfile"
+    />
     <div class="wrapper">
       <div class="title">入力確認</div>
       <v-card class="pa-1 card">
@@ -135,12 +176,16 @@ export default defineComponent({
         </div>
         <v-col class="container text-left" v-if="isForm">
           <div class="input-area">
-            <label for="name" class="label">氏名</label>
+            <label for="name" class="label">ユーザー名</label>
             <p>{{ userName }}</p>
           </div>
           <div class="input-area">
-            <label for="name" class="label">ユーザー名</label>
-            <p>{{ nickName }}</p>
+            <label for="name" class="label">姓</label>
+            <p>{{ lastName }}</p>
+          </div>
+          <div class="input-area">
+            <label for="name" class="label">名</label>
+            <p>{{ firstName }}</p>
           </div>
           <div class="input-area">
             <label for="name" class="label">メールアドレス</label>
@@ -194,7 +239,7 @@ export default defineComponent({
           </div>
           <div class="bottom">
             <div class="back-btn" @click="backStep">内容修正する</div>
-            <div class="next-btn">登録完了する</div>
+            <div class="next-btn" @click="registerConfirm">登録完了する</div>
           </div>
         </v-col>
         <v-col v-else>

@@ -1,9 +1,8 @@
 <script lang="ts">
 import Vue from "vue";
-import { API_URL } from "@/master";
-import axios from "axios";
+import { API_URL, $fetch } from "@/master";
 import { Job, Skill } from "@/types/index";
-import { FetchSkills } from "@/types/fetch";
+import { FetchSkills, FetchJobs } from "@/types/fetch";
 
 type DateType = {
   skills: Skill[];
@@ -31,7 +30,7 @@ export default Vue.extend({
   },
   created() {
     // * フレームワーク取得
-    axios.get<FetchSkills>(`${API_URL}/skills`).then((res) => {
+    $fetch<FetchSkills>(`${API_URL}/skills`).then((res) => {
       this.skills = res.data.response;
     });
   },
@@ -52,7 +51,8 @@ export default Vue.extend({
       }
       const skillStateEnd: number[] = skillState.slice(0);
       const result: string = arraySkill.join("");
-      axios.get(`${API_URL}/jobs?${result}`).then((res) => {
+
+      $fetch<FetchJobs>(`${API_URL}/jobs?${result}`).then((res) => {
         this.jobs = res.data.response;
 
         this.$emit("compliteSearchSkill", this.jobs);

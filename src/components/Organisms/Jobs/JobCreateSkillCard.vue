@@ -7,9 +7,8 @@ import {
   onMounted,
   PropType,
 } from "@vue/composition-api";
-import axios from "axios";
 import Vuex from "@/store/index";
-import { API_URL, catchError, md } from "@/master";
+import { $fetch, $post, API_URL, catchError, md } from "@/master";
 import { SkillSelectArea, RadioArea } from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsSecond } from "@/types/params";
@@ -71,7 +70,7 @@ export default defineComponent({
 
     onMounted(async () => {
       try {
-        const res = await axios.get<FetchLanguages>(
+        const res = await $fetch<FetchLanguages>(
           `${API_URL}/programing_languages`
         );
         state.languages = res.data.response;
@@ -79,7 +78,7 @@ export default defineComponent({
         catchError(error);
       }
       try {
-        const res = await axios.get<FetchFrameworks>(
+        const res = await $fetch<FetchFrameworks>(
           `${API_URL}/programing_frameworks`
         );
         state.framworks = res.data.response;
@@ -87,7 +86,7 @@ export default defineComponent({
         catchError(error);
       }
       try {
-        const res = await axios.get<FetchSkills>(`${API_URL}/skills`);
+        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
         state.skills = res.data.response;
       } catch (error) {
         catchError(error);
@@ -148,7 +147,7 @@ export default defineComponent({
         job_status_id: Number(state.jobStatusId),
       };
       try {
-        await axios.post<JobCreateParamsSecond>(`${API_URL}/job`, params);
+        await $post<JobCreateParamsSecond>(`${API_URL}/job`, params);
         sessionStorage.removeItem("jobTitle");
         sessionStorage.removeItem("jobDescription");
         sessionStorage.removeItem("devStartDate");

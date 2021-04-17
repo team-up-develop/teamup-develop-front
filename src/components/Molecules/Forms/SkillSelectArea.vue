@@ -1,37 +1,47 @@
 <script lang="ts">
-import { defineComponent, computed, PropType } from "@vue/composition-api";
+import { defineComponent, computed } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import SkillSelect from "@/components/Atoms/Forms/SkillSelect.vue";
 import { Language, Framework, Skill } from "@/types/index";
 
-export default defineComponent({
+const propsOption = {
+  value: {
+    type: Array as PropType<Language[] | Framework[] | Skill[]>,
+    required: true,
+    defalut: [{}],
+  },
+  options: {
+    type: Array as PropType<Language[] | Framework[] | Skill[]>,
+    required: true,
+    defalut: [{}],
+  },
+  name: { type: String as PropType<string>, required: true, defalut: "" },
+  textLabel: {
+    type: String as PropType<string>,
+    required: true,
+    defalut: "",
+  },
+  mandatory: {
+    type: Boolean as PropType<boolean>,
+    required: true,
+    defalut: false,
+  },
+  mandatoryText: { type: String as PropType<string>, defalut: "" },
+  max: { type: Number as PropType<number>, required: true },
+} as const;
+
+type PropsOption = typeof propsOption;
+export type SkillSelectAreaProps = OutsidePropsType<PropsOption>;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     SkillSelect,
   },
-  props: {
-    value: {
-      type: Array as PropType<Language[] | Framework[] | Skill[]>,
-      required: true,
-      defalut: [{}],
-    },
-    options: {
-      type: Array as PropType<Language[] | Framework[] | Skill[]>,
-      required: true,
-      defalut: [{}],
-    },
-    name: { type: String as PropType<string>, required: true, defalut: "" },
-    textLabel: {
-      type: String as PropType<string>,
-      required: true,
-      defalut: "",
-    },
-    mandatory: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-      defalut: false,
-    },
-    mandatoryText: { type: String as PropType<string>, defalut: "" },
-    max: { type: Number as PropType<number>, required: true },
-  },
+  props: propsOption,
   setup: (props, ctx) => {
     const mandatoryLabel = computed(() => {
       return props.mandatory ? true : false;

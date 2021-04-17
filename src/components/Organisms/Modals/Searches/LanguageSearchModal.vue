@@ -1,9 +1,8 @@
 <script lang="ts">
 import Vue from "vue";
-import { API_URL } from "@/master";
-import axios from "axios";
+import { $fetch, API_URL } from "@/master";
 import { Job, Language } from "@/types/index";
-import { FetchLanguages } from "@/types/fetch";
+import { FetchLanguages, FetchJobs } from "@/types/fetch";
 
 type DateType = {
   languages: Language[];
@@ -31,7 +30,7 @@ export default Vue.extend({
   },
   created() {
     // * プログラミング言語 取得
-    axios.get<FetchLanguages>(`${API_URL}/programing_languages`).then((res) => {
+    $fetch<FetchLanguages>(`${API_URL}/programing_languages`).then((res) => {
       this.languages = res.data.response;
     });
   },
@@ -51,7 +50,8 @@ export default Vue.extend({
       }
       const languageStateEnd: number[] = languageState.slice(0);
       const result: string = array.join("");
-      axios.get(`${API_URL}/jobs?${result}`).then((res) => {
+
+      $fetch<FetchJobs>(`${API_URL}/jobs?${result}`).then((res) => {
         this.jobs = res.data.response;
         this.$emit("compliteSearchLanguage", this.jobs);
 

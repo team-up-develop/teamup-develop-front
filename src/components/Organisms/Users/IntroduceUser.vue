@@ -56,6 +56,7 @@ export default defineComponent({
       .sub-area {
         right: 0;
         font-size: 14px;
+        white-space: pre-wrap;
       }
     }
   }

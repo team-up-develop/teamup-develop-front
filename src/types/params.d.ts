@@ -1,12 +1,18 @@
+import {
+  APPLY_STATUS_APPLY,
+  APPLY_STATUS_PARTICIPATE,
+  APPLY_STATUS_REJECT,
+} from "@/types";
+
 type Maybe<T> = T | null;
-export interface JobCreateParamsFirst {
+interface JobCreateParamsFirst {
   jobTitle: string;
   jobDescription: Maybe<string>;
   devStartDate: string;
   devEndDate: string;
 }
 
-export interface JobCreateParamsSecond {
+interface JobCreateParamsSecond {
   user_id: number;
   job_title: string;
   job_description: Maybe<string>;
@@ -19,34 +25,34 @@ export interface JobCreateParamsSecond {
   job_status_id: number;
 }
 
-export interface ApplyParams {
+interface ApplyParams {
   job_id: number;
   user_id: number;
-  apply_status_id: number;
+  apply_status_id: APPLY_STATUS_APPLY;
 }
 
-export interface FavoriteParams {
+interface FavoriteParams {
   job_id: number;
   user_id: number;
 }
 
-export interface ParticipateParams {
+interface ParticipateParams {
   id: number;
   job_id: number;
   user_id: number;
-  apply_status_id: 2;
+  apply_status_id: APPLY_STATUS_PARTICIPATE;
   updated_at: string;
 }
 
-export interface RejectParams {
+interface RejectParams {
   id: number;
   job_id: number;
   user_id: number;
-  apply_status_id: 3;
+  apply_status_id: APPLY_STATUS_REJECT;
   updated_at: string;
 }
 
-export interface RegisterSessionFirstParams {
+interface RegisterSessionFirstParams {
   userName: string;
   lastName: string;
   firstName: string;
@@ -56,7 +62,7 @@ export interface RegisterSessionFirstParams {
   learningStartDate: string;
 }
 
-export interface RegisterSessionSecondParams {
+interface RegisterSessionSecondParams {
   programingLanguage: {}[];
   programingFramework: {}[];
   skill: {}[];
@@ -64,25 +70,39 @@ export interface RegisterSessionSecondParams {
   twitter: Maybe<string>;
 }
 
-export interface messageParams {
+interface messageParams {
   message: string;
   user_id: number;
   job_id: number;
 }
 
-export interface EditProfileParams {
+interface EditProfileParams {
   id: number;
   user_name: string;
   first_name: string;
   last_name: string;
+  login_password: string;
+  email: string;
   learning_start_date: Date;
   bio: Maybe<string>;
   github_account: Maybe<string>;
   twitter_account: Maybe<string>;
   updated_at: Date;
   birthday: Date;
-  login_password: string;
   programing_language_ids: {}[];
   programing_framework_ids: {}[];
   skill_ids: {}[];
 }
+
+export {
+  JobCreateParamsFirst,
+  JobCreateParamsSecond,
+  ApplyParams,
+  FavoriteParams,
+  ParticipateParams,
+  RejectParams,
+  RegisterSessionFirstParams,
+  RegisterSessionSecondParams,
+  messageParams,
+  EditProfileParams,
+};

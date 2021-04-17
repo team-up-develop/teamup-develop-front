@@ -4,10 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
-  // computed,
 } from "@vue/composition-api";
-// import axios from "axios";
-// import { API_URL } from "@/master";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import useJobs from "@/hooks/useJobs";
 

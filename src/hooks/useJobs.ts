@@ -4,24 +4,18 @@ import {
   onMounted,
   // onUnmounted,
 } from "@vue/composition-api";
-import { API_URL, catchError } from "@/master";
-import axios from "axios";
-import { ManageJob, Job, ApplyJob } from "@/types/index";
-import {
-  FetchManageJobs,
-  FetchJobs,
-  FetchApplyJob,
-  FetchFavoriteJob,
-} from "@/types/fetch";
+import { $fetch, API_URL, catchError } from "@/master";
+import { ManageJob, FavoriteJob, Job } from "@/types/index";
+import { FetchManageJobs, FetchJobs, FetchFavoriteJob } from "@/types/fetch";
 import Vuex from "@/store/index";
 
 type State = {
   userId: number;
   jobs: Job[];
-  job: ApplyJob | Job | {};
+  job: Job | {};
   manageJobs: ManageJob[];
   profileJobs: ManageJob[];
-  favoriteJobs: Job[];
+  favoriteJobs: FavoriteJob[];
   loading: boolean;
 };
 
@@ -40,7 +34,7 @@ const useJobs = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await axios.get<FetchJobs>(`${API_URL}/jobs`);
+      const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
       state.jobs = res.data.response;
     } catch (error) {
       catchError(error);
@@ -49,9 +43,7 @@ const useJobs = () => {
 
   const fetchJobDetail = async (jobId: number) => {
     try {
-      const res = await axios.get<FetchJobs | FetchApplyJob | FetchFavoriteJob>(
-        `${API_URL}/job/${jobId}`
-      );
+      const res = await $fetch<FetchJobs>(`${API_URL}/job/${jobId}`);
       state.job = res.data.response;
       setTimeout(() => {
         state.loading = false;
@@ -63,7 +55,7 @@ const useJobs = () => {
 
   const fetchManageJobs = async () => {
     try {
-      const res = await axios.get<FetchManageJobs>(
+      const res = await $fetch<FetchManageJobs>(
         `${API_URL}/jobs?user_id=${state.userId}`
       );
       state.manageJobs = res.data.response;
@@ -74,7 +66,7 @@ const useJobs = () => {
 
   const fetchProfileJobs = async (userId: number) => {
     try {
-      const res = await axios.get<FetchManageJobs>(
+      const res = await $fetch<FetchManageJobs>(
         `${API_URL}/jobs?user_id=${userId}`
       );
       state.profileJobs = res.data.response;
@@ -85,7 +77,7 @@ const useJobs = () => {
 
   const fetchFavoriteJobs = async () => {
     try {
-      const res = await axios.get<FetchJobs>(
+      const res = await $fetch<FetchFavoriteJob>(
         `${API_URL}/favorite_jobs?user_id=${state.userId}`
       );
       state.favoriteJobs = res.data.response;

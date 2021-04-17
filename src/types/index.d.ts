@@ -1,8 +1,16 @@
+import { m } from "@/master";
+type APPLY_STATUS_APPLY = typeof m.APPLY_STATUS_APPLY;
+type APPLY_STATUS_PARTICIPATE = typeof m.APPLY_STATUS_PARTICIPATE;
+type APPLY_STATUS_REJECT = typeof m.APPLY_STATUS_REJECT;
+
+export { APPLY_STATUS_APPLY, APPLY_STATUS_PARTICIPATE, APPLY_STATUS_REJECT };
+
 type Maybe<T> = T | null;
 
-export type Job = {
+type Job = {
   created_at: Date;
-  deleted_at: null | Date;
+  deleted_at: Maybe<Date>;
+  updated_at: Date;
   dev_end_date: Date;
   dev_start_date: Date;
   id: number;
@@ -12,24 +20,21 @@ export type Job = {
   programing_frameworks: Framework[];
   programing_languages: Language[];
   skills: Skill[];
-  // publicationPeriod: Date;
   recruitment_numbers: number;
-  updated_at: Date;
-  // useMenter?: boolean;
   user: User;
   user_id: number;
 };
 
-export type User = {
+type User = {
   bio: string;
   created_at: Date;
   deleted_at: Maybe<Date>;
+  updated_at: Date;
   id: number;
-  job: null;
+  job: Maybe<Job>;
   learning_start_date: Date;
   twitter_account: Maybe<string>;
   github_account: Maybe<string>;
-  updatedAt: Date;
   birthday: Date;
   user_name: string;
   first_name: string;
@@ -40,66 +45,92 @@ export type User = {
   skills: Skill[];
 };
 
-export type ManageJob = {
-  apply_status_id: number;
-  createdAt: Date;
-  deletedAt: Maybe<Date>;
-  id: number;
-  job: Job;
-  jobId: number;
-  updatedAt: Date;
-  user: User;
-  userId: number;
-};
-
-export type ApplyJob = {
+type ManageJob = {
   id: number;
   updated_at: Date;
-  apply_status_id: 2;
+  apply_status_id: number;
   job_id: number;
   job: Job;
   user_id: number;
   user: User;
 };
 
-export type FavoriteJob = {
+type ApplyJob = {
+  id: number;
+  updated_at: Date;
+  apply_status_id: APPLY_STATUS_APPLY;
   job_id: number;
   job: Job;
   user_id: number;
   user: User;
 };
 
-export type Language = {
+type ParticipateJob = {
   id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Maybe<Date>;
+  updated_at: Date;
+  apply_status_id: APPLY_STATUS_PARTICIPATE;
+  job_id: number;
+  job: Job;
+  user_id: number;
+  user: User;
+};
+
+type RejectJob = {
+  id: number;
+  updated_at: Date;
+  apply_status_id: APPLY_STATUS_REJECT;
+  job_id: number;
+  job: Job;
+  user_id: number;
+  user: User;
+};
+
+type FavoriteJob = {
+  job_id: number;
+  job: Job;
+  user_id: number;
+  user: User;
+};
+
+type Language = {
+  id: number;
+  updated_at: Date;
   name: string;
 };
 
-export type Framework = {
+type Framework = {
   id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Maybe<Date>;
+  updated_at: Date;
   name: string;
 };
 
-export type Skill = {
+type Skill = {
   id: number;
-  createdAt: Date;
-  updatedAt: Date;
-  deletedAt: Maybe<Date>;
+  updated_at: Date;
   name: string;
 };
 
-export type Message = {
+type Message = {
   id: number;
   job: Job;
   job_id: number;
   message: string;
-  updatedAt: Date;
+  updated_at: Date;
   user: User;
   user_id: number;
-  createdAt: Date;
+  created_at: Date;
+};
+
+export {
+  Job,
+  User,
+  ManageJob,
+  ApplyJob,
+  ParticipateJob,
+  RejectJob,
+  FavoriteJob,
+  Language,
+  Framework,
+  Skill,
+  Message,
 };

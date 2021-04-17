@@ -10,8 +10,8 @@ import {
   toRefs,
   computed,
 } from "@vue/composition-api";
-import axios from "axios";
-import { m, API_URL, catchError } from "@/master";
+import { FetchManageJobs } from "@/types/fetch";
+import { $fetch, m, API_URL, catchError } from "@/master";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
 
 const propsOption = {
@@ -26,7 +26,7 @@ export type StatusChangeProps = OutsidePropsType<PropsOption>;
 
 type State = {
   statusId: number;
-  updatedAt: string;
+  updatedAt: Date | string;
 };
 
 const initialState = (): State => ({
@@ -59,7 +59,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     // * 表示中のユーザーのステータスを格納
     const getStatus = async () => {
       try {
-        const res = await axios.get(`
+        const res = await $fetch<FetchManageJobs>(`
           ${API_URL}/apply_jobs?job_id=${props.jobId}&user_id=${props.id}`);
         state.statusId = res.data.response[0].apply_status_id;
         state.updatedAt = res.data.response[0].updated_at;
@@ -120,7 +120,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   line-height: 1;
   text-align: center;
   margin: auto;
-  font-size: 1.1rem;
+  font-size: 1rem;
   display: inline-block;
   border: none;
   span {

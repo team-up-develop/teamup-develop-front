@@ -1,10 +1,11 @@
+// TODO: 現在は使用していない
 <script lang="ts">
 import Vue from "vue";
-import { API_URL, catchError } from "@/master";
-import axios from "axios";
+import { $fetch, $put, API_URL, catchError } from "@/master";
 import vSelect from "vue-select";
 // import 'vue-select/dist/vue-select.css';
 import { Language } from "@/types/index";
+import { FetchLanguages } from "@/types/fetch";
 
 type DataType = {
   jobId: number;
@@ -44,8 +45,8 @@ export default Vue.extend({
   },
   created() {
     // * 開発言語
-    axios.get<Language[]>(`${API_URL}/programing_language`).then((res) => {
-      this.languages = res.data;
+    $fetch<FetchLanguages>(`${API_URL}/programing_language`).then((res) => {
+      this.languages = res.data.response;
     });
     this.selectedLang = this.job.programingLanguage;
     for (let l = 0; l < this.selectedLang.length; l++) {
@@ -79,8 +80,7 @@ export default Vue.extend({
         jobDescription: this.jobDescription,
         programingLanguage: languageArray,
       };
-      axios
-        .put(`${API_URL}/job/${this.jobId}`, params)
+      $put(`${API_URL}/job/${this.jobId}`, params)
         .then((res) => {
           catchError(res);
           // this.$emit('compliteAssgin', this.message)

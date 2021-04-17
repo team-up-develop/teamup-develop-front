@@ -1,12 +1,22 @@
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import { dayJs, truncate } from "@/master";
 import { ManageJob } from "@/types/index";
 
-export default defineComponent({
-  props: {
-    job: { type: Object as PropType<ManageJob>, require: true },
-  },
+const propsOption = {
+  job: { type: Object as PropType<ManageJob>, require: true },
+} as const;
+
+type PropsOption = typeof propsOption;
+export type JobCardProps = OutsidePropsType<PropsOption>;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
+  props: propsOption,
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);

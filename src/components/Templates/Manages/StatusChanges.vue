@@ -162,8 +162,9 @@ export default defineComponent({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: $dark-grey 1px solid;
-      background-color: $dark-grey;
+      border: $dark-grey 1px solid;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
     }
   }
 }

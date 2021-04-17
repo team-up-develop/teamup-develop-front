@@ -4,21 +4,36 @@ import {
   computed,
   reactive,
   toRefs,
-  PropType,
 } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import Input from "@/components/Atoms/Forms/Input.vue";
 
-type Props = {
-  value: string | null;
-  name: string;
-  type: string;
-  textLabel: string;
-  mandatory: boolean;
-  mandatoryText: string;
-  placeholder: string;
-  maxlength: string;
-  remaining: boolean;
-};
+const propsOption = {
+  value: { type: String as PropType<string> },
+  name: { type: String as PropType<string>, required: true },
+  type: { type: String as PropType<string>, required: true },
+  textLabel: { type: String as PropType<string>, required: true },
+  mandatory: {
+    type: Boolean as PropType<boolean>,
+    required: true,
+    defalut: false,
+  },
+  mandatoryText: { type: String as PropType<string> },
+  placeholder: { type: String as PropType<string>, required: true },
+  maxlength: { type: String as PropType<string>, required: true },
+  remaining: {
+    type: Boolean as PropType<boolean>,
+    required: true,
+    defalut: false,
+  },
+} as const;
+
+type PropsOption = typeof propsOption;
+export type InputAreaProps = OutsidePropsType<PropsOption>;
 
 type State = {
   titleLimit: number;
@@ -28,30 +43,12 @@ const initialState = (): State => ({
   titleLimit: 0,
 });
 
-export default defineComponent({
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     Input,
   },
-  props: {
-    value: { type: String as PropType<string> },
-    name: { type: String as PropType<string>, required: true },
-    type: { type: String as PropType<string>, required: true },
-    textLabel: { type: String as PropType<string>, required: true },
-    mandatory: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-      defalut: false,
-    },
-    mandatoryText: { type: String as PropType<string> },
-    placeholder: { type: String as PropType<string>, required: true },
-    maxlength: { type: String as PropType<string>, required: true },
-    remaining: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-      defalut: false,
-    },
-  },
-  setup: (props: Props, ctx) => {
+  props: propsOption,
+  setup: (props, ctx) => {
     const state = reactive<State>(initialState());
 
     const mandatoryLabel = computed(() => {

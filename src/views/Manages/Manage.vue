@@ -10,6 +10,7 @@ import Vuex from "@/store/index";
 import Manage from "@/components/Templates/Manages/Manage.vue";
 import useJobs from "@/hooks/useJobs";
 // import ApplyFavorite from "@/components/Templates/Manages/ApplyFavorite.vue";
+
 type State = {
   userId: number;
 };

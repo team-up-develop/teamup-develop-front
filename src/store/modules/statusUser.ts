@@ -1,8 +1,12 @@
 import { ActionTree, GetterTree, MutationTree } from "vuex";
-import axios from "axios";
 // import { ManageJob } from '@/types/index'
-import { FetchManageJobs } from "@/types/fetch";
-import { API_URL, m, catchError } from "@/master";
+import {
+  FetchApplyJob,
+  FetchParticipateJob,
+  FetchRejectJob,
+  FetchJob,
+} from "@/types/fetch";
+import { $fetch, API_URL, m, catchError } from "@/master";
 
 interface State {
   userApplyNum: number;
@@ -54,19 +58,19 @@ const mutations: MutationTree<State> = {
 const actions: ActionTree<State, GetStatus> = {
   async getUserNum({ commit }, jobObject: ActionsJob) {
     try {
-      const responseApply = await axios.get<FetchManageJobs>(
+      const responseApply = await $fetch<FetchApplyJob>(
         `${API_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_APPLY}`
       );
       commit("getUserApplyNum", responseApply.data.response.length);
-      const responseParticipate = await axios.get<FetchManageJobs>(
+      const responseParticipate = await $fetch<FetchParticipateJob>(
         `${API_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}`
       );
       commit("getUserParticipateNum", responseParticipate.data.response.length);
-      const responseReject = await axios.get<FetchManageJobs>(
+      const responseReject = await $fetch<FetchRejectJob>(
         `${API_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_REJECT}`
       );
       commit("getUserRejectNum", responseReject.data.response.length);
-      const res = await axios.get(`${API_URL}/job/${jobObject.jobId}`);
+      const res = await $fetch<FetchJob>(`${API_URL}/job/${jobObject.jobId}`);
       commit("getJob", res.data.response.job_title);
     } catch (error) {
       catchError(error);

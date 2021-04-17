@@ -6,8 +6,7 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
-import { API_URL, m, catchError } from "@/master";
-import axios from "axios";
+import { $fetch, API_URL, m, catchError } from "@/master";
 import { ManageJob } from "@/types/index";
 import { FetchManageJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
@@ -50,7 +49,7 @@ export default defineComponent({
         return;
       }
       try {
-        const res = await axios.get<FetchManageJobs>(
+        const res = await $fetch<FetchManageJobs>(
           `${API_URL}/apply_jobs?user_id=${state.userId}`
         );
         // TODO: API改正要望

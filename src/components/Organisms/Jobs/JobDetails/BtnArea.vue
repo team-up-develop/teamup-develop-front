@@ -5,11 +5,14 @@ import {
   toRefs,
   onMounted,
   computed,
-  PropType,
 } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import Vuex from "@/store/index";
-import axios from "axios";
-import { API_URL, catchError } from "@/master";
+import { $fetch, API_URL, catchError } from "@/master";
 import { FetchManageJobs } from "@/types/fetch";
 import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
 import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
@@ -18,10 +21,13 @@ import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import useJobs from "@/hooks/useJobs";
 import { Job } from "@/types";
 
-type Props = {
-  id: number;
-  job: Job;
-};
+const propsOption = {
+  id: { type: Number as PropType<number>, default: 0, require: true },
+  job: { type: Object as PropType<Job>, defalut: {}, require: true },
+} as const;
+
+type PropsOption = typeof propsOption;
+export type BtnAreaProps = OutsidePropsType<PropsOption>;
 
 type State = {
   userId: number;
@@ -39,18 +45,15 @@ const initialState = (): State => ({
   editModal: false,
 });
 
-export default defineComponent({
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     FavoriteDetailBtn,
     ApplyModal,
     Applybtn,
     // EditJobModal,
   },
-  props: {
-    id: { type: Number as PropType<number>, default: 0, require: true },
-    job: { type: Object as PropType<Job>, defalut: {}, require: true },
-  },
-  setup: (props: Props, context) => {
+  props: propsOption,
+  setup: (props, context) => {
     const state = reactive<State>(initialState());
     const router = context.root.$router;
     const { manageJobs, fetchManageJobs } = useJobs();
@@ -72,7 +75,7 @@ export default defineComponent({
     // * ログインユーザーが応募済みか応募済みではないかを判定する
     const getCheckStatus = async () => {
       try {
-        const res = await axios.get<FetchManageJobs>(
+        const res = await $fetch<FetchManageJobs>(
           `${API_URL}/apply_jobs?user_id=${state.userId}`
         );
         const arrayApply: any = [];

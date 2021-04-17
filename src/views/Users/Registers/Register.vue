@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue from "vue";
-import axios from "axios";
-import { API_URL, catchError } from "@/master";
+import { $post, API_URL, catchError } from "@/master";
 
 type DataType = {
   email: string;
@@ -38,8 +37,7 @@ export default Vue.extend({
         LoginPassword: this.LoginPassword,
       };
 
-      axios
-        .post(`${API_URL}/signup`, params)
+      $post(`${API_URL}/signup`, params)
         .then((res) => {
           console.log(res);
           return this.$router.push("/register/sent_mail");

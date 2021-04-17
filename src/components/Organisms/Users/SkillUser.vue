@@ -1,11 +1,15 @@
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
+import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
 import { User } from "@/types/index";
 
-export default defineComponent({
-  props: {
-    user: { type: Object as PropType<User>, require: true, defalut: {} },
-  },
+const propsOption = {
+  user: { type: Object as PropType<User>, require: true, defalut: {} },
+} as const;
+
+type PropsOption = typeof propsOption;
+export default defineComponent<InsidePropsType<PropsOption>>({
+  props: propsOption,
 });
 </script>
 

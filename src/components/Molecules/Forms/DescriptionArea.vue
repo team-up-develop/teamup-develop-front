@@ -4,20 +4,35 @@ import {
   computed,
   reactive,
   toRefs,
-  PropType,
 } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import Description from "@/components/Atoms/Forms/Description.vue";
 
-type Props = {
-  value: string;
-  name: string;
-  textLabel: string;
-  mandatory: boolean;
-  mandatoryText: string;
-  placeholder: string;
-  maxlength: string;
-  remaining: boolean;
-};
+const propsOption = {
+  value: { type: String as PropType<string>, defalut: "" },
+  name: { type: String as PropType<string>, required: true },
+  textLabel: { type: String as PropType<string>, required: true },
+  mandatory: {
+    type: Boolean as PropType<boolean>,
+    required: true,
+    defalut: false,
+  },
+  mandatoryText: { type: String as PropType<string> },
+  placeholder: { type: String as PropType<string>, required: true },
+  maxlength: { type: String as PropType<string>, required: true },
+  remaining: {
+    type: Boolean as PropType<boolean>,
+    required: true,
+    defalut: false,
+  },
+} as const;
+
+type PropsOption = typeof propsOption;
+export type DescriptionAreaProps = OutsidePropsType<PropsOption>;
 
 type State = {
   jobDescriptionLimit: number;
@@ -27,29 +42,12 @@ const initialState = (): State => ({
   jobDescriptionLimit: 0,
 });
 
-export default defineComponent({
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     Description,
   },
-  props: {
-    value: { type: String as PropType<string>, defalut: "" },
-    name: { type: String as PropType<string>, required: true },
-    textLabel: { type: String as PropType<string>, required: true },
-    mandatory: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-      defalut: false,
-    },
-    mandatoryText: { type: String as PropType<string> },
-    placeholder: { type: String as PropType<string>, required: true },
-    maxlength: { type: String as PropType<string>, required: true },
-    remaining: {
-      type: Boolean as PropType<boolean>,
-      required: true,
-      defalut: false,
-    },
-  },
-  setup: (props: Props, ctx) => {
+  props: propsOption,
+  setup: (props, ctx) => {
     const state = reactive<State>(initialState());
 
     const input = (e: any) => {

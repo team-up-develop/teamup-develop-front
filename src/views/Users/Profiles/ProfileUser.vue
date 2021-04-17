@@ -7,8 +7,8 @@ import {
   computed,
   PropType,
 } from "@vue/composition-api";
-import { API_URL, catchError } from "@/master";
-import axios from "axios";
+import { API_URL, catchError, $fetch } from "@/master";
+import Vuex from "@/store/index";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import {
@@ -21,7 +21,7 @@ import {
 // import Logout from '@/components/button/Logout'
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
-import Vuex from "@/store/index";
+import { FetchUser } from "@/types/fetch";
 import useJobs from "@/hooks/useJobs";
 
 type Props = {
@@ -80,7 +80,7 @@ export default defineComponent({
     const fetchUser = async () => {
       // * ユーザー情報取得
       try {
-        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        const res = await $fetch<FetchUser>(`${API_URL}/user/${props.id}`);
         state.userInfo = res.data.response;
       } catch (error) {
         catchError(error);
@@ -150,7 +150,7 @@ export default defineComponent({
             @editEmit="editEmit()"
             :myselfFlag="myselfFlag"
           />
-          <v-row class="header">
+          <v-row>
             <UserTabs
               :myselfFlag="myselfFlag"
               :currentTab="currentTab"
@@ -246,10 +246,6 @@ export default defineComponent({
       @media screen and (max-width: $la) {
         width: 95%;
       }
-
-      .header {
-        border-bottom: $dark-grey 2px solid;
-      }
     }
   }
 }
@@ -310,14 +306,14 @@ export default defineComponent({
     @include box-shadow-btn;
     background-color: $secondary-color;
     color: $white;
-    padding: 1.2rem 8rem;
+    padding: 1rem 8rem;
     transition: 0.3s;
     border-radius: 50px;
     font-weight: 600;
     line-height: 1;
     text-align: center;
     margin: auto;
-    font-size: 1.3rem;
+    font-size: 1rem;
     display: inline-block;
     margin-bottom: 0.5rem;
     cursor: pointer;

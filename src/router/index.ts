@@ -12,8 +12,8 @@ import ManageUserProfile from "@/views/Users/Manages/ManageUserProfile.vue";
 import Login from "@/views/Users/Logins/Login.vue";
 import Register from "@/views/Users/Registers/Register.vue";
 import SentMailComplete from "@/views/Users/Registers/SentMailComplete.vue";
-import RegisterStep1 from "@/views/Users/Registers/RegisterStep1.vue";
-import RegisterStep2 from "@/views/Users/Registers/RegisterStep2.vue";
+import RegisterStepBase from "@/views/Users/Registers/RegisterStepBase.vue";
+import RegisterStepSkill from "@/views/Users/Registers/RegisterStepSkill.vue";
 import RegisterStepComplete from "@/views/Users/Registers/RegisterStepComplete.vue";
 import RegisterConfirm from "@/views/Users/Registers/RegisterConfirm.vue";
 import Manage from "@/views/Manages/Manage.vue";
@@ -111,13 +111,13 @@ const routes: Array<RouteConfig> = [
   // * 本登録登録
   {
     path: "/register/step/1",
-    name: "RegisterStep1",
-    component: RegisterStep1,
+    name: "RegisterStepBase",
+    component: RegisterStepBase,
   },
   {
     path: "/register/step/2",
-    name: "RegisterStep2",
-    component: RegisterStep2,
+    name: "RegisterStepSkill",
+    component: RegisterStepSkill,
   },
   {
     path: "/register/step/confirm",
