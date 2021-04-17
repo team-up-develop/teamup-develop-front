@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { m, API_URL, catchError } from "@/master";
-import axios from "axios";
+import { $post, m, API_URL, catchError } from "@/master";
 import CompliteModal from "@/components/Organisms/Modals/Applications/CompliteModal.vue";
 import { ApplyParams } from "@/types/params";
 
@@ -30,8 +29,7 @@ export default Vue.extend({
         user_id: this.userId,
         apply_status_id: m.APPLY_STATUS_APPLY,
       };
-      axios
-        .post<ApplyParams>(`${API_URL}/apply_job`, params)
+      $post<ApplyParams>(`${API_URL}/apply_job`, params)
         .then((res) => {
           this.compliteModal = true;
           this.applyFlag = false;

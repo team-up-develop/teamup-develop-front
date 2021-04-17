@@ -5,24 +5,25 @@ import {
   toRefs,
   onMounted,
 } from "@vue/composition-api";
-import axios from "axios";
-import { API_URL, catchError } from "@/master";
-import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
-import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
-import JobRegisterFalse from "@/components/Organisms/Jobs/JobRegisterFalse.vue";
-import JobRightLogin from "@/components/Organisms/Jobs/JobRightLogin.vue";
-import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
+import { $fetch, API_URL, catchError } from "@/master";
+import {
+  JobRegisterFalse,
+  JobRightLogin,
+  CardJob,
+} from "@/components/Organisms/Jobs";
 import {
   LanguageSearchModal,
   FrameworkSearchModal,
   SkillSearchModal,
 } from "@/components/Organisms/Modals/Searches";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
+import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { dayJs, truncate } from "@/master";
 import { Job } from "@/types/index";
-import { FetchJobs } from "@/types/fetch";
+import { FetchJobs, FetchFavoriteJob } from "@/types/fetch";
 import Vuex from "@/store/index";
 
 type State = {
@@ -110,7 +111,7 @@ export default defineComponent({
       // * 投稿一覧取得
       const posts: Job[] = [];
       try {
-        const res = await axios.get<FetchJobs>(`${API_URL}/jobs`);
+        const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
         setTimeout(() => {
           state.loading = false;
           state.jobs = res.data.response;
@@ -166,7 +167,7 @@ export default defineComponent({
       }
       const LastLanguageURL: string = arrayLanguage.join("");
       try {
-        const res = await axios.get<FetchJobs>(
+        const res = await $fetch<FetchJobs>(
           `${API_URL}/jobs?${LastLanguageURL}`
         );
         state.jobs = res.data.response;
@@ -212,7 +213,7 @@ export default defineComponent({
     const searchFreeword = async () => {
       const posts: Job[] = [];
       try {
-        const res = await axios.get(`${API_URL}/jobs`);
+        const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
         for (const i in res.data.response) {
           const jobs: any = res.data.response[i]; //FIXME: any
           if (jobs.job_description) {
@@ -283,7 +284,7 @@ export default defineComponent({
       if (state.userId) {
         // * 自分の案件かを判定
         try {
-          const res = await axios.get<FetchJobs>(
+          const res = await $fetch<FetchJobs>(
             `${API_URL}/jobs?user_id=${state.userId}`
           );
           for (let i = 0; i < res.data.response.length; i++) {
@@ -295,9 +296,10 @@ export default defineComponent({
         } catch (error) {
           catchError(error);
         }
+        // TODO: 処理見直し
         try {
           // * 応募済みか応募済みでないかを判断
-          const res = await axios.get<FetchJobs>(
+          const res = await $fetch<FetchJobs>(
             `${API_URL}/apply_jobs?user_id=${state.userId}`
           );
           const arrayApply: number[] = [];
@@ -313,7 +315,7 @@ export default defineComponent({
         }
         // * 保存済みか保存済みではないかを判定する
         try {
-          const res = await axios.get<FetchJobs>(
+          const res = await $fetch<FetchFavoriteJob>(
             `${API_URL}/favorite_jobs?user_id=${state.userId}`
           );
           const array: number[] = [];
@@ -648,7 +650,7 @@ export default defineComponent({
             <div class="tag-area">
               開発詳細
             </div>
-            <div class="post-user-area">
+            <div class="post-user-area pre-wrap">
               {{ jobDetail.job_description }}
             </div>
             <div class="jobDetail-time-area">
@@ -1113,7 +1115,6 @@ export default defineComponent({
 
 .job-wrapper-left-false {
   margin-top: 10rem;
-  width: 43%;
   flex: 1 0 auto;
   align-items: center;
   justify-content: center;
@@ -1193,6 +1194,10 @@ label.checkbox {
 
 .router-1 {
   display: none;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
 }
 
 @media screen and (max-width: 1289px) {

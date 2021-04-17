@@ -85,8 +85,16 @@ export default defineComponent({
 
     @media screen and (max-width: $la) {
       width: 70%;
+      padding: 1.8rem 2rem 0 1.5rem;
+    }
+    @media screen and (max-width: $me) {
+      padding: 1.8rem 2rem 0 2rem;
+    }
+    @media screen and (max-width: $sm) {
+      padding: 1.8rem 2rem 0 1.1rem;
     }
     @media screen and (max-width: $ti) {
+      padding: 1.8rem 2rem 0 1rem;
       width: 64%;
     }
 

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
-import axios from "axios";
-import { m, API_URL, catchError } from "@/master";
+import { $put, m, API_URL, catchError } from "@/master";
 import { ParticipateParams } from "@/types/params";
 
 type Props = {
@@ -33,7 +32,10 @@ export default defineComponent({
         updated_at: props.updatedAt,
       };
       try {
-        await axios.put(`${API_URL}/apply_job/${props.jobId}`, params);
+        await $put<ParticipateParams>(
+          `${API_URL}/apply_job/${props.jobId}`,
+          params
+        );
         console.log(params);
         context.emit("participate", m.APPLY_STATUS_PARTICIPATE);
       } catch (error) {
@@ -60,14 +62,14 @@ export default defineComponent({
   @include red-btn;
   @include neumorphism;
   color: $white;
-  padding: 1.2rem 4.2rem;
+  padding: 1.1rem 4.2rem;
   transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
   text-align: center;
   margin: auto;
-  font-size: 1.1rem;
+  font-size: 1rem;
   display: inline-block;
   cursor: pointer;
   border: none;
@@ -77,15 +79,15 @@ export default defineComponent({
   }
 
   @media screen and (max-width: $sm) {
-    padding: 1.2rem 3rem;
+    padding: 1.1rem 3rem;
   }
   @media screen and (max-width: $ti) {
-    padding: 1.2rem 2.4rem;
+    padding: 1.1rem 2.4rem;
     font-size: 1rem;
   }
   // TODO: px指定をしなくてもstyleがずれないようにする
   @media screen and (max-width: 352px) {
-    padding: 1.2rem 1.5rem;
+    padding: 1rem 1.5rem;
   }
 }
 </style>

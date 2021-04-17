@@ -2,57 +2,99 @@ import {
   Job,
   ManageJob,
   ApplyJob,
+  ParticipateJob,
+  RejectJob,
   FavoriteJob,
   Language,
   Framework,
   Skill,
   Message,
+  User,
 } from "@/types/index";
 
-export type FetchJobs = {
+type FetchJobs = {
   msg: string;
   response: Job[];
   status: string;
 };
 
-export type FetchManageJobs = {
+type FetchJob = {
+  msg: string;
+  response: Job;
+  status: string;
+};
+
+type FetchManageJobs = {
   msg: string;
   response: ManageJob[];
   status: string;
 };
 
-export type FetchFavoriteJob = {
+type FetchFavoriteJob = {
   msg: string;
   response: FavoriteJob[];
   status: string;
 };
-
-export type FetchApplyJob = {
+//* apply_status_id=1
+type FetchApplyJob = {
   msg: string;
   response: ApplyJob[];
   status: string;
 };
+//* apply_status_id=2
+type FetchParticipateJob = {
+  msg: string;
+  response: ParticipateJob[];
+  status: string;
+};
+//* apply_status_id=3
+type FetchRejectJob = {
+  msg: string;
+  response: RejectJob[];
+  status: string;
+};
 
-export type FetchLanguages = {
+type FetchLanguages = {
   msg: string;
   response: Language[];
   status: string;
 };
 
-export type FetchFrameworks = {
+type FetchFrameworks = {
   msg: string;
   response: Framework[];
   status: string;
 };
 
-export type FetchSkills = {
+type FetchSkills = {
   msg: string;
   response: Skill[];
   status: string;
 };
 
-export type FetchMessage = {
+type FetchUser = {
+  msg: string;
+  response: User;
+  status: string;
+};
+
+type FetchMessage = {
   msg: string;
   response: Message[];
   status: string;
+};
+
+export {
+  FetchJobs,
+  FetchJob,
+  FetchManageJobs,
+  FetchFavoriteJob,
+  FetchApplyJob,
+  FetchParticipateJob,
+  FetchRejectJob,
+  FetchLanguages,
+  FetchFrameworks,
+  FetchSkills,
+  FetchUser,
+  FetchMessage,
 };

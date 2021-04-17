@@ -37,7 +37,7 @@ export default defineComponent({
         </div>
         <div class="detail-information">
           <div class="tag">詳細</div>
-          <div class="sub-area">{{ job.job_description }}</div>
+          <div class="sub-area pre-wrap">{{ job.job_description }}</div>
         </div>
       </div>
     </v-sheet>
@@ -76,6 +76,9 @@ export default defineComponent({
       .sub-area {
         right: 0;
         font-size: 14px;
+      }
+      .pre-wrap {
+        white-space: pre-wrap;
       }
     }
   }

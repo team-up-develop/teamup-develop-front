@@ -1,25 +1,29 @@
 <script lang="ts">
-import { defineComponent, computed, PropType } from "@vue/composition-api";
+import { defineComponent, computed } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import { UserCard, JobsCard } from "@/components/Organisms/Manages";
 import { ManageJob } from "@/types/index";
 
-type Props = {
-  activeCss: 1; //? 1: 管理案件
-  userId: number;
-  jobs: ManageJob[];
-};
+const propsOption = {
+  activeCss: { type: Number as PropType<1>, defalut: 1, require: true }, //? 管理案件
+  userId: { type: Number as PropType<number>, defalut: 0, require: true },
+  jobs: { type: Array as PropType<ManageJob[]>, defalut: [], require: true },
+} as const;
 
-export default defineComponent({
+type PropsOption = typeof propsOption;
+export type ManageProps = OutsidePropsType<PropsOption>;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     UserCard,
     JobsCard,
   },
-  props: {
-    activeCss: { type: Number as PropType<1>, defalut: 1, require: true },
-    userId: { type: Number as PropType<number>, defalut: 0, require: true },
-    jobs: { type: Array as PropType<ManageJob[]>, defalut: [], require: true },
-  },
-  setup: (props: Props) => {
+  props: propsOption,
+  setup: (props) => {
     const isLogin = computed(() => {
       return props.userId ? true : false;
     });
@@ -127,8 +131,9 @@ export default defineComponent({
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
-      border-bottom: $dark-grey 1px solid;
-      background-color: $dark-grey;
+      border: $dark-grey 1px solid;
+      border-bottom: none;
+      border-radius: 8px 8px 0 0;
     }
   }
 }

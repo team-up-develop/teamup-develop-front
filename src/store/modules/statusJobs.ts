@@ -1,8 +1,7 @@
 import { ActionTree, GetterTree, MutationTree } from "vuex";
-import axios from "axios";
 import { ManageJob } from "@/types/index";
-import { FetchManageJobs, FetchJobs } from "@/types/fetch";
-import { API_URL, m, catchError } from "@/master";
+import { FetchManageJobs, FetchFavoriteJob } from "@/types/fetch";
+import { $fetch, API_URL, m, catchError } from "@/master";
 
 interface State {
   jobsManageNum: number;
@@ -50,15 +49,15 @@ const actions: ActionTree<State, GetStatus> = {
       if (!userObject) {
         return;
       }
-      const responseManage = await axios.get<FetchManageJobs>(
+      const responseManage = await $fetch<FetchManageJobs>(
         `${API_URL}/jobs?user_id=${userObject.userId}`
       );
       commit("getJobsManageNum", responseManage.data.response.length);
-      const responseFavorite = await axios.get<FetchJobs>(
+      const responseFavorite = await $fetch<FetchFavoriteJob>(
         `${API_URL}/favorite_jobs?user_id=${userObject.userId}`
       );
       commit("getJobsFavoriteNum", responseFavorite.data.response.length);
-      const responseApply = await axios.get<FetchManageJobs>(
+      const responseApply = await $fetch<FetchManageJobs>(
         `${API_URL}/apply_jobs?user_id=${userObject.userId}`
       );
       const applyNumber: any = [];

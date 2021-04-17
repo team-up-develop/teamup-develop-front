@@ -8,14 +8,13 @@ import {
   ref,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
-import axios from "axios";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
 import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { Message } from "@/types/index";
-import { FetchMessage } from "@/types/fetch";
-import { m, API_URL, truncate, catchError } from "@/master";
+import { FetchMessage, FetchJob } from "@/types/fetch";
+import { $fetch, m, API_URL, truncate, catchError } from "@/master";
 
 type State = {
   chats: Message[];
@@ -83,7 +82,7 @@ export default defineComponent({
 
     const getJob = async () => {
       try {
-        const res = await axios.get(`${API_URL}/job/${props.id}`);
+        const res = await $fetch<FetchJob>(`${API_URL}/job/${props.id}`);
         state.jobTitle = res.data.response.job_title;
         state.clickJobId = res.data.response.id;
       } catch (error) {
@@ -95,7 +94,7 @@ export default defineComponent({
       let chatLength = 0;
       setInterval(async () => {
         try {
-          const res = await axios.get<FetchMessage>(
+          const res = await $fetch<FetchMessage>(
             `${API_URL}/chat_messages?job_id=${props.id}`
           );
           state.loading = false;

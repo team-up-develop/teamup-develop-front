@@ -7,10 +7,9 @@ import {
   computed,
   PropType,
 } from "@vue/composition-api";
-import axios from "axios";
 import { Job } from "@/types/index";
 import { ManageJob } from "@/types/index";
-import { m, dayJs, API_URL, truncate, catchError } from "@/master";
+import { $fetch, m, dayJs, API_URL, truncate, catchError } from "@/master";
 import { FetchManageJobs } from "@/types/fetch";
 
 type Props = {
@@ -43,7 +42,7 @@ export default defineComponent({
 
     const getChatGroups = async () => {
       try {
-        const res = await axios.get<FetchManageJobs>(
+        const res = await $fetch<FetchManageJobs>(
           `${API_URL}/apply_jobs?user_id=${props.userId}`
         );
         const array: ManageJob[] = [];

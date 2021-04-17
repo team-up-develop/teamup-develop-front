@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
-import axios from "axios";
-import { m, API_URL, catchError } from "@/master";
+import { $put, m, API_URL, catchError } from "@/master";
 import { RejectParams } from "@/types/params";
 
 type Props = {
@@ -33,7 +32,7 @@ export default defineComponent({
         updated_at: props.updatedAt,
       };
       try {
-        await axios.put(`${API_URL}/apply_job/${props.jobId}`, params);
+        await $put<RejectParams>(`${API_URL}/apply_job/${props.jobId}`, params);
         context.emit("reject", m.APPLY_STATUS_REJECT);
       } catch (error) {
         catchError(error);
@@ -58,28 +57,28 @@ export default defineComponent({
 .btn-reject {
   @include neumorphismGrey;
   color: $red;
-  margin-left: 1rem;
-  padding: 1.2rem 5.5rem;
+  margin-left: 1.1rem;
+  padding: 1rem 5.5rem;
   transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
   text-align: center;
-  font-size: 1.2rem;
+  font-size: 1.1rem;
   display: inline-block;
   cursor: pointer;
 
   @media screen and (max-width: $sm) {
-    padding: 1.2rem 3.2rem;
+    padding: 1.1rem 3.2rem;
     margin-left: 0.3rem;
   }
   @media screen and (max-width: $ti) {
-    padding: 1.2rem 2.8rem;
+    padding: 1.1rem 2.8rem;
     font-size: 1rem;
   }
   // TODO: px指定をしなくてもstyleがずれないようにする
   @media screen and (max-width: 352px) {
-    padding: 1.2rem 2.2rem;
+    padding: 1rem 2.2rem;
   }
 }
 </style>

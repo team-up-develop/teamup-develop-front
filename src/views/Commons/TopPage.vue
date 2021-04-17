@@ -1,7 +1,6 @@
 <script lang="ts">
 import Vue from "vue";
-import { API_URL, catchError } from "@/master";
-import axios from "axios";
+import { $fetch, API_URL, catchError } from "@/master";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
   HeaderArea,
@@ -48,8 +47,7 @@ export default Vue.extend({
       this.$store.state.search.framwork = [];
       this.$store.state.search.skill = [];
       // * 開発言語 取得
-      axios
-        .get<FetchLanguages>(`${API_URL}/programing_languages`)
+      $fetch<FetchLanguages>(`${API_URL}/programing_languages`)
         .then((res) => {
           // .slice(5)
           this.languages = res.data.response;
@@ -58,8 +56,7 @@ export default Vue.extend({
           catchError(error);
         });
       // * フレームワーク
-      axios
-        .get<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+      $fetch<FetchFrameworks>(`${API_URL}/programing_frameworks`)
         .then((res) => {
           this.framworks = res.data.response;
         })
@@ -67,8 +64,7 @@ export default Vue.extend({
           catchError(error);
         });
       // * その他スキル
-      axios
-        .get<FetchSkills>(`${API_URL}/skills`)
+      $fetch<FetchSkills>(`${API_URL}/skills`)
         .then((res) => {
           this.skills = res.data.response;
         })

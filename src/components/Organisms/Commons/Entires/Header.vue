@@ -42,7 +42,10 @@ export default defineComponent({
           <Logo />
         </div>
         <div class="header-main-right">
-          <v-row class="left-user-menu">
+          <v-row class="left-create-btn">
+            <CreateBtn />
+          </v-row>
+          <v-row class="right-user-menu">
             <v-menu left bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn icon v-bind="attrs" v-on="on">
@@ -86,9 +89,6 @@ export default defineComponent({
                 </v-list>
               </v-list-item-group>
             </v-menu>
-          </v-row>
-          <v-row class="right-create-btn">
-            <CreateBtn />
           </v-row>
         </div>
       </div>
@@ -161,24 +161,26 @@ export default defineComponent({
 
       .header-main-right {
         width: 300px;
-        padding: 0.7rem 4rem 0 0;
+        padding: 0.7rem 0rem 0 0;
         position: absolute;
         right: 0;
         top: 0;
 
-        @media screen and (max-width: $me) {
-          width: 250px;
-        }
-
         @media screen and (max-width: $sm) {
-          width: 210px;
+          width: 230px;
         }
 
-        .left-user-menu {
-          width: 100px;
+        .right-user-menu {
           height: 100%;
           margin: 0;
           display: inline-block;
+          position: absolute;
+          right: 0;
+          margin-right: 2rem;
+
+          @media screen and (max-width: $sm) {
+            margin-right: 1rem;
+          }
 
           .user-image {
             @include user-image;
@@ -189,9 +191,9 @@ export default defineComponent({
           }
         }
 
-        .right-create-btn {
-          width: 30%;
+        .left-create-btn {
           height: 100%;
+          margin-top: 0.05rem;
           display: inline-block;
           font-weight: bold;
           color: $white;

@@ -1,7 +1,6 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "@vue/composition-api";
-import { API_URL, catchError } from "@/master";
-import axios from "axios";
+import { $post, API_URL, catchError } from "@/master";
 import Email from "@/components/Atoms/Forms/Email.vue";
 import Password from "@/components/Atoms/Forms/Password.vue";
 
@@ -29,7 +28,7 @@ export default defineComponent({
         LoginPassword: state.LoginPassword,
       };
       try {
-        const res = await axios.post(`${API_URL}/signup`, params);
+        const res = await $post(`${API_URL}/signup`, params);
         console.log(res);
         state.email = "";
         state.LoginPassword = "";

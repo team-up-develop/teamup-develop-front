@@ -6,16 +6,15 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
-import axios from "axios";
-import { ManageJob } from "@/types/index";
-import { FetchManageJobs } from "@/types/fetch";
+import { ParticipateJob } from "@/types/index";
+import { FetchParticipateJob } from "@/types/fetch";
 import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import { m, API_URL, catchError } from "@/master";
+import { $fetch, m, API_URL, catchError } from "@/master";
 import Vuex from "@/store/index";
 
 type State = {
-  assginUsers: ManageJob[];
+  assginUsers: ParticipateJob[];
   userId: number;
 };
 
@@ -56,7 +55,7 @@ export default defineComponent({
 
     const fetchAssginUser = async () => {
       try {
-        const res = await axios.get<FetchManageJobs>(`
+        const res = await $fetch<FetchParticipateJob>(`
             ${API_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}
             `);
         state.assginUsers = res.data.response;

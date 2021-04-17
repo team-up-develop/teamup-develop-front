@@ -7,8 +7,7 @@ import {
   PropType,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
-import axios from "axios";
-import { API_URL, catchError } from "@/master";
+import { $post, API_URL, catchError } from "@/master";
 import { messageParams } from "@/types/params";
 
 type Props = {
@@ -49,7 +48,7 @@ export default defineComponent({
       }
       try {
         // ? 投稿
-        await axios.post<messageParams>(`${API_URL}/chat_message`, params);
+        await $post<messageParams>(`${API_URL}/chat_message`, params);
       } catch (error) {
         catchError(error);
       }

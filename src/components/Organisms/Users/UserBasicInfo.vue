@@ -1,12 +1,19 @@
 <script lang="ts">
+import { defineComponent, reactive, computed } from "@vue/composition-api";
 import {
-  defineComponent,
-  reactive,
-  computed,
+  InsidePropsType,
+  OutsidePropsType,
   PropType,
-} from "@vue/composition-api";
+} from "@icare-jp/vue-props-type";
 import { User } from "@/types/index";
 import { dayJs } from "@/master";
+
+const propsOption = {
+  user: { type: Object as PropType<User>, require: true, defalut: {} },
+} as const;
+
+type PropsOption = typeof propsOption;
+export type UserBasicInfoProps = OutsidePropsType<PropsOption>;
 
 type State = {
   passwordModal: boolean;
@@ -15,10 +22,8 @@ type State = {
 const initialState = (): State => ({
   passwordModal: false,
 });
-export default defineComponent({
-  props: {
-    user: { type: Object as PropType<User>, require: true, defalut: {} },
-  },
+export default defineComponent<InsidePropsType<PropsOption>>({
+  props: propsOption,
   setup: () => {
     const state = reactive<State>(initialState());
     const day = (value: string, format: string) => dayJs(value, format);

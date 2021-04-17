@@ -7,7 +7,6 @@ import {
   computed,
   PropType,
 } from "@vue/composition-api";
-import axios from "axios";
 import Vuex from "@/store/index";
 // import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
@@ -20,8 +19,9 @@ import { StatusChangeBtnArea } from "@/components/Organisms/Manages";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
-import { API_URL, catchError, m } from "@/master";
+import { $fetch, API_URL, catchError } from "@/master";
 import useJobs from "@/hooks/useJobs";
+import { FetchUser } from "@/types/fetch";
 
 type Props = {
   id: number; //? 詳細を見るユーザーのID
@@ -34,7 +34,6 @@ type State = {
   userInfo: User | {};
   userId: number;
   doneStatusFlag: boolean;
-  statusId: number;
   currentTab: 0 | 1;
 };
 
@@ -43,7 +42,6 @@ const initialState = (): State => ({
   userInfo: {},
   userId: Vuex.state.auth.userId,
   doneStatusFlag: false,
-  statusId: m.APPLY_STATUS_APPLY,
   currentTab: 0,
 });
 
@@ -92,7 +90,7 @@ export default defineComponent({
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${API_URL}/user/${props.id}`);
+        const res = await $fetch<FetchUser>(`${API_URL}/user/${props.id}`);
         state.userInfo = res.data.response;
       } catch (error) {
         catchError(error);
@@ -131,7 +129,7 @@ export default defineComponent({
             @editEmit="editEmit()"
             :myselfFlag="myselfFlag"
           />
-          <v-row class="header">
+          <v-row>
             <UserTabs
               :myselfFlag="false"
               :currentTab="currentTab"
@@ -207,10 +205,6 @@ export default defineComponent({
 
       @media screen and (max-width: $la) {
         width: 95%;
-      }
-
-      .header {
-        border-bottom: $dark-grey 2px solid;
       }
     }
   }

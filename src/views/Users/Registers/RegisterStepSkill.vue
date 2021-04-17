@@ -6,12 +6,12 @@ import {
   computed,
   onMounted,
 } from "@vue/composition-api";
-import { API_URL, catchError } from "@/master";
-import axios from "axios";
+import { $fetch, API_URL, catchError } from "@/master";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import SkillSelectArea from "@/components/Molecules/Forms/SkillSelectArea.vue";
 import InputArea from "@/components/Molecules/Forms/InputArea.vue";
 import { Language, Framework, Skill } from "@/types/index";
+import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { RegisterSessionSecondParams } from "@/types/params";
 
 type Maybe<T> = T | null;
@@ -63,19 +63,23 @@ export default defineComponent({
 
     const fetchSkill = async () => {
       try {
-        const res = await axios.get(`${API_URL}/programing_languages`);
+        const res = await $fetch<FetchLanguages>(
+          `${API_URL}/programing_languages`
+        );
         state.languages = res.data.response;
       } catch (error) {
         catchError(error);
       }
       try {
-        const res = await axios.get(`${API_URL}/programing_frameworks`);
+        const res = await $fetch<FetchFrameworks>(
+          `${API_URL}/programing_frameworks`
+        );
         state.framworks = res.data.response;
       } catch (error) {
         catchError(error);
       }
       try {
-        const res = await axios.get(`${API_URL}/skills`);
+        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
         state.skills = res.data.response;
       } catch (error) {
         catchError(error);
@@ -96,7 +100,7 @@ export default defineComponent({
     });
 
     const backStep = () => {
-      return router.push({ name: "RegisterStep1" });
+      return router.push({ name: "RegisterStepBase" });
     };
 
     const nextStep = () => {

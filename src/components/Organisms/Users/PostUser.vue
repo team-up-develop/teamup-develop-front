@@ -1,41 +1,44 @@
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import { dayJs } from "@/master";
 import { User } from "@/types/index";
 
-type Props = {
-  user: User;
-  myselfFlag: boolean;
-};
-
-export default defineComponent({
-  props: {
-    user: { type: Object as PropType<User>, require: true, defalut: {} },
-    myselfFlag: {
-      type: Boolean as PropType<boolean>,
-      require: true,
-      defalut: false,
-    },
+const propsOption = {
+  user: { type: Object as PropType<User>, require: true },
+  myselfFlag: {
+    type: Boolean as PropType<boolean>,
+    require: true,
+    defalut: false,
   },
-  setup: (props: Props, context) => {
+} as const;
+
+type PropsOption = typeof propsOption;
+export type PostUserProps = OutsidePropsType<PropsOption>;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
+  props: propsOption,
+  setup: (props, context) => {
     const day = (value: string, format: string) => dayJs(value, format);
 
     const twitterTab = () => {
-      if (props.user.twitter_account == null) {
-        return props.user.twitter_account;
-      } else {
+      if (props.user?.twitter_account) {
         const url: string = props.user.twitter_account;
-        return window.open(url);
+        return window.open(url, "_blank");
       }
+      return;
     };
 
     const gitTab = () => {
-      if (props.user.github_account == null) {
-        return props.user.github_account;
-      } else {
+      if (props.user?.github_account) {
         const url: string = props.user.github_account;
-        return window.open(url);
+        return window.open(url, "_blank");
       }
+      return;
     };
 
     const editEmit = () => {

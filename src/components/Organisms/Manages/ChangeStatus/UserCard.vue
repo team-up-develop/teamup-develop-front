@@ -1,12 +1,22 @@
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import { dayJs, truncate } from "@/master";
 import { User } from "@/types";
 
-export default defineComponent({
-  props: {
-    user: { type: Object as PropType<User>, default: null, require: true },
-  },
+const propsOption = {
+  user: { type: Object as PropType<User>, default: null, require: true },
+} as const;
+
+type PropsOption = typeof propsOption;
+export type UserCardProps = OutsidePropsType<PropsOption>;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
+  props: propsOption,
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);
     const limit = (value: string, num: number) => truncate(value, num);

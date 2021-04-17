@@ -6,16 +6,15 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
-import axios from "axios";
-import { ManageJob } from "@/types/index";
-import { FetchManageJobs } from "@/types/fetch";
-import { m, API_URL, catchError } from "@/master";
+import { RejectJob } from "@/types/index";
+import { FetchRejectJob } from "@/types/fetch";
+import { $fetch, m, API_URL, catchError } from "@/master";
 import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import Vuex from "@/store/index";
 
 type State = {
-  rejectUsers: ManageJob[];
+  rejectUsers: RejectJob[];
   userId: number;
 };
 
@@ -56,7 +55,7 @@ export default defineComponent({
 
     const fetchRejectUser = async () => {
       try {
-        const res = await axios.get<FetchManageJobs>(`
+        const res = await $fetch<FetchRejectJob>(`
             ${API_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_REJECT}`);
         state.rejectUsers = res.data.response;
       } catch (error) {
