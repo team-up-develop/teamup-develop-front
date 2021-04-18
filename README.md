@@ -49,27 +49,11 @@ $ npm cache verify --force
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
 
-## Compoent構成
+## Doc
+### Compoent構成
 Atomic Design 導入 
 詳しくは → https://github.com/team-up-develop/teamup-develop-front/issues/86
 
-## 命名規約
-```
-案件: job
-詳細: detail
-管理: manage
-参加: participate
-応募: apply
-拒否: reject
-チャット: chat
-お気に入り いいね: favorite
-```
-
-## style & javaScript ※ここは今後linterにて設定します🙇‍♂️
-- JavaScript キャメルケース推奨
-- インデントは半角スペース2つ分で揃え、タブは混ぜないこと
-- 固有名詞などを除いて大文字は使用を控えること
-- 不要なスペースをコード各所に残さないこと
 - コメントは必要に応じて残すこと
 > https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
 > https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight
@@ -80,17 +64,7 @@ Atomic Design 導入
 // FIXME: 私が修正します
 ```
 
-- メディアのキャプションや alt テキストを設定すること
-- 行の折り返しは適宜行うこと
-- style ケバブケース推奨
-- Bemを使用すること
-- セクションコメントでグループ化すること
-- _variables.scssでの共通化すること
-- PXの多用はしない (% or remを推奨)
-- media screen ごとに分けること
-- ComponentあたりでStyleを適用すること
-
-## color
+### color
 <img width="612" alt="スクリーンショット 2020-12-19 10 59 58" src="https://user-images.githubusercontent.com/56709557/102679879-7673e880-41f6-11eb-8889-27143779a070.png">
 
 ### Sass 定義
