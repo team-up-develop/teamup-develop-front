@@ -53,14 +53,13 @@ export default defineComponent({
           `${API_URL}/apply_jobs?user_id=${state.userId}`
         );
         // TODO: API改正要望
-        for (let i = 0; i < res.data.response.length; i++) {
-          const applyJobCorrect: ManageJob = res.data.response[i];
+        for (const value of res.data.response) {
           if (
-            applyJobCorrect.apply_status_id === m.APPLY_STATUS_APPLY ||
-            applyJobCorrect.apply_status_id === m.APPLY_STATUS_PARTICIPATE ||
-            applyJobCorrect.apply_status_id === m.APPLY_STATUS_REJECT
+            value.apply_status_id === m.APPLY_STATUS_APPLY ||
+            value.apply_status_id === m.APPLY_STATUS_PARTICIPATE ||
+            value.apply_status_id === m.APPLY_STATUS_REJECT
           ) {
-            state.applyJob.push(applyJobCorrect);
+            state.applyJob.push(value);
           }
         }
       } catch (error) {

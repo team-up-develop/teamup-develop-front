@@ -128,8 +128,9 @@ $primary-border-color: #2196f3;
 // * ホバー
 //? タブ
 @mixin tab-hover {
-  background-color: $dark-grey;
-  transition: 0.3s;
+  opacity: 0.8;
+  // transition: 0.3s;
+  font-weight: bold;
 }
 // ? フォーム
 @mixin form-hover {

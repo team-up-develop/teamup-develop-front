@@ -23,8 +23,10 @@ import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { dayJs, truncate } from "@/master";
 import { Job } from "@/types/index";
-import { FetchJobs, FetchFavoriteJob } from "@/types/fetch";
+import { FetchJobs, FetchFavoriteJob, FetchManageJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
+
+type Maybe<T> = T | null;
 
 type State = {
   jobs: Job[]; //? 案件一覧配列
@@ -34,7 +36,7 @@ type State = {
   jobDetail: any; //? 案件詳細
   detailFlag: boolean; //? 案件詳細を表示するためのフラグ
   selfJobPost: boolean; //? 自分の案件かを判定
-  selfJob: any; //FIXME: Any //? 自分の案件を格納する
+  selfJob: Maybe<Job>; //? 自分の案件を格納する
   applyFlug: boolean; //?応募済みかの判定フラグ
   id: number; //? clickした案件のIdを取得
   modal: boolean; //?モーダルを開いてるか否か
@@ -50,8 +52,6 @@ type State = {
   displayJobs: Job[]; //? 表示する案件
   jobsPageSize: number; //? ページに表示する案件の数
   paginationLength: number; //? ページネーション番号
-  scroll: any;
-  newJobLabel: boolean;
 };
 
 const initialState = (): State => ({
@@ -78,8 +78,6 @@ const initialState = (): State => ({
   displayJobs: [],
   jobsPageSize: 10,
   paginationLength: 0,
-  scroll: null,
-  newJobLabel: false,
 });
 
 export default defineComponent({
@@ -104,7 +102,7 @@ export default defineComponent({
 
     // * 非ログイン時 登録リダイレクト
     const registerRedirect = () => {
-      router.push({ name: "RegisterStep1" });
+      router.push({ name: "RegisterStepBase" });
     };
 
     const fetchData = async () => {
@@ -118,11 +116,10 @@ export default defineComponent({
           paginateJobs(state.jobs);
 
           //* トップページから フリーワード 検索をした際の処理
-          for (const i in res.data.response) {
-            const jobs: any = res.data.response[i]; //FIXME: any
-            if (jobs.job_description) {
-              if (jobs.job_description.indexOf(state.freeWord) !== -1) {
-                posts.push(jobs);
+          for (const job of res.data.response) {
+            if (job.job_description) {
+              if (job.job_description.indexOf(state.freeWord) !== -1) {
+                posts.push(job);
               }
             }
           }
@@ -160,9 +157,8 @@ export default defineComponent({
     ) => {
       const arrayLanguage: string[] = [];
       const languageNum: number[] = searchLang;
-      for (let s = 0; s < languageNum.length; s++) {
-        const languageNumParams = languageNum[s];
-        const queryParamsLanguage = urlParams + "=" + languageNumParams + "&";
+      for (const value of languageNum) {
+        const queryParamsLanguage = urlParams + "=" + value + "&";
         arrayLanguage.push(queryParamsLanguage);
       }
       const LastLanguageURL: string = arrayLanguage.join("");
@@ -214,11 +210,10 @@ export default defineComponent({
       const posts: Job[] = [];
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
-        for (const i in res.data.response) {
-          const jobs: any = res.data.response[i]; //FIXME: any
-          if (jobs.job_description) {
-            if (jobs.job_description.indexOf(state.freeWord) !== -1) {
-              posts.push(jobs);
+        for (const job of res.data.response) {
+          if (job.job_description) {
+            if (job.job_description.indexOf(state.freeWord) !== -1) {
+              posts.push(job);
             }
           }
         }
@@ -270,16 +265,11 @@ export default defineComponent({
     };
     // * click して案件を取得 === 詳細
     const getJob = async (job: Job) => {
-      // FIXME: any
       state.jobDetail = job; //? clickした案件を取得
       state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
       state.id = job.id; //? clickしたIdを this.idに格納する
       state.selfJobPost = false; //? clickする度に 自分の案件では無くする
       state.applyFlug = true; //? clickする度に 応募済み案件にする
-      state.newJobLabel = false;
-      if (state.jobDetail.job_status_id == 1) {
-        state.newJobLabel = true;
-      }
       // * ログインしていれば以下の処理が走る
       if (state.userId) {
         // * 自分の案件かを判定
@@ -287,8 +277,8 @@ export default defineComponent({
           const res = await $fetch<FetchJobs>(
             `${API_URL}/jobs?user_id=${state.userId}`
           );
-          for (let i = 0; i < res.data.response.length; i++) {
-            state.selfJob = res.data.response[i];
+          for (const selfJob of res.data.response) {
+            state.selfJob = selfJob;
             if (state.selfJob.id === state.id) {
               state.selfJobPost = true;
             }
@@ -299,12 +289,11 @@ export default defineComponent({
         // TODO: 処理見直し
         try {
           // * 応募済みか応募済みでないかを判断
-          const res = await $fetch<FetchJobs>(
+          const res = await $fetch<FetchManageJobs>(
             `${API_URL}/apply_jobs?user_id=${state.userId}`
           );
           const arrayApply: number[] = [];
-          for (let c = 0; c < res.data.response.length; c++) {
-            const applyData: any = res.data.response[c]; // FIXME: any
+          for (const applyData of res.data.response) {
             arrayApply.push(applyData.job.id);
           }
           if (arrayApply.includes(state.jobDetail.id)) {
@@ -319,9 +308,8 @@ export default defineComponent({
             `${API_URL}/favorite_jobs?user_id=${state.userId}`
           );
           const array: number[] = [];
-          for (let i = 0; i < res.data.response.length; i++) {
-            const likeData: any = res.data.response[i]; //FIXME: any
-            array.push(likeData.job.id);
+          for (const favoriteData of res.data.response) {
+            array.push(favoriteData.job.id);
           }
           if (array.includes(state.jobDetail.id)) {
             state.saveFlag = false;
@@ -372,28 +360,6 @@ export default defineComponent({
       state.skillModal = false;
     };
 
-    //   // * トップに行く
-    //   const scrollTop = () => {
-    //     window.scrollTo({
-    //       behavior: 'smooth',
-    //       top: 0,
-    //     })
-    //   };
-    //   const scrollWindow = () => {
-    //     const top: 100 = 100 // ? ボタンを表示させたい位置
-    //     state.scroll = window.scrollY
-    //     if (top <= state.scroll) {
-    //       state.buttonActive = true
-    //     } else {
-    //       state.buttonActive = false
-    //     }
-    //   }
-    // };
-    // methods: {
-    // mounted() {
-    //   window.addEventListener('scroll', this.scrollWindow) //?ボタンを表示させたい位置
-    // },
-
     return {
       ...toRefs(state),
       paginateJobs,
@@ -425,11 +391,6 @@ export default defineComponent({
 
 <template>
   <div class="job-wrapper">
-    <transition name="button">
-      <!-- <div class="scroll-area" v-show="buttonActive">
-        <a href="#"><v-icon class="icon">↑</v-icon></a>
-      </div> -->
-    </transition>
     <LanguageSearchModal
       @close="closeLangSearchModal"
       v-if="langModal"
@@ -450,7 +411,7 @@ export default defineComponent({
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:footer>
           <Applybtn @compliteEntry="compliteEntry" :jobId="id" />
-          <button @click="doSend" class="modal-btn">キャンセル</button>
+          <v-btn @click="doSend" class="modal-btn">キャンセル</v-btn>
         </template>
       </ApplyModal>
     </div>
@@ -1059,15 +1020,14 @@ export default defineComponent({
 .modal-btn {
   @include neumorphismGrey;
   color: $red;
-  padding: 1rem 2.4rem;
+  padding: 0rem 2.4rem !important;
+  height: 46px !important;
   border-radius: 50px;
-  font-weight: 600;
   line-height: 1;
   text-align: center;
   max-width: 280px;
   margin-left: 1.2rem;
   font-size: 1rem;
-  cursor: pointer;
   position: absolute;
   top: 0;
   right: 0;

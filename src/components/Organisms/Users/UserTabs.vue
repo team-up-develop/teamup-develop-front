@@ -5,6 +5,7 @@ import {
   toRefs,
   PropType,
 } from "@vue/composition-api";
+import { md } from "@/master";
 
 type State = {
   tabs: { id: number; tabName: string }[];
@@ -12,15 +13,8 @@ type State = {
 };
 
 const initialState = (): State => ({
-  tabs: [
-    { id: 0, tabName: "プロフィール" },
-    { id: 1, tabName: "投稿案件" },
-  ],
-  selfTabs: [
-    { id: 0, tabName: "プロフィール" },
-    { id: 1, tabName: "投稿案件" },
-    { id: 2, tabName: "基本情報" },
-  ],
+  tabs: md.userTabs,
+  selfTabs: md.selfTabs,
 });
 
 export default defineComponent({
@@ -91,6 +85,9 @@ button {
   width: 33.3%;
   padding: 0.7rem 0;
   border-bottom: $dark-grey 1px solid;
+}
+button:hover {
+  @include tab-hover;
 }
 
 button.active {

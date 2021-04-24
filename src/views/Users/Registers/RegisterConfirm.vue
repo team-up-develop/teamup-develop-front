@@ -4,12 +4,14 @@ import {
   reactive,
   toRefs,
   computed,
+  onMounted,
   // watch,
   // onMounted,
 } from "@vue/composition-api";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { Language, Framework, Skill } from "@/types/index";
-import { dayJs } from "@/master";
+import { RegisterCompleteParams } from "@/types/params";
+import { $post, API_URL, dayJs, catchError } from "@/master";
 import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
 
 type Maybe<T> = T | null;
@@ -21,17 +23,19 @@ type State = {
   framworks: Framework[];
   selectedSkill: any | null;
   skills: Skill[];
+  bio: Maybe<string>;
   github: Maybe<string>;
   twitter: Maybe<string>;
-  userName: Maybe<string>;
-  lastName: Maybe<string>;
-  firstName: Maybe<string>;
-  password: Maybe<string>;
-  userBirthday: Maybe<string>;
-  learningStartDate: Maybe<string>;
+  userName: string;
+  lastName: string;
+  firstName: string;
+  password: string;
+  userBirthday: string;
+  learningStartDate: string;
   passwordModal: boolean;
-  email: Maybe<string>;
+  email: string;
   confirmModal: boolean;
+  compliteOk: boolean;
 };
 
 const initialState = (): State => ({
@@ -41,6 +45,7 @@ const initialState = (): State => ({
   framworks: [],
   selectedSkill: null,
   skills: [],
+  bio: "",
   github: "",
   twitter: "",
   userName: "",
@@ -52,6 +57,7 @@ const initialState = (): State => ({
   passwordModal: false,
   email: "",
   confirmModal: false,
+  compliteOk: false,
 });
 
 export default defineComponent({
@@ -75,22 +81,53 @@ export default defineComponent({
       const programingLanguage = sessionStorage.getItem("programingLanguage");
       const programingFramework = sessionStorage.getItem("programingFramework");
       const skill = sessionStorage.getItem("skill");
+      const bio = sessionStorage.getItem("bio");
       const github = sessionStorage.getItem("github");
       const twitter = sessionStorage.getItem("twitter");
-      state.userName = userName;
-      state.lastName = lastName;
-      state.firstName = firstName;
-      state.password = password;
-      state.email = email;
-      state.userBirthday = userBirthday;
-      state.learningStartDate = learningStartDate;
-      state.selectedLang = programingLanguage;
-      state.selectedFramwork = programingFramework;
-      state.selectedSkill = skill;
-      state.github = github;
-      state.twitter = twitter;
+      if (userName) {
+        state.userName = userName;
+      }
+      if (lastName) {
+        state.lastName = lastName;
+      }
+      if (firstName) {
+        state.firstName = firstName;
+      }
+      if (password) {
+        state.password = password;
+      }
+      if (email) {
+        state.email = email;
+      }
+      if (userBirthday) {
+        state.userBirthday = userBirthday;
+      }
+      if (learningStartDate) {
+        state.learningStartDate = learningStartDate;
+      }
+      if (programingLanguage) {
+        state.selectedLang = JSON.parse(programingLanguage);
+      }
+      if (programingFramework) {
+        state.selectedFramwork = JSON.parse(programingFramework);
+      }
+      if (skill) {
+        state.selectedSkill = JSON.parse(skill);
+      }
+      if (bio) {
+        state.bio = bio;
+      }
+      if (github) {
+        state.github = github;
+      }
+      if (twitter) {
+        state.twitter = twitter;
+      }
     };
-    strageGet();
+
+    onMounted(async () => {
+      await strageGet();
+    });
 
     const isForm = computed(() => {
       if (
@@ -131,9 +168,74 @@ export default defineComponent({
     const closeConfirm = () => {
       state.confirmModal = false;
     };
-
-    const register = () => {
+    // TODO: 登録周りパラメーター確認 エラー処理
+    const register = async () => {
       console.log("register");
+      // * date型に変換のための data用意
+      function toDate<T, U>(str: T | any, delim: U): Date {
+        const arr = str.split(delim);
+        return new Date(arr[0], arr[1] - 1, arr[2]);
+      }
+      // //* 開始日
+      const learningStart: string = state.learningStartDate;
+      const learningStartDate: Date = toDate(learningStart, "-");
+      // //* 生年月日
+      const birthdayString: string = state.userBirthday;
+      const birthdayDate: Date = toDate(birthdayString, "-");
+      // * 言語を {id: Number}に変換
+      const languageArray: {}[] = [];
+      for (const selectedLang of state.selectedLang) {
+        languageArray.push({ id: selectedLang });
+      }
+      // * フレームワークを{id: Number}に変換
+      const framworksArray: {}[] = [];
+      for (const selectedFramwork of state.selectedFramwork) {
+        framworksArray.push({ id: selectedFramwork });
+      }
+      // * その他スキルを {id: Number}に変換
+      const skillArray: {}[] = [];
+      for (const selectedSkill of state.selectedSkill) {
+        skillArray.push({ id: selectedSkill });
+      }
+      const params: RegisterCompleteParams = {
+        user_name: state.userName,
+        last_name: state.lastName,
+        first_name: state.firstName,
+        login_password: state.password,
+        email: state.email,
+        learning_start_date: learningStartDate,
+        birthday: birthdayDate,
+        programing_language_ids: languageArray,
+        programing_framework_ids: framworksArray,
+        skill_ids: skillArray,
+        bio: state.bio,
+        github_account: state.github,
+        twitter_account: state.twitter,
+      };
+      console.log(JSON.stringify(params), "res");
+      try {
+        await $post<RegisterCompleteParams>(`${API_URL}/sign_up`, params);
+        await removeSessionStrage();
+        state.compliteOk = true;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    const removeSessionStrage = () => {
+      sessionStorage.removeItem("userName");
+      sessionStorage.removeItem("lastName");
+      sessionStorage.removeItem("firstName");
+      sessionStorage.removeItem("password");
+      sessionStorage.removeItem("email");
+      sessionStorage.removeItem("userBirthday");
+      sessionStorage.removeItem("learningStartDate");
+      sessionStorage.removeItem("programingLanguage");
+      sessionStorage.removeItem("programingFramework");
+      sessionStorage.removeItem("skill");
+      sessionStorage.removeItem("bio");
+      sessionStorage.removeItem("github");
+      sessionStorage.removeItem("twitter");
     };
 
     const redirectProfile = () => {
@@ -165,6 +267,7 @@ export default defineComponent({
       compliteModalTitle="登録完了しました。"
       mainBtnText="登録する"
       subBtnText="閉じる"
+      :compliteOk="compliteOk"
       @close="closeConfirm"
       @complite="redirectProfile"
     />
@@ -224,6 +327,10 @@ export default defineComponent({
             <label for="name" class="label">その他スキル</label>
             <p>{{ selectedSkill }}</p>
           </div>
+          <div class="input-area pre-wrap">
+            <label for="name" class="label">自己紹介</label>
+            <p>{{ bio }}</p>
+          </div>
           <div class="input-area">
             <label for="name" class="label">GitHub URL</label>
             <p>{{ github }}</p>
@@ -238,8 +345,10 @@ export default defineComponent({
             >
           </div>
           <div class="bottom">
-            <div class="back-btn" @click="backStep">内容修正する</div>
-            <div class="next-btn" @click="registerConfirm">登録完了する</div>
+            <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
+            <v-btn class="next-btn" @click="registerConfirm"
+              >登録完了する</v-btn
+            >
           </div>
         </v-col>
         <v-col v-else>
@@ -248,13 +357,13 @@ export default defineComponent({
             <div class="alert-message">
               <span
                 >入力されていない項目があるようです。 <br />
-                一旦戻って確認してください。
+                入力内容をご確認ください。
               </span>
             </div>
           </div>
           <div class="bottom">
-            <div class="back-btn" @click="backStep">内容修正する</div>
-            <div class="next-btn-false">登録完了する</div>
+            <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
+            <v-btn class="next-btn-false">登録完了する</v-btn>
           </div>
         </v-col>
       </v-card>
@@ -264,9 +373,7 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
-.label {
-  font-weight: bold;
-}
+
 .wrapper {
   width: 550px;
   height: 90%;
@@ -300,8 +407,16 @@ export default defineComponent({
     }
   }
 }
+
 .input-area {
-  height: 60px;
+  min-height: 60px;
+}
+.label {
+  font-weight: bold;
+}
+
+.pre-wrap {
+  white-space: pre-wrap;
 }
 .alert-message {
   padding: 0.5rem;
@@ -324,7 +439,7 @@ export default defineComponent({
   outline: none;
 }
 .bottom {
-  width: 80%;
+  width: 100%;
   height: 100px;
   margin: 2rem auto 0 auto;
 
@@ -336,11 +451,10 @@ export default defineComponent({
     @include neumorphismGrey;
     color: $primary-color;
     font-weight: 600;
-    text-align: left;
     display: block;
-    padding: 1.1rem 2rem;
+    padding: 0 2rem;
+    height: 46px;
     border-radius: 25px;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -353,7 +467,7 @@ export default defineComponent({
     text-decoration: none;
 
     @media (max-width: 400px) {
-      padding: 1.1rem 1.2rem;
+      padding: 0 1.2rem;
     }
   }
 
@@ -361,12 +475,11 @@ export default defineComponent({
     @include box-shadow-btn;
     @include blue-btn;
     color: $white;
-    text-align: left;
     display: block;
-    padding: 1.1rem 2rem;
+    padding: 0 2rem;
+    height: 46px;
     border-radius: 25px;
     border: none;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -379,7 +492,7 @@ export default defineComponent({
     outline: none;
 
     @media (max-width: 400px) {
-      padding: 1.1rem 1rem;
+      padding: 0 1rem;
     }
 
     &:hover {
@@ -393,10 +506,10 @@ export default defineComponent({
     color: $white;
     text-align: left;
     display: block;
-    padding: 1.1rem 2rem;
+    padding: 0 2rem;
+    height: 46px;
     border-radius: 25px;
     border: none;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;

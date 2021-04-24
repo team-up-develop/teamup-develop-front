@@ -66,8 +66,25 @@ interface RegisterSessionSecondParams {
   programingLanguage: {}[];
   programingFramework: {}[];
   skill: {}[];
+  bio: string;
   github: Maybe<string>;
   twitter: Maybe<string>;
+}
+
+interface RegisterCompleteParams {
+  user_name: string;
+  last_name: string;
+  first_name: string;
+  login_password: string;
+  email: string;
+  learning_start_date: Date;
+  birthday: Date;
+  programing_language_ids: {}[];
+  programing_framework_ids: {}[];
+  skill_ids: {}[];
+  bio: Maybe<string>;
+  github_account: Maybe<string>;
+  twitter_account: Maybe<string>;
 }
 
 interface messageParams {
@@ -103,6 +120,7 @@ export {
   RejectParams,
   RegisterSessionFirstParams,
   RegisterSessionSecondParams,
+  RegisterCompleteParams,
   messageParams,
   EditProfileParams,
 };

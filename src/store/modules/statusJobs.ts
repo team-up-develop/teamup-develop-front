@@ -53,24 +53,25 @@ const actions: ActionTree<State, GetStatus> = {
         `${API_URL}/jobs?user_id=${userObject.userId}`
       );
       commit("getJobsManageNum", responseManage.data.response.length);
+
       const responseFavorite = await $fetch<FetchFavoriteJob>(
         `${API_URL}/favorite_jobs?user_id=${userObject.userId}`
       );
       commit("getJobsFavoriteNum", responseFavorite.data.response.length);
+
       const responseApply = await $fetch<FetchManageJobs>(
         `${API_URL}/apply_jobs?user_id=${userObject.userId}`
       );
-      const applyNumber: any = [];
-      for (let i = 0; i < responseApply.data.response.length; i++) {
-        const applyJobCorrect: ManageJob = responseApply.data.response[i];
+      const applyArray: ManageJob[] = [];
+      for (const job of responseApply.data.response) {
         if (
-          applyJobCorrect.apply_status_id === m.APPLY_STATUS_APPLY ||
-          applyJobCorrect.apply_status_id === m.APPLY_STATUS_PARTICIPATE
+          job.apply_status_id === m.APPLY_STATUS_APPLY ||
+          job.apply_status_id === m.APPLY_STATUS_PARTICIPATE
         ) {
-          applyNumber.push(applyJobCorrect);
+          applyArray.push(job);
         }
       }
-      commit("getJobsApplyNum", applyNumber.length);
+      commit("getJobsApplyNum", applyArray.length);
     } catch (error) {
       catchError(error);
     }

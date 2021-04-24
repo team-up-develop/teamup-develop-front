@@ -8,8 +8,11 @@ import {
 } from "@vue/composition-api";
 import { $fetch, API_URL, catchError } from "@/master";
 import Session from "@/components/Atoms/Commons/Session.vue";
-import SkillSelectArea from "@/components/Molecules/Forms/SkillSelectArea.vue";
-import InputArea from "@/components/Molecules/Forms/InputArea.vue";
+import {
+  InputArea,
+  DescriptionArea,
+  SkillSelectArea,
+} from "@/components/Molecules/Forms";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { RegisterSessionSecondParams } from "@/types/params";
@@ -23,6 +26,7 @@ type State = {
   framworks: Framework[];
   selectedSkill: [];
   skills: Skill[];
+  bio: string;
   github: Maybe<string>;
   twitter: Maybe<string>;
 };
@@ -34,6 +38,7 @@ const initialState = (): State => ({
   framworks: [],
   selectedSkill: [],
   skills: [],
+  bio: "",
   github: "",
   twitter: "",
 });
@@ -43,6 +48,7 @@ export default defineComponent({
     Session,
     SkillSelectArea,
     InputArea,
+    DescriptionArea,
   },
   setup(_, ctx: any) {
     const state = reactive<State>(initialState());
@@ -105,22 +111,23 @@ export default defineComponent({
 
     const nextStep = () => {
       const languageArray: {}[] = [];
-      for (let i = 0; i < state.selectedLang.length; i++) {
-        languageArray.push({ id: state.selectedLang[i] });
+      for (const selectedLang of state.selectedLang) {
+        languageArray.push({ id: selectedLang });
       }
       const framworksArray: {}[] = [];
-      for (let c = 0; c < state.selectedFramwork.length; c++) {
-        framworksArray.push({ id: state.selectedFramwork[c] });
+      for (const selectedFramwork of state.selectedFramwork) {
+        framworksArray.push({ id: selectedFramwork });
       }
       const skillArray: {}[] = [];
-      for (let d = 0; d < state.selectedSkill.length; d++) {
-        skillArray.push({ id: state.selectedSkill[d] });
+      for (const selectedSkill of state.selectedSkill) {
+        skillArray.push({ id: selectedSkill });
       }
 
       const params: RegisterSessionSecondParams = {
         programingLanguage: languageArray,
         programingFramework: framworksArray,
         skill: skillArray,
+        bio: state.bio,
         github: state.github,
         twitter: state.twitter,
       };
@@ -138,6 +145,9 @@ export default defineComponent({
       }
       if (params.twitter) {
         sessionStorage.setItem("twitter", params.twitter);
+      }
+      if (params.bio) {
+        sessionStorage.setItem("bio", params.bio);
       }
       return router.push({ name: "RegisterConfirm" });
     };
@@ -196,6 +206,19 @@ export default defineComponent({
             />
           </div>
           <div class="input-area">
+            <DescriptionArea
+              v-model="bio"
+              type="text"
+              name="bio"
+              textLabel="自己紹介文"
+              :mandatory="false"
+              mandatoryText=""
+              placeholder="自己紹介を記載してください。(500文字以内)"
+              maxlength="500"
+              :remaining="true"
+            />
+          </div>
+          <div class="input-area">
             <InputArea
               v-model="github"
               type="text"
@@ -222,16 +245,16 @@ export default defineComponent({
             />
           </div>
           <div class="bottom" v-if="isForm">
-            <div class="back-btn" @click="backStep">戻る</div>
-            <div class="next-btn" @click="nextStep">次へ2/3</div>
+            <v-btn class="back-btn" @click="backStep">戻る</v-btn>
+            <v-btn class="next-btn" @click="nextStep">次へ2/3</v-btn>
           </div>
           <div class="bottom" v-else>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <div class="back-btn" @click="backStep">戻る</div>
-                <div class="next-btn-false" v-on="on" v-bind="attrs">
+                <v-btn class="back-btn" @click="backStep">戻る</v-btn>
+                <v-btn class="next-btn-false" v-on="on" v-bind="attrs">
                   次へ2/3
-                </div>
+                </v-btn>
               </template>
               <span>必須項目が入力されていません</span>
             </v-tooltip>
@@ -281,24 +304,20 @@ export default defineComponent({
 .input-area {
   min-height: 90px;
 }
+
 .bottom {
-  width: 80%;
+  width: 100%;
   height: 100px;
   margin: 1rem auto 0 auto;
-
-  @media (max-width: $sm) {
-    width: 100%;
-  }
 
   .back-btn {
     @include neumorphismGrey;
     color: $primary-color;
     font-weight: 600;
-    text-align: left;
     display: block;
-    padding: 1.1rem 4rem;
+    padding: 0 4rem;
+    height: 46px;
     border-radius: 25px;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -311,7 +330,7 @@ export default defineComponent({
     text-decoration: none;
 
     @media (max-width: $ti) {
-      padding: 1.1rem 3rem;
+      padding: 0 3rem;
     }
   }
 
@@ -319,12 +338,11 @@ export default defineComponent({
     @include box-shadow-btn;
     @include blue-btn;
     color: $white;
-    text-align: left;
     display: block;
-    padding: 1.1rem 3rem;
+    padding: 0 3rem;
+    height: 46px;
     border-radius: 25px;
     border: none;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -337,7 +355,7 @@ export default defineComponent({
     outline: none;
 
     @media (max-width: $ti) {
-      padding: 1.1rem 2rem;
+      padding: 0 2rem;
     }
 
     &:hover {
@@ -348,12 +366,11 @@ export default defineComponent({
     @include box-shadow-btn;
     @include grey-btn;
     color: $white;
-    text-align: left;
     display: block;
-    padding: 1.1rem 3rem;
+    padding: 0 3rem;
+    height: 46px;
     border-radius: 25px;
     border: none;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -364,6 +381,10 @@ export default defineComponent({
     cursor: pointer;
     transition: 0.3s;
     outline: none;
+
+    @media (max-width: $ti) {
+      padding: 0 2rem;
+    }
   }
 }
 </style>
