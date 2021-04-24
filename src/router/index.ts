@@ -10,7 +10,7 @@ import JobCreateComplete from "@/views/Jobs/JobCreateComplete.vue";
 import ProfileUser from "@/views/Users/Profiles/ProfileUser.vue";
 import ManageUserProfile from "@/views/Users/Manages/ManageUserProfile.vue";
 import Login from "@/views/Users/Logins/Login.vue";
-import Register from "@/views/Users/Registers/Register.vue";
+// import Register from "@/views/Users/Registers/Register.vue";
 import SentMailComplete from "@/views/Users/Registers/SentMailComplete.vue";
 import RegisterStepBase from "@/views/Users/Registers/RegisterStepBase.vue";
 import RegisterStepSkill from "@/views/Users/Registers/RegisterStepSkill.vue";
@@ -98,11 +98,11 @@ const routes: Array<RouteConfig> = [
     component: Login,
     name: "Login",
   },
-  {
-    path: "/register",
-    name: "register",
-    component: Register,
-  },
+  // {
+  //   path: "/register",
+  //   name: "register",
+  //   component: Register,
+  // },
   {
     path: "/register/sent_mail",
     name: "SentMailComplete",

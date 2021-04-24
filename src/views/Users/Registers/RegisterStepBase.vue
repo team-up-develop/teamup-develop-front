@@ -214,14 +214,14 @@ export default defineComponent({
             />
           </div>
           <div class="bottom" v-if="isForm">
-            <div class="next-btn" @click="nextStep2">次へ1/3</div>
+            <v-btn class="next-btn" @click="nextStep2">次へ1/3</v-btn>
           </div>
           <div class="bottom" v-else>
             <v-tooltip bottom>
               <template v-slot:activator="{ on, attrs }">
-                <div class="next-btn-false" v-on="on" v-bind="attrs">
+                <v-btn class="next-btn-false" v-on="on" v-bind="attrs">
                   次へ1/3
-                </div>
+                </v-btn>
               </template>
               <span>必須項目が入力されていません</span>
             </v-tooltip>
@@ -260,71 +260,30 @@ export default defineComponent({
   .container {
     padding: 0 2rem;
 
-    @media (max-width: 500px) {
+    @media (max-width: $sm) {
       padding: 0 1rem;
     }
   }
 }
 
-.label {
-  font-weight: bold;
-  margin-bottom: 1rem;
-}
-.label-required {
-  color: $white;
-  background-color: $error-message-color;
-  font-size: 12px;
-  font-weight: bold;
-  border-radius: 25px;
-  padding: 0.25rem 0.9rem;
-  text-align: center;
-  margin-left: 10px;
-}
 .input-area {
   height: 90px;
 }
 
-input[type="password"] {
-  background-color: $dark-white;
-  color: $text-main-color;
-  font: 16px/24px sans-serif;
-  box-sizing: border-box;
-  width: 100%;
-  padding: 0.3em;
-  transition: 0.3s;
-  letter-spacing: 1px;
-  border-radius: 4px;
-  padding: 0.5rem;
-  margin-top: 0.5rem;
-
-  &:focus {
-    @include form-hover;
-  }
-}
-.datepicker {
-  width: 100%;
-  height: 100px;
-}
-
 .bottom {
-  width: 80%;
+  width: 100%;
   height: 100px;
   margin: 0 auto;
-
-  @media (max-width: $sm) {
-    width: 100%;
-  }
 
   .next-btn {
     @include box-shadow-btn;
     @include blue-btn;
     color: $white;
-    text-align: left;
     display: block;
-    padding: 1.1rem 3rem;
+    padding: 0 3rem;
+    height: 46px;
     border-radius: 25px;
     border: none;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;
@@ -345,12 +304,11 @@ input[type="password"] {
     @include box-shadow-btn;
     @include grey-btn;
     color: $white;
-    text-align: left;
     display: block;
-    padding: 1.1rem 3rem;
+    padding: 0 3rem;
+    height: 46px;
     border-radius: 25px;
     border: none;
-    font-size: 0.875rem;
     font-weight: 600;
     line-height: 1;
     text-align: center;

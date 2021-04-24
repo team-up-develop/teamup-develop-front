@@ -1,17 +1,21 @@
 <script lang="ts">
 import Vue from "vue";
-import { API_URL, $fetch } from "@/master";
+import { API_URL, $fetch, catchError } from "@/master";
 import { Job, Skill } from "@/types/index";
 import { FetchSkills, FetchJobs } from "@/types/fetch";
 
-type DateType = {
+type State = {
   skills: Skill[];
-  selectedSkill: [];
+  selectedSkill: number[];
   jobs: Job[];
 };
 
+type SearchParams = {
+  skill: number[];
+};
+
 export default Vue.extend({
-  data(): DateType {
+  data(): State {
     return {
       selectedSkill: this.$store.state.search.skill,
       skills: [],
@@ -28,24 +32,25 @@ export default Vue.extend({
     //   }
     // }
   },
-  created() {
-    // * フレームワーク取得
-    $fetch<FetchSkills>(`${API_URL}/skills`).then((res) => {
+  async created() {
+    try {
+      const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
       this.skills = res.data.response;
-    });
+    } catch (error) {
+      catchError(error);
+    }
   },
   methods: {
     // * その他スキル 検索
     searchSkill() {
       const arraySkill: string[] = [];
       const skillState: number[] = [];
-      const params = {
+      const params: SearchParams = {
         skill: this.selectedSkill,
       };
-      for (let i = 0; i < params.skill.length; i++) {
-        const skillParams: number = params.skill[i];
+      for (const skillParams of params.skill) {
         skillState.push(skillParams);
-        // /jobs?skill_id=1&skill_id=4
+        //* /jobs?skill_id=1&skill_id=4
         const queryParams: string = "skill_id=" + skillParams + "&";
         arraySkill.push(queryParams);
       }
@@ -94,9 +99,9 @@ export default Vue.extend({
           </div>
         </v-card-text>
         <div class="modal-footer">
-          <div @click="searchSkill" class="serach-btn">
+          <v-btn @click="searchSkill" class="serach-btn">
             検索する
-          </div>
+          </v-btn>
         </div>
         <!-- // FIXME: 現状は使用していない -->
         <!-- <div class="modal-footer" v-else>
@@ -225,9 +230,9 @@ export default Vue.extend({
     @include blue-btn;
     @include neumorphism;
     color: $white;
-    padding: 1rem 3.4rem;
+    padding: 1rem 5.5rem !important;
+    height: 46px !important;
     border-radius: 35px;
-    font-weight: 600;
     line-height: 1;
     text-align: center;
     max-width: 280px;
@@ -235,7 +240,6 @@ export default Vue.extend({
     font-size: 1rem;
     cursor: pointer;
     margin: 1rem auto;
-    outline: none;
   }
 
   .serach-btn-false {

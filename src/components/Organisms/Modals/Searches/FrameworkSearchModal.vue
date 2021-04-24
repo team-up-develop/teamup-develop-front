@@ -4,29 +4,23 @@ import { $fetch, API_URL, catchError } from "@/master";
 import { Job, Framework } from "@/types/index";
 import { FetchFrameworks, FetchJobs } from "@/types/fetch";
 
-type DateType = {
+type State = {
   frameworks: Framework[];
-  selectedFramework: [];
+  selectedFramework: number[];
   jobs: Job[];
 };
 
+type SearchParams = {
+  framework: number[];
+};
+
 export default Vue.extend({
-  data(): DateType {
+  data(): State {
     return {
       frameworks: [],
       selectedFramework: this.$store.state.search.framwork,
       jobs: [],
     };
-  },
-  computed: {
-    // FIXME: 現状は使用していない
-    // isSearch() {
-    //   if(this.selectedFramework.length !== 0) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }
   },
   async created() {
     try {
@@ -43,11 +37,10 @@ export default Vue.extend({
     async searchFramework() {
       const arrayFramework: string[] = [];
       const frameworkState: number[] = [];
-      const params = {
+      const params: SearchParams = {
         framework: this.selectedFramework,
       };
-      for (let i = 0; i < params.framework.length; i++) {
-        const frameworkParams: number = params.framework[i];
+      for (const frameworkParams of params.framework) {
         frameworkState.push(frameworkParams);
         const queryParams: string = "pf_id=" + frameworkParams + "&";
         arrayFramework.push(queryParams);
@@ -99,21 +92,10 @@ export default Vue.extend({
           </div>
         </v-card-text>
         <div class="modal-footer">
-          <div @click="searchFramework" class="serach-btn">
+          <v-btn @click="searchFramework" class="serach-btn">
             検索する
-          </div>
+          </v-btn>
         </div>
-        <!-- // FIXME: 現状は使用していない -->
-        <!-- <div class="modal-footer" v-else>
-          <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <div class="serach-btn-false" v-on="on" v-bind="attrs">
-                検索する
-              </div>
-            </template>
-            <span>検索項目入力してください</span>
-          </v-tooltip>
-        </div> -->
       </div>
     </div>
   </transition>
@@ -168,7 +150,7 @@ export default Vue.extend({
 
   .row-area {
     margin: 0;
-    height: 40%;
+    height: 52%;
 
     @media screen and (max-width: $me) {
       display: block;
@@ -230,9 +212,9 @@ export default Vue.extend({
     @include blue-btn;
     @include neumorphism;
     color: $white;
-    padding: 1rem 3.4rem;
+    padding: 1rem 5.5rem !important;
+    height: 46px !important;
     border-radius: 35px;
-    font-weight: 600;
     line-height: 1;
     text-align: center;
     max-width: 280px;
@@ -240,27 +222,6 @@ export default Vue.extend({
     font-size: 1rem;
     cursor: pointer;
     margin: 1rem auto;
-    outline: none;
-  }
-
-  .serach-btn-false {
-    @include box-shadow-btn;
-    @include grey-btn;
-    color: $white;
-    padding: 1rem 3.4rem;
-    border-radius: 50px;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin-left: 1.2rem;
-    font-size: 1rem;
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 1rem;
-    outline: none;
   }
 }
 

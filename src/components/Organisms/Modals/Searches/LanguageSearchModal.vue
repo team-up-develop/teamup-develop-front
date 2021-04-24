@@ -1,49 +1,46 @@
 <script lang="ts">
 import Vue from "vue";
-import { $fetch, API_URL } from "@/master";
+import { $fetch, API_URL, catchError } from "@/master";
 import { Job, Language } from "@/types/index";
 import { FetchLanguages, FetchJobs } from "@/types/fetch";
 
-type DateType = {
+type State = {
   languages: Language[];
-  selectedLang: [];
+  selectedLang: number[];
   jobs: Job[];
 };
 
+type SearchParams = {
+  language: number[];
+};
+
 export default Vue.extend({
-  data(): DateType {
+  data(): State {
     return {
       languages: [],
       selectedLang: this.$store.state.search.language,
       jobs: [],
     };
   },
-  computed: {
-    // FIXME: 現状は使用していない
-    // isSearch() {
-    //   if(this.selectedLang.length !== 0) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }
-  },
-  created() {
-    // * プログラミング言語 取得
-    $fetch<FetchLanguages>(`${API_URL}/programing_languages`).then((res) => {
+  async created() {
+    try {
+      const res = await $fetch<FetchLanguages>(
+        `${API_URL}/programing_languages`
+      );
       this.languages = res.data.response;
-    });
+    } catch (error) {
+      catchError(error);
+    }
   },
   methods: {
     // * 開発言語検索
     searchLanguage() {
       const array: string[] = [];
       const languageState: number[] = [];
-      const params = {
+      const params: SearchParams = {
         language: this.selectedLang,
       };
-      for (let i = 0; i < params.language.length; i++) {
-        const languageParams: number = params.language[i];
+      for (const languageParams of params.language) {
         languageState.push(languageParams);
         const queryParams: string = "pl_id=" + languageParams + "&";
         array.push(queryParams);
@@ -93,21 +90,10 @@ export default Vue.extend({
           </div>
         </v-card-text>
         <div class="modal-footer">
-          <div @click="searchLanguage" class="serach-btn">
+          <v-btn @click="searchLanguage" class="serach-btn">
             検索する
-          </div>
+          </v-btn>
         </div>
-        <!-- // FIXME: 現状は使用していない -->
-        <!-- <div class="modal-footer" v-else>
-          <v-tooltip top>
-            <template v-slot:activator="{ on, attrs }">
-              <div class="serach-btn-false" v-on="on" v-bind="attrs">
-                検索する
-              </div>
-            </template>
-            <span>検索言語を入力してください</span>
-          </v-tooltip>
-        </div> -->
       </div>
     </div>
   </transition>
@@ -181,14 +167,12 @@ export default Vue.extend({
       font-weight: 700;
       color: $white;
       font-size: 0.85em;
-      // letter-spacing: 4px;
       text-decoration: none;
       font-family: sans-serif;
       text-align: center;
       width: 95%;
       min-width: 160px;
       display: inline-block;
-      // width: 50%;
       padding: 0.5rem 1rem;
       cursor: pointer;
       margin: 0 auto;
@@ -224,9 +208,9 @@ export default Vue.extend({
     @include blue-btn;
     @include neumorphism;
     color: $white;
-    padding: 1rem 3.4rem;
+    padding: 1rem 5.5rem !important;
+    height: 46px !important;
     border-radius: 35px;
-    font-weight: 600;
     line-height: 1;
     text-align: center;
     max-width: 280px;
@@ -234,27 +218,6 @@ export default Vue.extend({
     font-size: 1rem;
     cursor: pointer;
     margin: 1rem auto;
-    outline: none;
-  }
-
-  .serach-btn-false {
-    @include box-shadow-btn;
-    @include grey-btn;
-    color: $white;
-    padding: 1rem 3.4rem;
-    border-radius: 50px;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin-left: 1.2rem;
-    font-size: 1rem;
-    cursor: pointer;
-    position: absolute;
-    top: 0;
-    right: 0;
-    margin: 1rem;
-    outline: none;
   }
 }
 

@@ -11,6 +11,9 @@ type State = {
 };
 
 export default Vue.extend({
+  components: {
+    CompliteModal,
+  },
   props: {
     jobId: { type: Number as PropType<number>, default: 0 },
   },
@@ -43,26 +46,16 @@ export default Vue.extend({
     openCompliteModal() {
       this.compliteModal = true;
     },
-    closeCompliteModal() {
-      this.compliteModal = false;
-    },
-  },
-  components: {
-    CompliteModal,
   },
 });
 </script>
 
 <template>
   <div class="modal-apply-area">
-    <div class="btn-apply" @click="applyJob">
+    <CompliteModal v-if="compliteModal" />
+    <v-btn class="btn-apply" @click="applyJob" v-if="!compliteModal">
       応募する
-    </div>
-    <CompliteModal @close="closeCompliteModal" v-if="compliteModal">
-      <p class="mt-2 mx-auto text-center">応募が完了しました</p>
-      <span>投稿者から参加許可をされたらチャットが自動的に作成されます。</span>
-      <template v-slot:footer></template>
-    </CompliteModal>
+    </v-btn>
   </div>
 </template>
 
@@ -76,10 +69,9 @@ export default Vue.extend({
 .btn-apply {
   @include neumorphism;
   @include red-btn;
-  display: block;
-  padding: 1rem 3rem;
-  border-radius: 50px;
-  font-weight: 600;
+  padding: 0rem 3rem !important;
+  height: 46px !important;
+  border-radius: 45px;
   color: $white;
   line-height: 1;
   text-align: center;
@@ -88,7 +80,6 @@ export default Vue.extend({
   font-size: 0.95rem;
   display: inline-block;
   cursor: pointer;
-  outline: none;
 }
 
 span {

@@ -24,9 +24,8 @@ export default Vue.extend({
     $fetch<FetchFavoriteJob>(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
       .then((res) => {
         const array = [];
-        for (let i = 0; i < res.data.response.length; i++) {
-          const likeData = res.data.response[i];
-          array.push(likeData.job.id);
+        for (const favoriteJob of res.data.response) {
+          array.push(favoriteJob.job.id);
         }
         if (array.includes(this.jobId)) {
           this.flag = false;

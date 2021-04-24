@@ -55,10 +55,10 @@ export default defineComponent({
     <div class="login-wrapper">
       <v-card class="login-container">
         <div class="login-title">LOGIN</div>
-        <div class="name-form-mail">
-          <label for="name">メールアドレス</label>
+        <div class="text-left mt-6">
+          <label class="font-weight-bold" for="name">メールアドレス</label>
           <br /><br />
-          <v-row cols="12" md="4">
+          <v-row class="px-3" cols="12" md="4">
             <Email
               v-model="email"
               placeholder="example@teamUp.com"
@@ -66,10 +66,10 @@ export default defineComponent({
             />
           </v-row>
         </div>
-        <div class="name-form-password">
-          <label for="name">パスワード</label>
+        <div class="text-left mt-2">
+          <label class="font-weight-bold" for="name">パスワード</label>
           <br /><br />
-          <v-row cols="12" md="4">
+          <v-row class="px-3" cols="12" md="4">
             <Password v-model="password" type="password" />
           </v-row>
         </div>
@@ -84,7 +84,7 @@ export default defineComponent({
               ><span>こちら</span></router-link
             >
           </p>
-          <button @click="login" class="login-btn">ログインする</button>
+          <v-btn @click="login" class="login-btn">ログインする</v-btn>
         </div>
       </v-card>
     </div>
@@ -132,36 +132,6 @@ section {
       border-bottom: solid 3px $primary-color;
     }
 
-    // * メールフォーム
-    .name-form-mail {
-      text-align: left;
-      margin: 1.5rem 0 0 0;
-
-      .row {
-        margin-right: 0;
-        margin-left: 0;
-      }
-
-      label {
-        font-weight: bold;
-      }
-    }
-
-    // * パスワードフォーム
-    .name-form-password {
-      text-align: left;
-      margin: 0.5rem 0 0.5rem 0;
-
-      .row {
-        margin-right: 0;
-        margin-left: 0;
-      }
-
-      label {
-        font-weight: bold;
-      }
-    }
-
     .btn-area {
       margin: 0 auto;
       width: 80%;
@@ -178,18 +148,14 @@ section {
         color: $primary-color;
         display: block;
         width: 100%;
-        padding: 1.2rem 5rem;
+        height: 48px;
         border-radius: 50px;
-        font-size: 0.875rem;
-        font-weight: 600;
         line-height: 1;
         text-align: center;
-        // max-width: 280px;
         margin: auto;
         font-size: 1em;
         display: inline-block;
         cursor: pointer;
-        margin: 0 auto;
         transition: 0.3s;
         box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
         outline: none;

@@ -64,7 +64,7 @@ export default defineComponent({
     },
     jobDescription: { type: String as PropType<string>, default: "" },
   },
-  setup: (props: Props, ctx: any) => {
+  setup: (props: Props, ctx) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
@@ -106,20 +106,19 @@ export default defineComponent({
     const createJob = async () => {
       // * 言語を {id: Number}に変換
       const languageArray: {}[] = [];
-      for (let i = 0; i < state.selectedLang.length; i++) {
-        languageArray.push({ id: state.selectedLang[i] });
+      for (const selectedLang of state.selectedLang) {
+        languageArray.push({ id: selectedLang });
       }
       // * フレームワークを{id: Number}に変換
       const framworksArray: {}[] = [];
-      for (let c = 0; c < state.selectedFramwork.length; c++) {
-        framworksArray.push({ id: state.selectedFramwork[c] });
+      for (const selectedFramwork of state.selectedFramwork) {
+        framworksArray.push({ id: selectedFramwork });
       }
       // * その他スキルを {id: Number}に変換
       const skillArray: {}[] = [];
-      for (let d = 0; d < state.selectedSkill.length; d++) {
-        skillArray.push({ id: state.selectedSkill[d] });
+      for (const selectedSkill of state.selectedSkill) {
+        skillArray.push({ id: selectedSkill });
       }
-
       // FIXME:  宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
       // * date型に変換のための data用意
       function toDate(str: any, delim: any) {
@@ -152,12 +151,12 @@ export default defineComponent({
         sessionStorage.removeItem("jobDescription");
         sessionStorage.removeItem("devStartDate");
         sessionStorage.removeItem("devEndDate");
-        router.push({ name: "JobCreateComplete" });
         state.selectedLang = [];
         state.selectedFramwork = [];
         state.selectedSkill = [];
         state.recruitNumber = "";
         state.jobStatusId = "";
+        router.push({ name: "JobCreateComplete" });
       } catch (error) {
         catchError(error);
       }

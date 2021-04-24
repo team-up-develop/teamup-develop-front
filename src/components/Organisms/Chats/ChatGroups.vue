@@ -46,13 +46,12 @@ export default defineComponent({
           `${API_URL}/apply_jobs?user_id=${props.userId}`
         );
         const array: ManageJob[] = [];
-        for (let i = 0; i < res.data.response.length; i++) {
-          const applyData: ManageJob = res.data.response[i];
+        for (const job of res.data.response) {
           if (
-            applyData.apply_status_id == m.APPLY_STATUS_PARTICIPATE ||
-            applyData.apply_status_id == m.APPLY_STATUS_SELF
+            job.apply_status_id == m.APPLY_STATUS_PARTICIPATE ||
+            job.apply_status_id == m.APPLY_STATUS_SELF
           ) {
-            array.push(applyData);
+            array.push(job);
             state.chatGroups = array;
           }
         }

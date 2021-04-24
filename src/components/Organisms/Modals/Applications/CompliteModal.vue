@@ -3,8 +3,14 @@
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
         <div class="modal-content">
-          <v-icon class="icon">mdi-check-underline-circle-outline</v-icon>
-          <slot />
+          <div class="content">
+            <v-icon class="icon">mdi-check-underline-circle-outline</v-icon>
+            <p class="mt-2 mx-auto text-center">応募が完了しました</p>
+            <p class="px-2 text-center">
+              投稿者から参加許可をされたら<br />
+              <span class="alert">チャットに参加できます。</span>
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -25,7 +31,6 @@
   width: 100%;
   height: 100%;
   background: $modal-background;
-  font-weight: bold;
   background-color: $white;
 }
 
@@ -36,13 +41,23 @@
 }
 
 .modal-content {
-  padding: 4rem 4rem;
   margin: 0 auto;
+  min-width: 320px;
+  max-width: 480px;
+
+  .content {
+    margin: 0 auto;
+    padding: 1rem 0rem;
+
+    .alert {
+      color: $error-message-color;
+    }
+  }
 
   .icon {
     color: $primary-color;
-    margin-right: 6rem;
     font-size: 6em;
+    margin-right: 7rem;
   }
 }
 
@@ -70,10 +85,5 @@
 .modal-enter,
 .modal-leave-to {
   opacity: 0;
-}
-
-.modal-enter,
-.modal-window {
-  transform: translateY(-20px);
 }
 </style>

@@ -31,6 +31,7 @@ type User = {
   deleted_at: Maybe<Date>;
   updated_at: Date;
   id: number;
+  email: string;
   job: Maybe<Job>;
   learning_start_date: Date;
   twitter_account: Maybe<string>;

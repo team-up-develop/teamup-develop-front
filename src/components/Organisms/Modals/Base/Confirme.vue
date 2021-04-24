@@ -23,17 +23,16 @@ const propsOption = {
     require: true,
     default: "",
   },
+  compliteOk: { type: Boolean, default: false },
 } as const;
 type PropsOption = typeof propsOption;
 
 type State = {
   overlay: boolean;
-  complite: boolean;
 };
 
 const initialState = (): State => ({
   overlay: false,
-  complite: false,
 });
 
 export default defineComponent<InsidePropsType<PropsOption>>({
@@ -47,18 +46,16 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
     watch(
       () => state.overlay,
-      (val) => {
+      () => {
         setTimeout(() => {
-          console.log(`${val} -> ${state.overlay}`);
           state.overlay = false;
-          state.complite = true;
         }, 3000);
       }
     );
 
     const emitOption = () => {
       // *完了した際の emit
-      if (state.complite) {
+      if (props.compliteOk) {
         return ctx.emit("complite");
       }
       // * モーダルを閉じる
@@ -81,7 +78,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       </v-overlay>
       <div class="modal-window">
         <div class="modal-content">
-          <div class="confirm" v-if="!complite">
+          <div class="confirm" v-if="!compliteOk">
             <v-icon class="icon">
               mdi mdi-emoticon-happy-outline
             </v-icon>
@@ -101,7 +98,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
               </v-btn>
             </div>
           </div>
-          <div class="complite" v-if="complite">
+          <div class="complite" v-if="compliteOk">
             <v-icon class="icon">mdi-check-underline-circle-outline</v-icon>
             <p>
               {{ compliteModalTitle }}

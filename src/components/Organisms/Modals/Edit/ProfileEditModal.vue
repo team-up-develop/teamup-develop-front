@@ -11,7 +11,7 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
-import { $fetch, API_URL, $put, catchError } from "@/master";
+import { md, $fetch, API_URL, $put, catchError } from "@/master";
 import { EditProfileParams } from "@/types/params";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { Language, Framework, Skill, User } from "@/types/index";
@@ -21,6 +21,8 @@ import {
   DescriptionArea,
   DatePickerArea,
 } from "@/components/Molecules/Forms";
+// TODO: モーダルの molecule に分割
+// import ProfileEditBase from "@/components/Molecules/Modals/ProfileEditBase.vue";
 
 const propsOption = {
   userInfo: {
@@ -50,7 +52,7 @@ type State = {
   selectedLang: Language[]; //? プログラミング言語
   selectlangValue: number[]; //? 開発言語 編集用 array[Number, Number...]
   languages: Language[]; //? プログラミング言語全て
-  selectedFram: Framework[];
+  selectedFramwork: Framework[];
   selectFramValue: number[];
   framworks: Framework[];
   selectedSkill: Skill[];
@@ -78,16 +80,13 @@ const initialState = (userInfo: User | any): State => ({
   selectedLang: [],
   selectlangValue: [],
   languages: [],
-  selectedFram: [],
+  selectedFramwork: [],
   selectFramValue: [],
   framworks: [],
   selectedSkill: [],
   selectSkillValue: [],
   skills: [],
-  tabs: [
-    { id: 0, tabName: "スキル情報" },
-    { id: 1, tabName: "基本情報" },
-  ],
+  tabs: md.editProfileTabs,
   currentTab: 0,
 });
 
@@ -97,6 +96,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     InputArea,
     DescriptionArea,
     DatePickerArea,
+    // ProfileEditBase,
   },
   props: propsOption,
   setup(props, ctx) {
@@ -113,8 +113,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       );
       state.languages = res.data.response;
       state.selectedLang = props.userInfo.programing_languages;
-      for (let l = 0; l < state.selectedLang.length; l++) {
-        state.selectlangValue.push(state.selectedLang[l].id); //? 配列 [Number, Number...]
+      for (const selectlangValue of state.selectedLang) {
+        state.selectlangValue.push(selectlangValue.id);
       }
     };
 
@@ -123,9 +123,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         `${API_URL}/programing_frameworks`
       );
       state.framworks = res.data.response;
-      state.selectedFram = props.userInfo.programing_frameworks;
-      for (let l = 0; l < state.selectedFram.length; l++) {
-        state.selectFramValue.push(state.selectedFram[l].id); //? 配列 [Number, Number...]
+      state.selectedFramwork = props.userInfo.programing_frameworks;
+      for (const selectedFramwork of state.selectedFramwork) {
+        state.selectFramValue.push(selectedFramwork.id);
       }
     };
 
@@ -133,12 +133,12 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
       state.skills = res.data.response;
       state.selectedSkill = props.userInfo.skills;
-      for (let l = 0; l < state.selectedSkill.length; l++) {
-        state.selectSkillValue.push(state.selectedSkill[l].id); //? 配列 [Number, Number...]
+      for (const selectedSkill of state.selectedSkill) {
+        state.selectSkillValue.push(selectedSkill.id);
       }
     };
 
-    onMounted(async () => {
+    onMounted(() => {
       fetchLang();
       fetchFram();
       fetchSkill();
@@ -153,9 +153,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         state.email.length > 0 &&
         state.password.length > 0 &&
         state.learningStartDate.length > 0 &&
-        state.selectedLang.length > 0 &&
-        state.selectedFram.length > 0 &&
-        state.selectedSkill.length > 0
+        state.selectlangValue.length > 0 &&
+        state.selectFramValue.length > 0 &&
+        state.selectSkillValue.length > 0
       ) {
         return true;
       }
@@ -173,20 +173,19 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       const learningStartDate = toDate(learningStart, "-");
       // * 言語を {id: Number}に変換
       const languageArray: {}[] = [];
-      for (let i = 0; i < state.selectedLang.length; i++) {
-        languageArray.push({ id: state.selectedLang[i].id });
+      for (const selectedLang of state.selectlangValue) {
+        languageArray.push({ id: selectedLang });
       }
       // * フレームワークを{id: Number}に変換
       const framworksArray: {}[] = [];
-      for (let c = 0; c < state.selectedFram.length; c++) {
-        framworksArray.push({ id: state.selectedFram[c].id });
+      for (const selectedFramwork of state.selectFramValue) {
+        framworksArray.push({ id: selectedFramwork });
       }
       // * その他スキルを {id: Number}に変換
       const skillArray: {}[] = [];
-      for (let d = 0; d < state.selectedSkill.length; d++) {
-        skillArray.push({ id: state.selectedSkill[d].id });
+      for (const selectedSkill of state.selectSkillValue) {
+        skillArray.push({ id: selectedSkill });
       }
-      console.log(skillArray, "skillArray");
       const params: EditProfileParams = {
         id: state.id,
         updated_at: props.userInfo.updated_at,
@@ -194,7 +193,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         first_name: state.firstName,
         last_name: state.lastName,
         birthday: props.userInfo.birthday,
-        email: state.email, // TODO: fix error
+        email: state.email,
         bio: state.bio,
         github_account: state.githubAccount,
         twitter_account: state.twitterAccount,
@@ -207,7 +206,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       console.log(params);
       const a = JSON.stringify(params);
       console.log(a);
-      // console.log(ctx);
+      console.log(ctx);
       $put<EditProfileParams>(`${API_URL}/user/${state.id}`, params)
         .then((res) => {
           ctx.emit("compliteEdit");
@@ -389,6 +388,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 maxlength="128"
                 :remaining="false"
               />
+              <!-- <ProfileEditBase :userInfo="userInfo" /> -->
             </div>
           </section>
           <slot />

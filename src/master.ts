@@ -42,6 +42,19 @@ export const md = {
     { label: "新規募集", value: "1" },
     { label: "追加募集", value: "2" },
   ],
+  userTabs: [
+    { id: 0, tabName: "スキル情報" },
+    { id: 1, tabName: "投稿案件" },
+  ],
+  selfTabs: [
+    { id: 0, tabName: "スキル情報" },
+    { id: 1, tabName: "投稿案件" },
+    { id: 2, tabName: "基本情報" },
+  ],
+  editProfileTabs: [
+    { id: 0, tabName: "スキル情報" },
+    { id: 1, tabName: "基本情報" },
+  ],
 };
 // 移行前に接続がしたい場合
 // port: 8888

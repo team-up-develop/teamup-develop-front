@@ -34,7 +34,7 @@ type State = {
   selfJobPost: boolean;
   applyFlug: boolean;
   modal: boolean;
-  editModal: boolean;
+  // editModal: boolean;
 };
 
 const initialState = (): State => ({
@@ -42,7 +42,7 @@ const initialState = (): State => ({
   selfJobPost: false,
   applyFlug: true,
   modal: false,
-  editModal: false,
+  // editModal: false,
 });
 
 export default defineComponent<InsidePropsType<PropsOption>>({
@@ -64,8 +64,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
     // * 自分の案件か否かを判定
     const getCheckSelfJob = async () => {
-      for (let i = 0; i < manageJobs.value.length; i++) {
-        const selfJob = await manageJobs.value[i];
+      for (const selfJob of manageJobs.value) {
         if (selfJob.id === props.id) {
           state.selfJobPost = true;
         }
@@ -79,8 +78,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           `${API_URL}/apply_jobs?user_id=${state.userId}`
         );
         const arrayApply: any = [];
-        for (let c = 0; c < res.data.response.length; c++) {
-          const applyData: any = res.data.response[c];
+        for (const applyData of res.data.response) {
           arrayApply.push(applyData.job.id);
         }
         if (arrayApply.includes(props.id)) {
@@ -94,10 +92,11 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     const openModal = () => (state.modal = true);
     const closeModal = () => (state.modal = false);
     const doSend = () => closeModal();
-    const openEditModal = () => (state.editModal = true);
-    const closeEditModal = () => (state.editModal = false);
+    const compliteEntry = () => (state.applyFlug = false);
+    // const openEditModal = () => (state.editModal = true);
+    // const closeEditModal = () => (state.editModal = false);
 
-    const registerRedirect = () => router.push("/register");
+    const registerRedirect = () => router.push("/register/step/1");
 
     onMounted(async () => {
       if (!state.userId) {
@@ -116,9 +115,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       openModal,
       closeModal,
       doSend,
-      openEditModal,
-      closeEditModal,
+      // openEditModal,
+      // closeEditModal,
       registerRedirect,
+      compliteEntry,
     };
   },
 });
@@ -131,8 +131,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <ApplyModal @close="closeModal" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:footer>
-          <Applybtn :jobId="id" />
-          <button @click="doSend" class="modal-btn">キャンセル</button>
+          <Applybtn :jobId="id" @compliteEntry="compliteEntry" />
+          <v-btn @click="doSend" class="modal-btn">キャンセル</v-btn>
         </template>
       </ApplyModal>
     </div>
@@ -280,35 +280,35 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 }
 
 //* 編集するボタン
-.edit {
-  @include box-shadow-btn;
-  background-color: $secondary-color;
-  color: $white;
-  padding: 1.2rem 8rem;
-  transition: 0.3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  margin-bottom: 0.5rem;
-  cursor: pointer;
-  border: none;
-  appearance: none;
-  border: none;
-  transition: 0.3s;
-  outline: none;
+// .edit {
+//   @include box-shadow-btn;
+//   background-color: $secondary-color;
+//   color: $white;
+//   padding: 1.2rem 8rem;
+//   transition: 0.3s;
+//   border-radius: 50px;
+//   font-weight: 600;
+//   line-height: 1;
+//   text-align: center;
+//   margin: auto;
+//   font-size: 1.3rem;
+//   display: inline-block;
+//   margin-bottom: 0.5rem;
+//   cursor: pointer;
+//   border: none;
+//   appearance: none;
+//   border: none;
+//   transition: 0.3s;
+//   outline: none;
 
-  @media screen and (max-width: $sm) {
-    font-size: 1rem;
-  }
+//   @media screen and (max-width: $sm) {
+//     font-size: 1rem;
+//   }
 
-  &:hover {
-    @include btn-hover;
-  }
-}
+//   &:hover {
+//     @include btn-hover;
+//   }
+// }
 
 .favorite {
   position: absolute;
@@ -332,15 +332,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 .modal-btn {
   @include neumorphismGrey;
   color: $red;
-  padding: 1rem 2.4rem;
+  padding: 0rem 2.4rem !important;
+  height: 46px !important;
   border-radius: 50px;
-  font-weight: 600;
   line-height: 1;
   text-align: center;
   max-width: 280px;
   margin-left: 1.2rem;
   font-size: 1rem;
-  cursor: pointer;
   position: absolute;
   top: 0;
   right: 0;
