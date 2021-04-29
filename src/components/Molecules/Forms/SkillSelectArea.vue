@@ -47,7 +47,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       return props.mandatory ? true : false;
     });
 
-    const input = (e: any) => {
+    const input = (e: number[]) => {
       ctx.emit("input", e);
     };
     return {

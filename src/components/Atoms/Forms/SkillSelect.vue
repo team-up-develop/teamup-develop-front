@@ -21,7 +21,7 @@ export default Vue.extend({
     max: { type: Number as PropType<number>, required: true, default: 0 },
   },
   methods: {
-    onInput(e: []) {
+    onInput(e: number[]) {
       this.$emit("input", e);
     },
   },
@@ -31,6 +31,7 @@ export default Vue.extend({
 <template>
   <section>
     <v-select
+      :value="value"
       class="input-area"
       multiple
       :options="options"
