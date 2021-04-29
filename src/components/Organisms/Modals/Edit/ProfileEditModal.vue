@@ -61,6 +61,7 @@ type State = {
   tabs: { id: number; tabName: string }[];
   currentTab: number;
 };
+
 //TODO: any
 const initialState = (userInfo: User | any): State => ({
   id: userInfo.id,
@@ -326,7 +327,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 :max="5"
                 mandatoryText="5つまで"
               />
-              {{ selectSkillValue }}
             </div>
             <div v-show="currentTab === 1">
               <p class="font-weight-bold alert">

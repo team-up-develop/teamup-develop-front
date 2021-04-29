@@ -31,10 +31,12 @@ export default Vue.extend({
     } catch (error) {
       catchError(error);
     }
+
+    // console.log(this.$route.query.language_id);
   },
   methods: {
     // * 開発言語検索
-    searchLanguage() {
+    async searchLanguage() {
       const array: string[] = [];
       const languageState: number[] = [];
       const params: SearchParams = {
@@ -47,8 +49,8 @@ export default Vue.extend({
       }
       const languageStateEnd: number[] = languageState.slice(0);
       const result: string = array.join("");
-
-      $fetch<FetchJobs>(`${API_URL}/jobs?${result}`).then((res) => {
+      try {
+        const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
         this.jobs = res.data.response;
         this.$emit("compliteSearchLanguage", this.jobs);
 
@@ -62,7 +64,9 @@ export default Vue.extend({
             language: [],
           });
         }
-      });
+      } catch (error) {
+        catchError(error);
+      }
     },
   },
 });
