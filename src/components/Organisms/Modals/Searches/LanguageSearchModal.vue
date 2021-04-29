@@ -7,7 +7,6 @@ import { FetchLanguages, FetchJobs } from "@/types/fetch";
 type State = {
   languages: Language[];
   selectedLang: number[];
-  framwork: any;
   jobs: Job[];
 };
 
@@ -20,7 +19,6 @@ export default Vue.extend({
     return {
       languages: [],
       selectedLang: this.$store.state.search.language,
-      framwork: this.$store.state.search.framwork,
       jobs: [],
     };
   },
