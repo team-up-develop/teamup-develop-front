@@ -26,7 +26,7 @@ import Apply from "@/views/Manages/Applications/Apply.vue";
 import ApplyJobDetail from "@/views/Manages/Applications/ApplyJobDetail.vue";
 import Chat from "@/views/Chats/Chat.vue";
 import ChatDetail from "@/views/Chats/ChatDetail.vue";
-import NotFound from "@/views/Errors/404.vue";
+import NotFound from "@/views/Commons/Errors/404.vue";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [

@@ -5,7 +5,7 @@ import { Md } from "@/master";
 export default defineComponent({
   props: {
     value: { type: String as PropType<string>, required: true, default: "" },
-    options: { type: Array as PropType<Md[]>, required: true, default: [{}] },
+    options: { type: Array as PropType<Md[]>, required: true, default: [] },
     name: { type: String as PropType<string>, required: true, default: "" },
   },
   setup: (_, ctx) => {
