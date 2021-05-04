@@ -229,7 +229,7 @@ export default defineComponent({
     };
     // * 検索後の処理
     const searchJobPagenate = (value: Job[]) => {
-      state.jobs = value.slice().reverse();
+      state.jobs = value;
       state.paginationLength = Math.ceil(
         state.jobs.length / state.jobsPageSize
       );
@@ -321,9 +321,7 @@ export default defineComponent({
         }
       }
       // * 登録 or ログインしてない場合
-      else {
-        return;
-      }
+      return;
     };
 
     // * エントリーが完了したら応募済みにする

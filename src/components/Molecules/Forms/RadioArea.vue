@@ -58,7 +58,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       name="jobStatusId"
       @input="input"
     />
-    {{ options }}
   </section>
 </template>
 
