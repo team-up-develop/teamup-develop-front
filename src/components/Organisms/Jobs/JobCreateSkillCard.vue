@@ -5,8 +5,12 @@ import {
   reactive,
   toRefs,
   onMounted,
-  PropType,
 } from "@vue/composition-api";
+import {
+  InsidePropsType,
+  OutsidePropsType,
+  PropType,
+} from "@icare-jp/vue-props-type";
 import Vuex from "@/store/index";
 import { $fetch, $post, API_URL, catchError, md } from "@/master";
 import { SkillSelectArea, RadioArea } from "@/components/Molecules/Forms";
@@ -15,13 +19,7 @@ import { JobCreateParamsSecond } from "@/types/params";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 
-type Props = {
-  jobTitle: string;
-  devStartDate: string;
-  devEndDate: string;
-  jobDescription: string;
-};
-
+type Select = { id: number };
 type State = {
   selectedLang: number[];
   languages: Language[];
@@ -32,7 +30,6 @@ type State = {
   recruitNumber: string | number; //? POSTする時にはnumberに変換
   jobStatusId: string | number;
 };
-
 const initialState = (): State => ({
   selectedLang: [],
   languages: [],
@@ -44,27 +41,31 @@ const initialState = (): State => ({
   jobStatusId: "",
 });
 
-export default defineComponent({
+const propsOption = {
+  jobTitle: { type: String as PropType<string>, required: true, default: "" },
+  devStartDate: {
+    type: String as PropType<string>,
+    required: true,
+    default: "",
+  },
+  devEndDate: {
+    type: String as PropType<string>,
+    required: true,
+    default: "",
+  },
+  jobDescription: { type: String as PropType<string>, default: "" },
+} as const;
+type PropsOption = typeof propsOption;
+export type JobCreateSkill = OutsidePropsType<PropsOption>;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     Session,
     RadioArea,
     SkillSelectArea,
   },
-  props: {
-    jobTitle: { type: String as PropType<string>, required: true, default: "" },
-    devStartDate: {
-      type: String as PropType<string>,
-      required: true,
-      default: "",
-    },
-    devEndDate: {
-      type: String as PropType<string>,
-      required: true,
-      default: "",
-    },
-    jobDescription: { type: String as PropType<string>, default: "" },
-  },
-  setup: (props: Props, ctx) => {
+  props: propsOption,
+  setup: (props, ctx) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
@@ -105,27 +106,26 @@ export default defineComponent({
 
     const createJob = async () => {
       // * 言語を {id: Number}に変換
-      const languageArray: {}[] = [];
+      const languageArray: Select[] = [];
       for (const selectedLang of state.selectedLang) {
         languageArray.push({ id: selectedLang });
       }
       // * フレームワークを{id: Number}に変換
-      const framworksArray: {}[] = [];
+      const framworksArray: Select[] = [];
       for (const selectedFramwork of state.selectedFramwork) {
         framworksArray.push({ id: selectedFramwork });
       }
       // * その他スキルを {id: Number}に変換
-      const skillArray: {}[] = [];
+      const skillArray: Select[] = [];
       for (const selectedSkill of state.selectedSkill) {
         skillArray.push({ id: selectedSkill });
       }
       // FIXME:  宣言していない arameter 'str', 'delim' implicitly has an 'any' type.
       // * date型に変換のための data用意
-      function toDate(str: any, delim: any) {
+      function toDate<T, U>(str: T | any, delim: U): Date {
         const arr = str.split(delim);
         return new Date(arr[0], arr[1] - 1, arr[2]);
       }
-
       //* 開始日
       const devStart = props.devStartDate;
       const devStartDate = toDate(devStart, "-");
@@ -147,19 +147,23 @@ export default defineComponent({
       };
       try {
         await $post<JobCreateParamsSecond>(`${API_URL}/job`, params);
-        sessionStorage.removeItem("jobTitle");
-        sessionStorage.removeItem("jobDescription");
-        sessionStorage.removeItem("devStartDate");
-        sessionStorage.removeItem("devEndDate");
-        state.selectedLang = [];
-        state.selectedFramwork = [];
-        state.selectedSkill = [];
-        state.recruitNumber = "";
-        state.jobStatusId = "";
+        await removeItem();
         router.push({ name: "JobCreateComplete" });
       } catch (error) {
         catchError(error);
       }
+    };
+
+    const removeItem = () => {
+      sessionStorage.removeItem("jobTitle");
+      sessionStorage.removeItem("jobDescription");
+      sessionStorage.removeItem("devStartDate");
+      sessionStorage.removeItem("devEndDate");
+      state.selectedLang = [];
+      state.selectedFramwork = [];
+      state.selectedSkill = [];
+      state.recruitNumber = "";
+      state.jobStatusId = "";
     };
 
     return {
@@ -209,7 +213,6 @@ export default defineComponent({
             :max="5"
             mandatoryText="5つまで"
           />
-          {{ selectedSkill }}
         </div>
         <div class="create-area">
           <RadioArea

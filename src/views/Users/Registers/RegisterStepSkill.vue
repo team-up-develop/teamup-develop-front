@@ -18,7 +18,7 @@ import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { RegisterSessionSecondParams } from "@/types/params";
 
 type Maybe<T> = T | null;
-
+type Select = { id: number };
 type State = {
   selectedLang: [];
   languages: Language[];
@@ -50,7 +50,7 @@ export default defineComponent({
     InputArea,
     DescriptionArea,
   },
-  setup(_, ctx: any) {
+  setup(_, ctx) {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
@@ -110,15 +110,15 @@ export default defineComponent({
     };
 
     const nextStep = () => {
-      const languageArray: {}[] = [];
+      const languageArray: Select[] = [];
       for (const selectedLang of state.selectedLang) {
         languageArray.push({ id: selectedLang });
       }
-      const framworksArray: {}[] = [];
+      const framworksArray: Select[] = [];
       for (const selectedFramwork of state.selectedFramwork) {
         framworksArray.push({ id: selectedFramwork });
       }
-      const skillArray: {}[] = [];
+      const skillArray: Select[] = [];
       for (const selectedSkill of state.selectedSkill) {
         skillArray.push({ id: selectedSkill });
       }

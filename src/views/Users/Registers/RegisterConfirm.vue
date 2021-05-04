@@ -5,27 +5,20 @@ import {
   toRefs,
   computed,
   onMounted,
-  // watch,
-  // onMounted,
 } from "@vue/composition-api";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { Language, Framework, Skill } from "@/types/index";
 import { RegisterCompleteParams } from "@/types/params";
-import { $post, API_URL, dayJs, catchError } from "@/master";
+import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
+import { $post, $fetch, API_URL, dayJs, catchError } from "@/master";
 import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
 
 type Maybe<T> = T | null;
-
+type Select = { id: number };
 type State = {
-  selectedLang: Maybe<any>;
-  languages: Language[];
-  selectedFramwork: any | null;
-  framworks: Framework[];
-  selectedSkill: any | null;
-  skills: Skill[];
-  bio: Maybe<string>;
-  github: Maybe<string>;
-  twitter: Maybe<string>;
+  selectedLang: NonNullable<Select[]>; //* 選択言語
+  selectedFramwork: NonNullable<Select[]>; //* 選択フレームワーク
+  selectedSkill: NonNullable<Select[]>; //* 選択その他スキル
   userName: string;
   lastName: string;
   firstName: string;
@@ -34,20 +27,26 @@ type State = {
   learningStartDate: string;
   passwordModal: boolean;
   email: string;
+  bio: Maybe<string>;
+  github: Maybe<string>;
+  twitter: Maybe<string>;
   confirmModal: boolean;
   compliteOk: boolean;
 };
 
+type SkillState = {
+  displayLanguages: Language[]; //* 表示用開発言語
+  languages: Language[]; //* fetch
+  displayFramworks: Framework[]; //* 表示用フレームワーク
+  framworks: Framework[]; //* fetch
+  displaySkills: Skill[]; //* 表示用その他スキル
+  skills: Skill[]; //* fetch
+};
+
 const initialState = (): State => ({
-  selectedLang: null,
-  languages: [],
-  selectedFramwork: null,
-  framworks: [],
-  selectedSkill: null,
-  skills: [],
-  bio: "",
-  github: "",
-  twitter: "",
+  selectedLang: [],
+  selectedFramwork: [],
+  selectedSkill: [],
   userName: "",
   lastName: "",
   firstName: "",
@@ -56,8 +55,20 @@ const initialState = (): State => ({
   learningStartDate: "",
   passwordModal: false,
   email: "",
+  bio: "",
+  github: "",
+  twitter: "",
   confirmModal: false,
   compliteOk: false,
+});
+
+const skillState = (): SkillState => ({
+  displayLanguages: [],
+  languages: [],
+  displayFramworks: [],
+  framworks: [],
+  displaySkills: [],
+  skills: [],
 });
 
 export default defineComponent({
@@ -65,67 +76,81 @@ export default defineComponent({
     Session,
     Confirme,
   },
-  setup(_, ctx: any) {
+  setup(_, ctx) {
     const state = reactive<State>(initialState());
+    const skills = reactive<SkillState>(skillState());
     const router = ctx.root.$router;
     const day = (value: string, format: string) => dayJs(value, format);
 
-    const strageGet = () => {
-      const userName = sessionStorage.getItem("userName");
-      const lastName = sessionStorage.getItem("lastName");
-      const firstName = sessionStorage.getItem("firstName");
-      const password = sessionStorage.getItem("password");
-      const email = sessionStorage.getItem("email");
-      const userBirthday = sessionStorage.getItem("userBirthday");
-      const learningStartDate = sessionStorage.getItem("learningStartDate");
-      const programingLanguage = sessionStorage.getItem("programingLanguage");
-      const programingFramework = sessionStorage.getItem("programingFramework");
-      const skill = sessionStorage.getItem("skill");
-      const bio = sessionStorage.getItem("bio");
-      const github = sessionStorage.getItem("github");
-      const twitter = sessionStorage.getItem("twitter");
-      if (userName) {
-        state.userName = userName;
+    const fetchSkill = async () => {
+      try {
+        const res = await $fetch<FetchLanguages>(
+          `${API_URL}/programing_languages`
+        );
+        skills.languages = res.data.response;
+      } catch (error) {
+        catchError(error);
       }
-      if (lastName) {
-        state.lastName = lastName;
+      try {
+        const res = await $fetch<FetchFrameworks>(
+          `${API_URL}/programing_frameworks`
+        );
+        skills.framworks = res.data.response;
+      } catch (error) {
+        catchError(error);
       }
-      if (firstName) {
-        state.firstName = firstName;
+      try {
+        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
+        skills.skills = res.data.response;
+      } catch (error) {
+        catchError(error);
       }
-      if (password) {
-        state.password = password;
+    };
+
+    const strageGet: () => void = () => {
+      state.userName = sessionStorage.getItem("userName")!;
+      state.lastName = sessionStorage.getItem("lastName")!;
+      state.firstName = sessionStorage.getItem("firstName")!;
+      state.password = sessionStorage.getItem("password")!;
+      state.email = sessionStorage.getItem("email")!;
+      state.userBirthday = sessionStorage.getItem("userBirthday")!;
+      state.learningStartDate = sessionStorage.getItem("learningStartDate")!;
+      const programingLanguage: string = sessionStorage.getItem(
+        "programingLanguage"
+      )!;
+      const programingFramework: string = sessionStorage.getItem(
+        "programingFramework"
+      )!;
+      const skill: string = sessionStorage.getItem("skill")!;
+      state.bio = sessionStorage.getItem("bio");
+      state.github = sessionStorage.getItem("github");
+      state.twitter = sessionStorage.getItem("twitter");
+
+      state.selectedLang = JSON.parse(programingLanguage);
+      for (const selectLang of state.selectedLang) {
+        const foundLang: Language = skills.languages.find(
+          (e: Language) => e.id === selectLang.id
+        )!;
+        skills.displayLanguages.push(foundLang);
       }
-      if (email) {
-        state.email = email;
+      state.selectedFramwork = JSON.parse(programingFramework);
+      for (const selectFrame of state.selectedFramwork) {
+        const foundFrame: Framework = skills.framworks.find(
+          (e: Framework) => e.id === selectFrame.id
+        )!;
+        skills.displayFramworks.push(foundFrame);
       }
-      if (userBirthday) {
-        state.userBirthday = userBirthday;
-      }
-      if (learningStartDate) {
-        state.learningStartDate = learningStartDate;
-      }
-      if (programingLanguage) {
-        state.selectedLang = JSON.parse(programingLanguage);
-      }
-      if (programingFramework) {
-        state.selectedFramwork = JSON.parse(programingFramework);
-      }
-      if (skill) {
-        state.selectedSkill = JSON.parse(skill);
-      }
-      if (bio) {
-        state.bio = bio;
-      }
-      if (github) {
-        state.github = github;
-      }
-      if (twitter) {
-        state.twitter = twitter;
+      state.selectedSkill = JSON.parse(skill);
+      for (const selectSkill of state.selectedSkill) {
+        const foundSkill: Skill = skills.skills.find(
+          (e: Skill) => e.id === selectSkill.id
+        )!;
+        skills.displaySkills.push(foundSkill);
       }
     };
 
     onMounted(async () => {
+      await fetchSkill();
       await strageGet();
     });
 
@@ -149,28 +174,24 @@ export default defineComponent({
     const isOpenPassword = computed(() => {
       return state.passwordModal ? true : false;
     });
-
     const openPassword = () => {
       state.passwordModal = true;
     };
     const closePassword = () => {
       state.passwordModal = false;
     };
-
     const backStep = () => {
       return router.push({ name: "RegisterStepSkill" });
     };
-
     const registerConfirm = () => {
       state.confirmModal = true;
     };
-
     const closeConfirm = () => {
       state.confirmModal = false;
     };
+
     // TODO: 登録周りパラメーター確認 エラー処理
     const register = async () => {
-      console.log("register");
       // * date型に変換のための data用意
       function toDate<T, U>(str: T | any, delim: U): Date {
         const arr = str.split(delim);
@@ -182,22 +203,8 @@ export default defineComponent({
       // //* 生年月日
       const birthdayString: string = state.userBirthday;
       const birthdayDate: Date = toDate(birthdayString, "-");
-      // * 言語を {id: Number}に変換
-      const languageArray: {}[] = [];
-      for (const selectedLang of state.selectedLang) {
-        languageArray.push({ id: selectedLang });
-      }
-      // * フレームワークを{id: Number}に変換
-      const framworksArray: {}[] = [];
-      for (const selectedFramwork of state.selectedFramwork) {
-        framworksArray.push({ id: selectedFramwork });
-      }
-      // * その他スキルを {id: Number}に変換
-      const skillArray: {}[] = [];
-      for (const selectedSkill of state.selectedSkill) {
-        skillArray.push({ id: selectedSkill });
-      }
-      const params: RegisterCompleteParams = {
+
+      const params: Required<RegisterCompleteParams> = {
         user_name: state.userName,
         last_name: state.lastName,
         first_name: state.firstName,
@@ -205,9 +212,9 @@ export default defineComponent({
         email: state.email,
         learning_start_date: learningStartDate,
         birthday: birthdayDate,
-        programing_language_ids: languageArray,
-        programing_framework_ids: framworksArray,
-        skill_ids: skillArray,
+        programing_language_ids: state.selectedLang,
+        programing_framework_ids: state.selectedFramwork,
+        skill_ids: state.selectedSkill,
         bio: state.bio,
         github_account: state.github,
         twitter_account: state.twitter,
@@ -215,27 +222,11 @@ export default defineComponent({
       console.log(JSON.stringify(params), "res");
       try {
         await $post<RegisterCompleteParams>(`${API_URL}/sign_up`, params);
-        await removeSessionStrage();
+        await sessionStorage.clear();
         state.compliteOk = true;
       } catch (error) {
         catchError(error);
       }
-    };
-
-    const removeSessionStrage = () => {
-      sessionStorage.removeItem("userName");
-      sessionStorage.removeItem("lastName");
-      sessionStorage.removeItem("firstName");
-      sessionStorage.removeItem("password");
-      sessionStorage.removeItem("email");
-      sessionStorage.removeItem("userBirthday");
-      sessionStorage.removeItem("learningStartDate");
-      sessionStorage.removeItem("programingLanguage");
-      sessionStorage.removeItem("programingFramework");
-      sessionStorage.removeItem("skill");
-      sessionStorage.removeItem("bio");
-      sessionStorage.removeItem("github");
-      sessionStorage.removeItem("twitter");
     };
 
     const redirectProfile = () => {
@@ -243,6 +234,7 @@ export default defineComponent({
     };
     return {
       ...toRefs(state),
+      ...toRefs(skills),
       day,
       backStep,
       isForm,
@@ -317,15 +309,39 @@ export default defineComponent({
           </div>
           <div class="input-area">
             <label for="name" class="label">開発言語</label>
-            <p>{{ selectedLang }}</p>
+            <p>
+              <span
+                class="langage"
+                v-for="lang in displayLanguages"
+                :key="lang.id"
+              >
+                {{ lang.name }}
+              </span>
+            </p>
           </div>
           <div class="input-area">
             <label for="name" class="label">フレームワーク</label>
-            <p>{{ selectedFramwork }}</p>
+            <p>
+              <span
+                class="framework"
+                v-for="frame in displayFramworks"
+                :key="frame.id"
+              >
+                {{ frame.name }}
+              </span>
+            </p>
           </div>
           <div class="input-area">
             <label for="name" class="label">その他スキル</label>
-            <p>{{ selectedSkill }}</p>
+            <p>
+              <span
+                class="skill"
+                v-for="skill in displaySkills"
+                :key="skill.id"
+              >
+                {{ skill.name }}
+              </span>
+            </p>
           </div>
           <div class="input-area pre-wrap">
             <label for="name" class="label">自己紹介</label>
@@ -373,6 +389,44 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
+
+.langage {
+  @include border_language;
+  color: $language-color;
+  text-decoration: none;
+  margin: 5px 0px 0px 5px;
+  text-align: left;
+  display: inline-block;
+  font-size: 12px;
+  padding: 4px 1.2rem;
+  border-radius: 5px / 5px;
+  font-weight: bold;
+  pointer-events: none;
+}
+.framework {
+  @include border_framework;
+  margin: 5px 0px 0 5px;
+  text-align: left;
+  display: inline-block;
+  color: $framework-color;
+  font-size: 12px;
+  padding: 7px 1.2rem;
+  border-radius: 5px / 5px;
+  font-weight: bold;
+  pointer-events: none;
+}
+.skill {
+  @include border-skill;
+  color: $skill-color;
+  margin: 5px 0px 0 5px;
+  text-align: left;
+  display: inline-block;
+  font-size: 12px;
+  padding: 7px 1.2rem;
+  border-radius: 5px / 5px;
+  font-weight: bold;
+  pointer-events: none;
+}
 
 .wrapper {
   width: 550px;

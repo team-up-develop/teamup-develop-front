@@ -72,19 +72,14 @@ export default defineComponent({
           devStartDate: state.devStartDate,
           devEndDate: state.devEndDate,
         };
-        if (params.jobTitle) {
-          sessionStorage.setItem("jobTitle", params.jobTitle);
-        }
+        sessionStorage.setItem("jobTitle", params.jobTitle);
+        sessionStorage.setItem("devStartDate", params.devStartDate);
+        sessionStorage.setItem("devEndDate", params.devEndDate);
         if (params.jobDescription) {
           sessionStorage.setItem("jobDescription", params.jobDescription);
         }
-        if (params.devStartDate) {
-          sessionStorage.setItem("devStartDate", params.devStartDate);
-        }
-        if (params.devEndDate) {
-          sessionStorage.setItem("devEndDate", params.devEndDate);
-        }
       }
+      return;
     };
 
     return {
