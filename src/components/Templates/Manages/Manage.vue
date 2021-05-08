@@ -61,7 +61,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           </v-row>
           <v-col>
             <router-link
-              :to="`/manage/applicant/${job.id}`"
+              :to="`/manage/${job.id}/applicant`"
               v-for="job in jobs"
               :key="job.id"
               class="jobs"

@@ -49,42 +49,42 @@ export default defineComponent({
           <v-row class="manage__header">
             <router-link
               v-if="activeCss === 1"
-              :to="`/manage/applicant/${jobId}`"
+              :to="`/manage/${jobId}/applicant`"
               class="router-link-active-click"
             >
               <span>応募者</span>
             </router-link>
             <router-link
               v-else
-              :to="`/manage/applicant/${jobId}`"
+              :to="`/manage/${jobId}/applicant`"
               class="router-link"
             >
               <span>応募者</span>
             </router-link>
             <router-link
               v-if="activeCss === 2"
-              :to="`/manage/participate/${jobId}`"
+              :to="`/manage/${jobId}/participate`"
               class="router-link-active-click"
             >
               <span>参加者</span>
             </router-link>
             <router-link
               v-else
-              :to="`/manage/participate/${jobId}`"
+              :to="`/manage/${jobId}/participate`"
               class="router-link"
             >
               <span>参加者</span>
             </router-link>
             <router-link
               v-if="activeCss === 3"
-              :to="`/manage/reject/${jobId}`"
+              :to="`/manage/${jobId}/reject`"
               class="router-link-active-click"
             >
               <span>拒否者</span>
             </router-link>
             <router-link
               v-else
-              :to="`/manage/reject/${jobId}`"
+              :to="`/manage/${jobId}/reject`"
               class="router-link"
             >
               <span>拒否者</span>
@@ -92,7 +92,7 @@ export default defineComponent({
           </v-row>
           <v-col>
             <router-link
-              :to="`/manage/profile/${jobId}/${user.user_id}/${user.id}`"
+              :to="`/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`"
               v-for="user in users"
               :key="user.id"
               class="users"

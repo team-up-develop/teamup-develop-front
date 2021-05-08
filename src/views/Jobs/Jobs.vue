@@ -488,7 +488,7 @@ export default defineComponent({
         別のキーワードで検索してください。
       </div>
       <router-link
-        :to="`/jobs/${job.id}`"
+        :to="`/jobs/${job.id}/detail`"
         class="router-1"
         v-for="job in displayJobs"
         :key="job.index"
@@ -521,7 +521,7 @@ export default defineComponent({
               </div>
               <template v-else>
                 <div class="top-job-detail-bottom">
-                  <router-link :to="`/manage/applicant/${jobDetail.id}`">
+                  <router-link :to="`/manage/${jobDetail.id}/applicant`">
                     <button class="btn-box-manage">管理画面</button>
                   </router-link>
                   <div class="label-area mt-5">
@@ -552,7 +552,7 @@ export default defineComponent({
             <div class="tag-area">
               投稿者
             </div>
-            <router-link :to="`/account/profile/${jobDetail.user_id}`">
+            <router-link :to="`/account/profile/${jobDetail.user_id}/detail`">
               <div class="post-user-name-area">
                 {{ limit(jobDetail.user.user_name, 55) }}
               </div>

@@ -77,7 +77,7 @@ export default defineComponent({
       {
         text: "応募者一覧",
         disabled: false,
-        href: `/manage/applicant/${props.jobId}`,
+        href: `/manage/${props.jobId}/applicant`,
       },
       {
         text: "ユーザー詳細",
@@ -155,7 +155,7 @@ export default defineComponent({
       <div v-show="currentTab === 1">
         <v-row class="jobs">
           <router-link
-            :to="`/jobs/${jobs.id}`"
+            :to="`/jobs/${jobs.id}/detail`"
             v-for="jobs in profileJobs"
             :key="jobs.id"
             class="jobs__card"

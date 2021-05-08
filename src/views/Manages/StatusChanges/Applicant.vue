@@ -49,7 +49,7 @@ export default defineComponent({
       {
         text: "応募者一覧",
         disabled: true,
-        href: `/manage/applicant/${props.id}`,
+        href: `/manage/${props.id}/applicant`,
       },
     ]);
 

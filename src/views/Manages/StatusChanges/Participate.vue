@@ -49,7 +49,7 @@ export default defineComponent({
       {
         text: "参加者一覧",
         disabled: true,
-        href: `/manage/participate/${props.id}`,
+        href: `/manage/${props.id}/participate`,
       },
     ]);
 

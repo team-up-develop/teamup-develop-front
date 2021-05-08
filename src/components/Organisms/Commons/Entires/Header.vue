@@ -56,7 +56,7 @@ export default defineComponent({
                 <v-list style="z-index: 100;">
                   <v-list-item>
                     <router-link
-                      :to="`/account/profile/${userId}`"
+                      :to="`/account/profile/${userId}/detail`"
                       class="menu-list"
                     >
                       <v-list-item-title>

@@ -62,7 +62,7 @@ export default defineComponent({
           {{ limit(jobTitle, 60) }}
         </v-row>
         <v-row class="card__center">
-          <router-link :to="`/jobs/${jobId}`">
+          <router-link :to="`/jobs/${jobId}/detail`">
             <button class="detail-btn">詳細をみる</button>
           </router-link>
           <v-row class="data-area">
