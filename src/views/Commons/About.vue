@@ -582,7 +582,7 @@ export default Vue.extend({
         .top-title {
           margin: 0rem auto;
           text-align: center;
-          width: 80%;
+          width: 90%;
           height: 40%;
 
           &__upper {

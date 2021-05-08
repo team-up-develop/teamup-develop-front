@@ -33,7 +33,7 @@ export default Vue.extend({
   <section>
     <!-- 案件カード デスクトップ -->
     <router-link
-      :to="`/jobs/${newJob.id}`"
+      :to="`/jobs/${newJob.id}/detail`"
       class="job-card-desktop"
       v-for="newJob in newJobsDesktop"
       :key="newJob.id"
@@ -87,7 +87,7 @@ export default Vue.extend({
     <v-row :align="align" no-gutters style="height: 150px;">
       <!-- 通常時案件カード -->
       <v-card
-        :to="`/jobs/${newJob.id}`"
+        :to="`/jobs/${newJob.id}/detail`"
         class="job-card"
         v-for="newJob in newJobs"
         :key="newJob.id"

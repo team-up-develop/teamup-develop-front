@@ -7,7 +7,7 @@ import {
   computed,
   PropType,
 } from "@vue/composition-api";
-import { API_URL, catchError, $fetch } from "@/master";
+import { API_URL, catchError, fetchError, $fetch } from "@/master";
 import Vuex from "@/store/index";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
@@ -81,6 +81,7 @@ export default defineComponent({
       // * ユーザー情報取得
       try {
         const res = await $fetch<FetchUser>(`${API_URL}/user/${props.id}`);
+        fetchError(res.data.status);
         state.userInfo = res.data.response;
       } catch (error) {
         catchError(error);
@@ -177,7 +178,7 @@ export default defineComponent({
         <div v-show="currentTab === 1">
           <v-row class="jobs">
             <router-link
-              :to="`/jobs/${jobs.id}`"
+              :to="`/jobs/${jobs.id}/detail`"
               v-for="jobs in profileJobs"
               :key="jobs.id"
               class="jobs__card"

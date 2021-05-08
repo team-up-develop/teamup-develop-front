@@ -27,14 +27,32 @@ import ApplyJobDetail from "@/views/Manages/Applications/ApplyJobDetail.vue";
 import Chat from "@/views/Chats/Chat.vue";
 import ChatDetail from "@/views/Chats/ChatDetail.vue";
 import NotFound from "@/views/Commons/Errors/404.vue";
+import ServerError from "@/views/Commons/Errors/500.vue";
+import BadRequest from "@/views/Commons/Errors/400.vue";
+import Unauthorized from "@/views/Commons/Errors/401.vue";
 Vue.use(VueRouter);
 
 const routes: Array<RouteConfig> = [
   // * 共通
   {
     path: "*",
-    name: "notFound",
+    name: "NotFound",
     component: NotFound,
+  },
+  {
+    path: "error",
+    name: "ServerError",
+    component: ServerError,
+  },
+  {
+    path: "error",
+    name: "BadRequest",
+    component: BadRequest,
+  },
+  {
+    path: "error",
+    name: "Unauthorized",
+    component: Unauthorized,
   },
   {
     path: "/",
@@ -53,7 +71,7 @@ const routes: Array<RouteConfig> = [
     component: Jobs,
   },
   {
-    path: "/jobs/:id",
+    path: "/jobs/:id/detail",
     component: JobDetail,
     props: (route) => ({
       id: Number(route.params.id),
@@ -77,7 +95,7 @@ const routes: Array<RouteConfig> = [
   },
   // * ユーザー
   {
-    path: "/account/profile/:id/",
+    path: "/account/profile/:id/detail",
     component: ProfileUser,
     props: (route) => ({
       id: Number(route.params.id),
@@ -85,7 +103,7 @@ const routes: Array<RouteConfig> = [
   },
   // * 管理案件 ユーザー
   {
-    path: "/manage/profile/:jobId/:id/:applyId",
+    path: "/manage/profile/:jobId/:id/:applyId/detail",
     component: ManageUserProfile,
     props: (route) => ({
       id: Number(route.params.id),
@@ -138,21 +156,21 @@ const routes: Array<RouteConfig> = [
   },
   // ? 案件管理詳細
   {
-    path: "/manage/applicant/:id",
+    path: "/manage/:id/applicant",
     component: Applicant,
     props: (route) => ({
       id: Number(route.params.id),
     }),
   },
   {
-    path: "/manage/participate/:id",
+    path: "/manage/:id/participate",
     component: Participate,
     props: (route) => ({
       id: Number(route.params.id),
     }),
   },
   {
-    path: "/manage/reject/:id",
+    path: "/manage/:id/reject",
     component: Reject,
     props: (route) => ({
       id: Number(route.params.id),
@@ -165,7 +183,7 @@ const routes: Array<RouteConfig> = [
     name: "ManageFavorite",
   },
   {
-    path: "/manage/favorite_job/:id/",
+    path: "/manage/favorite_job/:id/detail",
     component: FavoriteJobDetail,
     props: (route) => ({
       id: Number(route.params.id),
@@ -178,7 +196,7 @@ const routes: Array<RouteConfig> = [
     name: "ManageApply",
   },
   {
-    path: "/manage/apply_job/:id/",
+    path: "/manage/apply_job/:id/detail",
     component: ApplyJobDetail,
     props: (route) => ({
       id: Number(route.params.id),

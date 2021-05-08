@@ -145,7 +145,7 @@ export default defineComponent({
         </div>
         <div class="chat-card__right">
           <div class="main" ref="target" v-show="!loading">
-            <router-link :to="`/jobs/${clickJobId}`" class="router">
+            <router-link :to="`/jobs/${clickJobId}/detail`" class="router">
               <header class="header">{{ limit(jobTitle, 60) }}</header>
             </router-link>
             <section class="room" ref="root">

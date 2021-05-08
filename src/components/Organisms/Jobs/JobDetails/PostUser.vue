@@ -28,7 +28,7 @@ export default defineComponent({
         <div class="user-profile-area">
           <div class="user-name-are">
             <div class="user-name-tag">名前</div>
-            <router-link :to="`/account/profile/${job.user_id}`">
+            <router-link :to="`/account/profile/${job.user_id}/detail`">
               <div class="user-name">
                 {{ limit(job.user.user_name, 27) }}
               </div>

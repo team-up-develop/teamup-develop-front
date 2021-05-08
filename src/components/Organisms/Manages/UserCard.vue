@@ -47,7 +47,7 @@ export default defineComponent({
           <div class="user-name">{{ userName }}</div>
         </v-row>
         <v-row class="card__center">
-          <router-link :to="`/account/profile/${userId}`" class="">
+          <router-link :to="`/account/profile/${userId}/detail`" class="">
             <button class="btn">詳細をみる</button>
           </router-link>
           <v-row class="data-area">

@@ -15,9 +15,9 @@ export default defineComponent({
 <template>
   <div>
     <Error
-      :errorNumber="404"
-      title="ページが存在しません"
-      describe="URLをご確認ください。"
+      :errorNumber="401"
+      title="認証に失敗しました"
+      describe="再度ログインをお試しください"
     />
   </div>
 </template>

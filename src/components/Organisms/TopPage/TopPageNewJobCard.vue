@@ -53,7 +53,7 @@ export default defineComponent({
   <section>
     <v-row>
       <router-link
-        :to="`/jobs/${newJob.id}`"
+        :to="`/jobs/${newJob.id}/detail`"
         class="card"
         v-for="newJob in newJobs"
         :key="newJob.id"

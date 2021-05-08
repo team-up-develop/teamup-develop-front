@@ -37,7 +37,7 @@ export default defineComponent({
     Breadcrumbs,
   },
   props: {
-    id: { type: Number, default: 0 },
+    id: { type: Number, default: 0, required: true },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
