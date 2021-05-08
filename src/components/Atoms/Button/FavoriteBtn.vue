@@ -49,7 +49,6 @@ export default Vue.extend({
         await $post<FavoriteParams>(`${API_URL}/favorite_job`, params);
         this.flag = false;
       } catch (error) {
-        console.log("sadcasmcmk");
         catchError(error);
       }
     },
