@@ -4,7 +4,7 @@ import { User } from "@/types/index";
 
 export default defineComponent({
   props: {
-    user: { type: Object as PropType<User>, require: true, defalut: {} },
+    user: { type: Object as PropType<User>, required: true, defalut: {} },
   },
 });
 </script>

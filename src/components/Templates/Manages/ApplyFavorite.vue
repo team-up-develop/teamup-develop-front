@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
 import {
   InsidePropsType,
   OutsidePropsType,
@@ -7,19 +7,19 @@ import {
 } from "@icare-jp/vue-props-type";
 import { UserCard, JobsCard } from "@/components/Organisms/Manages";
 import { FavoriteJob } from "@/types/index";
+import { useUtils } from "@/hooks";
 
 const propsOption = {
-  activeCss: { type: Number as PropType<2 | 3>, defalut: 2, require: true }, //? 2:応募案件 3: 保存案件
-  userId: { type: Number as PropType<number>, defalut: 0, require: true },
+  activeCss: { type: Number as PropType<2 | 3>, defalut: 2, required: true }, //? 2:応募案件 3: 保存案件
   jobs: {
     type: Array as PropType<FavoriteJob[]>,
     defalut: [],
-    require: true,
+    required: true,
   },
   routingParams: {
     type: String as PropType<"favorite_job" | "apply_job">,
     defalut: "",
-    require: true,
+    required: true,
   },
 } as const;
 
@@ -32,10 +32,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     JobsCard,
   },
   props: propsOption,
-  setup: (props) => {
-    const isLogin = computed(() => {
-      return props.userId ? true : false;
-    });
+  setup: () => {
+    const { isLogin } = useUtils();
 
     return {
       isLogin,

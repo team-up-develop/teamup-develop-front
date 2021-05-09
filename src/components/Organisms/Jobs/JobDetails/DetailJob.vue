@@ -5,7 +5,7 @@ import { Job } from "@/types";
 
 export default defineComponent({
   props: {
-    job: { type: Object as PropType<Job>, require: true },
+    job: { type: Object as PropType<Job>, required: true },
   },
   setup: () => {
     const day = (value: string, format: string) => dayJs(value, format);

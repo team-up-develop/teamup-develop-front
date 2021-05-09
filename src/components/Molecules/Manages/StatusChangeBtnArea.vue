@@ -6,14 +6,14 @@ import ApplyPutBtn from "@/components/Atoms/Button/ApplyPutBtn.vue";
 import RejectBtn from "@/components/Atoms/Button/RejectBtn.vue";
 
 const propsOption = {
-  id: { type: Number as PropType<number>, default: 0, require: true }, //? 詳細を見るユーザーのID
-  jobId: { type: Number as PropType<number>, default: 0, require: true },
+  id: { type: Number as PropType<number>, default: 0, required: true }, //? 詳細を見るユーザーのID
+  jobId: { type: Number as PropType<number>, default: 0, required: true },
   updatedAt: {
     type: String as PropType<string>,
     defalut: new Date(),
-    require: true,
+    required: true,
   },
-  applyId: { type: Number as PropType<number>, default: 0, require: true },
+  applyId: { type: Number as PropType<number>, default: 0, required: true },
 } as const;
 
 type PropsOption = typeof propsOption;

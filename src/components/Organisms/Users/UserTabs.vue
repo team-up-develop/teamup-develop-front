@@ -22,9 +22,13 @@ export default defineComponent({
     myselfFlag: {
       type: Boolean as PropType<boolean>,
       default: false,
-      require: true,
+      required: true,
     },
-    currentTab: { type: Number as PropType<number>, default: 0, require: true },
+    currentTab: {
+      type: Number as PropType<number>,
+      default: 0,
+      required: true,
+    },
   },
   setup: (_, contex) => {
     const state = reactive<State>(initialState());

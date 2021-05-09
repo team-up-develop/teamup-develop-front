@@ -9,7 +9,7 @@ import { dayJs, truncate } from "@/master";
 import { ManageJob } from "@/types/index";
 
 const propsOption = {
-  job: { type: Object as PropType<ManageJob>, require: true },
+  job: { type: Object as PropType<ManageJob>, required: true },
 } as const;
 
 type PropsOption = typeof propsOption;

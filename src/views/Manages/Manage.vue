@@ -56,7 +56,7 @@ export default defineComponent({
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <!-- <ApplyFavorite :userId="userId" :jobs="manageJobs" /> -->
-    <Manage :userId="userId" :jobs="manageJobs" :activeCss="1" />
+    <Manage :jobs="manageJobs" :activeCss="1" />
   </section>
 </template>
 

@@ -4,7 +4,7 @@ import { defineComponent, PropType } from "@vue/composition-api";
 
 export default defineComponent({
   props: {
-    job: { type: Object as PropType<Job>, require: true, defalut: {} },
+    job: { type: Object as PropType<Job>, required: true, defalut: {} },
   },
 });
 </script>

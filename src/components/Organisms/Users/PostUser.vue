@@ -9,10 +9,10 @@ import { dayJs } from "@/master";
 import { User } from "@/types/index";
 
 const propsOption = {
-  user: { type: Object as PropType<User>, require: true },
+  user: { type: Object as PropType<User>, required: true },
   myselfFlag: {
     type: Boolean as PropType<boolean>,
-    require: true,
+    required: true,
     defalut: false,
   },
 } as const;

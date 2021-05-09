@@ -27,7 +27,7 @@ import {
 const propsOption = {
   userInfo: {
     type: Object as PropType<User | any>, //TODO: any
-    require: true,
+    required: true,
     default: {},
   },
 } as const;

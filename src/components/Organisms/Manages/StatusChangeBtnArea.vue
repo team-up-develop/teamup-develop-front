@@ -15,9 +15,9 @@ import { $fetch, m, API_URL, catchError } from "@/master";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
 
 const propsOption = {
-  id: { type: Number as PropType<number>, default: 0, require: true }, //? 詳細を見るユーザーのID
-  jobId: { type: Number as PropType<number>, default: 0, require: true },
-  applyId: { type: Number as PropType<number>, default: 0, require: true },
+  id: { type: Number as PropType<number>, default: 0, required: true }, //? 詳細を見るユーザーのID
+  jobId: { type: Number as PropType<number>, default: 0, required: true },
+  applyId: { type: Number as PropType<number>, default: 0, required: true },
 } as const;
 
 type PropsOption = typeof propsOption;

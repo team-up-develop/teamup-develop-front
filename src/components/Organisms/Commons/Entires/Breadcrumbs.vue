@@ -21,7 +21,7 @@ export default defineComponent({
   props: {
     breadCrumbs: {
       type: Array as PropType<Bread[]>,
-      require: true,
+      required: true,
       defalut: breadDefalut,
     },
   },
