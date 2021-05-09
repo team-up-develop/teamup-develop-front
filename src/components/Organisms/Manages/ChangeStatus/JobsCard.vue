@@ -29,7 +29,7 @@ const initialState = (): State => ({
 
 export default defineComponent({
   props: {
-    jobId: { type: Number as PropType<number>, default: 0, require: true },
+    jobId: { type: Number as PropType<number>, default: 0, required: true },
   },
   setup: (props: Props) => {
     const state = reactive<State>(initialState());

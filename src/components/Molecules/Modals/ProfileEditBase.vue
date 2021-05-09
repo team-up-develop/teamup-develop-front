@@ -11,7 +11,7 @@ import { InputArea, DatePickerArea } from "@/components/Molecules/Forms";
 const propsOption = {
   userInfo: {
     type: Object as PropType<User>, //TODO: any
-    require: true,
+    required: true,
     default: {},
   },
 } as const;

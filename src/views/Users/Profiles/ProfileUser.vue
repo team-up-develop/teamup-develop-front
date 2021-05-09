@@ -6,6 +6,7 @@ import {
   onMounted,
   computed,
   PropType,
+  onBeforeMount,
 } from "@vue/composition-api";
 import { API_URL, catchError, fetchError, $fetch } from "@/master";
 import Vuex from "@/store/index";
@@ -57,7 +58,7 @@ export default defineComponent({
     UserBasicInfo,
   },
   props: {
-    id: { type: Number as PropType<number>, default: 0, require: true },
+    id: { type: Number as PropType<number>, default: 0, required: true },
   },
   setup: (props: Props) => {
     const state = reactive<State>(initialState());
@@ -88,9 +89,11 @@ export default defineComponent({
       }
     };
 
-    if (state.userId == props.id) {
-      state.myselfFlag = true;
-    }
+    onBeforeMount(() => {
+      if (state.userId == props.id) {
+        state.myselfFlag = true;
+      }
+    });
 
     onMounted(() => {
       fetchUser();

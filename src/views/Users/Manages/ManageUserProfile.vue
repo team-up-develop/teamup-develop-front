@@ -56,9 +56,9 @@ export default defineComponent({
     UserTabs,
   },
   props: {
-    id: { type: Number as PropType<number>, default: 0, require: true },
-    jobId: { type: Number as PropType<number>, default: 0, require: true },
-    applyId: { type: Number as PropType<number>, default: 0, require: true },
+    id: { type: Number as PropType<number>, default: 0, required: true },
+    jobId: { type: Number as PropType<number>, default: 0, required: true },
+    applyId: { type: Number as PropType<number>, default: 0, required: true },
   },
   setup: (props: Props) => {
     const state = reactive<State>(initialState());

@@ -4,7 +4,7 @@ import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
 import { User } from "@/types/index";
 
 const propsOption = {
-  user: { type: Object as PropType<User>, require: true, defalut: {} },
+  user: { type: Object as PropType<User>, required: true, defalut: {} },
 } as const;
 
 type PropsOption = typeof propsOption;

@@ -7,10 +7,10 @@ export default defineComponent({
   props: {
     options: {
       type: Array as PropType<Language[] | Framework[] | Skill[]>,
-      require: true,
+      required: true,
       defalut: {},
     },
-    color: { type: Number as PropType<1 | 2 | 3>, require: true, defalut: 0 }, //? 1: language 2: Framework 3: Skill
+    color: { type: Number as PropType<1 | 2 | 3>, required: true, defalut: 0 }, //? 1: language 2: Framework 3: Skill
   },
   setup: (_, ctx) => {
     const router = ctx.root.$router;

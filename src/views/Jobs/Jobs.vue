@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch, API_URL, catchError } from "@/master";
 import {
@@ -76,7 +77,7 @@ const initialState = (): State => ({
   buttonActive: false,
   page: 1,
   displayJobs: [],
-  jobsPageSize: 10,
+  jobsPageSize: 5, //FIXME: 開発に応じて仮で置いています。正規 20
   paginationLength: 0,
 });
 
@@ -97,8 +98,6 @@ export default defineComponent({
   setup: (_, ctx) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
-    const day = (value: string, format: string) => dayJs(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
 
     // * 非ログイン時 登録リダイレクト
     const registerRedirect = () => {
@@ -227,6 +226,7 @@ export default defineComponent({
         catchError(error);
       }
     };
+
     // * 検索後の処理
     const searchJobPagenate = (value: Job[]) => {
       state.jobs = value;
@@ -238,9 +238,9 @@ export default defineComponent({
         state.jobsPageSize * state.page
       );
       state.jobsNullFlag = false;
-      closeLangSearchModal();
-      closeFrameworkSearchModal();
-      closeSkillSearchModal();
+      modal(state).closeLangSearchModal();
+      modal(state).closeFrameworkSearchModal();
+      modal(state).closeSkillSearchModal();
       state.loading = true;
       setTimeout(() => {
         if (value.length == 0) {
@@ -252,139 +252,180 @@ export default defineComponent({
         }
       }, 1500);
     };
-    // * ページネーション
-    const pageChange = (pageNumber: number) => {
-      state.loading = true;
-      setTimeout(() => {
-        state.loading = false;
-        state.displayJobs = state.jobs.slice(
-          state.jobsPageSize * (pageNumber - 1),
-          state.jobsPageSize * pageNumber
-        );
-      }, 1000);
-    };
-    // * click して案件を取得 === 詳細
-    const getJob = async (job: Job) => {
-      state.jobDetail = job; //? clickした案件を取得
-      state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
-      state.id = job.id; //? clickしたIdを this.idに格納する
-      state.selfJobPost = false; //? clickする度に 自分の案件では無くする
-      state.applyFlug = true; //? clickする度に 応募済み案件にする
-      // * ログインしていれば以下の処理が走る
-      if (state.userId) {
-        // * 自分の案件かを判定
-        try {
-          const res = await $fetch<FetchJobs>(
-            `${API_URL}/jobs?user_id=${state.userId}`
-          );
-          for (const selfJob of res.data.response) {
-            state.selfJob = selfJob;
-            if (state.selfJob.id === state.id) {
-              state.selfJobPost = true;
-            }
-          }
-        } catch (error) {
-          catchError(error);
-        }
-        // TODO: 処理見直し
-        try {
-          // * 応募済みか応募済みでないかを判断
-          const res = await $fetch<FetchManageJobs>(
-            `${API_URL}/apply_jobs?user_id=${state.userId}`
-          );
-          const arrayApply: number[] = [];
-          for (const applyData of res.data.response) {
-            arrayApply.push(applyData.job.id);
-          }
-          if (arrayApply.includes(state.jobDetail.id)) {
-            state.applyFlug = false;
-          }
-        } catch (error) {
-          catchError(error);
-        }
-        // * 保存済みか保存済みではないかを判定する
-        try {
-          const res = await $fetch<FetchFavoriteJob>(
-            `${API_URL}/favorite_jobs?user_id=${state.userId}`
-          );
-          const array: number[] = [];
-          for (const favoriteData of res.data.response) {
-            array.push(favoriteData.job.id);
-          }
-          if (array.includes(state.jobDetail.id)) {
-            state.saveFlag = false;
-          } else {
-            state.saveFlag = true;
-          }
-        } catch (error) {
-          catchError(error);
-        }
-      }
-      // * 登録 or ログインしてない場合
-      return;
-    };
-
-    // * エントリーが完了したら応募済みにする
-    const compliteEntry = () => {
-      state.applyFlug = false;
-    };
-    // * モーダル
-    const openModal = () => {
-      state.modal = true;
-    };
-    const closeModal = () => {
-      state.modal = false;
-    };
-    const doSend = () => {
-      closeModal();
-    };
-    // *検索 モーダル
-    const langSearchModal = () => {
-      state.langModal = true;
-    };
-    const closeLangSearchModal = () => {
-      state.langModal = false;
-    };
-    const frameworkSearchModal = () => {
-      state.frameworkModal = true;
-    };
-    const closeFrameworkSearchModal = () => {
-      state.frameworkModal = false;
-    };
-    const skillSearchModal = () => {
-      state.skillModal = true;
-    };
-    const closeSkillSearchModal = () => {
-      state.skillModal = false;
-    };
 
     return {
       ...toRefs(state),
       paginateJobs,
       fetchData,
-      day,
-      limit,
-      pageChange,
       registerRedirect,
       compliteSearchLanguage,
       compliteSearchFramework,
       compliteSearchSkill,
       searchFreeword,
-      getJob,
-      compliteEntry,
-      openModal,
-      closeModal,
-      doSend,
-      langSearchModal,
-      closeLangSearchModal,
-      frameworkSearchModal,
-      closeFrameworkSearchModal,
-      skillSearchModal,
-      closeSkillSearchModal,
       skillQueryParameter,
+      ...useUtils(state, ctx),
+      ...modal(state),
+      ...clickJob(state, ctx),
     };
   },
 });
+
+const useUtils = (state: State, ctx: SetupContext) => {
+  const day = (value: string, format: string) => dayJs(value, format);
+  const limit = (value: string, num: number) => truncate(value, num);
+  // * ページネーション
+  const pageChange = (pageNumber: number) => {
+    state.loading = true;
+    setTimeout(() => {
+      state.loading = false;
+      state.displayJobs = state.jobs.slice(
+        state.jobsPageSize * (pageNumber - 1),
+        state.jobsPageSize * pageNumber
+      );
+
+      ctx.root.$router.push({
+        query: { page: String(state.page), job_id: String(state.id) },
+      });
+    }, 1000);
+  };
+  return {
+    day,
+    limit,
+    pageChange,
+  };
+};
+
+const modal = (state: State) => {
+  // * エントリーが完了したら応募済みにする
+  const compliteEntry = () => {
+    state.applyFlug = false;
+  };
+  // * モーダル
+  const openModal = () => {
+    state.modal = true;
+  };
+  const closeModal = () => {
+    state.modal = false;
+  };
+  const doSend = () => {
+    closeModal();
+  };
+  // *検索 モーダル
+  const langSearchModal = () => {
+    state.langModal = true;
+  };
+  const closeLangSearchModal = () => {
+    state.langModal = false;
+  };
+  const frameworkSearchModal = () => {
+    state.frameworkModal = true;
+  };
+  const closeFrameworkSearchModal = () => {
+    state.frameworkModal = false;
+  };
+  const skillSearchModal = () => {
+    state.skillModal = true;
+  };
+  const closeSkillSearchModal = () => {
+    state.skillModal = false;
+  };
+
+  return {
+    compliteEntry,
+    openModal,
+    closeModal,
+    doSend,
+    langSearchModal,
+    closeLangSearchModal,
+    frameworkSearchModal,
+    closeFrameworkSearchModal,
+    skillSearchModal,
+    closeSkillSearchModal,
+  };
+};
+
+const clickJob = (state: State, ctx: SetupContext) => {
+  // * click して案件を取得 === 詳細
+  const getJob = async (job: Job) => {
+    if (state.id === job.id) {
+      return;
+    }
+    state.jobDetail = job; //? clickした案件を取得
+    state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
+    state.id = job.id; //? clickしたIdを this.idに格納する
+    state.selfJobPost = false; //? clickする度に 自分の案件では無くする
+    state.applyFlug = true; //? clickする度に 応募済み案件にする
+
+    ctx.root.$router.push({
+      query: { page: String(state.page), job_id: String(state.id) },
+    });
+
+    // * ログインしていれば以下の処理が走る
+    if (state.userId) {
+      await selfJobCheck();
+      await applyCheck();
+      await favoriteCheck();
+    }
+    // * 登録 or ログインしてない場合
+    return;
+  };
+
+  // * 自分の案件かを判定
+  const selfJobCheck = async () => {
+    try {
+      const res = await $fetch<FetchJobs>(
+        `${API_URL}/jobs?user_id=${state.userId}`
+      );
+      for (const selfJob of res.data.response) {
+        state.selfJob = selfJob;
+        if (state.selfJob.id === state.id) {
+          state.selfJobPost = true;
+        }
+      }
+    } catch (error) {
+      catchError(error);
+    }
+  };
+  // * 応募済みか応募済みでないかを判断
+  const applyCheck = async () => {
+    try {
+      const res = await $fetch<FetchManageJobs>(
+        `${API_URL}/apply_jobs?user_id=${state.userId}`
+      );
+      const arrayApply: number[] = [];
+      for (const applyData of res.data.response) {
+        arrayApply.push(applyData.job.id);
+      }
+      if (arrayApply.includes(state.jobDetail.id)) {
+        state.applyFlug = false;
+      }
+    } catch (error) {
+      catchError(error);
+    }
+  };
+  // * 保存済みか保存済みではないかを判定する
+  const favoriteCheck = async () => {
+    try {
+      const res = await $fetch<FetchFavoriteJob>(
+        `${API_URL}/favorite_jobs?user_id=${state.userId}`
+      );
+      const array: number[] = [];
+      for (const favoriteData of res.data.response) {
+        array.push(favoriteData.job.id);
+      }
+      if (array.includes(state.jobDetail.id)) {
+        state.saveFlag = false;
+      } else {
+        state.saveFlag = true;
+      }
+    } catch (error) {
+      catchError(error);
+    }
+  };
+  return {
+    getJob,
+  };
+};
 </script>
 
 <template>
@@ -633,11 +674,11 @@ export default defineComponent({
             :length="paginationLength"
             circle
             @input="pageChange"
-          ></v-pagination>
+          />
         </div>
       </v-main>
     </div>
-    <Loading v-show="loading"> </Loading>
+    <Loading v-show="loading" />
   </div>
 </template>
 
@@ -730,60 +771,6 @@ export default defineComponent({
   position: relative;
   min-height: 800px;
 
-  // * スクロール
-  .scroll-area {
-    // width: 50px;
-    // height: 50px;
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    background: #2196f3;
-    opacity: 0.6;
-    border-radius: 50%;
-    margin-right: 20px;
-    margin-bottom: 20px;
-    z-index: 100;
-
-    a {
-      position: relative;
-      display: block;
-      width: 50px;
-      height: 50px;
-      text-decoration: none;
-
-      .icon {
-        font-weight: bold;
-        color: #ffffff;
-        margin-top: 0.7rem;
-        font-size: 1.6em;
-      }
-    }
-
-    a::before {
-      font-weight: 900;
-      font-size: 25px;
-      color: #fff;
-      position: absolute;
-      width: 25px;
-      height: 25px;
-      top: -5px;
-      bottom: 0;
-      right: 0;
-      left: 0;
-      margin: auto;
-      text-align: center;
-    }
-  }
-  // * ふわっと表示 右側ボタン
-  .button-enter-active,
-  .button-leave-active {
-    transition: opacity 0.5s;
-  }
-  .button-enter,
-  .button-leave-to {
-    opacity: 0;
-  }
-
   // * 案件中央
   .job-wrapper-center {
     width: 90%;
@@ -810,7 +797,7 @@ export default defineComponent({
   margin-bottom: 0.2rem;
   bottom: 0;
   border-radius: 8px;
-  color: #111111;
+  color: $text-main-color;
   text-align: left;
 
   .top-job-detail-area {
@@ -850,7 +837,6 @@ export default defineComponent({
 
 .btn-box-save {
   display: inline-block;
-  // height: calc(100% - 1rem);
   padding: 0.3rem 0 0 1.2rem;
   position: absolute;
   top: 0;
@@ -872,21 +858,6 @@ export default defineComponent({
     }
   }
 }
-/* スクロールの幅の設定 */
-.job-wrapper-right .main-job-detail-area::-webkit-scrollbar {
-  width: 7px;
-}
-
-/* スクロールの背景の設定 */
-.job-wrapper-right .main-job-detail-area::-webkit-scrollbar-track {
-  border-radius: 5px;
-}
-
-/* スクロールのつまみ部分の設定 */
-.job-wrapper-right .main-job-detail-area::-webkit-scrollbar-thumb {
-  border-radius: 5px;
-  background: $dark-white;
-}
 
 .post-user-area {
   line-height: 1.8;
@@ -896,13 +867,12 @@ export default defineComponent({
 .jobDetail-time-area {
   margin-top: 1rem;
   font-size: 12px;
-  color: #7c7c7c;
+  color: $dark-grey;
   float: right;
 }
 
 .post-user-name-area {
   line-height: 1.8;
-  // font-size: 14px;
   text-decoration: underline;
   cursor: pointer;
   margin-bottom: 0.3rem;
@@ -1085,71 +1055,6 @@ export default defineComponent({
   color: #111111;
 }
 
-// * モーダル
-.modal-content {
-  // background-color: yellow;
-  margin-top: 1rem;
-}
-
-.round-skill {
-  text-align: left;
-  width: 24%;
-  margin-right: 0.3rem;
-  display: inline-block;
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-.round {
-  text-align: left;
-  width: 20%;
-  margin-right: 0.3rem;
-  display: inline-block;
-  position: relative;
-  margin-bottom: 2rem;
-}
-
-input[type="checkbox"] {
-  background-color: $white;
-  border: 1px solid #ccc;
-  border-radius: 80%;
-  cursor: pointer;
-  height: 28px;
-  width: 22px;
-}
-
-label.checkbox {
-  position: absolute;
-  top: 0;
-  margin-top: 0.3rem;
-  color: #111111;
-  margin-left: 0.2rem;
-  font-size: 14px;
-}
-
-.serach-btn {
-  @include box-shadow-btn;
-  @include blue-btn;
-  color: $white;
-  text-align: left;
-  display: block;
-  padding: 1.1rem 4rem;
-  border-radius: 25px;
-  border: none;
-  font-size: 0.875rem;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  font-size: 1rem;
-  float: right;
-  margin-top: 1.5rem;
-  cursor: pointer;
-  transition: 0.3s;
-  outline: none;
-}
-
 .router-1 {
   display: none;
 }
@@ -1221,21 +1126,6 @@ label.checkbox {
 
   .job-wrapper .job-wrapper-center {
     width: 95%;
-  }
-
-  // * モーダル
-  .modal-content {
-    overflow: scroll;
-  }
-
-  .round {
-    width: 100%;
-    margin-bottom: 0.2rem;
-  }
-
-  .round-skill {
-    width: 100%;
-    margin-bottom: 0.2rem;
   }
 }
 

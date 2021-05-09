@@ -83,12 +83,7 @@ export default defineComponent({
 <template>
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
-    <ApplyFavorite
-      :userId="userId"
-      :jobs="applyJob"
-      :activeCss="2"
-      routingParams="apply_job"
-    />
+    <ApplyFavorite :jobs="applyJob" :activeCss="2" routingParams="apply_job" />
   </section>
 </template>
 

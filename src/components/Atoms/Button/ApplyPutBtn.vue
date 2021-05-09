@@ -12,14 +12,14 @@ type Props = {
 
 export default defineComponent({
   props: {
-    id: { type: Number as PropType<number>, default: 0, require: true }, //? 詳細を見るユーザーのID
-    jobId: { type: Number as PropType<number>, default: 0, require: true },
+    id: { type: Number as PropType<number>, default: 0, required: true }, //? 詳細を見るユーザーのID
+    jobId: { type: Number as PropType<number>, default: 0, required: true },
     updatedAt: {
       type: String as PropType<string>,
       defalut: String(new Date()),
-      require: true,
+      required: true,
     },
-    applyId: { type: Number as PropType<number>, default: 0, require: true },
+    applyId: { type: Number as PropType<number>, default: 0, required: true },
   },
   setup: (props: Props, context) => {
     const putApply = async () => {

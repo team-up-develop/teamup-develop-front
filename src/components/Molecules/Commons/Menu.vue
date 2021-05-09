@@ -21,7 +21,7 @@ export default {};
               </v-list-item-title>
             </router-link>
           </v-list-item>
-          <div class="boder-line"></div>
+          <div class="boder-line" />
           <v-list-item>
             <router-link to="/chat" class="menu-list">
               <v-list-item-title>
