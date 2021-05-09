@@ -1,8 +1,14 @@
 <script lang="ts">
-import Vue from "vue";
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted
+} from '@vue/composition-api';
 import { $fetch, API_URL, catchError } from "@/master";
 import { Job, Framework } from "@/types/index";
 import { FetchFrameworks, FetchJobs } from "@/types/fetch";
+import Vuex from "@/store/index";
 
 type State = {
   frameworks: Framework[];
@@ -10,35 +16,40 @@ type State = {
   jobs: Job[];
 };
 
+const initialState = (): State => ({
+  frameworks: [],
+  selectedFramework: Vuex.state.search.framwork,
+  jobs: [],
+});
+
 type SearchParams = {
   framework: number[];
 };
 
-export default Vue.extend({
-  data(): State {
-    return {
-      frameworks: [],
-      selectedFramework: this.$store.state.search.framwork,
-      jobs: [],
+export default defineComponent({
+  setup: (_, context) => {
+    const state = reactive<State>(initialState());
+
+    onMounted(() => {
+      fetchFrameworks();
+    });
+    // * フレームワーク一覧取得
+    const fetchFrameworks = async () => {
+      try {
+        const res = await $fetch<FetchFrameworks>(
+          `${API_URL}/programing_frameworks`
+        );
+        state.frameworks = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
     };
-  },
-  async created() {
-    try {
-      const res = await $fetch<FetchFrameworks>(
-        `${API_URL}/programing_frameworks`
-      );
-      this.frameworks = res.data.response;
-    } catch (error) {
-      catchError(error);
-    }
-  },
-  methods: {
     // * フレームワーク検索
-    async searchFramework() {
+    const searchFramework = async () => {
       const arrayFramework: string[] = [];
       const frameworkState: number[] = [];
       const params: SearchParams = {
-        framework: this.selectedFramework,
+        framework: state.selectedFramework,
       };
       for (const frameworkParams of params.framework) {
         frameworkState.push(frameworkParams);
@@ -50,22 +61,27 @@ export default Vue.extend({
 
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
-        this.jobs = res.data.response;
-        this.$emit("compliteSearchFramework", this.jobs);
+        state.jobs = res.data.response;
+        context.emit("compliteSearchFramework", state.jobs);
         // * フレームワーク 検索語 Vuexに値を格納する
-        this.$store.dispatch("framworkSearch", {
+        Vuex.dispatch("framworkSearch", {
           framwork: frameworkStateEnd,
         });
         // * フレームワークが１つも選択されていない時の処理
         if (params.framework.length == 0) {
-          this.$store.dispatch("framworkSearch", {
+          Vuex.dispatch("framworkSearch", {
             framwork: [],
           });
         }
       } catch (error) {
         catchError(error);
       }
-    },
+    };
+    
+    return {
+      ...toRefs(state),
+      searchFramework
+    };
   },
 });
 </script>
