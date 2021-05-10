@@ -52,7 +52,6 @@ export default defineComponent({
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <ApplyFavorite
-      :userId="userId"
       :jobs="favoriteJobs"
       :activeCss="3"
       routingParams="favorite_job"

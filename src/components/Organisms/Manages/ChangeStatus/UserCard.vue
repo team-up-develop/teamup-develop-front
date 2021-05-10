@@ -9,7 +9,7 @@ import { dayJs, truncate } from "@/master";
 import { User } from "@/types";
 
 const propsOption = {
-  user: { type: Object as PropType<User>, default: null, require: true },
+  user: { type: Object as PropType<User>, default: null, required: true },
 } as const;
 
 type PropsOption = typeof propsOption;

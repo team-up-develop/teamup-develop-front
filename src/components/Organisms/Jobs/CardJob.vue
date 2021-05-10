@@ -11,7 +11,7 @@ export default defineComponent({
     JobStatusNew,
   },
   props: {
-    job: { type: Object as PropType<Job[]>, defalut: null, require: true },
+    job: { type: Object as PropType<Job[]>, defalut: null, required: true },
   },
   setup: () => {
     return {

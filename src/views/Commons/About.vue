@@ -19,6 +19,12 @@ export default Vue.extend({
     }, 1000);
   },
   methods: {
+    register() {
+      this.$router.push("/register/step/1");
+    },
+    login() {
+      this.$router.push("login");
+    },
     createJob() {
       this.$router.push("/job_create/1");
     },
@@ -50,14 +56,14 @@ export default Vue.extend({
             <img
               class="img"
               src="@/assets/images/teamup.jpg"
-              alt="LPイメージ"
+              alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
               width="80%"
               height="230px"
             />
           </div>
           <div class="top-btn" v-if="!userId">
-            <button class="login">ログインする</button>
-            <button class="register">登録する</button>
+            <button class="login" @click="login">ログインする</button>
+            <button class="register" @click="register">登録する</button>
           </div>
           <div class="top-btn" v-else>
             <button class="login" @click="searchJob">案件を探す</button>
@@ -68,7 +74,7 @@ export default Vue.extend({
           <img
             class="img"
             src="@/assets/images/teamup.jpg"
-            alt="LPイメージ"
+            alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
             width="100%"
             height="350px"
           />
@@ -114,9 +120,13 @@ export default Vue.extend({
           </v-card>
         </div>
         <div class="middle-btn-area">
-          <div class="middle-btn">
-            <button class="login">ログインする</button>
-            <button class="register">登録する</button>
+          <div class="middle-btn" v-if="!userId">
+            <button class="login" @click="login">ログインする</button>
+            <button class="register" @click="register">登録する</button>
+          </div>
+          <div class="middle-btn" v-else>
+            <button class="login" @click="searchJob">案件を探す</button>
+            <button class="register" @click="createJob">作成する</button>
           </div>
         </div>
       </div>
@@ -128,7 +138,7 @@ export default Vue.extend({
           <img
             class="img"
             src="@/assets/images/botom-area-logo.jpg"
-            alt="LPイメージ"
+            alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア "
             width="90%"
             height="500px"
           />
@@ -173,7 +183,7 @@ export default Vue.extend({
             <img
               class="img"
               src="@/assets/images/botom-area-logo.jpg"
-              alt="LPイメージ"
+              alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
               width="100%"
               height="700px"
             />
@@ -184,7 +194,7 @@ export default Vue.extend({
         <div class="image_inner"></div>
       </div>
     </div>
-    <Loading v-show="loading"> </Loading>
+    <Loading v-show="loading" />
   </section>
 </template>
 

@@ -9,18 +9,22 @@ import {
 import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
 
 const propsOption = {
-  onFunction: { type: Function as PropType<Function>, require: true },
-  modalText: { type: String as PropType<String>, require: true, default: "" },
-  mainBtnText: { type: String as PropType<String>, require: true, default: "" },
-  subBtnText: { type: String as PropType<String>, require: true, default: "" },
+  onFunction: { type: Function as PropType<Function>, required: true },
+  modalText: { type: String as PropType<String>, required: true, default: "" },
+  mainBtnText: {
+    type: String as PropType<String>,
+    required: true,
+    default: "",
+  },
+  subBtnText: { type: String as PropType<String>, required: true, default: "" },
   confirmModalTitle: {
     type: String as PropType<String>,
-    require: true,
+    required: true,
     default: "",
   },
   compliteModalTitle: {
     type: String as PropType<String>,
-    require: true,
+    required: true,
     default: "",
   },
   compliteOk: { type: Boolean, default: false },

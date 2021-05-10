@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent, computed } from "@vue/composition-api";
+import { defineComponent } from "@vue/composition-api";
 import {
   InsidePropsType,
   OutsidePropsType,
@@ -7,11 +7,11 @@ import {
 } from "@icare-jp/vue-props-type";
 import { UserCard, JobsCard } from "@/components/Organisms/Manages";
 import { ManageJob } from "@/types/index";
+import { useUtils } from "@/hooks";
 
 const propsOption = {
-  activeCss: { type: Number as PropType<1>, defalut: 1, require: true }, //? 管理案件
-  userId: { type: Number as PropType<number>, defalut: 0, require: true },
-  jobs: { type: Array as PropType<ManageJob[]>, defalut: [], require: true },
+  activeCss: { type: Number as PropType<1>, defalut: 1, required: true }, //? 管理案件
+  jobs: { type: Array as PropType<ManageJob[]>, defalut: [], required: true },
 } as const;
 
 type PropsOption = typeof propsOption;
@@ -23,10 +23,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     JobsCard,
   },
   props: propsOption,
-  setup: (props) => {
-    const isLogin = computed(() => {
-      return props.userId ? true : false;
-    });
+  setup: () => {
+    const { isLogin } = useUtils();
 
     return {
       isLogin,

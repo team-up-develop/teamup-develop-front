@@ -1,11 +1,7 @@
 <script lang="ts">
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  computed,
-} from "@vue/composition-api";
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 import Vuex from "@/store/index";
+import { useUtils } from "@/hooks";
 
 type State = {
   userId: number;
@@ -18,10 +14,7 @@ const initialState = (): State => ({
 export default defineComponent({
   setup() {
     const state = reactive<State>(initialState());
-
-    const isLogin = computed(() => {
-      return state.userId ? true : false;
-    });
+    const { isLogin } = useUtils();
 
     return {
       ...toRefs(state),

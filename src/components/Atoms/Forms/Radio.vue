@@ -36,7 +36,7 @@ export default defineComponent({
           :name="name"
           :value="option.value"
           @change="updateValue(option.value)"
-        ></v-radio>
+        />
       </v-row>
     </v-radio-group>
   </v-row>

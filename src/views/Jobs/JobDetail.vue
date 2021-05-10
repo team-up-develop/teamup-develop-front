@@ -5,6 +5,7 @@ import {
   toRefs,
   onMounted,
   computed,
+  onBeforeMount,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
@@ -15,16 +16,22 @@ import {
   SkillJob,
   DetailJob,
 } from "@/components/Organisms/Jobs/JobDetails";
-import useJobs from "@/hooks/useJobs";
+import { useJobs, useUtils } from "@/hooks";
+import { $fetch, API_URL, catchError } from "@/master";
+import { FetchManageJobs } from "@/types/fetch";
 
 type State = {
   userId: number;
   loading: boolean;
+  selfJobPost: boolean;
+  applyFlug: boolean;
 };
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
   loading: true,
+  selfJobPost: false,
+  applyFlug: true,
 });
 
 export default defineComponent({
@@ -41,9 +48,16 @@ export default defineComponent({
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
-    const { fetchJobDetail, job, loading } = useJobs();
-
+    const {
+      fetchJobDetail,
+      job,
+      loading,
+      manageJobs,
+      fetchManageJobs,
+    } = useJobs();
     fetchJobDetail(props.id);
+
+    const { isLogin } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -57,17 +71,56 @@ export default defineComponent({
       },
     ]);
 
-    onMounted(() => {
+    onBeforeMount(() => {
       if (!state.userId) {
         return;
       }
     });
+
+    onMounted(async () => {
+      if (state.userId) {
+        await fetchManageJobs();
+        await getCheckSelfJob();
+        await getCheckStatus();
+      }
+    });
+
+    // * 自分の案件か否かを判定
+    const getCheckSelfJob = () => {
+      for (const selfJob of manageJobs.value) {
+        if (selfJob.id === props.id) {
+          state.selfJobPost = true;
+        }
+      }
+    };
+
+    // * ログインユーザーが応募済みか応募済みではないかを判定する
+    const getCheckStatus = async () => {
+      try {
+        const res = await $fetch<FetchManageJobs>(
+          `${API_URL}/apply_jobs?user_id=${state.userId}`
+        );
+        const arrayApply: number[] = [];
+        for (const applyData of res.data.response) {
+          arrayApply.push(applyData.job.id);
+        }
+        if (arrayApply.includes(props.id)) {
+          state.applyFlug = false;
+        }
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    const applied = () => (state.applyFlug = false);
 
     return {
       ...toRefs(state),
       breadcrumbs,
       job,
       loading,
+      applied,
+      isLogin,
     };
   },
 });
@@ -90,7 +143,14 @@ export default defineComponent({
           <div class="detail-tag">詳細内容</div>
           <DetailJob :job="job" />
         </div>
-        <BtnArea :id="id" :job="job" />
+        <BtnArea
+          :id="id"
+          :job="job"
+          :isLogin="isLogin"
+          :selfjob="selfJobPost"
+          :applyFlug="applyFlug"
+          @applied="applied"
+        />
       </section>
       <Loading v-else />
     </div>

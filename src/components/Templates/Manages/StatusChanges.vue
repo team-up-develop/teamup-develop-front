@@ -19,14 +19,14 @@ export default defineComponent({
     JobsCard,
   },
   props: {
-    jobId: { type: Number as PropType<number>, defalut: 0, require: true },
+    jobId: { type: Number as PropType<number>, defalut: 0, required: true },
     activeCss: {
       type: Number as PropType<1 | 2 | 3>,
       defalut: 1,
-      require: true,
+      required: true,
     }, //? 1: 応募者, 2: 参加者, 3: 拒否者
-    userId: { type: Number as PropType<number>, defalut: 0, require: true },
-    users: { type: Array as PropType<User[]>, defalut: [], require: true },
+    userId: { type: Number as PropType<number>, defalut: 0, required: true },
+    users: { type: Array as PropType<User[]>, defalut: [], required: true },
   },
   setup: (props: Props) => {
     const isLogin = computed(() => {

@@ -17,7 +17,7 @@ export default defineComponent({
     updatedAt: {
       type: String as PropType<string>,
       defalut: String(new Date()),
-      require: true,
+      required: true,
     },
     applyId: { type: Number as PropType<number>, default: 0 },
   },

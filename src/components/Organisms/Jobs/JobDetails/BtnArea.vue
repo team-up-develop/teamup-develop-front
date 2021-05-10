@@ -3,46 +3,51 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
-  computed,
+  // computed,
 } from "@vue/composition-api";
 import {
   InsidePropsType,
   OutsidePropsType,
   PropType,
 } from "@icare-jp/vue-props-type";
-import Vuex from "@/store/index";
-import { $fetch, API_URL, catchError } from "@/master";
-import { FetchManageJobs } from "@/types/fetch";
+import { Job } from "@/types";
 import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
 import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 // import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
-import useJobs from "@/hooks/useJobs";
-import { Job } from "@/types";
 
 const propsOption = {
-  id: { type: Number as PropType<number>, default: 0, require: true },
-  job: { type: Object as PropType<Job>, defalut: {}, require: true },
+  id: { type: Number as PropType<number>, default: 0, required: true },
+  job: { type: Object as PropType<Job>, defalut: {}, required: true },
+  selfjob: {
+    type: Boolean as PropType<boolean>,
+    default: false,
+    required: true,
+  },
+  applyFlug: {
+    type: Boolean as PropType<boolean>,
+    default: false,
+    required: true,
+  },
+  isLogin: {
+    type: Boolean as PropType<boolean>,
+    default: false,
+    required: true,
+  },
 } as const;
 
 type PropsOption = typeof propsOption;
 export type BtnAreaProps = OutsidePropsType<PropsOption>;
 
 type State = {
-  userId: number;
   selfJobPost: boolean;
-  applyFlug: boolean;
   modal: boolean;
   // editModal: boolean;
 };
 
 const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
   selfJobPost: false,
-  applyFlug: true,
   modal: false,
-  // editModal: false,
 });
 
 export default defineComponent<InsidePropsType<PropsOption>>({
@@ -53,70 +58,21 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     // EditJobModal,
   },
   props: propsOption,
-  setup: (props, context) => {
+  setup: (_, ctx) => {
     const state = reactive<State>(initialState());
-    const router = context.root.$router;
-    const { manageJobs, fetchManageJobs } = useJobs();
-
-    const isLogin = computed(() => {
-      return state.userId ? true : false;
-    });
-
-    // * 自分の案件か否かを判定
-    const getCheckSelfJob = async () => {
-      for (const selfJob of manageJobs.value) {
-        if (selfJob.id === props.id) {
-          state.selfJobPost = true;
-        }
-      }
-    };
-
-    // * ログインユーザーが応募済みか応募済みではないかを判定する
-    const getCheckStatus = async () => {
-      try {
-        const res = await $fetch<FetchManageJobs>(
-          `${API_URL}/apply_jobs?user_id=${state.userId}`
-        );
-        const arrayApply: any = [];
-        for (const applyData of res.data.response) {
-          arrayApply.push(applyData.job.id);
-        }
-        if (arrayApply.includes(props.id)) {
-          state.applyFlug = false;
-        }
-      } catch (error) {
-        catchError(error);
-      }
-    };
+    const router = ctx.root.$router;
 
     const openModal = () => (state.modal = true);
     const closeModal = () => (state.modal = false);
     const doSend = () => closeModal();
-    const compliteEntry = () => (state.applyFlug = false);
-    // const openEditModal = () => (state.editModal = true);
-    // const closeEditModal = () => (state.editModal = false);
-
+    const compliteEntry = () => ctx.emit("applied");
     const registerRedirect = () => router.push("/register/step/1");
-
-    onMounted(async () => {
-      if (!state.userId) {
-        return;
-      }
-      await fetchManageJobs();
-      await getCheckSelfJob();
-      await getCheckStatus();
-    });
 
     return {
       ...toRefs(state),
-      isLogin,
-      getCheckSelfJob,
-      getCheckStatus,
       openModal,
       closeModal,
       doSend,
-      // openEditModal,
-      // closeEditModal,
       registerRedirect,
       compliteEntry,
     };
@@ -141,7 +97,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <EditJobModal @close="closeEditModal" v-if="editModal" :job="job" />
     </div> -->
     <div class="button-area" v-if="isLogin">
-      <div class="button-area__action" v-if="!selfJobPost">
+      <div class="button-area__action" v-if="!selfjob">
         <button @click="openModal" class="apply" v-if="applyFlug">
           応募する
         </button>

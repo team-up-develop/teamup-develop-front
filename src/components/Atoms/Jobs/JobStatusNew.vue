@@ -9,7 +9,7 @@ type Props = {
 
 export default defineComponent({
   props: {
-    job: { type: Object as PropType<Job>, defalut: {}, require: true },
+    job: { type: Object as PropType<Job>, defalut: {}, required: true },
   },
   setup: (props: Props) => {
     const isStatusNew = computed(() => {
