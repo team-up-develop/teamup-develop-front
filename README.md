@@ -23,54 +23,37 @@ $ docker-compose exec app sh
 $ npm i
 ```
 
-### runserver
+### runServer
 ```
 $ npm run dev
 ```
 
-## その他コマンド
+## Tips
 ### bundle size 
 
 ```
 $ yarn build --analyze
+$ open dist/report.html 
 ```
-## error が出たとき..
-## cache クリア
+
+<img width="800" alt="スクリーンショット 2021-04-14 20 37 17" src="https://user-images.githubusercontent.com/56709557/114704374-7ed1cf80-9d61-11eb-8902-82385d1d0214.png">
+
+
+### cache クリア
 ```
 $ npm cache verify --force
 ```
 
-### vue cli not found と出た場合
-```
-$ rm -rf node_modules package-lock.json && npm install
-```
-
-## モジュールを削除 再インストール
+### モジュールを削除 再インストール
 ```
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
 
-## Compoent構成
+## Doc
+### Compoent構成
 Atomic Design 導入 
 詳しくは → https://github.com/team-up-develop/teamup-develop-front/issues/86
 
-## 命名規約
-```
-案件: job
-詳細: detail
-管理: manage
-参加: participate
-応募: apply
-拒否: reject
-チャット: chat
-お気に入り いいね: favorite
-```
-
-## style & javaScript ※ここは今後linterにて設定します🙇‍♂️
-- JavaScript キャメルケース推奨
-- インデントは半角スペース2つ分で揃え、タブは混ぜないこと
-- 固有名詞などを除いて大文字は使用を控えること
-- 不要なスペースをコード各所に残さないこと
 - コメントは必要に応じて残すこと
 > https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
 > https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight
@@ -81,15 +64,15 @@ Atomic Design 導入
 // FIXME: 私が修正します
 ```
 
-- メディアのキャプションや alt テキストを設定すること
-- 行の折り返しは適宜行うこと
-- style ケバブケース推奨
-- Bemを使用すること
-- セクションコメントでグループ化すること
-- _variables.scssでの共通化すること
-- PXの多用はしない (% or remを推奨)
-- media screen ごとに分けること
-- ComponentあたりでStyleを適用すること
-
-## color
+### color
 <img width="612" alt="スクリーンショット 2020-12-19 10 59 58" src="https://user-images.githubusercontent.com/56709557/102679879-7673e880-41f6-11eb-8889-27143779a070.png">
+
+### Sass 定義
+https://github.com/team-up-develop/teamup-develop-front/blob/7ec7379dd1886ca19b29d75ed89b1e1cd8482e73/src/assets/scss/_variables.scss#L7
+
+### 型定義
+- index (type of entire)
+- fetch (type of get response)
+- params (type of post & put & delete parameter)
+
+https://github.com/team-up-develop/teamup-develop-front/tree/main/src/types

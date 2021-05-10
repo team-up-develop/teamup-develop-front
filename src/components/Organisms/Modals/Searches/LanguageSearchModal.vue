@@ -1,8 +1,14 @@
 <script lang="ts">
-import Vue from "vue";
+import { 
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted
+} from '@vue/composition-api';
 import { $fetch, API_URL, catchError } from "@/master";
 import { Job, Language } from "@/types/index";
 import { FetchLanguages, FetchJobs } from "@/types/fetch";
+import Vuex from "@/store/index";
 
 type State = {
   languages: Language[];
@@ -14,33 +20,36 @@ type SearchParams = {
   language: number[];
 };
 
-export default Vue.extend({
-  data(): State {
-    return {
-      languages: [],
-      selectedLang: this.$store.state.search.language,
-      jobs: [],
-    };
-  },
-  async created() {
-    try {
-      const res = await $fetch<FetchLanguages>(
-        `${API_URL}/programing_languages`
-      );
-      this.languages = res.data.response;
-    } catch (error) {
-      catchError(error);
-    }
+const initialState = (): State => ({
+  languages: [],
+  selectedLang: Vuex.state.search.language,
+  jobs: [],
+});
 
-    // console.log(this.$route.query.language_id);
-  },
-  methods: {
+export default defineComponent({
+  setup: (_, context) => {
+    const state = reactive<State>(initialState());
+    
+    onMounted(() => {
+      fetchLanguages();
+    });
+    // * 開発言語一覧取得
+    const fetchLanguages = async () => {
+      try {
+        const res = await $fetch<FetchLanguages>(
+          `${API_URL}/programing_languages`
+        );
+        state.languages = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
+    };
     // * 開発言語検索
-    async searchLanguage() {
+    const searchLanguage = async () => {
       const array: string[] = [];
       const languageState: number[] = [];
       const params: SearchParams = {
-        language: this.selectedLang,
+        language: state.selectedLang,
       };
       for (const languageParams of params.language) {
         languageState.push(languageParams);
@@ -51,23 +60,28 @@ export default Vue.extend({
       const result: string = array.join("");
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
-        this.jobs = res.data.response;
-        this.$emit("compliteSearchLanguage", this.jobs);
+        state.jobs = res.data.response;
+        context.emit("compliteSearchLanguage", state.jobs);
 
         // * 言語 検索語 Vuexに値を格納する
-        this.$store.dispatch("languageSearch", {
+        Vuex.dispatch("languageSearch", {
           language: languageStateEnd,
         });
         // * 言語が１つも選択されていない時の処理
         if (params.language.length == 0) {
-          this.$store.dispatch("languageSearch", {
+          Vuex.dispatch("languageSearch", {
             language: [],
           });
         }
       } catch (error) {
         catchError(error);
       }
-    },
+    };
+
+    return {
+      ...toRefs(state),
+      searchLanguage
+    }
   },
 });
 </script>

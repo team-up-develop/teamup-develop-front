@@ -1,8 +1,14 @@
 <script lang="ts">
-import Vue from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  onMounted
+} from '@vue/composition-api';
 import { API_URL, $fetch, catchError } from "@/master";
 import { Job, Skill } from "@/types/index";
 import { FetchSkills, FetchJobs } from "@/types/fetch";
+import Vuex from "@/store/index";
 
 type State = {
   skills: Skill[];
@@ -14,39 +20,34 @@ type SearchParams = {
   skill: number[];
 };
 
-export default Vue.extend({
-  data(): State {
-    return {
-      selectedSkill: this.$store.state.search.skill,
-      skills: [],
-      jobs: [],
+const initialState = (): State => ({
+  skills: [],
+  selectedSkill: Vuex.state.search.skill,
+  jobs: [],
+});
+
+export default defineComponent({
+  setup: (_, context) => {
+    const state = reactive<State>(initialState());
+
+    onMounted(() => {
+      fetchSkills();
+    });
+    // * その他スキル一覧取得
+    const fetchSkills = async () => {
+      try {
+        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
+        state.skills = res.data.response;
+      } catch (error) {
+        catchError(error);
+      }
     };
-  },
-  computed: {
-    // FIXME: 現状は使用していない
-    // isSearch() {
-    //   if(this.selectedSkill.length !== 0) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }
-  },
-  async created() {
-    try {
-      const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
-      this.skills = res.data.response;
-    } catch (error) {
-      catchError(error);
-    }
-  },
-  methods: {
     // * その他スキル 検索
-    searchSkill() {
+    const searchSkill = async () => {
       const arraySkill: string[] = [];
       const skillState: number[] = [];
       const params: SearchParams = {
-        skill: this.selectedSkill,
+        skill: state.selectedSkill,
       };
       for (const skillParams of params.skill) {
         skillState.push(skillParams);
@@ -58,22 +59,37 @@ export default Vue.extend({
       const result: string = arraySkill.join("");
 
       $fetch<FetchJobs>(`${API_URL}/jobs?${result}`).then((res) => {
-        this.jobs = res.data.response;
+        state.jobs = res.data.response;
 
-        this.$emit("compliteSearchSkill", this.jobs);
+        context.emit("compliteSearchSkill", state.jobs);
         // * その他スキル 検索語 Vuexに値を格納する
-        this.$store.dispatch("skillSearch", {
+        Vuex.dispatch("skillSearch", {
           skill: skillStateEnd,
         });
         // * その他スキルが１つも選択されていない時の処理
         if (params.skill.length == 0) {
-          this.$store.dispatch("skillSearch", {
+          Vuex.dispatch("skillSearch", {
             skill: [],
           });
         }
       });
-    },
+    };
+
+    return {
+      ...toRefs(state),
+      searchSkill
+    }
   },
+  // computed: {
+    // FIXME: 現状は使用していない
+    // isSearch() {
+    //   if(this.selectedSkill.length !== 0) {
+    //     return true;
+    //   } else {
+    //     return false;
+    //   }
+    // }
+  // },
 });
 </script>
 
