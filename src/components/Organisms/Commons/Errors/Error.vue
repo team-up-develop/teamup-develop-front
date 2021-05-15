@@ -27,11 +27,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 </script>
 <template>
   <div class="app">
-    <div>{{ errorNumber }}</div>
     <div class="txt">
       <span>{{ title }}<span class="blink">_</span></span
       ><br />
-      <span class="message">{{ describe }}</span>
+      <span class="message">
+        {{ describe }} <br />
+        {{ errorNumber }}
+      </span>
     </div>
   </div>
 </template>
@@ -64,6 +66,9 @@ body {
   text-shadow: 0px 0px $glowSize;
   font-size: 6rem;
   flex-direction: column;
+  .title {
+    font-size: 1rem;
+  }
   .txt {
     font-size: 1.8rem;
   }

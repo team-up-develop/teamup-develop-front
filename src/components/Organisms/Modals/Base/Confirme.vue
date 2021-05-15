@@ -9,21 +9,24 @@ import {
 import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
 
 const propsOption = {
-  onFunction: { type: Function as PropType<Function>, required: true },
-  modalText: { type: String as PropType<String>, required: true, default: "" },
-  mainBtnText: {
-    type: String as PropType<String>,
+  onFunction: { type: Function as PropType<() => void>, required: true },
+  btnTitle: {
+    type: String,
     required: true,
     default: "",
   },
-  subBtnText: { type: String as PropType<String>, required: true, default: "" },
+  btnSubTitle: {
+    type: String,
+    required: true,
+    default: "",
+  },
   confirmModalTitle: {
-    type: String as PropType<String>,
+    type: String,
     required: true,
     default: "",
   },
   compliteModalTitle: {
-    type: String as PropType<String>,
+    type: String,
     required: true,
     default: "",
   },
@@ -48,6 +51,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       props.onFunction?.();
       state.overlay = !state.overlay;
     };
+
     watch(
       () => state.overlay,
       () => {
@@ -92,13 +96,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 class="close-btn font-weight-bold px-8"
                 @click="emitOption"
               >
-                {{ subBtnText }}
+                {{ btnSubTitle }}
               </v-btn>
               <v-btn
                 class="register-btn font-weight-bold px-6 ml-4"
                 @click="onclickFunc"
               >
-                {{ mainBtnText }}
+                {{ btnTitle }}
               </v-btn>
             </div>
           </div>
@@ -170,7 +174,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 .modal-footer {
   width: 80%;
-  // padding: 1rem;
   text-align: right;
   display: inline-block;
 }

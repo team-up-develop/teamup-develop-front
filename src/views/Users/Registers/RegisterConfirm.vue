@@ -183,12 +183,6 @@ export default defineComponent({
     const backStep = () => {
       return router.push({ name: "RegisterStepSkill" });
     };
-    const registerConfirm = () => {
-      state.confirmModal = true;
-    };
-    const closeConfirm = () => {
-      state.confirmModal = false;
-    };
 
     // TODO: 登録周りパラメーター確認 エラー処理
     const register = async () => {
@@ -241,8 +235,6 @@ export default defineComponent({
       openPassword,
       closePassword,
       isOpenPassword,
-      registerConfirm,
-      closeConfirm,
       register,
       redirectProfile,
     };
@@ -257,10 +249,10 @@ export default defineComponent({
       :onFunction="register"
       confirmModalTitle="登録完了しますか？"
       compliteModalTitle="登録完了しました。"
-      mainBtnText="登録する"
-      subBtnText="閉じる"
+      btnTitle="登録する"
+      btnSubTitle="閉じる"
       :compliteOk="compliteOk"
-      @close="closeConfirm"
+      @close="confirmModal = false"
       @complite="redirectProfile"
     />
     <div class="wrapper">
@@ -362,7 +354,7 @@ export default defineComponent({
           </div>
           <div class="bottom">
             <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
-            <v-btn class="next-btn" @click="registerConfirm"
+            <v-btn class="next-btn" @click="() => (confirmModal = true)"
               >登録完了する</v-btn
             >
           </div>
