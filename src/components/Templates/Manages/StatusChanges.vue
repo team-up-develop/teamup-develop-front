@@ -45,7 +45,7 @@ export default defineComponent({
     <v-container class="wrapper" v-if="isLogin">
       <v-row>
         <JobsCard :jobId="jobId" />
-        <v-sheet class="manage">
+        <v-sheet class="manage" elevation="1">
           <v-row class="manage__header">
             <router-link
               v-if="activeCss === 1"

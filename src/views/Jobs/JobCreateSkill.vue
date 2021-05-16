@@ -64,7 +64,7 @@ export default defineComponent({
     <v-container class="wrapper">
       <v-row v-if="isValue">
         <UserCard />
-        <v-sheet class="create">
+        <v-sheet class="create" elevation="1">
           <v-col>
             <JobCreateSkillCard
               :jobTitle="jobTitle"

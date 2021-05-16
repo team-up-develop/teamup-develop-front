@@ -11,7 +11,7 @@ export default defineComponent({
 
 <template>
   <section>
-    <v-sheet class="dev-detail-area">
+    <v-sheet class="dev-detail-area" elevation="1">
       <div class="detail-leff-area">
         <div class="detail-information">
           <div class="tag"></div>
