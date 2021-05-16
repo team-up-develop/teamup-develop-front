@@ -49,7 +49,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <template>
   <div>
-    <v-sheet class="card">
+    <v-sheet class="card" elevation="1">
       <div class="d-flex justify-start">
         <div class="card__area">
           <label for="name" class="font-weight-bold text-left">姓</label>

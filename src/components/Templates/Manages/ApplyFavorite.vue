@@ -47,7 +47,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     <v-container class="wrapper" v-if="isLogin">
       <v-row>
         <UserCard />
-        <v-sheet class="manage">
+        <v-sheet class="manage" elevation="1">
           <v-row class="manage__header">
             <router-link to="/manage" class="router-link">
               <span>管理案件</span>

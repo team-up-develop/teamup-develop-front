@@ -15,7 +15,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <template>
   <section>
-    <v-sheet class="skill-detail-area">
+    <v-sheet class="skill-detail-area" elevation="1">
       <div class="lang-area">
         <label for="name" class="name-tag">開発言語</label>
         <div class="lang-box">

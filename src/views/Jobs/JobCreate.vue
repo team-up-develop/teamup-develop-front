@@ -36,7 +36,7 @@ export default defineComponent({
     <v-container class="wrapper">
       <v-row>
         <UserCard />
-        <v-sheet class="create">
+        <v-sheet class="create" elevation="1">
           <v-col>
             <JobCreateCard />
           </v-col>

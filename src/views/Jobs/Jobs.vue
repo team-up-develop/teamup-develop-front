@@ -97,12 +97,6 @@ export default defineComponent({
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState());
-    const router = ctx.root.$router;
-
-    // * 非ログイン時 登録リダイレクト
-    const registerRedirect = () => {
-      router.push({ name: "RegisterStepBase" });
-    };
 
     const fetchData = async () => {
       // * 投稿一覧取得
@@ -238,9 +232,9 @@ export default defineComponent({
         state.jobsPageSize * state.page
       );
       state.jobsNullFlag = false;
-      modal(state).closeLangSearchModal();
-      modal(state).closeFrameworkSearchModal();
-      modal(state).closeSkillSearchModal();
+      state.langModal = false;
+      state.frameworkModal = false;
+      state.skillModal = false;
       state.loading = true;
       setTimeout(() => {
         if (value.length == 0) {
@@ -257,22 +251,27 @@ export default defineComponent({
       ...toRefs(state),
       paginateJobs,
       fetchData,
-      registerRedirect,
       compliteSearchLanguage,
       compliteSearchFramework,
       compliteSearchSkill,
       searchFreeword,
       skillQueryParameter,
       ...useUtils(state, ctx),
-      ...modal(state),
       ...clickJob(state, ctx),
     };
   },
 });
 
 const useUtils = (state: State, ctx: SetupContext) => {
+  const router = ctx.root.$router;
   const day = (value: string, format: string) => dayJs(value, format);
   const limit = (value: string, num: number) => truncate(value, num);
+
+  // * 非ログイン時 登録リダイレクト
+  const registerRedirect = () => {
+    router.push({ name: "RegisterStepBase" });
+  };
+
   // * ページネーション
   const pageChange = (pageNumber: number) => {
     state.loading = true;
@@ -291,56 +290,8 @@ const useUtils = (state: State, ctx: SetupContext) => {
   return {
     day,
     limit,
+    registerRedirect,
     pageChange,
-  };
-};
-
-const modal = (state: State) => {
-  // * エントリーが完了したら応募済みにする
-  const compliteEntry = () => {
-    state.applyFlug = false;
-  };
-  // * モーダル
-  const openModal = () => {
-    state.modal = true;
-  };
-  const closeModal = () => {
-    state.modal = false;
-  };
-  const doSend = () => {
-    closeModal();
-  };
-  // *検索 モーダル
-  const langSearchModal = () => {
-    state.langModal = true;
-  };
-  const closeLangSearchModal = () => {
-    state.langModal = false;
-  };
-  const frameworkSearchModal = () => {
-    state.frameworkModal = true;
-  };
-  const closeFrameworkSearchModal = () => {
-    state.frameworkModal = false;
-  };
-  const skillSearchModal = () => {
-    state.skillModal = true;
-  };
-  const closeSkillSearchModal = () => {
-    state.skillModal = false;
-  };
-
-  return {
-    compliteEntry,
-    openModal,
-    closeModal,
-    doSend,
-    langSearchModal,
-    closeLangSearchModal,
-    frameworkSearchModal,
-    closeFrameworkSearchModal,
-    skillSearchModal,
-    closeSkillSearchModal,
   };
 };
 
@@ -431,26 +382,28 @@ const clickJob = (state: State, ctx: SetupContext) => {
 <template>
   <div class="job-wrapper">
     <LanguageSearchModal
-      @close="closeLangSearchModal"
+      @close="() => (langModal = false)"
       v-if="langModal"
       @compliteSearchLanguage="compliteSearchLanguage($event)"
     />
     <FrameworkSearchModal
       v-if="frameworkModal"
-      @close="closeFrameworkSearchModal"
+      @close="() => (frameworkModal = false)"
       @compliteSearchFramework="compliteSearchFramework($event)"
     />
     <SkillSearchModal
-      @close="closeSkillSearchModal"
+      @close="() => (skillModal = false)"
       v-if="skillModal"
       @compliteSearchSkill="compliteSearchSkill($event)"
     />
     <div class="modal-window">
-      <ApplyModal @close="closeModal" v-if="modal">
+      <ApplyModal @close="() => (modal = false)" v-if="modal">
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:footer>
-          <Applybtn @compliteEntry="compliteEntry" :jobId="id" />
-          <v-btn @click="doSend" class="modal-btn">キャンセル</v-btn>
+          <Applybtn @compliteEntry="() => (applyFlug = false)" :jobId="id" />
+          <v-btn @click="() => (modal = false)" class="modal-btn"
+            >キャンセル</v-btn
+          >
         </template>
       </ApplyModal>
     </div>
@@ -460,42 +413,42 @@ const clickJob = (state: State, ctx: SetupContext) => {
         <button
           v-if="this.$store.state.search.language.length == 0"
           class="search-area__modal-btn"
-          @click="langSearchModal"
+          @click="() => (langModal = true)"
         >
           開発言語
         </button>
         <button
           v-else
           class="search-area__modal-btn-active"
-          @click="langSearchModal"
+          @click="() => (langModal = true)"
         >
           開発言語
         </button>
         <button
           v-if="this.$store.state.search.framwork.length == 0"
           class="search-area__modal-btn"
-          @click="frameworkSearchModal"
+          @click="() => (frameworkModal = true)"
         >
           フレームワーク
         </button>
         <button
           v-else
           class="search-area__modal-btn-active"
-          @click="frameworkSearchModal"
+          @click="() => (frameworkModal = true)"
         >
           フレームワーク
         </button>
         <button
           v-if="this.$store.state.search.skill.length == 0"
           class="search-area__modal-btn"
-          @click="skillSearchModal"
+          @click="() => (skillModal = true)"
         >
           その他技術
         </button>
         <button
           v-else
           class="search-area__modal-btn-active"
-          @click="skillSearchModal"
+          @click="() => (skillModal = true)"
         >
           その他技術
         </button>
@@ -546,7 +499,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
             <template v-if="!entryRedirect">
               <div class="top-job-detail-bottom" v-if="!selfJobPost">
                 <button
-                  @click="openModal"
+                  @click="() => (modal = true)"
                   class="btn-box-apply"
                   v-if="applyFlug"
                 >
