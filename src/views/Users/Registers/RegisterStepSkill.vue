@@ -54,7 +54,7 @@ export default defineComponent({
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
-    const strageGet = () => {
+    (() => {
       // const programingLanguage = sessionStorage.getItem("programingLanguage");
       // const programingFramework = sessionStorage.getItem("programingFramework");
       // const skill = sessionStorage.getItem("skill");
@@ -65,7 +65,7 @@ export default defineComponent({
       // this.selectedSkill = skill;
       state.github = github;
       state.twitter = twitter;
-    };
+    })();
 
     const fetchSkill = async () => {
       try {
@@ -92,7 +92,6 @@ export default defineComponent({
       }
     };
 
-    strageGet();
     onMounted(() => {
       fetchSkill();
     });

@@ -8,10 +8,13 @@ import Vuex from "@/store/index";
 
 type State = {
   userId: number;
+  token: string | undefined;
 };
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
+  // userId: 1,
+  token: Vuex.state.auth.token,
 });
 
 const useUtils = () => {
@@ -21,9 +24,14 @@ const useUtils = () => {
     return state.userId ? true : false;
   });
 
+  const auth = computed(() => {
+    return { Authorization: `Bearer ${state.token}` };
+  });
+
   return {
     ...toRefs(state),
     isLogin,
+    auth,
   };
 };
 

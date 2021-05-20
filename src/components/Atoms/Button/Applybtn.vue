@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { $post, m, API_URL, catchError } from "@/master";
+import { $post, m, AUTH_URL, catchError } from "@/master";
 import CompliteModal from "@/components/Organisms/Modals/Applications/CompliteModal.vue";
 import { ApplyParams } from "@/types/params";
 
@@ -8,6 +8,7 @@ type State = {
   userId: number;
   compliteModal: boolean;
   applyFlag: boolean;
+  token: string;
 };
 
 export default Vue.extend({
@@ -22,6 +23,7 @@ export default Vue.extend({
       userId: this.$store.state.auth.userId,
       compliteModal: false,
       applyFlag: true,
+      token: this.$store.state.auth.token,
     };
   },
   methods: {
@@ -32,7 +34,11 @@ export default Vue.extend({
         user_id: this.userId,
         apply_status_id: m.APPLY_STATUS_APPLY,
       };
-      $post<ApplyParams>(`${API_URL}/apply_job`, params)
+      $post<ApplyParams>(`${AUTH_URL}/apply_job`, params, {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      })
         .then((res) => {
           this.compliteModal = true;
           this.applyFlag = false;

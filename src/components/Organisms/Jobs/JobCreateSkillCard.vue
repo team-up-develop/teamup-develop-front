@@ -4,7 +4,6 @@ import {
   computed,
   reactive,
   toRefs,
-  onMounted,
 } from "@vue/composition-api";
 import {
   InsidePropsType,
@@ -12,12 +11,13 @@ import {
   PropType,
 } from "@icare-jp/vue-props-type";
 import Vuex from "@/store/index";
-import { $fetch, $post, API_URL, catchError, md } from "@/master";
+import { $fetch, $post, API_URL, AUTH_URL, catchError, md } from "@/master";
 import { SkillSelectArea, RadioArea } from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsSecond } from "@/types/params";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
+import { useUtils } from "@/hooks";
 
 type Select = { id: number };
 type State = {
@@ -68,8 +68,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   setup: (props, ctx) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
+    const { auth } = useUtils();
 
-    onMounted(async () => {
+    (async () => {
       try {
         const res = await $fetch<FetchLanguages>(
           `${API_URL}/programing_languages`
@@ -92,7 +93,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       } catch (error) {
         catchError(error);
       }
-    });
+    })();
 
     const isForm = computed(() => {
       return state.selectedLang.length !== 0 &&
@@ -146,7 +147,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         job_status_id: Number(state.jobStatusId),
       };
       try {
-        await $post<JobCreateParamsSecond>(`${API_URL}/job`, params);
+        const res = await $post<JobCreateParamsSecond>(
+          `${AUTH_URL}/job`,
+          params,
+          {
+            headers: auth.value,
+          }
+        );
+        console.log(res.data);
         await removeItem();
         router.push({ name: "JobCreateComplete" });
       } catch (error) {
@@ -224,6 +232,17 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           />
         </div>
         <div class="create-area">
+          <v-tooltip left>
+            <template v-slot:activator="{ on, attrs }">
+              <div class="question font-weight-bold" v-bind="attrs" v-on="on">
+                開発フェーズとは？
+              </div>
+            </template>
+            <span
+              >開発フェーズとは、今回作成する案件が進行中のプロジェクトか<br />
+              新規でのプロジェクトかを選択してください</span
+            >
+          </v-tooltip>
           <RadioArea
             v-model="jobStatusId"
             :options="md.optionsJobStatus"
@@ -278,6 +297,11 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     border-radius: 4px;
     background-color: $white;
     background-color: $dark-white;
+  }
+
+  .question {
+    color: $primary-dark;
+    text-decoration: underline;
   }
 }
 

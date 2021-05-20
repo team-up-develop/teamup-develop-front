@@ -28,6 +28,8 @@ export default defineComponent({
         LoginPassword: state.LoginPassword,
       };
       try {
+        // TODO: jwt 導入
+        // https://github.com/team-up-develop/teamup-develop-front/issues/210
         const res = await $post(`${API_URL}/signup`, params);
         console.log(res);
         state.email = "";

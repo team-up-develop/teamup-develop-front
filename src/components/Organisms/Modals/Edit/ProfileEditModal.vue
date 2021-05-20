@@ -11,7 +11,7 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
-import { md, $fetch, API_URL, $put, catchError } from "@/master";
+import { md, $fetch, API_URL, AUTH_URL, $put, catchError } from "@/master";
 import { EditProfileParams } from "@/types/params";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { Language, Framework, Skill, User } from "@/types/index";
@@ -21,6 +21,7 @@ import {
   DescriptionArea,
   DatePickerArea,
 } from "@/components/Molecules/Forms";
+import Vuex from "@/store/index";
 // TODO: モーダルの molecule に分割
 // import ProfileEditBase from "@/components/Molecules/Modals/ProfileEditBase.vue";
 
@@ -39,6 +40,7 @@ type Maybe<T> = T | null;
 
 type State = {
   id: number;
+  token: string;
   userName: string;
   lastName: string;
   firstName: string;
@@ -65,6 +67,7 @@ type State = {
 //TODO: any
 const initialState = (userInfo: User | any): State => ({
   id: userInfo.id,
+  token: Vuex.state.auth.token,
   userName: userInfo.user_name,
   lastName: userInfo.last_name,
   firstName: userInfo.first_name,
@@ -102,7 +105,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup(props, ctx) {
     const state = reactive<State>(initialState(props.userInfo));
-    console.log(props, "props");
 
     const clickTabs = (value: 0 | 1 | 2) => {
       state.currentTab = value;
@@ -208,8 +210,11 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       const a = JSON.stringify(params);
       console.log(a);
       console.log(ctx);
-      $put<EditProfileParams>(`${API_URL}/user/${state.id}`, params)
+      $put<EditProfileParams>(`${AUTH_URL}/user/${state.id}`, params, {
+        headers: { Authorization: `Bearer ${state.token}` },
+      })
         .then((res) => {
+          console.log(res.data, "res.data");
           ctx.emit("compliteEdit");
           return res;
         })

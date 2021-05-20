@@ -174,12 +174,7 @@ export default defineComponent({
     const isOpenPassword = computed(() => {
       return state.passwordModal ? true : false;
     });
-    const openPassword = () => {
-      state.passwordModal = true;
-    };
-    const closePassword = () => {
-      state.passwordModal = false;
-    };
+
     const backStep = () => {
       return router.push({ name: "RegisterStepSkill" });
     };
@@ -232,8 +227,6 @@ export default defineComponent({
       day,
       backStep,
       isForm,
-      openPassword,
-      closePassword,
       isOpenPassword,
       register,
       redirectProfile,
@@ -281,11 +274,19 @@ export default defineComponent({
           <div class="input-area">
             <label for="name" class="label">パスワード</label>
             <section v-if="!isOpenPassword">
-              <button @click="openPassword" class="password-btn">開く</button>
+              <button
+                @click="() => (passwordModal = true)"
+                class="password-btn"
+              >
+                開く
+              </button>
               <p>*********</p>
             </section>
             <section v-else>
-              <button @click="closePassword" class="password-btn">
+              <button
+                @click="() => (passwordModal = false)"
+                class="password-btn"
+              >
                 閉じる
               </button>
               <p>{{ password }}</p>

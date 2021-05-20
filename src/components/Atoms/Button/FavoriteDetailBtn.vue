@@ -1,11 +1,19 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { $fetch, $post, $delete, API_URL, catchError } from "@/master";
+import {
+  $fetch,
+  $post,
+  $delete,
+  API_URL,
+  AUTH_URL,
+  catchError,
+} from "@/master";
 import { FavoriteParams } from "@/types/params";
 import { FetchFavoriteJob } from "@/types/fetch";
 
 type DataType = {
   userId: number;
+  token: string;
   flag: boolean;
 };
 
@@ -16,6 +24,7 @@ export default Vue.extend({
   data(): DataType {
     return {
       flag: true,
+      token: this.$store.state.auth.token,
       userId: this.$store.state.auth.userId,
     };
   },
@@ -39,12 +48,14 @@ export default Vue.extend({
   },
   methods: {
     // * 案件を保存する
-    saveJob() {
+    async saveJob() {
       const params: FavoriteParams = {
         job_id: this.jobId,
         user_id: this.userId,
       };
-      $post<FavoriteParams>(`${API_URL}/favorite_job`, params)
+      await $post<FavoriteParams>(`${AUTH_URL}/favorite_job`, params, {
+        headers: { Authorization: `Bearer ${this.token}` },
+      })
         .then((res) => {
           this.flag = false;
           return res.data;
@@ -54,19 +65,28 @@ export default Vue.extend({
         });
     },
     // * 案件を削除する
-    deleteJob() {
+    // TODO: DELETE ができていない
+    // https://myteam-qd67443.slack.com/archives/CNYQEFRK3/p1621171067005500
+    async deleteJob() {
       const params: FavoriteParams = {
         job_id: this.jobId,
         user_id: this.userId,
       };
-      $delete<FavoriteParams>(`${API_URL}/favorite_job`, { data: params })
-        .then((res) => {
-          this.flag = true;
-          return res.data;
-        })
-        .catch((error) => {
-          catchError(error);
+      try {
+        const res = await $delete<FavoriteParams>(`${AUTH_URL}/favorite_job`, {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+          data: {
+            params,
+          },
         });
+        if (res.data) {
+          this.flag = false;
+        }
+      } catch (error) {
+        catchError(error);
+      }
     },
   },
 });

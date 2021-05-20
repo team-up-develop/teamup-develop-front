@@ -55,10 +55,10 @@ type State = {
   paginationLength: number; //? ページネーション番号
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   jobs: [],
   jobsNullFlag: false,
-  freeWord: Vuex.state.search.freeWord,
+  freeWord: ctx.root.$store.getters.freeWord,
   loading: true,
   jobDetail: null,
   detailFlag: false,
@@ -69,7 +69,7 @@ const initialState = (): State => ({
   modal: false,
   saveFlag: true,
   limitationList: 1,
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
   entryRedirect: false,
   langModal: false,
   frameworkModal: false,
@@ -77,7 +77,7 @@ const initialState = (): State => ({
   buttonActive: false,
   page: 1,
   displayJobs: [],
-  jobsPageSize: 5, //FIXME: 開発に応じて仮で置いています。正規 20
+  jobsPageSize: 10, //FIXME: 開発に応じて仮で置いています。正規 20
   paginationLength: 0,
 });
 
@@ -96,7 +96,10 @@ export default defineComponent({
     JobStatusNew,
   },
   setup: (_, ctx) => {
-    const state = reactive<State>(initialState());
+    const state = reactive<State>(initialState(ctx));
+
+    // console.log(Vuex.getters.userId, "getters/userId gettersでアクセス");
+    // console.log(ctx.root.$store.getters, "ctxからアクセス");
 
     const fetchData = async () => {
       // * 投稿一覧取得
