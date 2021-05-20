@@ -44,7 +44,7 @@ export default defineComponent({
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
-    const strageGet = () => {
+    (() => {
       const userName = sessionStorage.getItem("userName");
       const lastName = sessionStorage.getItem("lastName");
       const firstName = sessionStorage.getItem("firstName");
@@ -59,7 +59,7 @@ export default defineComponent({
       state.email = email;
       state.userBirthday = userBirthday;
       state.learningStartDate = learningStartDate;
-    };
+    })();
 
     const isForm = computed(() => {
       return state.userName &&
@@ -105,8 +105,6 @@ export default defineComponent({
         console.log("必須が入力されていません");
       }
     };
-
-    strageGet();
 
     return {
       ...toRefs(state),

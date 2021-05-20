@@ -1,12 +1,21 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { $fetch, $post, $delete, API_URL, catchError } from "@/master";
+import {
+  $fetch,
+  $post,
+  $delete,
+  API_URL,
+  AUTH_URL,
+  catchError,
+} from "@/master";
 import { FavoriteParams } from "@/types/params";
 import { FetchFavoriteJob } from "@/types/fetch";
+// import { useUtils } from "@/hooks";
 
 type DataType = {
   userId: number;
   flag: boolean;
+  token: string;
 };
 
 export default Vue.extend({
@@ -16,6 +25,7 @@ export default Vue.extend({
   data(): DataType {
     return {
       userId: this.$store.state.auth.userId,
+      token: this.$store.state.auth.token,
       flag: true,
     };
   },
@@ -46,23 +56,40 @@ export default Vue.extend({
         user_id: this.userId,
       };
       try {
-        await $post<FavoriteParams>(`${API_URL}/favorite_job`, params);
+        await $post<FavoriteParams>(`${AUTH_URL}/favorite_job`, params, {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+            "Content-Type": "application/json",
+            // "Cache-Control": "no-cache,no-store",
+            // Pragma: "no-cache",
+            // Expires: 0,
+          },
+        });
         this.flag = false;
       } catch (error) {
         catchError(error);
       }
     },
-    // * 案件を削除する
+    //* 案件削除
+    // TODO: DELETE ができていない
+    // https://myteam-qd67443.slack.com/archives/CNYQEFRK3/p1621171067005500
     async deleteJob() {
       const params: FavoriteParams = {
         job_id: this.jobId,
         user_id: this.userId,
       };
       try {
-        await $delete<FavoriteParams>(`${API_URL}/favorite_job`, {
-          data: params,
+        const res = await $delete<FavoriteParams>(`${AUTH_URL}/favorite_job`, {
+          headers: {
+            Authorization: `Bearer ${this.token}`,
+          },
+          data: {
+            params,
+          },
         });
-        this.flag = true;
+        if (res.data) {
+          this.flag = true;
+        }
       } catch (error) {
         catchError(error);
       }

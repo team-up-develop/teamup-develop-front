@@ -7,8 +7,9 @@ import {
   PropType,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
-import { $post, API_URL, catchError } from "@/master";
+import { $post, AUTH_URL, catchError } from "@/master";
 import { messageParams } from "@/types/params";
+import { useUtils } from "@/hooks";
 
 type Props = {
   id: number;
@@ -29,6 +30,7 @@ export default defineComponent({
   },
   setup: (props: Props) => {
     const state = reactive<State>(initialState());
+    const { auth } = useUtils();
 
     // * job_id が存在するか判別
     const isChat = computed(() => {
@@ -48,7 +50,9 @@ export default defineComponent({
       }
       try {
         // ? 投稿
-        await $post<messageParams>(`${API_URL}/chat_message`, params);
+        await $post<messageParams>(`${AUTH_URL}/chat_message`, params, {
+          headers: auth.value,
+        });
       } catch (error) {
         catchError(error);
       }

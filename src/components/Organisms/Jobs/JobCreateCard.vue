@@ -40,14 +40,16 @@ export default defineComponent({
     const state = reactive<JobCreateSession1>(initialState());
 
     // * セッションストレージの値をフォームに格納する
-    const jobTitle = sessionStorage.getItem("jobTitle");
-    const jobDescription = sessionStorage.getItem("jobDescription");
-    const devStartDateString = sessionStorage.getItem("devStartDate");
-    const devEndDateString = sessionStorage.getItem("devEndDate");
-    state.jobTitle = jobTitle;
-    state.devStartDate = devStartDateString;
-    state.devEndDate = devEndDateString;
-    state.jobDescription = jobDescription;
+    (() => {
+      const jobTitle = sessionStorage.getItem("jobTitle");
+      const jobDescription = sessionStorage.getItem("jobDescription");
+      const devStartDateString = sessionStorage.getItem("devStartDate");
+      const devEndDateString = sessionStorage.getItem("devEndDate");
+      state.jobTitle = jobTitle;
+      state.devStartDate = devStartDateString;
+      state.devEndDate = devEndDateString;
+      state.jobDescription = jobDescription;
+    })();
 
     const isForm = computed(() => {
       return state.jobTitle && state.devStartDate && state.devEndDate

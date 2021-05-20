@@ -2,6 +2,9 @@ import dayjs from "dayjs";
 import axios from "axios";
 import router from "@/router";
 
+//env file デバッグ
+// console.log(process.env);
+
 //* 応募のステータス
 // 1: 応募
 // 2: 参加
@@ -69,7 +72,8 @@ export const md = {
 };
 // 移行前に接続がしたい場合
 // port: 8888
-export const API_URL = "http://localhost:8090/api/v1";
+export const API_URL = process.env.VUE_APP_API_BASE_URL;
+export const AUTH_URL = process.env.VUE_APP_API_AUTH_URL;
 
 //* axios モジュール
 const $fetch = axios.get;

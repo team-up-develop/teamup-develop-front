@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
-import { $put, m, API_URL, catchError } from "@/master";
+import { $put, m, AUTH_URL, catchError } from "@/master";
 import { ParticipateParams } from "@/types/params";
+import { useUtils } from "@/hooks";
 
 type Props = {
   id: number;
@@ -22,6 +23,8 @@ export default defineComponent({
     applyId: { type: Number as PropType<number>, default: 0, required: true },
   },
   setup: (props: Props, context) => {
+    const { auth } = useUtils();
+
     const putApply = async () => {
       const params: ParticipateParams = {
         id: props.applyId,
@@ -33,8 +36,11 @@ export default defineComponent({
       };
       try {
         await $put<ParticipateParams>(
-          `${API_URL}/apply_job/${props.jobId}`,
-          params
+          `${AUTH_URL}/apply_job/${props.jobId}`,
+          params,
+          {
+            headers: auth.value,
+          }
         );
         console.log(params);
         context.emit("participate", m.APPLY_STATUS_PARTICIPATE);

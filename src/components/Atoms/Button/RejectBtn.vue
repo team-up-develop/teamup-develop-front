@@ -1,7 +1,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
-import { $put, m, API_URL, catchError } from "@/master";
+import { $put, m, AUTH_URL, catchError } from "@/master";
 import { RejectParams } from "@/types/params";
+import { useUtils } from "@/hooks";
 
 type Props = {
   id: number;
@@ -22,6 +23,8 @@ export default defineComponent({
     applyId: { type: Number as PropType<number>, default: 0 },
   },
   setup: (props: Props, context) => {
+    const { auth } = useUtils();
+
     const applyUserReject = async () => {
       const params: RejectParams = {
         id: props.applyId,
@@ -32,7 +35,13 @@ export default defineComponent({
         updated_at: props.updatedAt,
       };
       try {
-        await $put<RejectParams>(`${API_URL}/apply_job/${props.jobId}`, params);
+        await $put<RejectParams>(
+          `${AUTH_URL}/apply_job/${props.jobId}`,
+          params,
+          {
+            headers: auth.value,
+          }
+        );
         context.emit("reject", m.APPLY_STATUS_REJECT);
       } catch (error) {
         catchError(error);

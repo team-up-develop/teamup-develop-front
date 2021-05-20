@@ -5,6 +5,7 @@ import router from "@/router";
 interface State {
   userId: number | null;
   userName: string;
+  token: string;
   errorFlag: boolean;
 }
 
@@ -16,12 +17,14 @@ interface LoginData {
 const state: State = {
   userId: null,
   userName: "",
+  token: "",
   errorFlag: false,
 };
 
 const getters: GetterTree<State, LoginData> = {
   userId: (state: State) => state.userId,
   userName: (state: State) => state.userName,
+  token: (state: State) => state.token,
 };
 
 const mutations: MutationTree<State> = {
@@ -30,6 +33,9 @@ const mutations: MutationTree<State> = {
   },
   loginUserName(state: State, userName: string) {
     state.userName = userName;
+  },
+  loginToken(state: State, token: string) {
+    state.token = token;
   },
   loginError(state: State, errorFlag: boolean) {
     state.errorFlag = errorFlag;
@@ -49,6 +55,7 @@ const actions: ActionTree<State, LoginData> = {
       console.log(res);
       commit("loginUserId", res.data.response.id);
       commit("loginUserName", res.data.response.user_name);
+      commit("loginToken", res.data.response.token);
       router.push("/jobs");
     } catch (error) {
       const errorFlag = true;
