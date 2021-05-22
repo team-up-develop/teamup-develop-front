@@ -5,7 +5,8 @@ import {
   OutsidePropsType,
   PropType,
 } from "@icare-jp/vue-props-type";
-import { dayJs, truncate } from "@/master";
+import { truncate } from "@/hooks/useUtils";
+import { dayJsFormat } from "@/libs/dayjs";
 import { ManageJob } from "@/types/index";
 
 const propsOption = {
@@ -18,7 +19,7 @@ export type JobCardProps = OutsidePropsType<PropsOption>;
 export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: () => {
-    const day = (value: string, format: string) => dayJs(value, format);
+    const day = (value: string, format: string) => dayJsFormat(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
     return {
       day,

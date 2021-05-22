@@ -6,8 +6,10 @@ import {
   toRefs,
   PropType,
 } from "@vue/composition-api";
+import { $post } from "@/libs/axios";
 import Vuex from "@/store/index";
-import { $post, AUTH_URL, catchError } from "@/master";
+import { AUTH_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { messageParams } from "@/types/params";
 import { useUtils } from "@/hooks";
 
@@ -28,7 +30,7 @@ export default defineComponent({
   props: {
     id: { type: Number as PropType<number>, defalut: 0, required: true },
   },
-  setup: (props: Props) => {
+  setup: (props: Props, ctx) => {
     const state = reactive<State>(initialState());
     const { auth } = useUtils();
 
@@ -50,9 +52,17 @@ export default defineComponent({
       }
       try {
         // ? 投稿
-        await $post<messageParams>(`${AUTH_URL}/chat_message`, params, {
-          headers: auth.value,
-        });
+        const res = await $post<messageParams>(
+          `${AUTH_URL}/chat_message`,
+          params,
+          {
+            headers: auth.value,
+          }
+        );
+        if (!res.data) {
+          return;
+        }
+        ctx.emit("reFetch");
       } catch (error) {
         catchError(error);
       }

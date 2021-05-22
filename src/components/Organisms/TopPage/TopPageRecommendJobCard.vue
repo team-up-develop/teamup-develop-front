@@ -2,7 +2,9 @@
 // FIXME: 現状は使用していない
 import Vue from "vue";
 import axios from "axios";
-import { dayJs, API_URL, truncate } from "@/master";
+import { API_URL } from "@/master";
+import { truncate } from "@/hooks/useUtils";
+import { dayJsFormat } from "@/libs/dayjs";
 
 export default Vue.extend({
   data() {
@@ -20,7 +22,7 @@ export default Vue.extend({
   },
   methods: {
     day(value: string, format: string) {
-      return dayJs(value, format);
+      return dayJsFormat(value, format);
     },
     limit(value: string, num: number) {
       return truncate(value, num);

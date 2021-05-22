@@ -10,8 +10,10 @@ import {
   OutsidePropsType,
   PropType,
 } from "@icare-jp/vue-props-type";
+import { $fetch, $post } from "@/libs/axios";
 import Vuex from "@/store/index";
-import { $fetch, $post, API_URL, AUTH_URL, catchError, md } from "@/master";
+import { API_URL, AUTH_URL, md } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { SkillSelectArea, RadioArea } from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsSecond } from "@/types/params";

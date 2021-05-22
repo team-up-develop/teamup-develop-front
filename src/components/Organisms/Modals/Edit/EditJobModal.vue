@@ -1,7 +1,9 @@
 // TODO: 現在は使用していない
 <script lang="ts">
 import Vue from "vue";
-import { $fetch, $put, API_URL, catchError } from "@/master";
+import { $fetch, $put } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import vSelect from "vue-select";
 // import 'vue-select/dist/vue-select.css';
 import { Language } from "@/types/index";

@@ -7,7 +7,7 @@ import {
   PropType,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
-import { truncate } from "@/master";
+import { truncate } from "@/hooks/useUtils";
 
 type Props = {
   jobId: number;

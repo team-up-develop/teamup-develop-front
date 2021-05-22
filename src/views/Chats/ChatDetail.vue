@@ -6,7 +6,9 @@ import {
   onMounted,
   computed,
   ref,
+  watch,
 } from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
 import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
@@ -14,7 +16,10 @@ import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { Message } from "@/types/index";
 import { FetchMessage, FetchJob } from "@/types/fetch";
-import { $fetch, m, API_URL, truncate, catchError } from "@/master";
+import { m, API_URL } from "@/master";
+import { truncate } from "@/hooks/useUtils";
+import { catchError } from "@/libs/errorHandler";
+import UserMessage from "@/components/Molecules/Chats/UserMessage.vue";
 
 type State = {
   chats: Message[];
@@ -44,10 +49,11 @@ export default defineComponent({
     ChatGroups,
     SendMessage,
     Breadcrumbs,
+    UserMessage,
   },
   props: {
     // * job.idを受け取る
-    id: { type: Number, required: true },
+    id: { type: Number, required: true, defalut: 0 },
   },
   setup: (props) => {
     const state = reactive<State>(initialState());
@@ -64,25 +70,34 @@ export default defineComponent({
         disabled: true,
       },
     ]);
-
     const limit = (value: string, num: number) => truncate(value, num);
-
     const scrollChat = () => {
+      state.loading = false;
       setTimeout(() => {
         const a = Number(root.value.scrollHeight);
         const b = Number(root.value.clientHeight);
         const bottom = a - b;
         if (root.value.scrollTop === bottom) {
+          // state.loading = false;
           return;
         } else {
+          // state.loading = false;
           root.value.scrollTop = bottom;
         }
-      }, 2000);
+      }, 500);
     };
 
-    const getJob = async () => {
+    watch(
+      () => props.id,
+      async (val: number) => {
+        await fetchJob(val);
+        await fetchMessage(val);
+      }
+    );
+
+    const fetchJob = async (id: number) => {
       try {
-        const res = await $fetch<FetchJob>(`${API_URL}/job/${props.id}`);
+        const res = await $fetch<FetchJob>(`${API_URL}/job/${id}`);
         state.jobTitle = res.data.response.job_title;
         state.clickJobId = res.data.response.id;
       } catch (error) {
@@ -90,33 +105,35 @@ export default defineComponent({
       }
     };
     // * チャット内容を取得 setInterval
-    const getChatMessage = async () => {
+    const fetchMessage = async (id: number) => {
       let chatLength = 0;
-      setInterval(async () => {
-        try {
-          const res = await $fetch<FetchMessage>(
-            `${API_URL}/chat_messages?job_id=${props.id}`
-          );
+      // state.loading = false;
+      try {
+        const res = await $fetch<FetchMessage>(
+          `${API_URL}/chat_messages?job_id=${id}`
+        );
+        state.chats = res.data.response;
+        if (chatLength === state.chats.length) {
           state.loading = false;
-          state.chats = res.data.response;
-          if (chatLength === state.chats.length) {
-            return console.log("chatLengt が一緒なのでスクロールしません。");
-          } else {
-            console.log("chatLengt の更新がかかりました。");
-            chatLength = state.chats.length;
-            scrollChat();
-          }
-        } catch (error) {
-          catchError(error);
+          return;
+        } else {
+          chatLength = state.chats.length;
+          scrollChat();
         }
-      }, 1500);
+      } catch (error) {
+        catchError(error);
+      }
     };
 
     onMounted(() => {
-      // scrollChat();
-      getChatMessage();
-      getJob();
+      fetchMessage(props.id);
+      fetchJob(props.id);
     });
+
+    const blankJob = () => {
+      const url = `/jobs/${state.clickJobId}/detail`;
+      return window.open(url, "_blank");
+    };
 
     return {
       ...toRefs(state),
@@ -124,9 +141,10 @@ export default defineComponent({
       root,
       breadcrumbs,
       scrollChat,
-      getChatMessage,
-      getJob,
+      fetchMessage,
+      fetchJob,
       limit,
+      blankJob,
     };
   },
 });
@@ -138,33 +156,22 @@ export default defineComponent({
     <div class="wrapper">
       <v-sheet class="chat-card">
         <div class="chat-card__left">
-          <div class="title">
-            チャットグループ
-          </div>
+          <div class="title" />
           <ChatGroups :userId="userId" />
         </div>
         <div class="chat-card__right">
           <div class="main" ref="target" v-show="!loading">
-            <router-link :to="`/jobs/${clickJobId}/detail`" class="router">
+            <div class="blank-link" @click="blankJob">
               <header class="header">{{ limit(jobTitle, 60) }}</header>
-            </router-link>
+              <header class="min">{{ limit(jobTitle, 40) }}</header>
+            </div>
             <section class="room" ref="root">
-              <div class="balloon" v-for="chat in chats" :key="chat.id">
-                <div class="balloon-image-left">
-                  <div class="balloon-img"></div>
-                </div>
-                <div class="user-name">
-                  {{ chat.user.user_name }}
-                </div>
-                <div class="balloon-text-right">
-                  <p>{{ chat.message }}</p>
-                </div>
-              </div>
+              <UserMessage :chats="chats" />
             </section>
           </div>
           <Loading v-show="loading" />
           <div class="bottom">
-            <SendMessage :id="id" />
+            <SendMessage :id="id" @reFetch="fetchMessage(clickJobId)" />
           </div>
         </div>
       </v-sheet>
@@ -178,17 +185,16 @@ export default defineComponent({
 .active {
   text-decoration: none;
 }
-
 .router-link-exact-active.router-link-active.active {
   font-weight: bold;
   text-decoration: underline;
 }
-
-.router {
-  text-decoration: none;
+.blank-link {
+  text-decoration: underline;
+  cursor: pointer;
   color: $text-main-color;
 }
-.router:hover {
+.blank-link:hover {
   color: $primary-color;
 }
 
@@ -241,6 +247,7 @@ export default defineComponent({
         text-align: left;
         border-bottom: $card-border-color 1px solid;
         background-color: $white;
+        box-shadow: 0 6px 2px -2px rgb(189, 189, 189);
         z-index: 10;
         position: -webkit-sticky;
         position: sticky;
@@ -342,7 +349,7 @@ export default defineComponent({
         display: flex;
         flex-direction: column;
 
-        header {
+        .header {
           background-color: $white;
           position: -webkit-sticky;
           position: sticky;
@@ -356,6 +363,31 @@ export default defineComponent({
           margin-left: 0.2rem;
           border-radius: 0 20px 0 0;
           height: 60px;
+          box-shadow: 0 6px 2px -2px rgb(189, 189, 189);
+
+          @media (max-width: $sm) {
+            display: none;
+          }
+        }
+
+        .min {
+          display: none;
+          @media (max-width: $sm) {
+            background-color: $white;
+            position: -webkit-sticky;
+            position: sticky;
+            top: 0;
+            left: 0;
+            display: flex;
+            font-weight: bold;
+            text-align: left;
+            padding: 0.4rem 0.8rem;
+            border-bottom: $card-border-color 1px solid;
+            margin-left: 0.2rem;
+            border-radius: 0 20px 0 0;
+            height: 60px;
+            box-shadow: 0 6px 2px -2px rgb(189, 189, 189);
+          }
         }
 
         .room {
@@ -390,106 +422,5 @@ export default defineComponent({
 // * v-card の boxshadowを消します
 .v-sheet.v-card:not(.v-sheet--outlined) {
   box-shadow: none;
-}
-
-// * ここからトーク周り
-.balloon {
-  margin-bottom: 2em;
-  position: relative;
-}
-.balloon:before,
-.balloon:after {
-  clear: both;
-  content: "";
-  display: block;
-}
-.balloon-image-left,
-.balloon-image-right {
-  width: 68px;
-  height: 68px;
-}
-.balloon-image-left {
-  float: left;
-  // margin-right: 20px;
-}
-.user-name {
-  padding: 0.2rem 1rem;
-  text-align: left;
-  color: $text-sub-color;
-  font-size: 12px;
-}
-.balloon-image-right {
-  float: right;
-}
-.balloon-img {
-  @include user-image;
-  width: 70%;
-  height: 70%;
-  border-radius: 50%;
-  margin: 0;
-  background-color: #ffffff;
-}
-.balloon-image-description {
-  padding: 5px 0 0;
-  font-size: 10px;
-  text-align: center;
-  background-color: $light-grey;
-}
-.balloon-text-right,
-.balloon-text-left {
-  word-wrap: break-word;
-  position: relative;
-  padding: 0.8rem 1.4rem;
-  // border: 1px solid #aaa;
-  border-radius: 10px;
-  max-width: -webkit-calc(100% - 120px);
-  max-width: calc(100% - 120px);
-  display: inline-block;
-  background-color: $light-grey;
-  text-align: left;
-}
-.balloon-text-right {
-  float: left;
-}
-.balloon p {
-  margin: 0 0 20px;
-}
-.balloon p:last-child {
-  margin-bottom: 0;
-}
-/* 三角部分 */
-.balloon-text-right:before {
-  position: absolute;
-  content: "";
-  // border: 10px solid transparent;
-  border-right: 10px solid #aaa;
-  top: 15px;
-  left: -20px;
-}
-.balloon-text-right:after {
-  position: absolute;
-  content: "";
-  border: 10px solid transparent;
-  border-right: 10px solid$light-grey;
-  top: 15px;
-  left: -19px;
-}
-.balloon-text-left:before {
-  position: absolute;
-  content: "";
-  background-color: $light-grey;
-  border: 10px solid transparent;
-  border-left: 10px solid #aaa;
-  top: 15px;
-  right: -20px;
-}
-.balloon-text-left:after {
-  position: absolute;
-  content: "";
-  border: 10px solid transparent;
-  border-left: 10px solid #f2f2f2;
-  top: 15px;
-  right: -19px;
-  background-color: #ffffff;
 }
 </style>

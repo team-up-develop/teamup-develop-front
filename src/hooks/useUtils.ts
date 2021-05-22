@@ -13,7 +13,6 @@ type State = {
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
-  // userId: 1,
   token: Vuex.state.auth.token,
 });
 
@@ -33,6 +32,14 @@ const useUtils = () => {
     isLogin,
     auth,
   };
+};
+
+export const truncate = (value: string, num: number) => {
+  const over = "...";
+  if (value.length <= num) {
+    return value;
+  }
+  return value.substring(0, num) + over;
 };
 
 export default useUtils;

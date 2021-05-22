@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
-import { $put, m, AUTH_URL, catchError } from "@/master";
+import { $put } from "@/libs/axios";
+import { m, AUTH_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { RejectParams } from "@/types/params";
 import { useUtils } from "@/hooks";
 

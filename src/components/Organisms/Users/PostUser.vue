@@ -5,7 +5,7 @@ import {
   OutsidePropsType,
   PropType,
 } from "@icare-jp/vue-props-type";
-import { dayJs } from "@/master";
+import { dayJsFormat } from "@/libs/dayjs";
 import { User } from "@/types/index";
 
 const propsOption = {
@@ -23,7 +23,7 @@ export type PostUserProps = OutsidePropsType<PropsOption>;
 export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: (props, context) => {
-    const day = (value: string, format: string) => dayJs(value, format);
+    const day = (value: string, format: string) => dayJsFormat(value, format);
 
     const twitterTab = () => {
       if (props.user?.twitter_account) {

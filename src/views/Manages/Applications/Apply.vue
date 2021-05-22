@@ -6,7 +6,9 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
-import { $fetch, API_URL, m, catchError } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { API_URL, m } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { ManageJob } from "@/types/index";
 import { FetchManageJobs } from "@/types/fetch";
 import Vuex from "@/store/index";

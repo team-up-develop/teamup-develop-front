@@ -3,7 +3,7 @@ import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
 import CreateBtn from "@/components/Atoms/Commons/Entires/CreateBtn.vue";
 import Vuex from "@/store/index";
-import { truncate } from "@/master";
+import { truncate } from "@/hooks/useUtils";
 
 type State = {
   userId: number;

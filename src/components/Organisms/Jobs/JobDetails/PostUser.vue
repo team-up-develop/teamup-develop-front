@@ -1,6 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
-import { dayJs, truncate } from "@/master";
+import { truncate } from "@/hooks/useUtils";
+import { dayJsFormat } from "@/libs/dayjs";
 import { Job } from "@/types";
 
 export default defineComponent({
@@ -8,7 +9,7 @@ export default defineComponent({
     job: { type: Object as PropType<Job>, required: true, defalut: {} },
   },
   setup: () => {
-    const day = (value: string, format: string) => dayJs(value, format);
+    const day = (value: string, format: string) => dayJsFormat(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
     return {
       day,

@@ -1,13 +1,8 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import {
-  $fetch,
-  $post,
-  $delete,
-  API_URL,
-  AUTH_URL,
-  catchError,
-} from "@/master";
+import { $fetch, $post, $delete } from "@/libs/axios";
+import { API_URL, AUTH_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { FavoriteParams } from "@/types/params";
 import { FetchFavoriteJob } from "@/types/fetch";
 // import { useUtils } from "@/hooks";

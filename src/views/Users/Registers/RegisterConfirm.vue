@@ -6,11 +6,14 @@ import {
   computed,
   onMounted,
 } from "@vue/composition-api";
+import { $fetch, $post } from "@/libs/axios";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { Language, Framework, Skill } from "@/types/index";
 import { RegisterCompleteParams } from "@/types/params";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
-import { $post, $fetch, API_URL, dayJs, catchError } from "@/master";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
+import { dayJsFormat } from "@/libs/dayjs";
 import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
 
 type Maybe<T> = T | null;
@@ -80,7 +83,7 @@ export default defineComponent({
     const state = reactive<State>(initialState());
     const skills = reactive<SkillState>(skillState());
     const router = ctx.root.$router;
-    const day = (value: string, format: string) => dayJs(value, format);
+    const day = (value: string, format: string) => dayJsFormat(value, format);
 
     const fetchSkill = async () => {
       try {

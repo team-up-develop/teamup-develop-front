@@ -6,7 +6,7 @@ import {
   PropType,
 } from "@icare-jp/vue-props-type";
 import { User } from "@/types/index";
-import { dayJs } from "@/master";
+import { dayJsFormat } from "@/libs/dayjs";
 
 const propsOption = {
   user: { type: Object as PropType<User>, required: true, defalut: {} },
@@ -26,7 +26,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: () => {
     const state = reactive<State>(initialState());
-    const day = (value: string, format: string) => dayJs(value, format);
+    const day = (value: string, format: string) => dayJsFormat(value, format);
 
     const isOpenPassword = computed(() => {
       return state.passwordModal ? true : false;
