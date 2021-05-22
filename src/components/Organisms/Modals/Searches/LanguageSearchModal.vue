@@ -1,11 +1,13 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted
-} from '@vue/composition-api';
-import { $fetch, API_URL, catchError } from "@/master";
+  onMounted,
+} from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { Job, Language } from "@/types/index";
 import { FetchLanguages, FetchJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
@@ -29,7 +31,7 @@ const initialState = (): State => ({
 export default defineComponent({
   setup: (_, context) => {
     const state = reactive<State>(initialState());
-    
+
     onMounted(() => {
       fetchLanguages();
     });
@@ -80,8 +82,8 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      searchLanguage
-    }
+      searchLanguage,
+    };
   },
 });
 </script>

@@ -1,11 +1,13 @@
 <script lang="ts">
-import { 
+import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted
-} from '@vue/composition-api';
-import { $fetch, API_URL, catchError } from "@/master";
+  onMounted,
+} from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { Job, Framework } from "@/types/index";
 import { FetchFrameworks, FetchJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
@@ -77,10 +79,10 @@ export default defineComponent({
         catchError(error);
       }
     };
-    
+
     return {
       ...toRefs(state),
-      searchFramework
+      searchFramework,
     };
   },
 });

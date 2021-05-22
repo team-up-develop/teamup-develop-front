@@ -1,7 +1,9 @@
 import { ActionTree, GetterTree, MutationTree } from "vuex";
+import { $fetch } from "@/libs/axios";
 import { ManageJob } from "@/types/index";
 import { FetchManageJobs, FetchFavoriteJob } from "@/types/fetch";
-import { $fetch, API_URL, m, catchError } from "@/master";
+import { API_URL, m } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 
 interface State {
   jobsManageNum: number;

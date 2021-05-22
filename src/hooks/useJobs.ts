@@ -4,7 +4,9 @@ import {
   onMounted,
   // onUnmounted,
 } from "@vue/composition-api";
-import { $fetch, API_URL, catchError, fetchError } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { fetchError, catchError } from "@/libs/errorHandler";
 import { ManageJob, FavoriteJob, Job } from "@/types/index";
 import { FetchManageJobs, FetchJobs, FetchFavoriteJob } from "@/types/fetch";
 import Vuex from "@/store/index";
@@ -44,7 +46,7 @@ const useJobs = () => {
   const fetchJobDetail = async (jobId: number) => {
     try {
       const res = await $fetch<FetchJobs>(`${API_URL}/job/${jobId}`);
-      fetchError(res.data.status);
+      await fetchError(res.data.status);
       state.job = res.data.response;
       setTimeout(() => {
         state.loading = false;

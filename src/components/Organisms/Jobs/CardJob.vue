@@ -1,7 +1,9 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from "@vue/composition-api";
 import CardJobSkill from "@/components/Atoms/Jobs/CardJobSkill.vue";
-import { truncate, dayJs, m } from "@/master";
+import { m } from "@/master";
+import { truncate } from "@/hooks/useUtils";
+import { dayJsFormat } from "@/libs/dayjs";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { Job } from "@/types/index";
 
@@ -22,7 +24,7 @@ export default defineComponent({
 });
 
 const useUtils = () => {
-  const day = (value: string, format: string) => dayJs(value, format);
+  const day = (value: string, format: string) => dayJsFormat(value, format);
   const limit = (value: string, num: number) => truncate(value, num);
   return {
     m: computed(() => m),

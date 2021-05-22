@@ -7,6 +7,7 @@ import {
   computed,
   onBeforeMount,
 } from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
 import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
@@ -17,7 +18,8 @@ import {
   DetailJob,
 } from "@/components/Organisms/Jobs/JobDetails";
 import { useJobs, useUtils } from "@/hooks";
-import { $fetch, API_URL, catchError } from "@/master";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { FetchManageJobs } from "@/types/fetch";
 
 type State = {

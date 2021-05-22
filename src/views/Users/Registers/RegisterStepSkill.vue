@@ -6,7 +6,9 @@ import {
   computed,
   onMounted,
 } from "@vue/composition-api";
-import { $fetch, API_URL, catchError } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import {
   InputArea,

@@ -8,7 +8,9 @@ import {
   PropType,
   onBeforeMount,
 } from "@vue/composition-api";
-import { API_URL, catchError, fetchError, $fetch } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { fetchError, catchError } from "@/libs/errorHandler";
 import Vuex from "@/store/index";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";

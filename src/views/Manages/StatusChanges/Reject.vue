@@ -6,9 +6,11 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
 import { RejectJob } from "@/types/index";
 import { FetchRejectJob } from "@/types/fetch";
-import { $fetch, m, API_URL, catchError } from "@/master";
+import { m, API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import Vuex from "@/store/index";

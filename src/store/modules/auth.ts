@@ -1,5 +1,7 @@
 import { ActionTree, GetterTree, MutationTree } from "vuex";
-import { $post, API_URL, catchError } from "@/master";
+import { $post } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import router from "@/router";
 
 interface State {

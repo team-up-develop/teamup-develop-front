@@ -1,9 +1,9 @@
-import dayjs from "dayjs";
-import axios from "axios";
-import router from "@/router";
-
-//env file デバッグ
+//* env file デバッグ
 // console.log(process.env);
+// 移行前に接続がしたい場合
+// port: 8888
+export const API_URL = process.env.VUE_APP_API_BASE_URL;
+export const AUTH_URL = process.env.VUE_APP_API_AUTH_URL;
 
 //* 応募のステータス
 // 1: 応募
@@ -70,50 +70,3 @@ export const md = {
     { id: 1, tabName: "基本情報" },
   ],
 };
-// 移行前に接続がしたい場合
-// port: 8888
-export const API_URL = process.env.VUE_APP_API_BASE_URL;
-export const AUTH_URL = process.env.VUE_APP_API_AUTH_URL;
-
-//* axios モジュール
-const $fetch = axios.get;
-const $post = axios.post;
-const $put = axios.put;
-const $delete = axios.delete;
-export { $fetch, $post, $put, $delete };
-
-// TODO: catch error の際のモーダルを作成し、移行する
-const catchError = (error: any) => {
-  const { status, statusText } = error.response;
-  return console.log(
-    `エラーが発生しました。お問合せください。\n HTTP Status: ${status} ${statusText} \n メッセージ: ${error.response.data.message}`
-  );
-};
-
-const fetchError = (status: string) => {
-  if (status === m.STATUS_BADREQUEST_ERR) {
-    router.push({ name: "BadRequest" });
-  } else if (status === m.STATUS_NOTFOUND_ERR) {
-    // request api or client url error
-    router.push({ name: "NotFound" });
-  } else if (status === m.STATUS_SERVER_ERR) {
-    router.push({ name: "ServerError" });
-  } else if (status === m.STATUS_UNAUTHORIZED) {
-    router.push({ name: "Unauthorized" });
-  }
-  return;
-};
-
-const truncate = (value: string, num: number) => {
-  const over = "...";
-  if (value.length <= num) {
-    return value;
-  }
-  return value.substring(0, num) + over;
-};
-
-const dayJs = (value: string, format: string) => {
-  return dayjs(value).format(format);
-};
-
-export { catchError, fetchError, truncate, dayJs };

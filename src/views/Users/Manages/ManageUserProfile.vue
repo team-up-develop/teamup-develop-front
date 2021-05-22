@@ -7,6 +7,7 @@ import {
   computed,
   PropType,
 } from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
 import Vuex from "@/store/index";
 // import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
@@ -19,7 +20,8 @@ import { StatusChangeBtnArea } from "@/components/Organisms/Manages";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
-import { $fetch, API_URL, catchError } from "@/master";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import useJobs from "@/hooks/useJobs";
 import { FetchUser } from "@/types/fetch";
 

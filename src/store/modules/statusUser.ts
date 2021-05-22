@@ -6,7 +6,9 @@ import {
   FetchRejectJob,
   FetchJob,
 } from "@/types/fetch";
-import { $fetch, API_URL, m, catchError } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { API_URL, m } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 
 interface State {
   userApplyNum: number;

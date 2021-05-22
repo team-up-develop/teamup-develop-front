@@ -7,9 +7,12 @@ import {
   computed,
   PropType,
 } from "@vue/composition-api";
-import { Job } from "@/types/index";
-import { ManageJob } from "@/types/index";
-import { $fetch, m, dayJs, API_URL, truncate, catchError } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { Job, ManageJob } from "@/types/index";
+import { m, API_URL } from "@/master";
+import { truncate } from "@/hooks/useUtils";
+import { catchError } from "@/libs/errorHandler";
+import { dayJsFormat } from "@/libs/dayjs";
 import { FetchManageJobs } from "@/types/fetch";
 
 type Props = {
@@ -37,7 +40,7 @@ export default defineComponent({
   setup: (props: Props) => {
     const state = reactive<State>(initialState());
 
-    const day = (value: string, format: string) => dayJs(value, format);
+    const day = (value: string, format: string) => dayJsFormat(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
 
     const getChatGroups = async () => {

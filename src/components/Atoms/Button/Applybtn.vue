@@ -1,6 +1,8 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
-import { $post, m, AUTH_URL, catchError } from "@/master";
+import { $post } from "@/libs/axios";
+import { m, AUTH_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import CompliteModal from "@/components/Organisms/Modals/Applications/CompliteModal.vue";
 import { ApplyParams } from "@/types/params";
 

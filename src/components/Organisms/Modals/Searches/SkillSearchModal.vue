@@ -3,9 +3,11 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted
-} from '@vue/composition-api';
-import { API_URL, $fetch, catchError } from "@/master";
+  onMounted,
+} from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { Job, Skill } from "@/types/index";
 import { FetchSkills, FetchJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
@@ -77,18 +79,18 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      searchSkill
-    }
+      searchSkill,
+    };
   },
   // computed: {
-    // FIXME: 現状は使用していない
-    // isSearch() {
-    //   if(this.selectedSkill.length !== 0) {
-    //     return true;
-    //   } else {
-    //     return false;
-    //   }
-    // }
+  // FIXME: 現状は使用していない
+  // isSearch() {
+  //   if(this.selectedSkill.length !== 0) {
+  //     return true;
+  //   } else {
+  //     return false;
+  //   }
+  // }
   // },
 });
 </script>

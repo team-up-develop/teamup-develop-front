@@ -1,6 +1,8 @@
 <script lang="ts">
 import Vue from "vue";
-import { $post, API_URL, catchError } from "@/master";
+import { $post } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 
 type DataType = {
   email: string;

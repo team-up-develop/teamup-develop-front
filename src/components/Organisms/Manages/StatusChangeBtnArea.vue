@@ -10,8 +10,10 @@ import {
   toRefs,
   computed,
 } from "@vue/composition-api";
+import { $fetch } from "@/libs/axios";
 import { FetchManageJobs } from "@/types/fetch";
-import { $fetch, m, API_URL, catchError } from "@/master";
+import { m, API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
 
 const propsOption = {

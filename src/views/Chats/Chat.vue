@@ -65,13 +65,13 @@ export default defineComponent({
     <div class="wrapper">
       <v-sheet class="chat-card" v-if="isLogin">
         <div class="chat-card__left">
-          <div class="title">
-            チャットグループ
-          </div>
+          <div class="title" />
           <ChatGroups :userId="userId" />
         </div>
         <div class="chat-card__right">
-          <div class="main" ref="target"></div>
+          <div class="main" ref="target">
+            <header class="header" />
+          </div>
           <div class="bottom">
             <SendMessage :id="0" />
           </div>
@@ -135,6 +135,7 @@ export default defineComponent({
         font-size: 0.5em;
         text-align: left;
         border-bottom: $card-border-color 1px solid;
+        box-shadow: 0 6px 2px -2px rgb(189, 189, 189);
         background-color: $white;
         z-index: 10;
         position: -webkit-sticky;
@@ -159,13 +160,27 @@ export default defineComponent({
       }
 
       .main {
-        margin-top: 0.5rem;
         height: 85%;
-        padding: 1rem 2rem;
         overflow: scroll;
         display: flex;
         flex-direction: column;
-        background-color: $white;
+
+        header {
+          background-color: $white;
+          position: -webkit-sticky;
+          position: sticky;
+          top: 0;
+          left: 0;
+          display: flex;
+          font-weight: bold;
+          text-align: left;
+          padding: 0.4rem 2rem;
+          border-bottom: $card-border-color 1px solid;
+          margin-left: 0.2rem;
+          border-radius: 20px 30px 0 0;
+          height: 60px;
+          box-shadow: 0 6px 2px -2px rgb(189, 189, 189);
+        }
       }
 
       .bottom {

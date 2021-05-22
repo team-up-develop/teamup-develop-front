@@ -11,7 +11,9 @@ import {
   onMounted,
   computed,
 } from "@vue/composition-api";
-import { md, $fetch, API_URL, AUTH_URL, $put, catchError } from "@/master";
+import { $fetch, $put } from "@/libs/axios";
+import { md, API_URL, AUTH_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import { EditProfileParams } from "@/types/params";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { Language, Framework, Skill, User } from "@/types/index";

@@ -6,7 +6,10 @@ import {
   onMounted,
   SetupContext,
 } from "@vue/composition-api";
-import { $fetch, API_URL, catchError } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
+import { truncate } from "@/hooks/useUtils";
 import {
   JobRegisterFalse,
   JobRightLogin,
@@ -22,7 +25,7 @@ import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vu
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
-import { dayJs, truncate } from "@/master";
+import { dayJsFormat } from "@/libs/dayjs";
 import { Job } from "@/types/index";
 import { FetchJobs, FetchFavoriteJob, FetchManageJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
@@ -97,7 +100,6 @@ export default defineComponent({
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
-
     // console.log(Vuex.getters.userId, "getters/userId gettersでアクセス");
     // console.log(ctx.root.$store.getters, "ctxからアクセス");
 
@@ -267,7 +269,7 @@ export default defineComponent({
 
 const useUtils = (state: State, ctx: SetupContext) => {
   const router = ctx.root.$router;
-  const day = (value: string, format: string) => dayJs(value, format);
+  const day = (value: string, format: string) => dayJsFormat(value, format);
   const limit = (value: string, num: number) => truncate(value, num);
 
   // * 非ログイン時 登録リダイレクト

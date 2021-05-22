@@ -1,6 +1,8 @@
 <script lang="ts">
 import Vue from "vue";
-import { $fetch, API_URL, catchError } from "@/master";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
   HeaderArea,

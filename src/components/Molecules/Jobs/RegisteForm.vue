@@ -1,6 +1,8 @@
 <script lang="ts">
 import { defineComponent, reactive, toRefs } from "@vue/composition-api";
-import { $post, API_URL, catchError } from "@/master";
+import { $post } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
 import Email from "@/components/Atoms/Forms/Email.vue";
 import Password from "@/components/Atoms/Forms/Password.vue";
 
