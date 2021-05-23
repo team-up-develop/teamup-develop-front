@@ -1,7 +1,7 @@
 // import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import { BtnArea } from "@/components/Organisms/Jobs/JobDetails";
-import { Job } from "@/types";
+// import { Job } from "@/types";
 import { user } from "@/mocks";
 // import { PropsOption }  from "@/components/Organisms/Jobs/JobDetails/BtnArea.vue"
 const job = {
