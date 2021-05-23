@@ -13,7 +13,7 @@ export default defineComponent({
     JobStatusNew,
   },
   props: {
-    job: { type: Object as PropType<Job[]>, defalut: null, required: true },
+    job: { type: Object as PropType<Job>, defalut: null, required: true },
   },
   setup: () => {
     return {
@@ -24,12 +24,10 @@ export default defineComponent({
 });
 
 const useUtils = () => {
-  const day = (value: string, format: string) => dayJsFormat(value, format);
-  const limit = (value: string, num: number) => truncate(value, num);
   return {
     m: computed(() => m),
-    day,
-    limit,
+    dayJsFormat,
+    truncate,
   };
 };
 
@@ -48,8 +46,8 @@ const useUtils = () => {
 <template>
   <div class="job-cards">
     <div class="job-cards__top">
-      <span>{{ limit(job.job_title, 40) }}</span>
-      <p>{{ limit(job.job_title, 30) }}</p>
+      <span>{{ truncate(job.job_title, 40) }}</span>
+      <p>{{ truncate(job.job_title, 30) }}</p>
     </div>
     <div class="job-cards__center">
       <!-- カード スキルコンポーネント -->
@@ -61,15 +59,15 @@ const useUtils = () => {
           開発期間:
         </div>
         <div class="product-start-end-time">
-          {{ day(job.dev_start_date, "YYYY年 M月 D日") }} ~
-          {{ day(job.dev_end_date, "YYYY年 M月 D日") }}
+          {{ dayJsFormat(job.dev_start_date, "YYYY年 M月 D日") }} ~
+          {{ dayJsFormat(job.dev_end_date, "YYYY年 M月 D日") }}
         </div>
       </div>
       <div class="post-user-area">
         <div class="post-user-image"></div>
         <div class="post-user-name-area">
           <div class="post-user-name">
-            {{ limit(job.user.user_name, 12) }}
+            {{ truncate(job.user.user_name, 12) }}
           </div>
         </div>
         <div class="label-area mt-5">

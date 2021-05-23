@@ -17,7 +17,7 @@ import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 // import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
 
 const propsOption = {
-  id: { type: Number as PropType<number>, default: 0, required: true },
+  id: { type: Number, default: 0, required: true },
   job: { type: Object as PropType<Job>, defalut: {}, required: true },
   selfjob: {
     type: Boolean as PropType<boolean>,

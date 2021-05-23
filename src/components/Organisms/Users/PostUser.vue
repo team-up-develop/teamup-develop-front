@@ -78,13 +78,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
               <v-row>
                 <img
                   class="img"
-                  @click="gitTab"
+                  @click="gitTab()"
                   src="@/assets/github.png"
                   width="35"
                 />
                 <img
                   class="twitter-img"
-                  @click="twitterTab"
+                  @click="twitterTab()"
                   src="@/assets/images/twitter.png"
                   width="35"
                 />
