@@ -1,7 +1,7 @@
 import Vue from "vue";
 import { shallowMount } from "@vue/test-utils";
 import { IntroduceUser, PostUser } from "@/components/Organisms/Users";
-import { user } from "@/mocks";
+import { user } from "@/mocks/user";
 import dayjs from "dayjs";
 
 describe("IntroduceUser ", () => {

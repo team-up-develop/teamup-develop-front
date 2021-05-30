@@ -16,6 +16,7 @@ import {
   IntroduceUser,
   UserTabs,
 } from "@/components/Organisms/Users";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { StatusChangeBtnArea } from "@/components/Organisms/Manages";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
@@ -56,6 +57,7 @@ export default defineComponent({
     Breadcrumbs,
     CardJob,
     UserTabs,
+    Loading,
   },
   props: {
     id: { type: Number as PropType<number>, default: 0, required: true },
@@ -87,7 +89,7 @@ export default defineComponent({
       },
     ]);
 
-    const { fetchProfileJobs, profileJobs } = useJobs();
+    const { fetchProfileJobs, profileJobs, loading } = useJobs();
     fetchProfileJobs(props.id);
 
     const fetchUser = async () => {
@@ -115,6 +117,7 @@ export default defineComponent({
       breadcrumbs,
       profileJobs,
       clickTabs,
+      loading,
     };
   },
 });
@@ -123,7 +126,7 @@ export default defineComponent({
 <template>
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
-    <div class="detail-wrapper">
+    <div class="detail-wrapper" v-if="!loading">
       <section class="user-area">
         <div class="user-area__post">
           <PostUser
@@ -172,6 +175,7 @@ export default defineComponent({
         </section>
       </div>
     </div>
+    <Loading v-else />
   </section>
 </template>
 

@@ -48,9 +48,7 @@ const useJobs = () => {
       const res = await $fetch<FetchJobs>(`${API_URL}/job/${jobId}`);
       await fetchError(res.data.status);
       state.job = res.data.response;
-      setTimeout(() => {
-        state.loading = false;
-      }, 1000);
+      state.loading = false;
     } catch (error) {
       catchError(error);
     }
@@ -73,6 +71,7 @@ const useJobs = () => {
         `${API_URL}/jobs?user_id=${userId}`
       );
       state.profileJobs = res.data.response;
+      state.loading = false;
     } catch (error) {
       catchError(error);
     }

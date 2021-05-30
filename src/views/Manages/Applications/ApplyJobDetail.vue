@@ -23,14 +23,12 @@ import { FetchManageJobs } from "@/types/fetch";
 
 type State = {
   userId: number;
-  loading: boolean;
   applyFlug: boolean;
   selfJobPost: boolean;
 };
 
 const initialState = (): State => ({
   userId: Vuex.state.auth.userId,
-  loading: true,
   applyFlug: false,
   selfJobPost: false,
 });

@@ -40,40 +40,38 @@ export default Vue.extend({
       loading: true,
     };
   },
-  mounted() {
-    setTimeout(() => {
-      this.loading = false;
-      // * ページ遷移知れてきたらVuexの中身を消す
-      this.$store.state.search.freeWord = "";
-      this.$store.state.search.language = [];
-      this.$store.state.search.framwork = [];
-      this.$store.state.search.skill = [];
-      // * 開発言語 取得
-      $fetch<FetchLanguages>(`${API_URL}/programing_languages`)
-        .then((res) => {
-          // .slice(5)
-          this.languages = res.data.response;
-        })
-        .catch((error) => {
-          catchError(error);
-        });
-      // * フレームワーク
-      $fetch<FetchFrameworks>(`${API_URL}/programing_frameworks`)
-        .then((res) => {
-          this.framworks = res.data.response;
-        })
-        .catch((error) => {
-          catchError(error);
-        });
-      // * その他スキル
-      $fetch<FetchSkills>(`${API_URL}/skills`)
-        .then((res) => {
-          this.skills = res.data.response;
-        })
-        .catch((error) => {
-          catchError(error);
-        });
-    }, 3000);
+  async mounted() {
+    // * ページ遷移知れてきたらVuexの中身を消す
+    this.$store.state.search.freeWord = "";
+    this.$store.state.search.language = [];
+    this.$store.state.search.framwork = [];
+    this.$store.state.search.skill = [];
+    // * 開発言語 取得
+    await $fetch<FetchLanguages>(`${API_URL}/programing_languages`)
+      .then((res) => {
+        // .slice(5)
+        this.languages = res.data.response;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
+    // * フレームワーク
+    await $fetch<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+      .then((res) => {
+        this.framworks = res.data.response;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
+    // * その他スキル
+    await $fetch<FetchSkills>(`${API_URL}/skills`)
+      .then((res) => {
+        this.skills = res.data.response;
+      })
+      .catch((error) => {
+        catchError(error);
+      });
+    this.loading = false;
   },
 });
 </script>

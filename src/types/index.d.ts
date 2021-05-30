@@ -107,8 +107,8 @@ type Framework = {
 
 type Skill = {
   id: number;
-  updated_at: Date;
   name: string;
+  updated_at: Date;
 };
 
 type Message = {
