@@ -16,7 +16,7 @@ export default Vue.extend({
   mounted() {
     setTimeout(() => {
       this.loading = false;
-    }, 1000);
+    }, 1500);
   },
   methods: {
     register() {
@@ -42,23 +42,21 @@ export default Vue.extend({
         <div class="top-area__left">
           <div class="top-title">
             <div class="top-title__upper">
-              <span>チーム開発で誰にも負けないスキルを</span>
+              <span>チーム開発で実務で使えるスキルを獲得する</span>
             </div>
             <div class="top-title__lower">
               <p>
-                本気でキャリアを変えようと努力している未経験エンジニア同士が
-                オンラインでの「チーム開発」を通じて相互に成長し、
-                エンジニアとしてスタートを切る。
+                本気でキャリアを変えようと努力している未経験エンジニア同士がオンラインでの「チーム開発」を通じて相互に成長し、エンジニアとしてキャリアをスタートを切ることをサポートします。
               </p>
             </div>
           </div>
           <div class="top-img">
             <img
               class="img"
-              src="@/assets/images/teamup.jpg"
+              src="@/assets/images/teamUp.png"
               alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
-              width="80%"
-              height="230px"
+              width="100%"
+              height="350px"
             />
           </div>
           <div class="top-btn" v-if="!userId">
@@ -73,7 +71,7 @@ export default Vue.extend({
         <div class="top-area__right">
           <img
             class="img"
-            src="@/assets/images/teamup.jpg"
+            src="@/assets/images/teamUp.png"
             alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
             width="100%"
             height="350px"
@@ -81,11 +79,13 @@ export default Vue.extend({
         </div>
       </div>
       <div class="middle-area">
-        <div class="middle-titlle">
-          チームアップが可能にすること
-        </div>
+        <h2 class="middle-titlle font-weight-bold">
+          チームアップでできること
+          <p>What you can do</p>
+        </h2>
         <div class="card-area">
           <v-card elevation="6">
+            <h3 class="card-title">仲間との繋がり</h3>
             <div class="circle">
               <v-icon class="icon">
                 mdi-account-group
@@ -93,30 +93,38 @@ export default Vue.extend({
             </div>
             <div class="card-inner">
               <p>
-                未経験のエンジニア同士エンジニア同士がオンラインで繋がり<br />
-                ゼロからチーム開発を体験する事ができます。
+                未経験のエンジニア同士エンジニア同士がオンラインで繋がり、
+                <span>0からチーム開発を体験する事ができます。</span>
+                目標を共有できる開発の仲間を見つけることができます。
               </p>
             </div>
           </v-card>
           <v-card elevation="6">
+            <h3 class="card-title">スキルを習得</h3>
             <div class="circle">
               <v-icon class="icon">
-                mdi-chat-outline
+                mdi-diamond-stone
               </v-icon>
             </div>
             <div class="card-inner">
               <p>
-                未経験のエンジニア同士エンジニア同士がオンラインで繋がり<br />
-                ゼロからチーム開発を体験する事ができます。
+                <span>「使いたい」「得意な」</span>
+                スキルを選択して開発をスタートすることができます。
+                実際にサービスをリリースするにあたり、コードを書くだけでなく
+                品質を意識した開発をすることで学べる知識は多岐に渡ります。
               </p>
             </div>
           </v-card>
-          <v-card elevation="6" color="#bdbdbd">
-            <div class="circle">
+          <v-card elevation="6" color="rgba(0, 0, 0, 0.637)">
+            <h3 class="card-title-coming">メンターサポート</h3>
+            <div class="text-center">
+              <p class="soon mt-10">Coming Soon</p>
+            </div>
+            <!-- <div class="circle">
               <v-icon class="icon">
                 mdi-account-multiple
               </v-icon>
-            </div>
+            </div> -->
           </v-card>
         </div>
         <div class="middle-btn-area">
@@ -131,13 +139,14 @@ export default Vue.extend({
         </div>
       </div>
       <div class="bottom-area">
-        <div class="bottom-title">
+        <h2 class="bottom-title font-weight-bold">
           チームアップはスキルアップの手助けをします
-        </div>
+          <p>value of service</p>
+        </h2>
         <div class="bottom-img">
           <img
             class="img"
-            src="@/assets/images/botom-area-logo.jpg"
+            src="@/assets/images/lp-value.png"
             alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア "
             width="90%"
             height="500px"
@@ -152,37 +161,31 @@ export default Vue.extend({
               <p>
                 個人で得る情報には、偏りがまれやすい。
                 しかし、チーム開発を行うことで、<br />その偏りを技ない、知識の幅を広げることができる。<br />
-                チーム内の誰かが発した聞きなれない聞き慣れないワードは,<br />やがて自分の『知』となり<br />
-                チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。
               </p>
             </div>
             <div class="bottom_contents_left__top">
-              <h3>チームの『知』を自分の『知』にできる</h3>
+              <h3>個人では得られない『体験価値』得ることができる</h3>
             </div>
             <div class="bottom_contents_left__upper">
               <p>
-                個人で得る情報には、偏りがまれやすい。
-                しかし、チーム開発を行うことで、その偏りを技ない、知識の幅を広げることができる。
-                チーム内の誰かが発した聞きなれない聞き慣れないワードはやがて自分の『知』』となり
-                チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。
+                個人では意識しない「コードレビュー」・「第三者の意見」「開発の進め方」が体験としいて得ることができます。<br />
+                実務では必須だが、個人では得られない観点の知識を得ることができます。
               </p>
             </div>
             <div class="bottom_contents_left__top">
-              <h3>チームの『知』を自分の『知』にできる</h3>
+              <h3>専門分野に特化することができる</h3>
             </div>
             <div class="bottom_contents_left__upper">
               <p>
-                個人で得る情報には、偏りがまれやすい。
-                しかし、チーム開発を行うことで、その偏りを技ない、知識の幅を広げることができる。
-                チーム内の誰かが発した聞きなれない聞き慣れないワードは<br />やがて自分の『知』』となり
-                チーム内の誰かが取り入れた見慣れない方法はやがて自分の『知』となる。
+                開発では、作業を分担して行います。バックエンド、フロントエンド、デザイナーなど様々な専門的技術が混ざり合い開発を行います。
+                浅く広くではなく、深く1点を突き詰めることで実務でも活きる力になります。
               </p>
             </div>
           </div>
           <div class="bottom_contents_right">
             <img
               class="img"
-              src="@/assets/images/botom-area-logo.jpg"
+              src="@/assets/images/lp-value.png"
               alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
               width="100%"
               height="700px"
@@ -209,10 +212,6 @@ export default Vue.extend({
 //  height: 450px;
 //  z-index: -10;
 //}
-
-.grey-out {
-  background-color: #1f1f1f5b;
-}
 
 .wrapper {
   width: 100%;
@@ -283,6 +282,7 @@ export default Vue.extend({
 
         .register {
           @include blue-btn;
+          @include box-shadow-btn;
           color: $white;
           font-weight: bold;
           padding: 1.1rem 4rem;
@@ -300,7 +300,7 @@ export default Vue.extend({
           bottom: 0;
 
           &:hover {
-            @include box-shadow-btn;
+            box-shadow: none;
           }
         }
       }
@@ -321,9 +321,9 @@ export default Vue.extend({
     width: 100%;
     position: relative;
 
-    .middle-titlle {
-      font-weight: bold;
-      font-size: 2em;
+    .middle-titlle p {
+      font-size: 0.5em;
+      color: $secondary-color;
     }
 
     .card-area {
@@ -333,8 +333,21 @@ export default Vue.extend({
       justify-content: space-between;
       position: relative;
 
+      .card-title {
+        color: $primary-color;
+        margin: 1rem auto;
+      }
+      .card-title-coming {
+        color: $white;
+        margin: 1rem auto;
+      }
+      .soon {
+        font-size: 2em;
+        color: $white;
+      }
+
       .v-card {
-        height: 500px;
+        min-height: 450px;
         width: 30%;
 
         .circle {
@@ -342,7 +355,7 @@ export default Vue.extend({
           width: 7rem;
           background-color: $dark-white;
           position: relative;
-          margin: 2rem auto;
+          margin: 0rem auto;
           border-radius: 50%;
           box-shadow: -5px -5px 20px $white, 5px 5px 20px #babecc;
 
@@ -355,17 +368,24 @@ export default Vue.extend({
 
         .card-inner {
           margin: 2rem;
+          line-height: 1.8rem;
+
+          p span {
+            color: $primary-dark;
+            font-size: 1.2em;
+            font-weight: bold;
+          }
         }
       }
     }
 
     .middle-btn-area {
-      width: 100%;
+      width: 95%;
       height: 20vh;
       margin: 5rem auto;
       position: relative;
       display: flex;
-      background-color: $primary-dark;
+      // background-color: $primary-dark;
 
       .middle-btn {
         width: 430px;
@@ -378,15 +398,13 @@ export default Vue.extend({
           color: $primary-color;
           text-align: left;
           background-color: $white;
-          box-shadow: none;
           padding: 1.1rem 3rem;
-          border-radius: 50px;
+          border-radius: 8px;
           font-size: 0.875rem;
           font-weight: 600;
           line-height: 1;
           text-align: center;
           max-width: 280px;
-          margin: 1rem auto;
           font-size: 1rem;
           float: right;
           cursor: pointer;
@@ -399,24 +417,26 @@ export default Vue.extend({
 
         .register {
           @include blue-btn;
+          @include box-shadow-btn;
           color: $white;
+          font-weight: bold;
           padding: 1.1rem 4rem;
-          border-radius: 50px;
-          border: none;
-          font-size: 0.875rem;
-          font-weight: 600;
+          border-radius: 8px;
           line-height: 1;
           text-align: center;
           max-width: 280px;
-          margin: 1rem auto;
+          margin: auto;
           font-size: 1rem;
           float: right;
           cursor: pointer;
           transition: 0.3s;
-          outline: none;
           position: absolute;
           left: 0;
           bottom: 0;
+
+          &:hover {
+            box-shadow: none;
+          }
         }
       }
     }
@@ -427,9 +447,9 @@ export default Vue.extend({
     position: relative;
     margin: 3rem auto;
 
-    .bottom-title {
-      font-weight: bold;
-      font-size: 2em;
+    .bottom-title p {
+      font-size: 0.5em;
+      color: $secondary-color;
     }
 
     .bottom-img {
@@ -449,6 +469,7 @@ export default Vue.extend({
 
         .bottom_contents_left__top {
           float: left;
+          text-align: left;
           margin-top: 1rem;
         }
 
@@ -631,6 +652,25 @@ export default Vue.extend({
       }
     }
 
+    .middle-area {
+      margin: 8rem 0;
+
+      .card-area {
+        display: flex;
+        flex-flow: column;
+        justify-content: space-between;
+        margin: 0rem auto;
+
+        .v-card {
+          width: 80%;
+          margin: 2rem auto;
+        }
+      }
+      .middle-btn-area {
+        margin: 3rem auto;
+      }
+    }
+
     .bottom-area {
       .bottom-img {
         display: inline;
@@ -686,22 +726,9 @@ export default Vue.extend({
     }
 
     .middle-area {
+      margin: 10rem 0;
       .middle-titlle {
         margin: 2rem 2rem;
-      }
-      .card-area {
-        display: flex;
-        flex-flow: column;
-        justify-content: space-between;
-        margin: 0rem auto;
-
-        .v-card {
-          width: 80%;
-          margin: 2rem auto;
-        }
-      }
-      .middle-btn-area {
-        margin: 3rem auto;
       }
     }
 
@@ -751,8 +778,6 @@ export default Vue.extend({
     }
 
     .middle-area {
-      margin: 2rem 0;
-
       .middle-titlle {
         margin: 0 2rem;
       }

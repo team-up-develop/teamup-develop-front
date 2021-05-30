@@ -108,38 +108,36 @@ export default defineComponent({
       const posts: Job[] = [];
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
-        setTimeout(() => {
-          state.loading = false;
-          state.jobs = res.data.response;
-          paginateJobs(state.jobs);
+        state.jobs = res.data.response;
+        paginateJobs(state.jobs);
 
-          //* トップページから フリーワード 検索をした際の処理
-          for (const job of res.data.response) {
-            if (job.job_description) {
-              if (job.job_description.indexOf(state.freeWord) !== -1) {
-                posts.push(job);
-              }
+        //* トップページから フリーワード 検索をした際の処理
+        for (const job of res.data.response) {
+          if (job.job_description) {
+            if (job.job_description.indexOf(state.freeWord) !== -1) {
+              posts.push(job);
             }
           }
-          state.jobs = posts;
-          paginateJobs(state.jobs);
-          // * トップページから 開発言語 検索した際の処理
-          if (Vuex.state.search.language.length !== 0) {
-            skillQueryParameter(Vuex.state.search.language, "pl_id");
-          }
-          // * トップページから フレームワーク 検索した際の処理
-          else if (Vuex.state.search.framwork.length !== 0) {
-            skillQueryParameter(Vuex.state.search.framwork, "pf_id");
-          }
-          // * トップページから その他スキル 検索した際の処理
-          else if (Vuex.state.search.skill.length !== 0) {
-            skillQueryParameter(Vuex.state.search.skill, "skill_id");
-          }
-          // * もし案件が存在しなかったら処理が走る
-          else if (!state.jobs.length) {
-            state.jobsNullFlag = true;
-          }
-        }, 1000);
+        }
+        state.jobs = posts;
+        paginateJobs(state.jobs);
+        // * トップページから 開発言語 検索した際の処理
+        if (Vuex.state.search.language.length !== 0) {
+          skillQueryParameter(Vuex.state.search.language, "pl_id");
+        }
+        // * トップページから フレームワーク 検索した際の処理
+        else if (Vuex.state.search.framwork.length !== 0) {
+          skillQueryParameter(Vuex.state.search.framwork, "pf_id");
+        }
+        // * トップページから その他スキル 検索した際の処理
+        else if (Vuex.state.search.skill.length !== 0) {
+          skillQueryParameter(Vuex.state.search.skill, "skill_id");
+        }
+        // * もし案件が存在しなかったら処理が走る
+        else if (!state.jobs.length) {
+          state.jobsNullFlag = true;
+        }
+        // }, 1000);
         // * 非ログイン時は応募/いいねを押下した際にリダイレクトでログインに遷移させる
         if (!state.userId) {
           state.entryRedirect = true; //* 非ログイン時表示に
@@ -167,6 +165,7 @@ export default defineComponent({
         state.jobs = res.data.response;
         if (state.jobs.length == 0) {
           state.jobsNullFlag = true;
+          state.loading = false;
         } else {
           paginateJobs(state.jobs);
         }
@@ -189,18 +188,22 @@ export default defineComponent({
         state.jobsPageSize * (state.page - 1),
         state.jobsPageSize * state.page
       );
+      state.loading = false;
     };
 
     // * 言語検索 emit
     const compliteSearchLanguage = (emitLanguage: Job[]) => {
+      state.loading = true;
       searchJobPagenate(emitLanguage);
     };
     // * フレームワーク検索 emit
     const compliteSearchFramework = (emitFramework: Job[]) => {
+      state.loading = true;
       searchJobPagenate(emitFramework);
     };
     // * その他スキル検索 emit
     const compliteSearchSkill = (emitSkill: Job[]) => {
+      state.loading = true;
       searchJobPagenate(emitSkill);
     };
     // * フリーワード 検索
@@ -229,27 +232,17 @@ export default defineComponent({
     // * 検索後の処理
     const searchJobPagenate = (value: Job[]) => {
       state.jobs = value;
-      state.paginationLength = Math.ceil(
-        state.jobs.length / state.jobsPageSize
-      );
-      state.displayJobs = state.jobs.slice(
-        state.jobsPageSize * (state.page - 1),
-        state.jobsPageSize * state.page
-      );
+      paginateJobs(state.jobs);
       state.jobsNullFlag = false;
       state.langModal = false;
       state.frameworkModal = false;
       state.skillModal = false;
-      state.loading = true;
-      setTimeout(() => {
-        if (value.length == 0) {
-          state.loading = false;
-          state.jobsNullFlag = true;
-        } else {
-          state.loading = false;
-          state.detailFlag = false;
-        }
-      }, 1500);
+      if (value.length == 0) {
+        state.jobsNullFlag = true;
+        state.detailFlag = false;
+      } else {
+        state.detailFlag = false;
+      }
     };
 
     return {
@@ -280,17 +273,15 @@ const useUtils = (state: State, ctx: SetupContext) => {
   // * ページネーション
   const pageChange = (pageNumber: number) => {
     state.loading = true;
-    setTimeout(() => {
-      state.loading = false;
-      state.displayJobs = state.jobs.slice(
-        state.jobsPageSize * (pageNumber - 1),
-        state.jobsPageSize * pageNumber
-      );
+    state.displayJobs = state.jobs.slice(
+      state.jobsPageSize * (pageNumber - 1),
+      state.jobsPageSize * pageNumber
+    );
 
-      ctx.root.$router.push({
-        query: { page: String(state.page), job_id: String(state.id) },
-      });
-    }, 1000);
+    ctx.root.$router.push({
+      query: { page: String(state.page), job_id: String(state.id) },
+    });
+    state.loading = false;
   };
   return {
     day,

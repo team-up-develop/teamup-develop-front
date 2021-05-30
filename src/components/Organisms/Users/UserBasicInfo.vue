@@ -49,6 +49,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <template>
   <div>
+    <p class="text-color">他のユーザーには公開されていない情報です</p>
     <v-sheet class="card" elevation="1">
       <div class="d-flex justify-start">
         <div class="card__area">
@@ -91,6 +92,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
+
+.text-color {
+  color: $error-message-color;
+}
 
 .card {
   border-radius: 4px;

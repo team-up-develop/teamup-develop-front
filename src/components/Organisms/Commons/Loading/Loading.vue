@@ -23,8 +23,8 @@ export default Vue.extend({
     <div class="fullview">
       <div class="loading-spacer"></div>
       <vue-loading
-        type="spin"
-        color="#666666"
+        type="bubbles"
+        color="#2196f3"
         :size="{ width: '120px', height: '65px' }"
       >
       </vue-loading>
