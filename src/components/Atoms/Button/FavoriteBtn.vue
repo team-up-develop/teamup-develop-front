@@ -19,8 +19,8 @@ export default Vue.extend({
   },
   data(): DataType {
     return {
-      userId: this.$store.state.auth.userId,
-      token: this.$store.state.auth.token,
+      userId: this.$store.getters.userId,
+      token: this.$store.getters.token,
       flag: true,
     };
   },
@@ -79,7 +79,7 @@ export default Vue.extend({
             Authorization: `Bearer ${this.token}`,
           },
           data: {
-            params,
+            ...params,
           },
         });
         if (res.data) {

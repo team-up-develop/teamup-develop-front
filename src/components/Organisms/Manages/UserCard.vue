@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  SetupContext,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 
@@ -15,17 +16,17 @@ type State = {
   userName: string;
 };
 
-const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
-  userName: Vuex.state.auth.userName,
-  manageNum: Vuex.state.statusJobs.jobsManageNum,
-  favoriteNum: Vuex.state.statusJobs.jobsFavoriteJobsNum,
-  applyNum: Vuex.state.statusJobs.jobsApplyNum,
+const initialState = (ctx: SetupContext): State => ({
+  userId: ctx.root.$store.getters.userId,
+  userName: ctx.root.$store.getters.userName,
+  manageNum: ctx.root.$store.getters.getJobsManageNum,
+  favoriteNum: ctx.root.$store.getters.getJobsFavoriteNum,
+  applyNum: ctx.root.$store.getters.getJobsApplyNum,
 });
 
 export default defineComponent({
-  setup: () => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
     onMounted(() => {
       Vuex.dispatch("getJobNum", {
         userId: state.userId,

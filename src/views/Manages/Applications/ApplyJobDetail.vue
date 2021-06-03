@@ -5,9 +5,9 @@ import {
   toRefs,
   computed,
   onMounted,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
   BtnArea,
@@ -27,8 +27,8 @@ type State = {
   selfJobPost: boolean;
 };
 
-const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
+const initialState = (ctx: SetupContext): State => ({
+  userId: ctx.root.$store.getters.userId,
   applyFlug: false,
   selfJobPost: false,
 });
@@ -45,8 +45,8 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0 },
   },
-  setup: (props) => {
-    const state = reactive<State>(initialState());
+  setup: (props, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     const {
       fetchJobDetail,

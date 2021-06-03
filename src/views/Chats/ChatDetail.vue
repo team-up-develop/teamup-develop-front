@@ -7,9 +7,9 @@ import {
   computed,
   ref,
   watch,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
 import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
@@ -32,10 +32,10 @@ type State = {
   clickJobId: number;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   chats: [],
   chatMessage: "",
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
   isActive: true,
   hasError: false,
   loading: true,
@@ -55,8 +55,8 @@ export default defineComponent({
     // * job.idを受け取る
     id: { type: Number, required: true, defalut: 0 },
   },
-  setup: (props) => {
-    const state = reactive<State>(initialState());
+  setup: (props, ctx) => {
+    const state = reactive<State>(initialState(ctx));
     let root: any = ref(null);
 
     const breadcrumbs = computed(() => [

@@ -5,9 +5,9 @@ import {
   reactive,
   toRefs,
   PropType,
+  SetupContext,
 } from "@vue/composition-api";
 import { $post } from "@/libs/axios";
-import Vuex from "@/store/index";
 import { AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { messageParams } from "@/types/params";
@@ -21,9 +21,9 @@ type State = {
   chatMessage: string;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   chatMessage: "",
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
@@ -31,7 +31,7 @@ export default defineComponent({
     id: { type: Number as PropType<number>, defalut: 0, required: true },
   },
   setup: (props: Props, ctx) => {
-    const state = reactive<State>(initialState());
+    const state = reactive<State>(initialState(ctx));
     const { auth } = useUtils();
 
     // * job_id が存在するか判別

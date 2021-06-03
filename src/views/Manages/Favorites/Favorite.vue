@@ -4,9 +4,9 @@ import {
   reactive,
   toRefs,
   computed,
+  SetupContext,
 } from "@vue/composition-api";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import Vuex from "@/store/index";
 import ApplyFavorite from "@/components/Templates/Manages/ApplyFavorite.vue";
 import useJobs from "@/hooks/useJobs";
 
@@ -14,8 +14,8 @@ type State = {
   userId: number;
 };
 
-const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
+const initialState = (ctx: SetupContext): State => ({
+  userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
@@ -23,8 +23,8 @@ export default defineComponent({
     Breadcrumbs,
     ApplyFavorite,
   },
-  setup: () => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
     const { favoriteJobs } = useJobs();
 
     const breadcrumbs = computed(() => [

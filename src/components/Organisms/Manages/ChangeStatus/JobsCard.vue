@@ -5,6 +5,8 @@ import {
   toRefs,
   onMounted,
   PropType,
+  SetupContext,
+  // SetupContext,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import { truncate } from "@/hooks/useUtils";
@@ -20,31 +22,31 @@ type State = {
   jobTitle: string;
 };
 
-const initialState = (): State => ({
-  applyNum: Vuex.state.statusUser.userApplyNum,
-  participateNum: Vuex.state.statusUser.userParticipateNum,
-  rejectNum: Vuex.state.statusUser.userRejectNum,
-  jobTitle: Vuex.state.statusUser.jobTitle,
+const initialState = (ctx: SetupContext): State => ({
+  applyNum: ctx.root.$store.getters.getUserApplyNum,
+  participateNum: ctx.root.$store.getters.getUserParticipateNum,
+  rejectNum: ctx.root.$store.getters.getUserRejectNum,
+  jobTitle: ctx.root.$store.getters.getJob,
 });
 
 export default defineComponent({
   props: {
     jobId: { type: Number as PropType<number>, default: 0, required: true },
   },
-  setup: (props: Props) => {
-    const state = reactive<State>(initialState());
+  setup: (props: Props, ctx) => {
+    const state = reactive<State>(initialState(ctx));
     const limit = (value: string, num: number) => truncate(value, num);
 
     onMounted(() => {
       Vuex.dispatch("getUserNum", {
         jobId: props.jobId,
       });
-      setTimeout(() => {
-        state.applyNum = Vuex.state.statusUser.userApplyNum;
-        state.participateNum = Vuex.state.statusUser.userParticipateNum;
-        state.rejectNum = Vuex.state.statusUser.userRejectNum;
-        state.jobTitle = Vuex.state.statusUser.jobTitle;
-      }, 500);
+      // setTimeout(() => {
+      //   state.applyNum = Vuex.state.statusUser.userApplyNum;
+      //   state.participateNum = Vuex.state.statusUser.userParticipateNum;
+      //   state.rejectNum = Vuex.state.statusUser.userRejectNum;
+      //   state.jobTitle = Vuex.state.statusUser.jobTitle;
+      // }, 500);
     });
 
     return {

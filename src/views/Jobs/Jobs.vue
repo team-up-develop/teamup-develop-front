@@ -29,6 +29,7 @@ import { dayJsFormat } from "@/libs/dayjs";
 import { Job } from "@/types/index";
 import { FetchJobs, FetchFavoriteJob, FetchManageJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
+import { encode } from "@/libs/jsBase64";
 
 type Maybe<T> = T | null;
 
@@ -100,6 +101,7 @@ export default defineComponent({
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
+    // console.log(state.userId, "userId");
     // console.log(Vuex.getters.userId, "getters/userId gettersでアクセス");
     // console.log(ctx.root.$store.getters, "ctxからアクセス");
 
@@ -122,16 +124,16 @@ export default defineComponent({
         state.jobs = posts;
         paginateJobs(state.jobs);
         // * トップページから 開発言語 検索した際の処理
-        if (Vuex.state.search.language.length !== 0) {
-          skillQueryParameter(Vuex.state.search.language, "pl_id");
+        if (ctx.root.$store.getters.language.length !== 0) {
+          skillQueryParameter(ctx.root.$store.getters.language, "pl_id");
         }
         // * トップページから フレームワーク 検索した際の処理
-        else if (Vuex.state.search.framwork.length !== 0) {
-          skillQueryParameter(Vuex.state.search.framwork, "pf_id");
+        else if (ctx.root.$store.getters.framwork.length !== 0) {
+          skillQueryParameter(ctx.root.$store.getters.framwork, "pf_id");
         }
         // * トップページから その他スキル 検索した際の処理
-        else if (Vuex.state.search.skill.length !== 0) {
-          skillQueryParameter(Vuex.state.search.skill, "skill_id");
+        else if (ctx.root.$store.getters.skill.length !== 0) {
+          skillQueryParameter(ctx.root.$store.getters.skill, "skill_id");
         }
         // * もし案件が存在しなかったら処理が走る
         else if (!state.jobs.length) {
@@ -307,6 +309,10 @@ const clickJob = (state: State, ctx: SetupContext) => {
       query: { page: String(state.page), job_id: String(state.id) },
     });
 
+    localStorage.setItem("cji_data_en", encode(String(state.id)));
+    //  TODO: decode テスト
+    // const test: string = localStorage.getItem("cji_data_en")!;
+    // console.log(decode(test));
     // * ログインしていれば以下の処理が走る
     if (state.userId) {
       await selfJobCheck();

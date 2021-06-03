@@ -1,19 +1,23 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "@vue/composition-api";
-import Vuex from "@/store/index";
+import {
+  defineComponent,
+  reactive,
+  SetupContext,
+  toRefs,
+} from "@vue/composition-api";
 import { useUtils } from "@/hooks";
 
 type State = {
   userId: number;
 };
 
-const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
+const initialState = (ctx: SetupContext): State => ({
+  userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
-  setup() {
-    const state = reactive<State>(initialState());
+  setup(_, ctx) {
+    const state = reactive<State>(initialState(ctx));
     const { isLogin } = useUtils();
 
     return {

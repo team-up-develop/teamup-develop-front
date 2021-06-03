@@ -6,9 +6,9 @@ import {
   onMounted,
   computed,
   onBeforeMount,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import {
@@ -29,8 +29,8 @@ type State = {
   applyFlug: boolean;
 };
 
-const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
+const initialState = (ctx: SetupContext): State => ({
+  userId: ctx.root.$store.getters.userId,
   loading: true,
   selfJobPost: false,
   applyFlug: true,
@@ -48,8 +48,8 @@ export default defineComponent({
   props: {
     id: { type: Number, default: 0, required: true },
   },
-  setup: (props) => {
-    const state = reactive<State>(initialState());
+  setup: (props, ctx) => {
+    const state = reactive<State>(initialState(ctx));
     const {
       fetchJobDetail,
       job,

@@ -5,6 +5,7 @@ import {
   toRefs,
   onMounted,
   computed,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { RejectJob } from "@/types/index";
@@ -13,16 +14,15 @@ import { m, API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import Vuex from "@/store/index";
 
 type State = {
   rejectUsers: RejectJob[];
   userId: number;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   rejectUsers: [],
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
@@ -34,8 +34,8 @@ export default defineComponent({
     // * job.idを受け取る
     id: { type: Number, default: null },
   },
-  setup: (props) => {
-    const state = reactive<State>(initialState());
+  setup: (props, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     const breadcrumbs = computed(() => [
       {

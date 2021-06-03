@@ -22,7 +22,7 @@ type State = {
 };
 
 const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
+  userId: Vuex.getters.userId,
   jobs: [],
   job: {},
   manageJobs: [],

@@ -4,20 +4,23 @@ import {
   reactive,
   toRefs,
   onMounted,
+  SetupContext,
 } from "@vue/composition-api";
-import Vuex from "@/store/index";
 import {
   Header,
   Footer,
   HeaderLoginFalse,
 } from "@/components/Organisms/Commons/Entires";
+type Maybe<T> = T | null;
 
 type State = {
   loginFlag: boolean;
+  userId: Maybe<number>;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   loginFlag: false,
+  userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
@@ -27,11 +30,11 @@ export default defineComponent({
     Footer,
     HeaderLoginFalse,
   },
-  setup: () => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     onMounted(() => {
-      if (Vuex.state.auth.userId) {
+      if (state.userId) {
         state.loginFlag = true;
       }
     });

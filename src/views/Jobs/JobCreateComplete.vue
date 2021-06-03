@@ -5,8 +5,8 @@ import {
   toRefs,
   onMounted,
   computed,
+  SetupContext,
 } from "@vue/composition-api";
-import Vuex from "@/store/index";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import UserCard from "@/components/Organisms/Manages/UserCard.vue";
 import JobCreateCompleteCard from "@/components/Organisms/Jobs/JobCreateCompleteCard.vue";
@@ -17,9 +17,9 @@ type State = {
   userId: number;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   loading: true,
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
@@ -29,8 +29,8 @@ export default defineComponent({
     JobCreateCompleteCard,
     Breadcrumbs,
   },
-  setup: () => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     const breadcrumbs = computed(() => [
       {

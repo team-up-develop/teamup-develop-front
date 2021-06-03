@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
@@ -22,15 +23,15 @@ type SearchParams = {
   language: number[];
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   languages: [],
-  selectedLang: Vuex.state.search.language,
+  selectedLang: ctx.root.$store.getters.language,
   jobs: [],
 });
 
 export default defineComponent({
-  setup: (_, context) => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     onMounted(() => {
       fetchLanguages();
@@ -63,7 +64,7 @@ export default defineComponent({
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
         state.jobs = res.data.response;
-        context.emit("compliteSearchLanguage", state.jobs);
+        ctx.emit("compliteSearchLanguage", state.jobs);
 
         // * 言語 検索語 Vuexに値を格納する
         Vuex.dispatch("languageSearch", {

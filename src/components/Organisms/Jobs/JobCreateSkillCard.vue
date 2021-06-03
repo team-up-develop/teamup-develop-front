@@ -11,7 +11,6 @@ import {
   PropType,
 } from "@icare-jp/vue-props-type";
 import { $fetch, $post } from "@/libs/axios";
-import Vuex from "@/store/index";
 import { API_URL, AUTH_URL, md } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { SkillSelectArea, RadioArea } from "@/components/Molecules/Forms";
@@ -137,7 +136,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       const devEndDate = toDate(devEnd, "-");
 
       const params: JobCreateParamsSecond = {
-        user_id: Vuex.state.auth.userId,
+        user_id: ctx.root.$store.getters.userId,
         job_title: props.jobTitle,
         job_description: props.jobDescription,
         dev_start_date: devStartDate,

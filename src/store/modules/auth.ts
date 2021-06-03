@@ -3,9 +3,9 @@ import { $post } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import router from "@/router";
-
+import { encode, decode } from "@/libs/jsBase64";
 interface State {
-  userId: number | null;
+  userId: string;
   userName: string;
   token: string;
   errorFlag: boolean;
@@ -17,21 +17,21 @@ interface LoginData {
 }
 
 const state: State = {
-  userId: null,
+  userId: "",
   userName: "",
   token: "",
   errorFlag: false,
 };
 
 const getters: GetterTree<State, LoginData> = {
-  userId: (state: State) => state.userId,
+  userId: (state: State) => decode(state.userId),
   userName: (state: State) => state.userName,
   token: (state: State) => state.token,
 };
 
 const mutations: MutationTree<State> = {
   loginUserId(state: State, userId: number) {
-    state.userId = userId;
+    state.userId = encode(String(userId));
   },
   loginUserName(state: State, userName: string) {
     state.userName = userName;

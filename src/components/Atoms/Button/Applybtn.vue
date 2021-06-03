@@ -22,10 +22,10 @@ export default Vue.extend({
   },
   data(): State {
     return {
-      userId: this.$store.state.auth.userId,
+      userId: this.$store.getters.userId,
       compliteModal: false,
       applyFlag: true,
-      token: this.$store.state.auth.token,
+      token: this.$store.getters.token,
     };
   },
   methods: {

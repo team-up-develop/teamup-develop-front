@@ -1,7 +1,6 @@
 <script lang="ts">
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import Vue from "vue";
-import Vuex from "@/store/index";
 
 export default Vue.extend({
   components: {
@@ -10,7 +9,7 @@ export default Vue.extend({
   data() {
     return {
       loading: true,
-      userId: Vuex.state.auth.userId,
+      userId: this.$store.getters.userId,
     };
   },
   mounted() {

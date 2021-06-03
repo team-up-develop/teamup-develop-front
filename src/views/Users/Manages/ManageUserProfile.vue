@@ -6,9 +6,9 @@ import {
   onMounted,
   computed,
   PropType,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import Vuex from "@/store/index";
 // import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
   PostUser,
@@ -40,10 +40,10 @@ type State = {
   currentTab: 0 | 1;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   myselfFlag: false,
   userInfo: {},
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
   doneStatusFlag: false,
   currentTab: 0,
 });
@@ -64,8 +64,8 @@ export default defineComponent({
     jobId: { type: Number as PropType<number>, default: 0, required: true },
     applyId: { type: Number as PropType<number>, default: 0, required: true },
   },
-  setup: (props: Props) => {
-    const state = reactive<State>(initialState());
+  setup: (props: Props, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     const breadcrumbs = computed(() => [
       {

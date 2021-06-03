@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
@@ -22,15 +23,15 @@ type SearchParams = {
   skill: number[];
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   skills: [],
-  selectedSkill: Vuex.state.search.skill,
+  selectedSkill: ctx.root.$store.getters.skill,
   jobs: [],
 });
 
 export default defineComponent({
-  setup: (_, context) => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     onMounted(() => {
       fetchSkills();
@@ -63,7 +64,7 @@ export default defineComponent({
       $fetch<FetchJobs>(`${API_URL}/jobs?${result}`).then((res) => {
         state.jobs = res.data.response;
 
-        context.emit("compliteSearchSkill", state.jobs);
+        ctx.emit("compliteSearchSkill", state.jobs);
         // * その他スキル 検索語 Vuexに値を格納する
         Vuex.dispatch("skillSearch", {
           skill: skillStateEnd,

@@ -7,11 +7,11 @@ import {
   computed,
   PropType,
   onBeforeMount,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
-import Vuex from "@/store/index";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import {
@@ -39,10 +39,10 @@ type State = {
   currentTab: 0 | 1 | 2;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   myselfFlag: false,
   userInfo: {},
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
   modal: false,
   currentTab: 0,
 });
@@ -62,8 +62,8 @@ export default defineComponent({
   props: {
     id: { type: Number as PropType<number>, default: 0, required: true },
   },
-  setup: (props: Props) => {
-    const state = reactive<State>(initialState());
+  setup: (props: Props, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     const breadcrumbs = computed(() => [
       {
