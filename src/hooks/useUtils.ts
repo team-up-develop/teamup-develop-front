@@ -12,8 +12,8 @@ type State = {
 };
 
 const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
-  token: Vuex.state.auth.token,
+  userId: Vuex.getters.userId,
+  token: Vuex.getters.token,
 });
 
 const useUtils = () => {

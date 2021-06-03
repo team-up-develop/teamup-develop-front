@@ -1,18 +1,23 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "@vue/composition-api";
+import {
+  defineComponent,
+  reactive,
+  SetupContext,
+  toRefs,
+} from "@vue/composition-api";
 import Vuex from "@/store/index";
 
 type State = {
   freeWord: string;
 };
 
-const initialState = (): State => ({
-  freeWord: Vuex.state.search.freeWord, //? フリーワード 検索
+const initialState = (ctx: SetupContext): State => ({
+  freeWord: ctx.root.$store.getters.freeWord,
 });
 
 export default defineComponent({
-  setup: (_, ctx: any) => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
     const router = ctx.root.$router;
 
     // * トップページフリーワード 検索

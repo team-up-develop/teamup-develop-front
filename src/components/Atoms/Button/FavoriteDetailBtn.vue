@@ -19,8 +19,8 @@ export default Vue.extend({
   data(): DataType {
     return {
       flag: true,
-      token: this.$store.state.auth.token,
-      userId: this.$store.state.auth.userId,
+      token: this.$store.getters.token,
+      userId: this.$store.getters.userId,
     };
   },
   mounted() {

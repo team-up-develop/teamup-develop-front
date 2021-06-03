@@ -5,13 +5,13 @@ import {
   toRefs,
   onMounted,
   computed,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { ManageJob } from "@/types/index";
 import { FetchManageJobs } from "@/types/fetch";
-import Vuex from "@/store/index";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import ApplyFavorite from "@/components/Templates/Manages/ApplyFavorite.vue";
 
@@ -20,9 +20,9 @@ type State = {
   userId: number;
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   applyJob: [],
-  userId: Vuex.state.auth.userId,
+  userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
@@ -30,8 +30,8 @@ export default defineComponent({
     Breadcrumbs,
     ApplyFavorite,
   },
-  setup: () => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     const breadcrumbs = computed(() => [
       {

@@ -23,7 +23,7 @@ export default defineComponent({
   },
   setup: () => {
     const state = reactive<State>(initialState());
-
+    // TODO: 修正が必要 Vuex
     const fetchError = () => {
       Vuex.state.auth.errorFlag = false;
     };

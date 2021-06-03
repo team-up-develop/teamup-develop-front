@@ -1,8 +1,12 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "@vue/composition-api";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  SetupContext,
+} from "@vue/composition-api";
 import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
 import CreateBtn from "@/components/Atoms/Commons/Entires/CreateBtn.vue";
-import Vuex from "@/store/index";
 import { truncate } from "@/hooks/useUtils";
 
 type State = {
@@ -10,9 +14,9 @@ type State = {
   userName: string;
 };
 
-const initialState = (): State => ({
-  userId: Vuex.state.auth.userId,
-  userName: Vuex.state.auth.userName,
+const initialState = (ctx: SetupContext): State => ({
+  userId: ctx.root.$store.getters.userId,
+  userName: ctx.root.$store.getters.userName,
 });
 
 export default defineComponent({
@@ -21,8 +25,8 @@ export default defineComponent({
     CreateBtn,
   },
 
-  setup: () => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     const limit = (value: string, num: number) => truncate(value, num);
 

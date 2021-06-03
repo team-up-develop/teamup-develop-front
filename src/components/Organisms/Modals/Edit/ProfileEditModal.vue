@@ -10,6 +10,7 @@ import {
   toRefs,
   onMounted,
   computed,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch, $put } from "@/libs/axios";
 import { md, API_URL, AUTH_URL } from "@/master";
@@ -23,7 +24,6 @@ import {
   DescriptionArea,
   DatePickerArea,
 } from "@/components/Molecules/Forms";
-import Vuex from "@/store/index";
 // TODO: モーダルの molecule に分割
 // import ProfileEditBase from "@/components/Molecules/Modals/ProfileEditBase.vue";
 
@@ -67,9 +67,9 @@ type State = {
 };
 
 //TODO: any
-const initialState = (userInfo: User | any): State => ({
+const initialState = (userInfo: User | any, ctx: SetupContext): State => ({
   id: userInfo.id,
-  token: Vuex.state.auth.token,
+  token: ctx.root.$store.getters.token,
   userName: userInfo.user_name,
   lastName: userInfo.last_name,
   firstName: userInfo.first_name,
@@ -106,7 +106,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   },
   props: propsOption,
   setup(props, ctx) {
-    const state = reactive<State>(initialState(props.userInfo));
+    const state = reactive<State>(initialState(props.userInfo, ctx));
 
     const clickTabs = (value: 0 | 1 | 2) => {
       state.currentTab = value;

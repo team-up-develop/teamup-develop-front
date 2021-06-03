@@ -4,6 +4,7 @@ import {
   reactive,
   toRefs,
   onMounted,
+  SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
@@ -18,9 +19,9 @@ type State = {
   jobs: Job[];
 };
 
-const initialState = (): State => ({
+const initialState = (ctx: SetupContext): State => ({
   frameworks: [],
-  selectedFramework: Vuex.state.search.framwork,
+  selectedFramework: ctx.root.$store.getters.framwork,
   jobs: [],
 });
 
@@ -29,8 +30,8 @@ type SearchParams = {
 };
 
 export default defineComponent({
-  setup: (_, context) => {
-    const state = reactive<State>(initialState());
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
 
     onMounted(() => {
       fetchFrameworks();
@@ -64,7 +65,7 @@ export default defineComponent({
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
         state.jobs = res.data.response;
-        context.emit("compliteSearchFramework", state.jobs);
+        ctx.emit("compliteSearchFramework", state.jobs);
         // * フレームワーク 検索語 Vuexに値を格納する
         Vuex.dispatch("framworkSearch", {
           framwork: frameworkStateEnd,
