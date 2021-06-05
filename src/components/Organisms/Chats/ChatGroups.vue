@@ -9,11 +9,12 @@ import {
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { Job, ManageJob } from "@/types/index";
-import { m, API_URL } from "@/master";
+import { m, AUTH_URL } from "@/master";
 import { truncate } from "@/hooks/useUtils";
 import { catchError } from "@/libs/errorHandler";
 import { dayJsFormat } from "@/libs/dayjs";
 import { FetchManageJobs } from "@/types/fetch";
+import { useUtils } from "@/hooks";
 
 type Props = {
   userId: number;
@@ -39,14 +40,17 @@ export default defineComponent({
   },
   setup: (props: Props) => {
     const state = reactive<State>(initialState());
-
+    const { auth } = useUtils();
     const day = (value: string, format: string) => dayJsFormat(value, format);
     const limit = (value: string, num: number) => truncate(value, num);
 
     const getChatGroups = async () => {
       try {
         const res = await $fetch<FetchManageJobs>(
-          `${API_URL}/apply_jobs?user_id=${props.userId}`
+          `${AUTH_URL}/apply_jobs?user_id=${props.userId}`,
+          {
+            headers: auth.value,
+          }
         );
         const array: ManageJob[] = [];
         for (const job of res.data.response) {

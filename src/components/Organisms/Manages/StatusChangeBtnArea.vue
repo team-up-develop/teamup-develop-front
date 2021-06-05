@@ -12,9 +12,10 @@ import {
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { FetchManageJobs } from "@/types/fetch";
-import { m, API_URL } from "@/master";
+import { m, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
+import { useUtils } from "@/hooks";
 
 const propsOption = {
   id: { type: Number as PropType<number>, default: 0, required: true }, //? 詳細を見るユーザーのID
@@ -43,7 +44,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: (props) => {
     const state = reactive<State>(initialState());
-
+    const { auth } = useUtils();
     const participate = () => {
       state.statusId = m.APPLY_STATUS_PARTICIPATE;
     };
@@ -61,8 +62,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     // * 表示中のユーザーのステータスを格納
     const getStatus = async () => {
       try {
-        const res = await $fetch<FetchManageJobs>(`
-          ${API_URL}/apply_jobs?job_id=${props.jobId}&user_id=${props.id}`);
+        const res = await $fetch<FetchManageJobs>(
+          `
+          ${AUTH_URL}/apply_jobs?job_id=${props.jobId}&user_id=${props.id}`,
+          {
+            headers: auth.value,
+          }
+        );
         state.statusId = res.data.response[0].apply_status_id;
         state.updatedAt = res.data.response[0].updated_at;
       } catch (error) {

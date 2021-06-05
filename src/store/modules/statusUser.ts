@@ -7,8 +7,9 @@ import {
   FetchJob,
 } from "@/types/fetch";
 import { $fetch } from "@/libs/axios";
-import { API_URL, m } from "@/master";
+import { API_URL, AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
+import Vuex from "@/store/index";
 
 interface State {
   userApplyNum: number;
@@ -61,15 +62,30 @@ const actions: ActionTree<State, GetStatus> = {
   async getUserNum({ commit }, jobObject: ActionsJob) {
     try {
       const responseApply = await $fetch<FetchApplyJob>(
-        `${API_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_APPLY}`
+        `${AUTH_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_APPLY}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Vuex.getters.token}`,
+          },
+        }
       );
       commit("getUserApplyNum", responseApply.data.response.length);
       const responseParticipate = await $fetch<FetchParticipateJob>(
-        `${API_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}`
+        `${AUTH_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Vuex.getters.token}`,
+          },
+        }
       );
       commit("getUserParticipateNum", responseParticipate.data.response.length);
       const responseReject = await $fetch<FetchRejectJob>(
-        `${API_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_REJECT}`
+        `${AUTH_URL}/apply_jobs?job_id=${jobObject.jobId}&apply_status_id=${m.APPLY_STATUS_REJECT}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Vuex.getters.token}`,
+          },
+        }
       );
       commit("getUserRejectNum", responseReject.data.response.length);
       const res = await $fetch<FetchJob>(`${API_URL}/job/${jobObject.jobId}`);

@@ -8,12 +8,13 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import { API_URL, m } from "@/master";
+import { AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { ManageJob } from "@/types/index";
 import { FetchManageJobs } from "@/types/fetch";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import ApplyFavorite from "@/components/Templates/Manages/ApplyFavorite.vue";
+import { useUtils } from "@/hooks";
 
 type State = {
   applyJob: ManageJob[];
@@ -32,7 +33,7 @@ export default defineComponent({
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
-
+    const { auth } = useUtils();
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -52,7 +53,10 @@ export default defineComponent({
       }
       try {
         const res = await $fetch<FetchManageJobs>(
-          `${API_URL}/apply_jobs?user_id=${state.userId}`
+          `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
+          {
+            headers: auth.value,
+          }
         );
         // TODO: API改正要望
         for (const value of res.data.response) {

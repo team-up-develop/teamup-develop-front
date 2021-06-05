@@ -2,9 +2,9 @@ import { ActionTree, GetterTree, MutationTree } from "vuex";
 import { $fetch } from "@/libs/axios";
 import { ManageJob } from "@/types/index";
 import { FetchManageJobs, FetchFavoriteJob } from "@/types/fetch";
-import { API_URL, m } from "@/master";
+import { API_URL, AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-
+import Vuex from "@/store/index";
 interface State {
   jobsManageNum: number;
   jobsFavoriteJobsNum: number;
@@ -57,12 +57,22 @@ const actions: ActionTree<State, GetStatus> = {
       commit("getJobsManageNum", responseManage.data.response.length);
 
       const responseFavorite = await $fetch<FetchFavoriteJob>(
-        `${API_URL}/favorite_jobs?user_id=${userObject.userId}`
+        `${AUTH_URL}/favorite_jobs?user_id=${userObject.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Vuex.getters.token}`,
+          },
+        }
       );
       commit("getJobsFavoriteNum", responseFavorite.data.response.length);
 
       const responseApply = await $fetch<FetchManageJobs>(
-        `${API_URL}/apply_jobs?user_id=${userObject.userId}`
+        `${AUTH_URL}/apply_jobs?user_id=${userObject.userId}`,
+        {
+          headers: {
+            Authorization: `Bearer ${Vuex.getters.token}`,
+          },
+        }
       );
       const applyArray: ManageJob[] = [];
       for (const job of responseApply.data.response) {

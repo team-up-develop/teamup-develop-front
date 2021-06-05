@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
 import { $fetch, $post, $delete } from "@/libs/axios";
-import { API_URL, AUTH_URL } from "@/master";
+import { AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { FavoriteParams } from "@/types/params";
 import { FetchFavoriteJob } from "@/types/fetch";
@@ -25,7 +25,14 @@ export default Vue.extend({
   },
   mounted() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
-    $fetch<FetchFavoriteJob>(`${API_URL}/favorite_jobs?user_id=${this.userId}`)
+    $fetch<FetchFavoriteJob>(
+      `${AUTH_URL}/favorite_jobs?user_id=${this.userId}`,
+      {
+        headers: {
+          Authorization: `Bearer ${this.token}`,
+        },
+      }
+    )
       .then((res) => {
         const array = [];
         for (const favoriteJob of res.data.response) {

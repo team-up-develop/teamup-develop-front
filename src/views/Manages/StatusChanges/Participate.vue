@@ -12,8 +12,9 @@ import { ParticipateJob } from "@/types/index";
 import { FetchParticipateJob } from "@/types/fetch";
 import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import { m, API_URL } from "@/master";
+import { m, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
+import { useUtils } from "@/hooks";
 
 type State = {
   assginUsers: ParticipateJob[];
@@ -36,7 +37,7 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-
+    const { auth } = useUtils();
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -57,9 +58,14 @@ export default defineComponent({
 
     const fetchAssginUser = async () => {
       try {
-        const res = await $fetch<FetchParticipateJob>(`
-            ${API_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}
-            `);
+        const res = await $fetch<FetchParticipateJob>(
+          `
+            ${AUTH_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}
+            `,
+          {
+            headers: auth.value,
+          }
+        );
         state.assginUsers = res.data.response;
       } catch (error) {
         catchError(error);
