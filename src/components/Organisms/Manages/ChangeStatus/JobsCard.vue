@@ -41,12 +41,13 @@ export default defineComponent({
       Vuex.dispatch("getUserNum", {
         jobId: props.jobId,
       });
-      // setTimeout(() => {
-      //   state.applyNum = Vuex.state.statusUser.userApplyNum;
-      //   state.participateNum = Vuex.state.statusUser.userParticipateNum;
-      //   state.rejectNum = Vuex.state.statusUser.userRejectNum;
-      //   state.jobTitle = Vuex.state.statusUser.jobTitle;
-      // }, 500);
+      // TODO: stateの値を更新するために記載
+      setTimeout(() => {
+        state.applyNum = ctx.root.$store.getters.getUserApplyNum;
+        state.participateNum = ctx.root.$store.getters.getUserParticipateNum;
+        state.rejectNum = ctx.root.$store.getters.getUserRejectNum;
+        state.jobTitle = ctx.root.$store.getters.getJob;
+      }, 700);
     });
 
     return {

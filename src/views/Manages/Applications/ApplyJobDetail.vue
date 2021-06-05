@@ -17,9 +17,10 @@ import {
 } from "@/components/Organisms/Jobs/JobDetails";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import useJobs from "@/hooks/useJobs";
-import { API_URL } from "@/master";
+import { AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { FetchManageJobs } from "@/types/fetch";
+import { useUtils } from "@/hooks";
 
 type State = {
   userId: number;
@@ -47,7 +48,7 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-
+    const { auth } = useUtils();
     const {
       fetchJobDetail,
       job,
@@ -82,7 +83,10 @@ export default defineComponent({
     const getCheckStatus = async () => {
       try {
         const res = await $fetch<FetchManageJobs>(
-          `${API_URL}/apply_jobs?user_id=${state.userId}`
+          `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
+          {
+            headers: auth.value,
+          }
         );
         const arrayApply: number[] = [];
         for (const applyData of res.data.response) {

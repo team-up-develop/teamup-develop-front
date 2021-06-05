@@ -5,11 +5,12 @@ import {
   // onUnmounted,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import { API_URL } from "@/master";
+import { API_URL, AUTH_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
 import { ManageJob, FavoriteJob, Job } from "@/types/index";
 import { FetchManageJobs, FetchJobs, FetchFavoriteJob } from "@/types/fetch";
 import Vuex from "@/store/index";
+import { useUtils } from "@/hooks";
 
 type State = {
   userId: number;
@@ -33,6 +34,7 @@ const initialState = (): State => ({
 
 const useJobs = () => {
   const state = reactive<State>(initialState());
+  const { auth } = useUtils();
 
   const fetchJobs = async () => {
     try {
@@ -80,7 +82,10 @@ const useJobs = () => {
   const fetchFavoriteJobs = async () => {
     try {
       const res = await $fetch<FetchFavoriteJob>(
-        `${API_URL}/favorite_jobs?user_id=${state.userId}`
+        `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
+        {
+          headers: auth.value,
+        }
       );
       state.favoriteJobs = res.data.response;
     } catch (error) {

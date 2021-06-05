@@ -18,7 +18,7 @@ import {
   DetailJob,
 } from "@/components/Organisms/Jobs/JobDetails";
 import { useJobs, useUtils } from "@/hooks";
-import { API_URL } from "@/master";
+import { AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { FetchManageJobs } from "@/types/fetch";
 
@@ -58,8 +58,7 @@ export default defineComponent({
       fetchManageJobs,
     } = useJobs();
     fetchJobDetail(props.id);
-
-    const { isLogin } = useUtils();
+    const { isLogin, auth } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -100,7 +99,10 @@ export default defineComponent({
     const getCheckStatus = async () => {
       try {
         const res = await $fetch<FetchManageJobs>(
-          `${API_URL}/apply_jobs?user_id=${state.userId}`
+          `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
+          {
+            headers: auth.value,
+          }
         );
         const arrayApply: number[] = [];
         for (const applyData of res.data.response) {

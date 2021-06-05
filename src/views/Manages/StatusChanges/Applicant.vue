@@ -12,8 +12,9 @@ import { ApplyJob } from "@/types/index";
 import { FetchApplyJob } from "@/types/fetch";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
-import { m, API_URL } from "@/master";
+import { m, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
+import { useUtils } from "@/hooks";
 
 type State = {
   applyUsers: ApplyJob[];
@@ -36,7 +37,7 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-
+    const { auth } = useUtils();
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -57,8 +58,13 @@ export default defineComponent({
 
     const fetchApplyUser = async () => {
       try {
-        const res = await $fetch<FetchApplyJob>(`
-            ${API_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_APPLY}`);
+        const res = await $fetch<FetchApplyJob>(
+          `
+            ${AUTH_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_APPLY}`,
+          {
+            headers: auth.value,
+          }
+        );
         state.applyUsers = res.data.response;
       } catch (error) {
         catchError(error);

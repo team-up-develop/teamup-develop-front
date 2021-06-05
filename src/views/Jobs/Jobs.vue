@@ -7,7 +7,7 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import { API_URL } from "@/master";
+import { API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { truncate } from "@/hooks/useUtils";
 import {
@@ -30,6 +30,7 @@ import { Job } from "@/types/index";
 import { FetchJobs, FetchFavoriteJob, FetchManageJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
 import { encode } from "@/libs/jsBase64";
+import { useUtils } from "@/hooks";
 
 type Maybe<T> = T | null;
 
@@ -256,13 +257,13 @@ export default defineComponent({
       compliteSearchSkill,
       searchFreeword,
       skillQueryParameter,
-      ...useUtils(state, ctx),
+      ...utils(state, ctx),
       ...clickJob(state, ctx),
     };
   },
 });
 
-const useUtils = (state: State, ctx: SetupContext) => {
+const utils = (state: State, ctx: SetupContext) => {
   const router = ctx.root.$router;
   const day = (value: string, format: string) => dayJsFormat(value, format);
   const limit = (value: string, num: number) => truncate(value, num);
@@ -294,6 +295,7 @@ const useUtils = (state: State, ctx: SetupContext) => {
 };
 
 const clickJob = (state: State, ctx: SetupContext) => {
+  const { auth } = useUtils();
   // * click して案件を取得 === 詳細
   const getJob = async (job: Job) => {
     if (state.id === job.id) {
@@ -343,8 +345,12 @@ const clickJob = (state: State, ctx: SetupContext) => {
   const applyCheck = async () => {
     try {
       const res = await $fetch<FetchManageJobs>(
-        `${API_URL}/apply_jobs?user_id=${state.userId}`
+        `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
+        {
+          headers: auth.value,
+        }
       );
+      console.log(res, "res");
       const arrayApply: number[] = [];
       for (const applyData of res.data.response) {
         arrayApply.push(applyData.job.id);
@@ -360,7 +366,10 @@ const clickJob = (state: State, ctx: SetupContext) => {
   const favoriteCheck = async () => {
     try {
       const res = await $fetch<FetchFavoriteJob>(
-        `${API_URL}/favorite_jobs?user_id=${state.userId}`
+        `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
+        {
+          headers: auth.value,
+        }
       );
       const array: number[] = [];
       for (const favoriteData of res.data.response) {

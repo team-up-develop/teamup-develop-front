@@ -10,10 +10,11 @@ import {
 import { $fetch } from "@/libs/axios";
 import { RejectJob } from "@/types/index";
 import { FetchRejectJob } from "@/types/fetch";
-import { m, API_URL } from "@/master";
+import { m, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
+import { useUtils } from "@/hooks";
 
 type State = {
   rejectUsers: RejectJob[];
@@ -36,7 +37,7 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-
+    const { auth } = useUtils();
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -57,8 +58,13 @@ export default defineComponent({
 
     const fetchRejectUser = async () => {
       try {
-        const res = await $fetch<FetchRejectJob>(`
-            ${API_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_REJECT}`);
+        const res = await $fetch<FetchRejectJob>(
+          `
+            ${AUTH_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_REJECT}`,
+          {
+            headers: auth.value,
+          }
+        );
         state.rejectUsers = res.data.response;
       } catch (error) {
         catchError(error);
