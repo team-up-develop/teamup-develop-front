@@ -40,8 +40,8 @@ export default defineComponent({
       },
     ]);
 
-    const { manageJobs } = useJobs();
-    // console.log(manageJobs);
+    const { fetchManageJobs, manageJobs } = useJobs();
+    fetchManageJobs();
 
     return {
       ...toRefs(state),

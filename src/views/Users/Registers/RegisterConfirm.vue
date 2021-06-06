@@ -6,7 +6,8 @@ import {
   computed,
   onMounted,
 } from "@vue/composition-api";
-import { $fetch, $post } from "@/libs/axios";
+import { $fetch } from "@/libs/axios";
+import Vuex from "@/store/index";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { Language, Framework, Skill } from "@/types/index";
 import { RegisterCompleteParams } from "@/types/params";
@@ -212,13 +213,27 @@ export default defineComponent({
         twitter_account: state.twitter,
       };
       console.log(JSON.stringify(params), "res");
-      try {
-        await $post<RegisterCompleteParams>(`${API_URL}/sign_up`, params);
-        await sessionStorage.clear();
-        state.compliteOk = true;
-      } catch (error) {
-        catchError(error);
-      }
+      const data = Vuex.dispatch("register", {
+        ...params,
+      });
+      console.log(data, "data");
+      setTimeout(() => {
+        if (!ctx.root.$store.getters.errorFlag) {
+          state.compliteOk = true;
+        }
+        return;
+      }, 2000);
+      // try {
+      //   const res = await $post<RegisterCompleteParams>(
+      //     `${API_URL}/sign_up`,
+      //     params
+      //   );
+      //   console.log(res, "res");
+      //   await sessionStorage.clear();
+      // state.compliteOk = true;
+      // } catch (error) {
+      //   catchError(error);
+      // }
     };
 
     const redirectProfile = () => {
