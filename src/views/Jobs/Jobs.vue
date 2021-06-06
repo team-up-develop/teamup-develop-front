@@ -102,9 +102,6 @@ export default defineComponent({
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    // console.log(state.userId, "userId");
-    // console.log(Vuex.getters.userId, "getters/userId gettersでアクセス");
-    // console.log(ctx.root.$store.getters, "ctxからアクセス");
 
     const fetchData = async () => {
       // * 投稿一覧取得
@@ -312,9 +309,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
     });
 
     localStorage.setItem("cji_data_en", encode(String(state.id)));
-    //  TODO: decode テスト
-    // const test: string = localStorage.getItem("cji_data_en")!;
-    // console.log(decode(test));
     // * ログインしていれば以下の処理が走る
     if (state.userId) {
       await selfJobCheck();
@@ -350,7 +344,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
           headers: auth.value,
         }
       );
-      console.log(res, "res");
       const arrayApply: number[] = [];
       for (const applyData of res.data.response) {
         arrayApply.push(applyData.job.id);

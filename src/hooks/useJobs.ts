@@ -1,7 +1,7 @@
 import {
   reactive,
   toRefs,
-  onMounted,
+  // onMounted,
   // onUnmounted,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
@@ -93,11 +93,11 @@ const useJobs = () => {
     }
   };
 
-  onMounted(async () => {
-    await fetchJobs();
-    await fetchManageJobs();
-    await fetchFavoriteJobs();
-  });
+  // onMounted(async () => {
+  //   await fetchJobs();
+  //   await fetchManageJobs();
+  //   await fetchFavoriteJobs();
+  // });
 
   return {
     ...toRefs(state),

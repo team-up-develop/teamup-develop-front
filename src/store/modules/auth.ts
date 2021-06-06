@@ -4,6 +4,7 @@ import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import router from "@/router";
 import { encode, decode } from "@/libs/jsBase64";
+import { RegisterCompleteParams } from "@/types/params";
 interface State {
   userId: string;
   userName: string;
@@ -27,6 +28,7 @@ const getters: GetterTree<State, LoginData> = {
   userId: (state: State) => decode(state.userId),
   userName: (state: State) => state.userName,
   token: (state: State) => state.token,
+  errorFlag: (state: State) => state.errorFlag,
 };
 
 const mutations: MutationTree<State> = {
@@ -55,10 +57,27 @@ const actions: ActionTree<State, LoginData> = {
       // TODO: type fix any
       const res = await $post<any>(`${API_URL}/login`, params);
       console.log(res);
+      commit("loginError", false);
       commit("loginUserId", res.data.response.id);
       commit("loginUserName", res.data.response.user_name);
       commit("loginToken", res.data.response.token);
       router.push("/jobs");
+    } catch (error) {
+      const errorFlag = true;
+      catchError(error);
+      commit("loginError", errorFlag);
+    }
+  },
+  // TODO: type fix any
+  async register({ commit }, registerParams: RegisterCompleteParams) {
+    try {
+      const res = await $post<any>(`${API_URL}/sign_up`, registerParams);
+      console.log(res, "res");
+      commit("loginError", false);
+      commit("loginUserId", res.data.response.id);
+      commit("loginUserName", res.data.response.user_name);
+      commit("loginToken", res.data.response.token);
+      await sessionStorage.clear();
     } catch (error) {
       const errorFlag = true;
       catchError(error);

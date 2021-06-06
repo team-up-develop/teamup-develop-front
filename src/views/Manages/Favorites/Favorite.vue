@@ -25,7 +25,8 @@ export default defineComponent({
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    const { favoriteJobs } = useJobs();
+    const { fetchFavoriteJobs, favoriteJobs } = useJobs();
+    fetchFavoriteJobs();
 
     const breadcrumbs = computed(() => [
       {
