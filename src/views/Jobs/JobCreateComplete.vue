@@ -11,6 +11,7 @@ import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import UserCard from "@/components/Organisms/Manages/UserCard.vue";
 import JobCreateCompleteCard from "@/components/Organisms/Jobs/JobCreateCompleteCard.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
+import { useUtils } from "@/hooks";
 
 type State = {
   loading: boolean;
@@ -44,9 +45,7 @@ export default defineComponent({
       },
     ]);
 
-    const isLogin = computed(() => {
-      return state.userId ? true : false;
-    });
+    const { isLogin } = useUtils();
 
     const Loading = () => {
       setTimeout(() => {

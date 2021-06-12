@@ -1,7 +1,7 @@
 <script lang="ts">
 import Vue, { PropType } from "vue";
 import vSelect from "vue-select";
-import "vue-select/dist/vue-select.css";
+// import "vue-select/dist/vue-select.css"; //FIXME: テストの際にこけるのでコメントアウト
 import { Language, Framework, Skill } from "@/types/index";
 
 export default Vue.extend({

@@ -1,7 +1,7 @@
 import { user } from "./user";
 import { programingLanguages, programingFrameworks, skills } from "./skills";
-import { Job } from "@/types";
-
+import { Job, ManageJob } from "@/types";
+import { m } from "@/master";
 const job: Job = {
   dev_end_date: new Date("2021-10-24T00:00:00+09:00"),
   dev_start_date: new Date("2021-01-24T00:00:00+09:00"),
@@ -21,4 +21,16 @@ const job: Job = {
   user_id: 1,
 };
 
-export { job };
+const manageJob: ManageJob = {
+  id: 1,
+  updated_at: new Date("2021-01-24T00:00:00+09:00"),
+  apply_status_id: m.JOB_STATUS_NEW,
+  job_id: 1,
+  job: job,
+  user_id: 1,
+  user: user,
+};
+
+const manageJobs = [manageJob];
+
+export { job, manageJob, manageJobs };

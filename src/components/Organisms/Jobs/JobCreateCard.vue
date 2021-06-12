@@ -12,14 +12,14 @@ import {
 } from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsFirst } from "@/types/params";
-
+import { isFormFirst, minStartDate } from "@/modules/Jobs/jobCreate";
 type Maybe<T> = T | null;
 
 export type JobCreateSession1 = {
-  jobTitle: Maybe<string>;
+  jobTitle: string;
+  devStartDate: string;
+  devEndDate: string;
   jobDescription: Maybe<string>;
-  devStartDate: Maybe<string>;
-  devEndDate: Maybe<string>;
 };
 
 const initialState = (): JobCreateSession1 => ({
@@ -41,30 +41,15 @@ export default defineComponent({
 
     // * セッションストレージの値をフォームに格納する
     (() => {
-      const jobTitle = sessionStorage.getItem("jobTitle");
+      const jobTitle = sessionStorage.getItem("jobTitle")!;
       const jobDescription = sessionStorage.getItem("jobDescription");
-      const devStartDateString = sessionStorage.getItem("devStartDate");
-      const devEndDateString = sessionStorage.getItem("devEndDate");
+      const devStartDateString = sessionStorage.getItem("devStartDate")!;
+      const devEndDateString = sessionStorage.getItem("devEndDate")!;
       state.jobTitle = jobTitle;
       state.devStartDate = devStartDateString;
       state.devEndDate = devEndDateString;
       state.jobDescription = jobDescription;
     })();
-
-    const isForm = computed(() => {
-      return state.jobTitle && state.devStartDate && state.devEndDate
-        ? true
-        : false;
-    });
-
-    const minStartDate = computed(() => {
-      if (state.devStartDate && state.devEndDate) {
-        const a = new Date(state.devStartDate);
-        const b = new Date(state.devEndDate);
-        return a > b ? true : false;
-      }
-      return false;
-    });
 
     const nextCreateBtn = () => {
       if (state.jobTitle && state.devStartDate && state.devEndDate) {
@@ -86,8 +71,12 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      isForm,
-      minStartDate,
+      isForm: computed(() =>
+        isFormFirst(state.jobTitle, state.devStartDate, state.devEndDate)
+      ),
+      minStartDate: computed(() =>
+        minStartDate(state.devStartDate, state.devEndDate)
+      ),
       nextCreateBtn,
     };
   },
@@ -112,9 +101,9 @@ export default defineComponent({
             :remaining="true"
           />
         </div>
-        <label v-if="minStartDate" class="error-message mb-5">{{
-          "開始日が終了日より前です。"
-        }}</label>
+        <p v-if="minStartDate" class="error-message mb-5">
+          開始日が終了日より前です
+        </p>
         <div class="time">
           <DatePickerArea
             v-model="devStartDate"

@@ -20,6 +20,7 @@ type State = {
   profileJobs: ManageJob[];
   favoriteJobs: FavoriteJob[];
   loading: boolean;
+  isApply: boolean;
 };
 
 const initialState = (): State => ({
@@ -30,6 +31,7 @@ const initialState = (): State => ({
   profileJobs: [],
   favoriteJobs: [],
   loading: true,
+  isApply: true,
 });
 
 const useJobs = () => {
@@ -93,6 +95,28 @@ const useJobs = () => {
     }
   };
 
+  // * 応募済みか否かを判定
+  const checkApplyStatus = async (jobId: number) => {
+    state.loading = true;
+    try {
+      const res = await $fetch<FetchManageJobs>(
+        `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
+        {
+          headers: auth.value,
+        }
+      );
+      const arrayApply: number[] = [];
+      for (const applyData of res.data.response) {
+        arrayApply.push(applyData.job.id);
+      }
+      const result: boolean = arrayApply.includes(jobId);
+      state.isApply = !result;
+      state.loading = false;
+    } catch (error) {
+      catchError(error);
+    }
+  };
+
   // onMounted(async () => {
   //   await fetchJobs();
   //   await fetchManageJobs();
@@ -106,6 +130,7 @@ const useJobs = () => {
     fetchFavoriteJobs,
     fetchJobDetail,
     fetchProfileJobs,
+    checkApplyStatus,
   };
 };
 

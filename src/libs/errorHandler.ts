@@ -4,6 +4,12 @@ import { m } from "@/master";
 // TODO: catch error の際のモーダルを作成し、移行する
 const catchError = (error: any) => {
   const { status, statusText } = error.response;
+  console.log(status, "status");
+  if (status == "401") {
+    localStorage.clear();
+    location.reload();
+    return router.push({ name: "Unauthorized" });
+  }
   return console.log(
     `エラーが発生しました。お問合せください。\n HTTP Status: ${status} ${statusText} \n メッセージ: ${error.response.data.message}`
   );

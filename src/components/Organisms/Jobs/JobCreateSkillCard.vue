@@ -19,6 +19,7 @@ import { JobCreateParamsSecond } from "@/types/params";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { useUtils } from "@/hooks";
+import { isFormSecond } from "@/modules/Jobs/jobCreate";
 
 type Select = { id: number };
 type State = {
@@ -96,16 +97,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       }
     })();
 
-    const isForm = computed(() => {
-      return state.selectedLang.length !== 0 &&
-        state.selectedFramwork.length !== 0 &&
-        state.selectedSkill.length !== 0 &&
-        state.recruitNumber !== "" &&
-        state.jobStatusId !== ""
-        ? true
-        : false;
-    });
-
     const createJob = async () => {
       // * 言語を {id: Number}に変換
       const languageArray: Select[] = [];
@@ -178,7 +169,15 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     return {
       ...toRefs(state),
       md: computed(() => md),
-      isForm,
+      isForm: computed(() =>
+        isFormSecond(
+          state.selectedLang,
+          state.selectedFramwork,
+          state.selectedSkill,
+          state.recruitNumber,
+          state.jobStatusId
+        )
+      ),
       createJob,
     };
   },

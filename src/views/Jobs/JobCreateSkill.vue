@@ -38,9 +38,9 @@ export default defineComponent({
       },
     ]);
 
-    state.jobTitle = sessionStorage.getItem("jobTitle");
-    state.devStartDate = sessionStorage.getItem("devStartDate");
-    state.devEndDate = sessionStorage.getItem("devEndDate");
+    state.jobTitle = sessionStorage.getItem("jobTitle")!;
+    state.devStartDate = sessionStorage.getItem("devStartDate")!;
+    state.devEndDate = sessionStorage.getItem("devEndDate")!;
     state.jobDescription = sessionStorage.getItem("jobDescription");
 
     const isValue = computed(() => {
