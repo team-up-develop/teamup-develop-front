@@ -223,17 +223,6 @@ export default defineComponent({
         }
         return;
       }, 2000);
-      // try {
-      //   const res = await $post<RegisterCompleteParams>(
-      //     `${API_URL}/sign_up`,
-      //     params
-      //   );
-      //   console.log(res, "res");
-      //   await sessionStorage.clear();
-      // state.compliteOk = true;
-      // } catch (error) {
-      //   catchError(error);
-      // }
     };
 
     const redirectProfile = () => {
