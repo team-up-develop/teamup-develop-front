@@ -63,21 +63,21 @@ describe("データチェック", () => {
   //   });
   // });
 
-  test("必須項目が入力されている場合、ボタンを表示する", async () => {
-    // const item = {
-    //   userName: "Test",
-    //   lastName: "Test",
-    //   firstName: "User",
-    //   password: "password",
-    //   userBirthday: "1900-10-10",
-    //   learningStartDate: "2000-10-10",
-    //   email: "test@test.com",
-    // };
-    const wrapper = shallowMount(RegisterStepBase);
-    // expect(wrapper.vm).toBeTruthy();
-    await wrapper.setData({ userName: "Lachlan" });
-    await console.log(wrapper);
-    await expect(wrapper.find(".bottom-a").exists()).toBe(true);
-    // expect(wrapper.text()).toBe("次へ1/3");
-  });
+  //   test("必須項目が入力されている場合、ボタンを表示する", async () => {
+  //     const item = {
+  //       userName: "Test",
+  //       lastName: "Test",
+  //       firstName: "User",
+  //       password: "password",
+  //       userBirthday: "1900-10-10",
+  //       learningStartDate: "2000-10-10",
+  //       email: "test@test.com",
+  //     };
+  //     const wrapper = shallowMount(RegisterStepBase);
+  //     expect(wrapper.vm).toBeTruthy();
+  //     await wrapper.setData({ userName: "Lachlan" });
+  //     await console.log(wrapper);
+  //     await expect(wrapper.find(".bottom-a").exists()).toBe(true);
+  //     expect(wrapper.text()).toBe("次へ1/3");
+  //   });
 });

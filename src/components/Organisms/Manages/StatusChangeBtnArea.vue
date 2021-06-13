@@ -16,7 +16,7 @@ import { m, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
 import { useUtils } from "@/hooks";
-
+import { doneParticipate, doneReject } from "@/modules/Manages/manages";
 const propsOption = {
   id: { type: Number as PropType<number>, default: 0, required: true }, //? 詳細を見るユーザーのID
   jobId: { type: Number as PropType<number>, default: 0, required: true },
@@ -45,19 +45,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   setup: (props) => {
     const state = reactive<State>(initialState());
     const { auth } = useUtils();
+
     const participate = () => {
       state.statusId = m.APPLY_STATUS_PARTICIPATE;
     };
     const reject = () => {
       state.statusId = m.APPLY_STATUS_REJECT;
     };
-
-    const doneParticipate = computed(() => {
-      return state.statusId == m.APPLY_STATUS_PARTICIPATE ? true : false;
-    });
-    const doneReject = computed(() => {
-      return state.statusId == m.APPLY_STATUS_REJECT ? true : false;
-    });
 
     // * 表示中のユーザーのステータスを格納
     const getStatus = async () => {
@@ -81,8 +75,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       ...toRefs(state),
       participate,
       reject,
-      doneParticipate,
-      doneReject,
+      doneParticipate: computed(() => doneParticipate(state.statusId)),
+      doneReject: computed(() => doneReject(state.statusId)),
     };
   },
 });

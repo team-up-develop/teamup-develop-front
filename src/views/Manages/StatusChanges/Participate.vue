@@ -7,29 +7,22 @@ import {
   computed,
   SetupContext,
 } from "@vue/composition-api";
-import { $fetch } from "@/libs/axios";
-import { ParticipateJob } from "@/types/index";
-import { FetchParticipateJob } from "@/types/fetch";
-import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
+import Template from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import { m, AUTH_URL } from "@/master";
-import { catchError } from "@/libs/errorHandler";
-import { useUtils } from "@/hooks";
+import { useUsers } from "@/hooks";
 
 type State = {
-  assginUsers: ParticipateJob[];
   userId: number;
 };
 
 const initialState = (ctx: SetupContext): State => ({
-  assginUsers: [],
   userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
   components: {
     Breadcrumbs,
-    StatusChanges,
+    Template,
   },
   props: {
     // * job.idを受け取る
@@ -37,7 +30,8 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    const { auth } = useUtils();
+    const { fetchAssignUsers, assignUsers } = useUsers();
+
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -56,30 +50,14 @@ export default defineComponent({
       },
     ]);
 
-    const fetchAssginUser = async () => {
-      try {
-        const res = await $fetch<FetchParticipateJob>(
-          `
-            ${AUTH_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}
-            `,
-          {
-            headers: auth.value,
-          }
-        );
-        state.assginUsers = res.data.response;
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
-    onMounted(() => {
-      fetchAssginUser();
+    onMounted(async () => {
+      await fetchAssignUsers(props.id);
     });
 
     return {
       ...toRefs(state),
       breadcrumbs,
-      fetchAssginUser,
+      assignUsers,
     };
   },
 });
@@ -88,10 +66,10 @@ export default defineComponent({
 <template>
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
-    <StatusChanges
+    <Template
       :jobId="id"
       :userId="userId"
-      :users="assginUsers"
+      :users="assignUsers"
       :activeCss="2"
     />
   </section>
