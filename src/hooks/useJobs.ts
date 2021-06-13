@@ -1,9 +1,4 @@
-import {
-  reactive,
-  toRefs,
-  // onMounted,
-  // onUnmounted,
-} from "@vue/composition-api";
+import { reactive, toRefs } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL, AUTH_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
@@ -46,18 +41,18 @@ const useJobs = () => {
       catchError(error);
     }
   };
-
+  // *詳細
   const fetchJobDetail = async (jobId: number) => {
     try {
       const res = await $fetch<FetchJobs>(`${API_URL}/job/${jobId}`);
       await fetchError(res.data.status);
       state.job = res.data.response;
-      state.loading = false;
+      // state.loading = false;
     } catch (error) {
       catchError(error);
     }
   };
-
+  // *管理案件
   const fetchManageJobs = async () => {
     try {
       const res = await $fetch<FetchManageJobs>(
@@ -68,7 +63,7 @@ const useJobs = () => {
       catchError(error);
     }
   };
-
+  // * 指定したユーザーの案件
   const fetchProfileJobs = async (userId: number) => {
     try {
       const res = await $fetch<FetchManageJobs>(
@@ -80,7 +75,7 @@ const useJobs = () => {
       catchError(error);
     }
   };
-
+  // * お気に入り案件
   const fetchFavoriteJobs = async () => {
     try {
       const res = await $fetch<FetchFavoriteJob>(
@@ -94,8 +89,7 @@ const useJobs = () => {
       catchError(error);
     }
   };
-
-  // * 応募済みか否かを判定
+  // * 応募済みか判別
   const checkApplyStatus = async (jobId: number) => {
     state.loading = true;
     try {
@@ -116,12 +110,6 @@ const useJobs = () => {
       catchError(error);
     }
   };
-
-  // onMounted(async () => {
-  //   await fetchJobs();
-  //   await fetchManageJobs();
-  //   await fetchFavoriteJobs();
-  // });
 
   return {
     ...toRefs(state),

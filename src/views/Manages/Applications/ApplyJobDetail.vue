@@ -7,7 +7,6 @@ import {
   onMounted,
   SetupContext,
 } from "@vue/composition-api";
-import { $fetch } from "@/libs/axios";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
   BtnArea,
@@ -16,22 +15,15 @@ import {
   DetailJob,
 } from "@/components/Organisms/Jobs/JobDetails";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import useJobs from "@/hooks/useJobs";
-import { AUTH_URL } from "@/master";
-import { catchError } from "@/libs/errorHandler";
-import { FetchManageJobs } from "@/types/fetch";
-import { useUtils } from "@/hooks";
+import { useJobs, useUtils } from "@/hooks";
+import { checkSelfJob } from "@/modules/Jobs/jobs";
 
 type State = {
   userId: number;
-  applyFlug: boolean;
-  selfJobPost: boolean;
 };
 
 const initialState = (ctx: SetupContext): State => ({
   userId: ctx.root.$store.getters.userId,
-  applyFlug: false,
-  selfJobPost: false,
 });
 
 export default defineComponent({
@@ -48,15 +40,17 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    const { auth } = useUtils();
     const {
       fetchJobDetail,
       job,
-      loading,
       manageJobs,
       fetchManageJobs,
+      checkApplyStatus,
+      isApply,
+      loading,
     } = useJobs();
     fetchJobDetail(props.id);
+    const { isLogin } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -75,57 +69,24 @@ export default defineComponent({
       },
     ]);
 
-    const isLogin = computed(() => {
-      return state.userId ? true : false;
-    });
-
-    // * ログインユーザーが応募済みか応募済みではないかを判定する
-    const getCheckStatus = async () => {
-      try {
-        const res = await $fetch<FetchManageJobs>(
-          `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
-          {
-            headers: auth.value,
-          }
-        );
-        const arrayApply: number[] = [];
-        for (const applyData of res.data.response) {
-          arrayApply.push(applyData.job.id);
-        }
-        if (arrayApply.includes(props.id)) {
-          state.applyFlug = false;
-        }
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
-    // * 自分の案件か否かを判定
-    const getCheckSelfJob = () => {
-      for (const selfJob of manageJobs.value) {
-        if (selfJob.id === props.id) {
-          state.selfJobPost = true;
-        }
-      }
-    };
-
-    const applied = () => (state.applyFlug = false);
+    const applied = () => (isApply.value = false);
 
     onMounted(async () => {
       if (state.userId) {
         await fetchManageJobs();
-        await getCheckSelfJob();
-        await getCheckStatus();
+        await checkApplyStatus(props.id);
       }
     });
 
     return {
       ...toRefs(state),
       breadcrumbs,
+      selfJobPost: computed(() => checkSelfJob(manageJobs.value, props.id)),
       job,
       loading,
       applied,
       isLogin,
+      isApply,
     };
   },
 });
@@ -155,7 +116,7 @@ export default defineComponent({
           :job="job"
           :isLogin="isLogin"
           :selfjob="selfJobPost"
-          :applyFlug="applyFlug"
+          :applyFlug="isApply"
           @applied="applied"
         />
       </section>

@@ -7,28 +7,21 @@ import {
   computed,
   SetupContext,
 } from "@vue/composition-api";
-import { $fetch } from "@/libs/axios";
-import { RejectJob } from "@/types/index";
-import { FetchRejectJob } from "@/types/fetch";
-import { m, AUTH_URL } from "@/master";
-import { catchError } from "@/libs/errorHandler";
-import StatusChanges from "@/components/Templates/Manages/StatusChanges.vue";
+import Template from "@/components/Templates/Manages/StatusChanges.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import { useUtils } from "@/hooks";
+import { useUsers } from "@/hooks";
 
 type State = {
-  rejectUsers: RejectJob[];
   userId: number;
 };
 
 const initialState = (ctx: SetupContext): State => ({
-  rejectUsers: [],
   userId: ctx.root.$store.getters.userId,
 });
 
 export default defineComponent({
   components: {
-    StatusChanges,
+    Template,
     Breadcrumbs,
   },
   props: {
@@ -37,7 +30,9 @@ export default defineComponent({
   },
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    const { auth } = useUtils();
+
+    const { fetchRejectUser, rejectUsers } = useUsers();
+
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -56,29 +51,14 @@ export default defineComponent({
       },
     ]);
 
-    const fetchRejectUser = async () => {
-      try {
-        const res = await $fetch<FetchRejectJob>(
-          `
-            ${AUTH_URL}/apply_jobs?job_id=${props.id}&apply_status_id=${m.APPLY_STATUS_REJECT}`,
-          {
-            headers: auth.value,
-          }
-        );
-        state.rejectUsers = res.data.response;
-      } catch (error) {
-        catchError(error);
-      }
-    };
-
-    onMounted(() => {
-      fetchRejectUser();
+    onMounted(async () => {
+      await fetchRejectUser(props.id);
     });
 
     return {
       ...toRefs(state),
       breadcrumbs,
-      fetchRejectUser,
+      rejectUsers,
     };
   },
 });
@@ -87,7 +67,7 @@ export default defineComponent({
 <template>
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
-    <StatusChanges
+    <Template
       :jobId="id"
       :userId="userId"
       :users="rejectUsers"

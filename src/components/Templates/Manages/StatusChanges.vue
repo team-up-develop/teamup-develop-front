@@ -1,17 +1,11 @@
 <script lang="ts">
-import { defineComponent, computed, PropType } from "@vue/composition-api";
+import { defineComponent, PropType } from "@vue/composition-api";
 import {
   JobsCard,
   UserCard,
 } from "@/components/Organisms/Manages/ChangeStatus";
 import { User } from "@/types/index";
-
-type Props = {
-  jobId: number;
-  activeCss: 1 | 2 | 3;
-  userId: number;
-  users: User[];
-};
+import { useUtils } from "@/hooks";
 
 export default defineComponent({
   components: {
@@ -28,10 +22,8 @@ export default defineComponent({
     userId: { type: Number as PropType<number>, defalut: 0, required: true },
     users: { type: Array as PropType<User[]>, defalut: [], required: true },
   },
-  setup: (props: Props) => {
-    const isLogin = computed(() => {
-      return props.userId ? true : false;
-    });
+  setup: () => {
+    const { isLogin } = useUtils();
 
     return {
       isLogin,

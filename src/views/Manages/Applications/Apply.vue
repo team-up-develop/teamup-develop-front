@@ -46,7 +46,7 @@ export default defineComponent({
       },
     ]);
 
-    // * 応募案件 / 参加案件 を取得
+    // * 応募案件 / 参加案件 / 拒否案件 を取得
     const fetchApplyJobs = async () => {
       if (!state.userId) {
         return;
