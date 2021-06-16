@@ -10,13 +10,14 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
+import { useUtils } from "@/hooks";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
 import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { Message } from "@/types/index";
 import { FetchMessage, FetchJob } from "@/types/fetch";
-import { m, API_URL } from "@/master";
+import { m, API_URL, AUTH_URL } from "@/master";
 import { truncate } from "@/hooks/useUtils";
 import { catchError } from "@/libs/errorHandler";
 import UserMessage from "@/components/Molecules/Chats/UserMessage.vue";
@@ -58,6 +59,8 @@ export default defineComponent({
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
     let root: any = ref(null);
+
+    const { auth } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -110,7 +113,10 @@ export default defineComponent({
       // state.loading = false;
       try {
         const res = await $fetch<FetchMessage>(
-          `${API_URL}/chat_messages?job_id=${id}`
+          `${AUTH_URL}/chat_messages?job_id=${id}`,
+          {
+            headers: auth.value,
+          }
         );
         state.chats = res.data.response;
         if (chatLength === state.chats.length) {

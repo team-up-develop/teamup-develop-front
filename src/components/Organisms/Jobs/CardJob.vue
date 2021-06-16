@@ -44,7 +44,7 @@ const useUtils = () => {
 </script>
 
 <template>
-  <div class="job-cards">
+  <v-sheet elevation="1" class="job-cards">
     <div class="job-cards__top">
       <span>{{ truncate(job.job_title, 40) }}</span>
       <p>{{ truncate(job.job_title, 30) }}</p>
@@ -75,7 +75,7 @@ const useUtils = () => {
         </div>
       </div>
     </div>
-  </div>
+  </v-sheet>
 </template>
 
 <style lang="scss" scoped>
@@ -104,7 +104,7 @@ const useUtils = () => {
     text-decoration: underline;
 
     @media screen and (max-width: $me) {
-      padding: 2rem 0.5rem 0rem 1.5rem;
+      padding: 1.5rem 0.5rem 0rem 1rem;
       min-height: none;
     }
 
@@ -129,7 +129,8 @@ const useUtils = () => {
     pointer-events: none;
 
     @media screen and (max-width: $me) {
-      padding: 0 0.5rem 0 1.1rem;
+      padding: 0 0.5rem 0 0.8rem;
+      min-height: 75px;
     }
   }
 
@@ -139,7 +140,7 @@ const useUtils = () => {
     margin-top: 0.2rem;
 
     @media screen and (max-width: $me) {
-      padding: 0.5rem 0px 1.1rem 0;
+      padding: 0rem 0px 1.1rem 0;
     }
 
     .product-start-end {
@@ -150,7 +151,7 @@ const useUtils = () => {
       pointer-events: none;
 
       @media screen and (max-width: $me) {
-        padding: 0rem 0px 0 1.1rem;
+        padding: 0.2rem 0px 0 0rem;
       }
 
       .product-start-end-tag {
@@ -181,6 +182,10 @@ const useUtils = () => {
       gap: 10px;
       grid-template-columns: 2fr 1fr;
 
+      @media screen and (max-width: $me) {
+        padding: 0.5rem 0px 0 1.5rem;
+      }
+
       .post-user-image {
         width: 55px;
         height: 55px;
@@ -205,6 +210,10 @@ const useUtils = () => {
         position: absolute;
         left: 0;
         margin-left: 6rem;
+
+        @media screen and (max-width: $me) {
+          margin-left: 5.5rem;
+        }
 
         .post-user-name {
           pointer-events: none;

@@ -79,14 +79,26 @@ export default Vue.extend({
 
       .skill-tag {
         @include detail-language;
+
+        @media screen and (max-width: $sm) {
+          @include language-responsive;
+        }
       }
 
       .flame-tag {
         @include detail-framework;
+
+        @media screen and (max-width: $sm) {
+          @include framework-responsive;
+        }
       }
 
       .other-tag {
         @include detail-skill;
+
+        @media screen and (max-width: $sm) {
+          @include skill-responsive;
+        }
       }
     }
   }

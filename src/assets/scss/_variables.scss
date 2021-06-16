@@ -171,7 +171,7 @@ $skill-color: $third-color;
   border: solid 1px $skill-color;
 }
 
-// * skill-detail
+// * 案件詳細画
 //? language
 @mixin detail-language {
   @include border_language;
@@ -184,6 +184,18 @@ $skill-color: $third-color;
   text-align: center;
   font-weight: bold;
   font-size: 14px;
+}
+
+@mixin language-responsive {
+  @include border_language;
+  color: $language-color;
+  text-align: left;
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 0.7rem;
+  border-radius: 5px / 5px;
+  font-weight: bold;
+  pointer-events: none;
 }
 
 // ? framework
@@ -200,6 +212,18 @@ $skill-color: $third-color;
   font-size: 14px;
 }
 
+@mixin framework-responsive {
+  @include border_framework;
+  color: $framework-color;
+  text-align: left;
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 0.7rem;
+  border-radius: 5px / 5px;
+  font-weight: bold;
+  pointer-events: none;
+}
+
 // ? skill
 @mixin detail-skill {
   @include border-skill;
@@ -212,6 +236,18 @@ $skill-color: $third-color;
   text-align: center;
   font-weight: bold;
   font-size: 14px;
+}
+
+@mixin skill-responsive {
+  @include border-skill;
+  color: $skill-color;
+  text-align: left;
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 0.7rem;
+  border-radius: 5px / 5px;
+  font-weight: bold;
+  pointer-events: none;
 }
 
 // * card login / register...

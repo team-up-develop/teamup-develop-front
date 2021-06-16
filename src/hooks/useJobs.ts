@@ -47,7 +47,7 @@ const useJobs = () => {
       const res = await $fetch<FetchJobs>(`${API_URL}/job/${jobId}`);
       await fetchError(res.data.status);
       state.job = res.data.response;
-      // state.loading = false;
+      state.loading = false;
     } catch (error) {
       catchError(error);
     }
@@ -91,7 +91,7 @@ const useJobs = () => {
   };
   // * 応募済みか判別
   const checkApplyStatus = async (jobId: number) => {
-    state.loading = true;
+    // state.loading = true;
     try {
       const res = await $fetch<FetchManageJobs>(
         `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
@@ -105,7 +105,7 @@ const useJobs = () => {
       }
       const result: boolean = arrayApply.includes(jobId);
       state.isApply = !result;
-      state.loading = false;
+      // state.loading = false;
     } catch (error) {
       catchError(error);
     }

@@ -18,7 +18,6 @@ export default defineComponent({
     >
       {{ langage.name }}
     </div>
-    <!-- レスポンシブ 言語 360px-->
     <div
       class="langage-responsive"
       v-for="(langage, index) in job.programing_languages.slice(0, 2)"
@@ -129,7 +128,7 @@ export default defineComponent({
     text-align: left;
     display: inline-block;
     font-size: 12px;
-    padding: 7px 1.2rem;
+    padding: 3px 0.7rem;
     border-radius: 5px / 5px;
     font-weight: bold;
     pointer-events: none;
@@ -146,7 +145,7 @@ export default defineComponent({
     text-align: left;
     display: inline-block;
     font-size: 12px;
-    padding: 7px 1.2rem;
+    padding: 3px 0.7rem;
     border-radius: 5px / 5px;
     font-weight: bold;
     pointer-events: none;
@@ -163,21 +162,21 @@ export default defineComponent({
     text-align: left;
     display: inline-block;
     font-size: 12px;
-    padding: 7px 1.2rem;
+    padding: 3px 0.7rem;
     border-radius: 5px / 5px;
     font-weight: bold;
     pointer-events: none;
   }
 }
-@media screen and (max-width: $ti) {
-  .langage-responsive {
-    padding: 7px 0.8rem;
-  }
-  .framework-responsive {
-    padding: 7px 0.8rem;
-  }
-  .skill-responsive {
-    padding: 7px 0.8rem;
-  }
-}
+// @media screen and (max-width: $ti) {
+//   .langage-responsive {
+//     padding: 7px 0.8rem;
+//   }
+//   .framework-responsive {
+//     padding: 7px 0.8rem;
+//   }
+//   .skill-responsive {
+//     padding: 7px 0.8rem;
+//   }
+// }
 </style>

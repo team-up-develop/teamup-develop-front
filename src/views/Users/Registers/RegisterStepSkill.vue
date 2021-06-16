@@ -179,8 +179,8 @@ export default defineComponent({
               name="languages"
               textLabel="開発言語"
               :mandatory="true"
-              mandatoryText=""
-              :max="100"
+              mandatoryText="15個まで"
+              :max="15"
             />
             <!-- {{ selectedLang }} -->
           </div>
@@ -192,7 +192,7 @@ export default defineComponent({
               textLabel="フレームワーク"
               :mandatory="true"
               mandatoryText=""
-              :max="100"
+              :max="15"
             />
           </div>
           <div class="input-area">
@@ -202,8 +202,8 @@ export default defineComponent({
               name="framworks"
               textLabel="フレームワーク"
               :mandatory="true"
-              mandatoryText=""
-              :max="100"
+              mandatoryText="15個まで"
+              :max="15"
             />
           </div>
           <div class="input-area">

@@ -313,8 +313,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 name="languages"
                 textLabel="開発言語"
                 :mandatory="true"
-                :max="5"
-                mandatoryText="5つまで"
+                :max="15"
+                mandatoryText="15個まで"
               />
               <SkillSelectArea
                 v-model="selectFramValue"
@@ -322,8 +322,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 name="framworks"
                 textLabel="フレームワーク"
                 :mandatory="true"
-                :max="5"
-                mandatoryText="5つまで"
+                :max="15"
+                mandatoryText="15個まで"
               />
               <SkillSelectArea
                 v-model="selectSkillValue"
@@ -331,8 +331,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 name="skills"
                 textLabel="その他スキル"
                 :mandatory="true"
-                :max="5"
-                mandatoryText="5つまで"
+                :max="15"
+                mandatoryText="15個まで"
               />
             </div>
             <div v-show="currentTab === 1">
@@ -437,6 +437,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 .modal-content {
   padding: 2rem 2rem;
   min-width: 660px;
+  max-width: 950px;
   height: 74vh;
   text-align: left;
   overflow: scroll;
@@ -450,7 +451,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   }
   @media screen and (max-width: $ti) {
     padding: 2rem 1rem;
-    width: 45vh;
+    width: 49vh;
   }
 
   // * モーダル
