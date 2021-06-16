@@ -71,7 +71,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             </v-col>
             <v-col class="introduce-area" style="padding: none">
               <div class="introduce">
-                {{ day(user.learning_start_date, "YYYY年 M月 D日") }}
+                学習開始 {{ day(user.learning_start_date, "YYYY年 M月 D日") }}
               </div>
             </v-col>
             <v-col class="url-area">

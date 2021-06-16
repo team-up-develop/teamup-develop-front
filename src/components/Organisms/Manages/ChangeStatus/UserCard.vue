@@ -41,6 +41,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           {{ langage.name }}
         </div>
         <div
+          class="lang-responsive"
+          v-for="(langage, index) in user.user.programing_languages.slice(0, 3)"
+          :key="`langage-responsive-${index}`"
+        >
+          {{ langage.name }}
+        </div>
+        <div
           class="fram"
           v-for="(framework, index) in user.user.programing_frameworks.slice(
             0,
@@ -51,9 +58,26 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           {{ framework.name }}
         </div>
         <div
+          class="fram-responsive"
+          v-for="(framework, index) in user.user.programing_frameworks.slice(
+            0,
+            2
+          )"
+          :key="`framework-responsive-${index}`"
+        >
+          {{ framework.name }}
+        </div>
+        <div
           class="skill"
           v-for="(skill, index) in user.user.skills.slice(0, 2)"
           :key="`skill-${index}`"
+        >
+          {{ skill.name }}
+        </div>
+        <div
+          class="skill-responsive"
+          v-for="(skill, index) in user.user.skills.slice(0, 3)"
+          :key="`skill-responsive-${index}`"
         >
           {{ skill.name }}
         </div>
@@ -104,6 +128,27 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       border-radius: 5px / 5px;
       font-weight: bold;
       pointer-events: none;
+
+      @media screen and (max-width: $sm) {
+        display: none;
+      }
+    }
+
+    .lang-responsive {
+      display: none;
+
+      @media screen and (max-width: $sm) {
+        @include border_language;
+        color: $language-color;
+        margin: 5px 0px 0px 5px;
+        text-align: left;
+        display: inline-block;
+        font-size: 12px;
+        padding: 3px 0.7rem;
+        border-radius: 5px / 5px;
+        font-weight: bold;
+        pointer-events: none;
+      }
     }
 
     .fram {
@@ -117,6 +162,27 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       border-radius: 5px / 5px;
       font-weight: bold;
       pointer-events: none;
+
+      @media screen and (max-width: $sm) {
+        display: none;
+      }
+    }
+
+    .fram-responsive {
+      display: none;
+
+      @media screen and (max-width: $sm) {
+        @include border_framework;
+        color: $framework-color;
+        margin: 5px 0px 0 5px;
+        text-align: left;
+        display: inline-block;
+        font-size: 12px;
+        padding: 3px 0.7rem;
+        border-radius: 5px / 5px;
+        font-weight: bold;
+        pointer-events: none;
+      }
     }
 
     .skill {
@@ -130,6 +196,27 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       border-radius: 5px / 5px;
       font-weight: bold;
       pointer-events: none;
+
+      @media screen and (max-width: $sm) {
+        display: none;
+      }
+    }
+
+    .skill-responsive {
+      display: none;
+
+      @media screen and (max-width: $sm) {
+        @include border-skill;
+        color: $skill-color;
+        margin: 5px 0px 0 5px;
+        text-align: left;
+        display: inline-block;
+        font-size: 12px;
+        padding: 3px 0.7rem;
+        border-radius: 5px / 5px;
+        font-weight: bold;
+        pointer-events: none;
+      }
     }
   }
 

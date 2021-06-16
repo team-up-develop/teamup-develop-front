@@ -150,6 +150,7 @@ export default defineComponent({
 
   @media screen and (max-width: $me) {
     width: 88%;
+    height: 88%;
   }
 }
 
@@ -162,6 +163,7 @@ export default defineComponent({
 
   @media screen and (max-width: $me) {
     padding: 1rem 1.2rem;
+    height: 90%;
   }
   @media screen and (max-width: $sm) {
     padding: 1rem 0.7rem;
@@ -223,6 +225,8 @@ export default defineComponent({
 
 .modal-footer {
   width: 100%;
+  position: absolute;
+  bottom: 0;
 
   // * モーダル内のキャンセルボタン
   .serach-btn {

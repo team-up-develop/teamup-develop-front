@@ -79,18 +79,30 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     .lang-box {
       width: 100%;
       text-align: left;
-      padding: 10px 0px 30px 0;
+      padding: 10px 0px 2rem 0;
 
       .skill-tag {
         @include detail-language;
+
+        @media screen and (max-width: $sm) {
+          @include language-responsive;
+        }
       }
 
       .flame-tag {
         @include detail-framework;
+
+        @media screen and (max-width: $sm) {
+          @include framework-responsive;
+        }
       }
 
       .other-tag {
         @include detail-skill;
+
+        @media screen and (max-width: $sm) {
+          @include skill-responsive;
+        }
       }
     }
   }
