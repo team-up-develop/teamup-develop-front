@@ -98,7 +98,7 @@ export default defineComponent({
   }
 
   .register-btn {
-    @include purple-btn;
+    @include blue-btn;
     @include neumorphism;
     color: $white;
     padding: 1.1rem 3rem;
@@ -107,8 +107,8 @@ export default defineComponent({
 
   .login-btn {
     @include neumorphism;
-    border: solid 1px $secondary-color;
-    color: $secondary-color;
+    border: solid 1px $primary-color;
+    color: $primary-color;
     background-color: $white;
     padding: 1.1rem 2rem;
     border-radius: 8px;
@@ -121,8 +121,8 @@ export default defineComponent({
 
   .search-btn {
     @include neumorphism;
-    border: solid 1px $secondary-color;
-    color: $secondary-color;
+    border: solid 1px $primary-color;
+    color: $primary-color;
     background-color: $white;
     padding: 1.1rem 2.7rem;
     border-radius: 8px;

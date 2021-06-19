@@ -78,16 +78,16 @@ export default defineComponent({
 }
 
 .search-freeword-btn {
-  @include blue-btn;
   @include neumorphism;
+  border: solid 1px $primary-color;
+  color: $primary-color;
+  background-color: $white;
   text-align: left;
   display: block;
   padding: 1.3rem 3.5rem;
   border-radius: 32px;
-  border: none;
   font-size: 0.875rem;
   font-weight: 600;
-  color: $white;
   line-height: 1;
   text-align: center;
   max-width: 280px;

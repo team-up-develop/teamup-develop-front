@@ -182,7 +182,6 @@ export default defineComponent({
               mandatoryText="15個まで"
               :max="15"
             />
-            <!-- {{ selectedLang }} -->
           </div>
           <div class="input-area">
             <SkillSelectArea
@@ -191,7 +190,7 @@ export default defineComponent({
               name="framworks"
               textLabel="フレームワーク"
               :mandatory="true"
-              mandatoryText=""
+              mandatoryText="15個まで"
               :max="15"
             />
           </div>
