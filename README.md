@@ -7,6 +7,9 @@
 - eslint v6.7.2
 - docker v19.03.13
 
+## URL
+- [テスト環境](https://teamup-dev.netlify.app/jobs) 
+
 ## 環境構築
 ### コンテナ作成 / 起動
 ```
@@ -49,7 +52,7 @@ $ npm cache verify --force
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
 
-## Doc
+## Tips
 ### Compoent構成
 Atomic Design 導入 
 詳しくは → https://github.com/team-up-develop/teamup-develop-front/issues/86
@@ -68,11 +71,21 @@ Atomic Design 導入
 <img width="612" alt="スクリーンショット 2020-12-19 10 59 58" src="https://user-images.githubusercontent.com/56709557/102679879-7673e880-41f6-11eb-8889-27143779a070.png">
 
 ### Sass 定義
-https://github.com/team-up-develop/teamup-develop-front/blob/7ec7379dd1886ca19b29d75ed89b1e1cd8482e73/src/assets/scss/_variables.scss#L7
+[src/assets/scss/_variables.scss](https://github.com/team-up-develop/teamup-develop-front/blob/7ec7379dd1886ca19b29d75ed89b1e1cd8482e73/src/assets/scss/_variables.scss#L7)
 
 ### 型定義
 - index (type of entire)
 - fetch (type of get response)
 - params (type of post & put & delete parameter)
 
-https://github.com/team-up-develop/teamup-develop-front/tree/main/src/types
+[src/types](https://github.com/team-up-develop/teamup-develop-front/tree/main/src/types)
+
+### 画像素材参考
+- [lordicon](https://lordicon.com/icons)
+- [material icon](https://materialdesignicons.com/)
+- [storyset](https://storyset.com/)
+- [unDraw](https://undraw.co/illustrations)
+- [freepik](https://www.freepik.com/)
+
+### deploy関連
+- [netlify](https://app.netlify.com/teams/kazuya-sakamoto/overview) 
