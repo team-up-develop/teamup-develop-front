@@ -3,13 +3,13 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  watch,
+  // watch,
   // onBeforeUnmount,
 } from "@vue/composition-api";
-import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
+import { InsidePropsType } from "@icare-jp/vue-props-type";
 
 const propsOption = {
-  onFunction: { type: Function as PropType<() => void>, required: true },
+  imageNumber: { type: Number, default: 1 },
   btnMain: {
     type: String,
     required: true,
@@ -25,6 +25,10 @@ const propsOption = {
     required: true,
     default: "",
   },
+  content: {
+    type: String,
+    default: "",
+  },
 } as const;
 type PropsOption = typeof propsOption;
 
@@ -38,26 +42,15 @@ const initialState = (): State => ({
 
 export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
-  setup(props, ctx) {
+  setup(_, ctx) {
     const state = reactive<State>(initialState());
 
-    const onclickFunc = () => {
-      props.onFunction?.();
-      state.overlay = !state.overlay;
+    const mainFunction = () => {
+      return ctx.emit("mainFunction");
     };
 
-    watch(
-      () => state.overlay,
-      () => {
-        setTimeout(() => {
-          state.overlay = false;
-        }, 3000);
-      }
-    );
-
-    const emitOption = () => {
-      // * モーダルを閉じる
-      return ctx.emit("close");
+    const subFunction = () => {
+      return ctx.emit("subFunction");
     };
 
     const close = () => {
@@ -66,8 +59,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
     return {
       ...toRefs(state),
-      onclickFunc,
-      emitOption,
+      mainFunction,
+      subFunction,
       close,
     };
   },
@@ -83,20 +76,24 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <div class="modal-window">
         <div class="modal-content">
           <div class="confirm">
-            <v-icon class="icon">
-              mdi mdi-emoticon-happy-outline
-            </v-icon>
-            <p class="py-2">{{ title }}</p>
+            <img
+              v-if="imageNumber === 1"
+              class="img"
+              src="@/assets/images/gif/happy.gif"
+              width="30%"
+            />
+            <h3 class="py-2">{{ title }}</h3>
+            <p class="content">{{ content }}</p>
             <div class="d-flex justify-center">
               <v-btn
                 class="close-btn font-weight-bold px-8"
-                @click="emitOption"
+                @click="subFunction"
               >
                 {{ btnSub }}
               </v-btn>
               <v-btn
                 class="register-btn font-weight-bold px-6 ml-4"
-                @click="onclickFunc"
+                @click="mainFunction"
               >
                 {{ btnMain }}
               </v-btn>
@@ -139,6 +136,11 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   .confirm {
     margin: 0 auto;
     padding: 1rem 0rem;
+
+    .content {
+      font-size: 12px;
+      font-weight: 100;
+    }
 
     .register-btn {
       @include box-shadow-btn;

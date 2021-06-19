@@ -1,11 +1,22 @@
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent } from "@vue/composition-api";
+import { useUtils } from "@/hooks";
 
-export default Vue.extend({
-  methods: {
-    redirectJobCreate() {
-      this.$router.push("/job_create/1");
-    },
+export default defineComponent({
+  setup(_, ctx) {
+    const { isLogin } = useUtils();
+
+    const onRegister = () => {
+      return ctx.root.$router.push({ name: "RegisterStepBase" });
+    };
+    const onCreateJob = () => {
+      return ctx.root.$router.push({ name: "JobCreate" });
+    };
+    return {
+      isLogin,
+      onRegister,
+      onCreateJob,
+    };
   },
 });
 </script>
@@ -13,12 +24,21 @@ export default Vue.extend({
 <template>
   <section>
     <v-card class="card">
-      <div class="content">
-        <img class="img" src="@/assets/images/createJob.png" width="100%" />
-        <p>自分が<span>開発したい環境</span>を設定して案件を作成しよう！</p>
-        <div class="btn-area">
-          <button class="register-btn" @click="redirectJobCreate">
+      <div v-if="isLogin" class="content">
+        <img class="img" src="@/assets/images/skills.png" width="100%" />
+        <h3><span>開発したいスキル</span>を設定して案件を作成しよう！</h3>
+        <div class="btn-area mt-2">
+          <button class="register-btn" @click="onCreateJob">
             案件を作成する
+          </button>
+        </div>
+      </div>
+      <div v-else class="content">
+        <img class="img" src="@/assets/images/search.png" width="100%" />
+        <h3><span>使いたいスキル</span>すぐにチーム開発を始めよう！</h3>
+        <div class="btn-area">
+          <button class="register-btn mt-3" @click="onRegister">
+            簡単登録する
           </button>
         </div>
       </div>
@@ -42,7 +62,7 @@ export default Vue.extend({
   .content {
     width: 100%;
 
-    p {
+    h3 {
       margin-top: 1rem;
       font-weight: bold;
       font-size: 15px;

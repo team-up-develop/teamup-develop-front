@@ -16,6 +16,7 @@ import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { dayJsFormat } from "@/libs/dayjs";
 import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
+import Complete from "@/components/Organisms/Modals/Base/Complete.vue";
 
 type Maybe<T> = T | null;
 type Select = { id: number };
@@ -34,8 +35,8 @@ type State = {
   bio: Maybe<string>;
   github: Maybe<string>;
   twitter: Maybe<string>;
-  confirmModal: boolean;
-  compliteOk: boolean;
+  confirm: boolean;
+  complite: boolean;
 };
 
 type SkillState = {
@@ -62,8 +63,8 @@ const initialState = (): State => ({
   bio: "",
   github: "",
   twitter: "",
-  confirmModal: false,
-  compliteOk: false,
+  confirm: false,
+  complite: false,
 });
 
 const skillState = (): SkillState => ({
@@ -79,6 +80,7 @@ export default defineComponent({
   components: {
     Session,
     Confirme,
+    Complete,
   },
   setup(_, ctx) {
     const state = reactive<State>(initialState());
@@ -219,7 +221,8 @@ export default defineComponent({
       console.log(data, "data");
       setTimeout(() => {
         if (!ctx.root.$store.getters.errorFlag) {
-          state.compliteOk = true;
+          state.confirm = false;
+          state.complite = true;
         }
         return;
       }, 2000);
@@ -227,6 +230,14 @@ export default defineComponent({
 
     const redirectProfile = () => {
       return router.push({ name: "Jobs" });
+    };
+
+    const testComplete = () => {
+      state.complite = true;
+    };
+
+    const redirectJobCreate = () => {
+      return router.push({ name: "JobCreate" });
     };
     return {
       ...toRefs(state),
@@ -237,6 +248,8 @@ export default defineComponent({
       isOpenPassword,
       register,
       redirectProfile,
+      testComplete,
+      redirectJobCreate,
     };
   },
 });
@@ -244,16 +257,24 @@ export default defineComponent({
 
 <template>
   <section>
+    <Complete
+      v-if="complite"
+      :imageNumber="Number(1)"
+      title="登録が完了しました"
+      content="早速チーム開発を始めよう！"
+      btnMain="案件を作る"
+      btnSub="案件を探す"
+      @subFunction="redirectProfile"
+      @mainFunction="redirectJobCreate"
+      @close="redirectProfile"
+    />
     <Confirme
-      v-if="confirmModal"
+      v-if="confirm"
       :onFunction="register"
-      confirmModalTitle="登録完了しますか？"
-      compliteModalTitle="登録完了しました。"
-      btnTitle="登録する"
-      btnSubTitle="閉じる"
-      :compliteOk="compliteOk"
-      @close="confirmModal = false"
-      @complite="redirectProfile"
+      title="登録完了しますか？"
+      btnMain="登録する"
+      btnSub="閉じる"
+      @close="confirm = false"
     />
     <div class="wrapper">
       <div class="title">入力確認</div>
@@ -362,7 +383,7 @@ export default defineComponent({
           </div>
           <div class="bottom">
             <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
-            <v-btn class="next-btn" @click="() => (confirmModal = true)"
+            <v-btn class="next-btn" @click="() => (confirm = true)"
               >登録完了する</v-btn
             >
           </div>

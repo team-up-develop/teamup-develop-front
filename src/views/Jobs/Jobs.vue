@@ -10,11 +10,7 @@ import { $fetch } from "@/libs/axios";
 import { API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { truncate } from "@/hooks/useUtils";
-import {
-  JobRegisterFalse,
-  JobRightLogin,
-  CardJob,
-} from "@/components/Organisms/Jobs";
+import { JobRightLogin, CardJob } from "@/components/Organisms/Jobs";
 import {
   LanguageSearchModal,
   FrameworkSearchModal,
@@ -91,7 +87,6 @@ export default defineComponent({
     Loading,
     Applybtn,
     ApplyModal,
-    JobRegisterFalse,
     CardJob,
     LanguageSearchModal,
     FrameworkSearchModal,
@@ -267,6 +262,7 @@ const utils = (state: State, ctx: SetupContext) => {
 
   // * 非ログイン時 登録リダイレクト
   const registerRedirect = () => {
+    localStorage.setItem("cji_data_en", encode(String(state.id)));
     router.push({ name: "RegisterStepBase" });
   };
 
@@ -308,7 +304,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
       query: { page: String(state.page), job_id: String(state.id) },
     });
 
-    localStorage.setItem("cji_data_en", encode(String(state.id)));
     // * ログインしていれば以下の処理が走る
     if (state.userId) {
       await selfJobCheck();
@@ -618,9 +613,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
       </template>
       <template v-else>
         <div class="job-wrapper-right-false">
-          <!-- 右側の登録コンポーネント -->
-          <JobRegisterFalse v-if="!userId" />
-          <JobRightLogin v-else />
+          <JobRightLogin />
         </div>
       </template>
       <!-- ページネーション -->
