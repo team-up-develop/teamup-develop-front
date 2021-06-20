@@ -47,7 +47,7 @@ const useJobs = () => {
       const res = await $fetch<FetchJobs>(`${API_URL}/job/${jobId}`);
       await fetchError(res.data.status);
       state.job = res.data.response;
-      state.loading = false;
+      // state.loading = false;
     } catch (error) {
       catchError(error);
     }
@@ -70,7 +70,7 @@ const useJobs = () => {
         `${API_URL}/jobs?user_id=${userId}`
       );
       state.profileJobs = res.data.response;
-      state.loading = false;
+      // state.loading = false;
     } catch (error) {
       catchError(error);
     }
@@ -105,7 +105,7 @@ const useJobs = () => {
       }
       const result: boolean = arrayApply.includes(jobId);
       state.isApply = !result;
-      // state.loading = false;
+      state.loading = false;
     } catch (error) {
       catchError(error);
     }

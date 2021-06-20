@@ -41,8 +41,6 @@ export default defineComponent({
   setup: (props: Props) => {
     const state = reactive<State>(initialState());
     const { auth } = useUtils();
-    const day = (value: string, format: string) => dayJsFormat(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
 
     const getChatGroups = async () => {
       try {
@@ -74,8 +72,8 @@ export default defineComponent({
     return {
       ...toRefs(state),
       m: computed(() => m),
-      day,
-      limit,
+      dayJsFormat,
+      truncate,
       getChatGroups,
     };
   },
@@ -92,7 +90,7 @@ export default defineComponent({
       class="group"
     >
       <div class="group__area">
-        <p>{{ limit(chatGroup.job.job_title, 36) }}</p>
+        <p>{{ truncate(chatGroup.job.job_title, 36) }}</p>
         <v-row class="row">
           <label
             for="name"
@@ -106,7 +104,9 @@ export default defineComponent({
             v-if="chatGroup.apply_status_id === m.APPLY_STATUS_PARTICIPATE"
             >参加案件</label
           >
-          <section>{{ day(chatGroup.created_at, "YYYY年 M月 D日") }}</section>
+          <section>
+            {{ dayJsFormat(chatGroup.created_at, "YYYY年 M月 D日") }}
+          </section>
         </v-row>
       </div>
     </v-card>

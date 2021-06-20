@@ -20,12 +20,10 @@ import { useJobs, useUtils } from "@/hooks";
 import { checkSelfJob } from "@/modules/Jobs/jobs";
 type State = {
   userId: number;
-  loading: boolean;
 };
 
 const initialState = (ctx: SetupContext): State => ({
   userId: ctx.root.$store.getters.userId,
-  loading: true,
 });
 
 export default defineComponent({
@@ -52,6 +50,7 @@ export default defineComponent({
       loading,
     } = useJobs();
     fetchJobDetail(props.id);
+
     const { isLogin } = useUtils();
 
     const breadcrumbs = computed(() => [
@@ -76,6 +75,10 @@ export default defineComponent({
       if (state.userId) {
         await fetchManageJobs();
         await checkApplyStatus(props.id);
+      } else {
+        setTimeout(() => {
+          loading.value = false;
+        }, 500);
       }
     });
 
@@ -99,7 +102,7 @@ export default defineComponent({
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper">
-      <section v-if="!loading">
+      <section v-show="!loading">
         <div class="detail-post-user-area">
           <div class="detail-tag">投稿者</div>
           <PostUser :job="job" />
@@ -121,7 +124,7 @@ export default defineComponent({
           @applied="applied"
         />
       </section>
-      <Loading v-else />
+      <Loading v-show="loading" />
     </div>
   </section>
 </template>

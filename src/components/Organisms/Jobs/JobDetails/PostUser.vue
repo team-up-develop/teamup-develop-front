@@ -6,14 +6,12 @@ import { Job } from "@/types";
 
 export default defineComponent({
   props: {
-    job: { type: Object as PropType<Job>, required: true, defalut: {} },
+    job: { type: Object as PropType<Job>, required: true },
   },
   setup: () => {
-    const day = (value: string, format: string) => dayJsFormat(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
     return {
-      day,
-      limit,
+      dayJsFormat,
+      truncate,
     };
   },
 });
@@ -31,14 +29,14 @@ export default defineComponent({
             <div class="user-name-tag">名前</div>
             <router-link :to="`/account/profile/${job.user_id}/detail`">
               <div class="user-name">
-                {{ limit(job.user.user_name, 27) }}
+                {{ truncate(job.user.user_name, 27) }}
               </div>
             </router-link>
           </div>
           <div class="user-introduce-area">
             <div class="introduce-tag">学習開始</div>
             <div class="introduce">
-              {{ day(job.user.learning_start_date, "YYYY年 M月 D日") }}
+              {{ dayJsFormat(job.user.learning_start_date, "YYYY年 M月 D日") }}
             </div>
           </div>
         </div>

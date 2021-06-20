@@ -19,11 +19,9 @@ export type JobCardProps = OutsidePropsType<PropsOption>;
 export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: () => {
-    const day = (value: string, format: string) => dayJsFormat(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
     return {
-      day,
-      limit,
+      dayJsFormat,
+      truncate,
     };
   },
 });
@@ -77,12 +75,12 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         </div>
       </v-row>
       <div class="card__title">
-        <span>{{ limit(job.job_title, 55) }}</span>
+        <span>{{ truncate(job.job_title, 55) }}</span>
       </div>
       <div class="card__bottom">
         <span
-          >{{ day(job.dev_start_date, "YYYY年 M月 D日") }} ~
-          {{ day(job.dev_end_date, "YYYY年 M月 D日") }}</span
+          >{{ dayJsFormat(job.dev_start_date, "YYYY年 M月 D日") }} ~
+          {{ dayJsFormat(job.dev_end_date, "YYYY年 M月 D日") }}</span
         >
       </div>
     </v-sheet>

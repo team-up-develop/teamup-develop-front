@@ -9,7 +9,6 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-// import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import {
   PostUser,
   SkillUser,
@@ -21,10 +20,11 @@ import { StatusChangeBtnArea } from "@/components/Organisms/Manages";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User } from "@/types/index";
-import { API_URL } from "@/master";
+import { m, API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-import useJobs from "@/hooks/useJobs";
+import { useJobs, useUtils } from "@/hooks";
 import { FetchUser } from "@/types/fetch";
+import { FetchManageJobs } from "@/types/fetch";
 
 type Props = {
   id: number; //? 詳細を見るユーザーのID
@@ -33,19 +33,25 @@ type Props = {
 };
 
 type State = {
+  loading: boolean;
   myselfFlag: boolean;
   userInfo: User | {};
   userId: number;
   doneStatusFlag: boolean;
   currentTab: 0 | 1;
+  statusId: number;
+  updatedAt: Date | string;
 };
 
 const initialState = (ctx: SetupContext): State => ({
+  loading: true,
   myselfFlag: false,
   userInfo: {},
   userId: ctx.root.$store.getters.userId,
   doneStatusFlag: false,
   currentTab: 0,
+  statusId: m.APPLY_STATUS_APPLY,
+  updatedAt: "",
 });
 
 export default defineComponent({
@@ -66,6 +72,7 @@ export default defineComponent({
   },
   setup: (props: Props, ctx) => {
     const state = reactive<State>(initialState(ctx));
+    const { auth } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -89,7 +96,7 @@ export default defineComponent({
       },
     ]);
 
-    const { fetchProfileJobs, profileJobs, loading } = useJobs();
+    const { fetchProfileJobs, profileJobs } = useJobs();
     fetchProfileJobs(props.id);
 
     const fetchUser = async () => {
@@ -101,15 +108,41 @@ export default defineComponent({
       }
     };
 
+    // * 表示中のユーザーのステータスを格納
+    const getStatus = async () => {
+      try {
+        const res = await $fetch<FetchManageJobs>(
+          `
+          ${AUTH_URL}/apply_jobs?job_id=${props.jobId}&user_id=${props.id}`,
+          {
+            headers: auth.value,
+          }
+        );
+        state.statusId = res.data.response[0].apply_status_id;
+        state.updatedAt = res.data.response[0].updated_at;
+        state.loading = false;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    const participate = () => {
+      state.statusId = m.APPLY_STATUS_PARTICIPATE;
+    };
+    const reject = () => {
+      state.statusId = m.APPLY_STATUS_REJECT;
+    };
+
     const clickTabs = (emitValue: 0 | 1) => {
       state.currentTab = emitValue;
     };
 
-    onMounted(() => {
+    onMounted(async () => {
       if (!state.userId) {
         return;
       }
-      fetchUser();
+      await fetchUser();
+      await getStatus();
     });
 
     return {
@@ -117,7 +150,8 @@ export default defineComponent({
       breadcrumbs,
       profileJobs,
       clickTabs,
-      loading,
+      participate,
+      reject,
     };
   },
 });
@@ -126,7 +160,7 @@ export default defineComponent({
 <template>
   <section>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
-    <div class="detail-wrapper" v-if="!loading">
+    <div class="detail-wrapper" v-show="!loading">
       <section class="user-area">
         <div class="user-area__post">
           <PostUser
@@ -171,11 +205,19 @@ export default defineComponent({
       </div>
       <div class="button-area">
         <section v-if="jobId">
-          <StatusChangeBtnArea :id="id" :jobId="jobId" :applyId="applyId" />
+          <StatusChangeBtnArea
+            :id="id"
+            :jobId="jobId"
+            :applyId="applyId"
+            :statusId="statusId"
+            :updatedAt="updatedAt"
+            @participate="participate"
+            @reject="reject"
+          />
         </section>
       </div>
     </div>
-    <Loading v-else />
+    <Loading v-show="loading" />
   </section>
 </template>
 

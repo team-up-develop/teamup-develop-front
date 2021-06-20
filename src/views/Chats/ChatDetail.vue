@@ -73,7 +73,7 @@ export default defineComponent({
         disabled: true,
       },
     ]);
-    const limit = (value: string, num: number) => truncate(value, num);
+
     const scrollChat = () => {
       state.loading = false;
       setTimeout(() => {
@@ -149,7 +149,7 @@ export default defineComponent({
       scrollChat,
       fetchMessage,
       fetchJob,
-      limit,
+      truncate,
       blankJob,
     };
   },
@@ -168,8 +168,8 @@ export default defineComponent({
         <div class="chat-card__right">
           <div class="main" ref="target" v-show="!loading">
             <div class="blank-link" @click="blankJob">
-              <header class="header">{{ limit(jobTitle, 60) }}</header>
-              <header class="min">{{ limit(jobTitle, 40) }}</header>
+              <header class="header">{{ truncate(jobTitle, 60) }}</header>
+              <header class="min">{{ truncate(jobTitle, 40) }}</header>
             </div>
             <section class="room" ref="root">
               <UserMessage :chats="chats" />

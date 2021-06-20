@@ -86,7 +86,6 @@ export default defineComponent({
     const state = reactive<State>(initialState());
     const skills = reactive<SkillState>(skillState());
     const router = ctx.root.$router;
-    const day = (value: string, format: string) => dayJsFormat(value, format);
 
     const fetchSkill = async () => {
       try {
@@ -242,7 +241,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       ...toRefs(skills),
-      day,
+      dayJsFormat,
       backStep,
       isForm,
       isOpenPassword,
@@ -322,11 +321,11 @@ export default defineComponent({
           </div>
           <div class="input-area">
             <label for="name" class="label">誕生日</label>
-            <p>{{ day(userBirthday, "YYYY年 M月 D日") }}</p>
+            <p>{{ dayJsFormat(userBirthday, "YYYY年 M月 D日") }}</p>
           </div>
           <div class="input-area">
             <label for="name" class="label">学習開始日</label>
-            <p>{{ day(learningStartDate, "YYYY年 M月 D日") }}</p>
+            <p>{{ dayJsFormat(learningStartDate, "YYYY年 M月 D日") }}</p>
           </div>
           <div class="input-area">
             <label for="name" class="label">開発言語</label>
