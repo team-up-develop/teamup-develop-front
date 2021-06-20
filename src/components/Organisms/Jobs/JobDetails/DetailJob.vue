@@ -8,9 +8,8 @@ export default defineComponent({
     job: { type: Object as PropType<Job>, required: true },
   },
   setup: () => {
-    const day = (value: string, format: string) => dayJsFormat(value, format);
     return {
-      day,
+      dayJsFormat,
     };
   },
 });
@@ -31,8 +30,8 @@ export default defineComponent({
         <div class="detail-information">
           <div class="tag">開発期間</div>
           <div class="sub-area">
-            {{ day(job.dev_start_date, "YYYY年 M月 D日") }} ~
-            {{ day(job.dev_end_date, "YYYY年 M月 D日") }}
+            {{ dayJsFormat(job.dev_start_date, "YYYY年 M月 D日") }} ~
+            {{ dayJsFormat(job.dev_end_date, "YYYY年 M月 D日") }}
           </div>
         </div>
         <div class="detail-information">

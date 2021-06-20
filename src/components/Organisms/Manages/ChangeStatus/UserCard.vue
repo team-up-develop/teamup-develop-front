@@ -19,11 +19,9 @@ export type UserCardProps = OutsidePropsType<PropsOption>;
 export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: () => {
-    const day = (value: string, format: string) => dayJsFormat(value, format);
-    const limit = (value: string, num: number) => truncate(value, num);
     return {
-      day,
-      limit,
+      dayJsFormat,
+      truncate,
     };
   },
 });
@@ -87,17 +85,17 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           <div class="card__user__image"></div>
           <v-col>
             <div class="card__user__name">
-              {{ limit(user.user.user_name, 26) }}
+              {{ truncate(user.user.user_name, 26) }}
             </div>
             <div class="card__user__study">
-              {{ day(user.user.learning_start_date, "YYYY年 M月 D日") }}
+              {{ dayJsFormat(user.user.learning_start_date, "YYYY年 M月 D日") }}
             </div>
           </v-col>
         </v-row>
       </div>
       <div class="card__bottom">
         <span>
-          {{ day(user.createdAt, "YYYY年 M月 D日") }}
+          {{ dayJsFormat(user.createdAt, "YYYY年 M月 D日") }}
         </span>
       </div>
     </v-sheet>

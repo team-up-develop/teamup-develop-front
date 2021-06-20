@@ -28,11 +28,9 @@ export default defineComponent({
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
 
-    const limit = (value: string, num: number) => truncate(value, num);
-
     return {
       ...toRefs(state),
-      limit,
+      truncate,
     };
   },
 });
@@ -67,7 +65,7 @@ export default defineComponent({
                         <v-icon class="icon"
                           >mdi-card-account-details-outline</v-icon
                         >
-                        {{ limit(userName, 6) }}
+                        {{ truncate(userName, 6) }}
                       </v-list-item-title>
                     </router-link>
                   </v-list-item>

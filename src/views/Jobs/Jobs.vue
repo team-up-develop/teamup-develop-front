@@ -17,6 +17,7 @@ import {
   SkillSearchModal,
 } from "@/components/Organisms/Modals/Searches";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
 import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
@@ -35,6 +36,7 @@ type State = {
   jobsNullFlag: boolean; //? 案件が存在しない場合 表示のため
   freeWord: string;
   loading: boolean;
+  circleLoading: boolean;
   jobDetail: any; //? 案件詳細
   detailFlag: boolean; //? 案件詳細を表示するためのフラグ
   selfJobPost: boolean; //? 自分の案件かを判定
@@ -43,7 +45,6 @@ type State = {
   id: number; //? clickした案件のIdを取得
   modal: boolean; //?モーダルを開いてるか否か
   saveFlag: boolean; //? 案件保存しているかを判定
-  limitationList: number;
   userId: number;
   entryRedirect: boolean; //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
   langModal: boolean; //? 言語モーダル
@@ -61,6 +62,7 @@ const initialState = (ctx: SetupContext): State => ({
   jobsNullFlag: false,
   freeWord: ctx.root.$store.getters.freeWord,
   loading: true,
+  circleLoading: true,
   jobDetail: null,
   detailFlag: false,
   selfJobPost: false,
@@ -69,7 +71,6 @@ const initialState = (ctx: SetupContext): State => ({
   id: 0,
   modal: false,
   saveFlag: true,
-  limitationList: 1,
   userId: ctx.root.$store.getters.userId,
   entryRedirect: false,
   langModal: false,
@@ -85,6 +86,7 @@ const initialState = (ctx: SetupContext): State => ({
 export default defineComponent({
   components: {
     Loading,
+    CircleLoading,
     Applybtn,
     ApplyModal,
     CardJob,
@@ -257,8 +259,6 @@ export default defineComponent({
 
 const utils = (state: State, ctx: SetupContext) => {
   const router = ctx.root.$router;
-  const day = (value: string, format: string) => dayJsFormat(value, format);
-  const limit = (value: string, num: number) => truncate(value, num);
 
   // * 非ログイン時 登録リダイレクト
   const registerRedirect = () => {
@@ -280,8 +280,8 @@ const utils = (state: State, ctx: SetupContext) => {
     state.loading = false;
   };
   return {
-    day,
-    limit,
+    dayJsFormat,
+    truncate,
     registerRedirect,
     pageChange,
   };
@@ -294,6 +294,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
     if (state.id === job.id) {
       return;
     }
+    state.circleLoading = true;
     state.jobDetail = job; //? clickした案件を取得
     state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
     state.id = job.id; //? clickしたIdを this.idに格納する
@@ -310,6 +311,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
       await applyCheck();
       await favoriteCheck();
     }
+    state.circleLoading = false;
     // * 登録 or ログインしてない場合
     return;
   };
@@ -492,36 +494,41 @@ const clickJob = (state: State, ctx: SetupContext) => {
         <v-card class="job-wrapper-right">
           <div class="top-job-detail-area">
             <div class="top-job-detail-area__title">
-              {{ limit(jobDetail.job_title, 60) }}
+              {{ truncate(jobDetail.job_title, 60) }}
             </div>
             <!-- ログイン時 -->
             <template v-if="!entryRedirect">
-              <div class="top-job-detail-bottom" v-if="!selfJobPost">
-                <button
-                  @click="() => (modal = true)"
-                  class="btn-box-apply"
-                  v-if="applyFlug"
-                >
-                  応募する
-                </button>
-                <div class="btn-box-apply-false" v-else>応募済み</div>
-                <div class="btn-box-save">
-                  <FavoriteBtn :jobId="id" />
-                </div>
-                <div class="label-area mt-5">
-                  <JobStatusNew :job="jobDetail" />
-                </div>
-              </div>
-              <template v-else>
-                <div class="top-job-detail-bottom">
-                  <router-link :to="`/manage/${jobDetail.id}/applicant`">
-                    <button class="btn-box-manage">管理画面</button>
-                  </router-link>
+              <div v-show="!circleLoading">
+                <div class="top-job-detail-bottom" v-if="!selfJobPost">
+                  <button
+                    @click="() => (modal = true)"
+                    class="btn-box-apply"
+                    v-if="applyFlug"
+                  >
+                    応募する
+                  </button>
+                  <div class="btn-box-apply-false" v-else>応募済み</div>
+                  <div class="btn-box-save">
+                    <FavoriteBtn :jobId="id" />
+                  </div>
                   <div class="label-area mt-5">
                     <JobStatusNew :job="jobDetail" />
                   </div>
                 </div>
-              </template>
+                <template v-else>
+                  <div class="top-job-detail-bottom">
+                    <router-link :to="`/manage/${jobDetail.id}/applicant`">
+                      <button class="btn-box-manage">管理画面</button>
+                    </router-link>
+                    <div class="label-area mt-5">
+                      <JobStatusNew :job="jobDetail" />
+                    </div>
+                  </div>
+                </template>
+              </div>
+              <div v-show="circleLoading" class="pb-4">
+                <CircleLoading />
+              </div>
             </template>
             <!-- 非ログイン時 リダイレクトさせる -->
             <template v-else>
@@ -547,7 +554,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
             </div>
             <router-link :to="`/account/profile/${jobDetail.user_id}/detail`">
               <div class="post-user-name-area">
-                {{ limit(jobDetail.user.user_name, 55) }}
+                {{ truncate(jobDetail.user.user_name, 55) }}
               </div>
             </router-link>
             <div class="tag-area">
@@ -590,8 +597,8 @@ const clickJob = (state: State, ctx: SetupContext) => {
               開発期間
             </div>
             <div class="post-user-area">
-              {{ day(jobDetail.dev_start_date, "YYYY年 M月 D日") }} ~
-              {{ day(jobDetail.dev_end_date, "YYYY年 M月 D日") }}
+              {{ dayJsFormat(jobDetail.dev_start_date, "YYYY年 M月 D日") }} ~
+              {{ dayJsFormat(jobDetail.dev_end_date, "YYYY年 M月 D日") }}
             </div>
             <div class="tag-area">
               募集人数
@@ -606,7 +613,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
               {{ jobDetail.job_description }}
             </div>
             <div class="jobDetail-time-area">
-              投稿期日 {{ day(jobDetail.created_at, "YYYY年 M月 D日") }}
+              投稿期日 {{ dayJsFormat(jobDetail.created_at, "YYYY年 M月 D日") }}
             </div>
           </div>
         </v-card>

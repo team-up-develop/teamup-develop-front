@@ -26,7 +26,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: () => {
     const state = reactive<State>(initialState());
-    const day = (value: string, format: string) => dayJsFormat(value, format);
 
     const isOpenPassword = computed(() => {
       return state.passwordModal ? true : false;
@@ -38,7 +37,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       state.passwordModal = false;
     };
     return {
-      day,
+      dayJsFormat,
       isOpenPassword,
       openPassword,
       closePassword,
@@ -64,7 +63,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <div class="d-flex justify-start">
         <div class="card__area">
           <label for="name" class="font-weight-bold text-left">生年月日</label>
-          <p>{{ day(user.birthday, "YYYY年 M月 D日") }}</p>
+          <p>{{ dayJsFormat(user.birthday, "YYYY年 M月 D日") }}</p>
         </div>
         <div class="card__area">
           <label for="name" class="font-weight-bold text-left"

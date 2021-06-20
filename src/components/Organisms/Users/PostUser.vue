@@ -23,8 +23,6 @@ export type PostUserProps = OutsidePropsType<PropsOption>;
 export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: (props, context) => {
-    const day = (value: string, format: string) => dayJsFormat(value, format);
-
     const twitterTab = () => {
       if (props.user?.twitter_account) {
         const url: string = props.user.twitter_account;
@@ -46,7 +44,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
 
     return {
-      day,
+      dayJsFormat,
       twitterTab,
       gitTab,
       editEmit,
@@ -71,7 +69,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             </v-col>
             <v-col class="introduce-area" style="padding: none">
               <div class="introduce">
-                学習開始 {{ day(user.learning_start_date, "YYYY年 M月 D日") }}
+                学習開始
+                {{ dayJsFormat(user.learning_start_date, "YYYY年 M月 D日") }}
               </div>
             </v-col>
             <v-col class="url-area">

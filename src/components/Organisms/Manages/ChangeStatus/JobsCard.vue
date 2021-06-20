@@ -35,7 +35,6 @@ export default defineComponent({
   },
   setup: (props: Props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    const limit = (value: string, num: number) => truncate(value, num);
 
     onMounted(() => {
       Vuex.dispatch("getUserNum", {
@@ -52,7 +51,7 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      limit,
+      truncate,
     };
   },
 });
@@ -62,7 +61,7 @@ export default defineComponent({
     <v-card class="card">
       <v-col>
         <v-row class="card__top">
-          {{ limit(jobTitle, 60) }}
+          {{ truncate(jobTitle, 60) }}
         </v-row>
         <v-row class="card__center">
           <router-link :to="`/jobs/${jobId}/detail`">

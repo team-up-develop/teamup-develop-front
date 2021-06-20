@@ -4,79 +4,43 @@ import {
   OutsidePropsType,
   PropType,
 } from "@icare-jp/vue-props-type";
-import {
-  defineComponent,
-  reactive,
-  toRefs,
-  computed,
-} from "@vue/composition-api";
-import { $fetch } from "@/libs/axios";
-import { FetchManageJobs } from "@/types/fetch";
-import { m, AUTH_URL } from "@/master";
-import { catchError } from "@/libs/errorHandler";
+import { defineComponent, computed } from "@vue/composition-api";
 import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
-import { useUtils } from "@/hooks";
 import { doneParticipate, doneReject } from "@/modules/Manages/manages";
+
 const propsOption = {
   id: { type: Number as PropType<number>, default: 0, required: true }, //? 詳細を見るユーザーのID
   jobId: { type: Number as PropType<number>, default: 0, required: true },
   applyId: { type: Number as PropType<number>, default: 0, required: true },
+  statusId: { type: Number as PropType<number>, default: 0, required: true },
+  updatedAt: {
+    type: String,
+    default: "",
+    required: true,
+  },
 } as const;
 
 type PropsOption = typeof propsOption;
-
 export type StatusChangeProps = OutsidePropsType<PropsOption>;
-
-type State = {
-  statusId: number;
-  updatedAt: Date | string;
-};
-
-const initialState = (): State => ({
-  statusId: m.APPLY_STATUS_APPLY,
-  updatedAt: "",
-});
 
 export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     StatusChangeBtnArea,
   },
   props: propsOption,
-  setup: (props) => {
-    const state = reactive<State>(initialState());
-    const { auth } = useUtils();
-
+  setup: (props, ctx) => {
     const participate = () => {
-      state.statusId = m.APPLY_STATUS_PARTICIPATE;
+      ctx.emit("participate");
     };
     const reject = () => {
-      state.statusId = m.APPLY_STATUS_REJECT;
+      ctx.emit("reject");
     };
-
-    // * 表示中のユーザーのステータスを格納
-    const getStatus = async () => {
-      try {
-        const res = await $fetch<FetchManageJobs>(
-          `
-          ${AUTH_URL}/apply_jobs?job_id=${props.jobId}&user_id=${props.id}`,
-          {
-            headers: auth.value,
-          }
-        );
-        state.statusId = res.data.response[0].apply_status_id;
-        state.updatedAt = res.data.response[0].updated_at;
-      } catch (error) {
-        catchError(error);
-      }
-    };
-    getStatus();
 
     return {
-      ...toRefs(state),
       participate,
       reject,
-      doneParticipate: computed(() => doneParticipate(state.statusId)),
-      doneReject: computed(() => doneReject(state.statusId)),
+      doneParticipate: computed(() => doneParticipate(props.statusId)),
+      doneReject: computed(() => doneReject(props.statusId)),
     };
   },
 });
