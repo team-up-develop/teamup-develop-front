@@ -52,7 +52,7 @@ $ npm cache verify --force
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
 
-## Tips
+## Doc
 ### Compoent構成
 Atomic Design 導入 
 詳しくは → https://github.com/team-up-develop/teamup-develop-front/issues/86
