@@ -12,7 +12,7 @@ import {
 } from "@icare-jp/vue-props-type";
 import { Job } from "@/types";
 import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
-import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
+import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 // import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
 
@@ -53,7 +53,7 @@ const initialState = (): State => ({
 export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     FavoriteDetailBtn,
-    ApplyModal,
+    Confirme,
     Applybtn,
     // EditJobModal,
   },
@@ -84,13 +84,18 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   <section class="wrap">
     <!-- 応募する モーダル画面 -->
     <div class="example-modal-window">
-      <ApplyModal @close="closeModal" v-if="modal">
+      <Confirme @close="closeModal" v-if="modal">
+        <v-icon class="apply-icon pt-1 pb-4">
+          mdi mdi-handshake-outline
+        </v-icon>
         <p>応募を完了してよろしいですか？</p>
-        <template v-slot:footer>
-          <Applybtn :jobId="id" @compliteEntry="compliteEntry" />
-          <v-btn @click="doSend" class="modal-btn">キャンセル</v-btn>
+        <template v-slot:btnArea>
+          <div class="d-flex justify-space-between">
+            <Applybtn :jobId="id" @compliteEntry="compliteEntry" />
+            <v-btn @click="doSend" class="modal-btn">キャンセル</v-btn>
+          </div>
         </template>
-      </ApplyModal>
+      </Confirme>
     </div>
     <!-- 編集 モーダル画面 -->
     <!-- <div class="example-modal-window">
@@ -124,6 +129,11 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
+.apply-icon {
+  color: $apply;
+  font-size: 6em;
+}
+
 .wrap {
   width: 100%;
   display: flex;
@@ -288,7 +298,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 .modal-btn {
   @include neumorphismGrey;
   color: $red;
-  padding: 0rem 2.4rem !important;
+  padding: 0rem 2rem !important;
   height: 46px !important;
   border-radius: 50px;
   line-height: 1;
@@ -296,10 +306,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   max-width: 280px;
   margin-left: 1.2rem;
   font-size: 1rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 1rem;
+  // position: absolute;
+  // top: 0;
+  // right: 0;
   outline: none;
 }
 </style>

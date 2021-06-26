@@ -52,13 +52,13 @@ export default defineComponent({
 
 <template>
   <section>
-    <div class="login-wrapper">
-      <v-card class="login-container">
-        <div class="login-title">LOGIN</div>
+    <div class="wrapper">
+      <div class="title">LOGIN</div>
+      <v-card class="card  py-4">
         <div class="text-left mt-6">
           <label class="font-weight-bold" for="name">メールアドレス</label>
           <br /><br />
-          <v-row class="px-3" cols="12" md="4">
+          <v-row class="px-3" cols="12">
             <Email
               v-model="email"
               placeholder="example@teamUp.com"
@@ -69,7 +69,7 @@ export default defineComponent({
         <div class="text-left mt-2">
           <label class="font-weight-bold" for="name">パスワード</label>
           <br /><br />
-          <v-row class="px-3" cols="12" md="4">
+          <v-row class="px-3" cols="12" md="1">
             <Password v-model="password" type="password" />
           </v-row>
         </div>
@@ -94,72 +94,63 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-section {
-  height: 87vh;
-}
-.router-link {
-  text-decoration: none;
-}
+.wrapper {
+  width: 550px;
+  height: 90%;
+  margin: 0 auto;
+  position: relative;
 
-.login-wrapper {
-  @include card-margin;
-  width: 100%;
-  height: 100%;
-  margin: 0;
+  @media (max-width: $me) {
+    width: 95%;
+  }
 
-  .login-container {
-    max-width: 500px;
-    height: 620px;
-    margin: 2rem auto 3rem auto;
-    border-radius: 8px;
-    padding: 1rem 3rem 2rem 3rem;
-    position: relative;
-    background-color: $white;
+  .card {
+    min-height: 550px;
+    padding: 0 2.8rem;
 
     @media (max-width: $sm) {
-      width: 95%;
-      padding: 1rem;
+      padding: 0 1rem;
+    }
+  }
+
+  .title {
+    color: $primary-color;
+    font-size: 2rem;
+    font-weight: bold;
+    height: 50px;
+    padding: 1rem 2rem;
+    margin-top: 1rem;
+  }
+
+  .btn-area {
+    margin: 0 auto;
+    width: 85%;
+    position: absolute;
+    bottom: 0;
+    padding: 2rem 0;
+
+    @media (max-width: $sm) {
+      width: 85%;
     }
 
-    //* ログインタイトル
-    .login-title {
-      color: $primary-color;
-      font-size: 1.8rem;
+    .login-btn {
+      @include box-shadow-btn;
+      @include blue-btn;
+      color: $white;
+      display: block;
+      width: 85%;
+      height: 48px;
+      border-radius: 50px;
+      line-height: 1;
+      text-align: center;
+      margin: auto;
+      font-size: 1em;
+      display: inline-block;
+      cursor: pointer;
+      transition: 0.3s;
+      box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
+      outline: none;
       font-weight: bold;
-      height: 50px;
-      margin-top: 1rem;
-      width: 100%;
-      border-bottom: solid 3px $primary-color;
-    }
-
-    .btn-area {
-      margin: 0 auto;
-      width: 80%;
-      position: absolute;
-      bottom: 0;
-      padding: 2rem 0;
-
-      @media (max-width: $sm) {
-        width: 90%;
-      }
-
-      .login-btn {
-        @include neumorphismGrey;
-        color: $primary-color;
-        display: block;
-        width: 100%;
-        height: 48px;
-        border-radius: 50px;
-        line-height: 1;
-        text-align: center;
-        margin: auto;
-        font-size: 1em;
-        display: inline-block;
-        cursor: pointer;
-        transition: 0.3s;
-        box-shadow: 1px 1px 5px rgba(0, 0, 0, 0.685);
-        outline: none;
-      }
     }
   }
 }

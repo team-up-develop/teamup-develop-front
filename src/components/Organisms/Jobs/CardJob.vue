@@ -3,7 +3,7 @@ import { defineComponent, computed, PropType } from "@vue/composition-api";
 import CardJobSkill from "@/components/Atoms/Jobs/CardJobSkill.vue";
 import { m } from "@/master";
 import { truncate } from "@/hooks/useUtils";
-import { dayJsFormat } from "@/libs/dayjs";
+import { dayjs } from "@/libs/dayjs";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { Job } from "@/types/index";
 
@@ -26,7 +26,7 @@ export default defineComponent({
 const useUtils = () => {
   return {
     m: computed(() => m),
-    dayJsFormat,
+    dayjs: computed(() => dayjs),
     truncate,
   };
 };
@@ -59,8 +59,8 @@ const useUtils = () => {
           開発期間:
         </div>
         <div class="product-start-end-time">
-          {{ dayJsFormat(job.dev_start_date, "YYYY年 M月 D日") }} ~
-          {{ dayJsFormat(job.dev_end_date, "YYYY年 M月 D日") }}
+          {{ dayjs(job.dev_start_date).format("YYYY年 M月 D日") }} ~
+          {{ dayjs(job.dev_end_date).format("YYYY年 M月 D日") }}
         </div>
       </div>
       <div class="post-user-area">

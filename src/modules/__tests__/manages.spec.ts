@@ -1,5 +1,5 @@
 import { m } from "@/master";
-import { doneParticipate, doneReject } from "@/modules/Manages/manages";
+import { doneParticipate, doneReject } from "@/modules/manages";
 
 describe("manage.ts", () => {
   describe("doneParticipate", () => {

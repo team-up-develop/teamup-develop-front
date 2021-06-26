@@ -3,7 +3,7 @@ import Vue, { PropType } from "vue";
 import { $post } from "@/libs/axios";
 import { m, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-import CompliteModal from "@/components/Organisms/Modals/Applications/CompliteModal.vue";
+import CompliteModal from "@/components/Organisms/Modals/Actions/CompliteModal.vue";
 import { ApplyParams } from "@/types/params";
 
 type State = {
@@ -59,7 +59,7 @@ export default Vue.extend({
 </script>
 
 <template>
-  <div class="modal-apply-area">
+  <div>
     <CompliteModal v-if="compliteModal" />
     <v-btn class="btn-apply" @click="applyJob" v-if="!compliteModal">
       応募する
@@ -70,14 +70,10 @@ export default Vue.extend({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-.modal-apply-area {
-  width: 160px;
-}
-
 .btn-apply {
   @include neumorphism;
   @include red-btn;
-  padding: 0rem 3rem !important;
+  padding: 0rem 2.5rem !important;
   height: 46px !important;
   border-radius: 45px;
   color: $white;

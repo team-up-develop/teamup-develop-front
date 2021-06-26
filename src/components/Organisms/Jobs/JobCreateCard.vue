@@ -12,7 +12,12 @@ import {
 } from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsFirst } from "@/types/params";
-import { isFormFirst, minStartDate } from "@/modules/Jobs/jobCreate";
+import {
+  isFormFirst,
+  afterDevEndDate,
+  beforeToDate,
+  minPeriod,
+} from "@/modules/jobCreate";
 type Maybe<T> = T | null;
 
 export type JobCreateSession1 = {
@@ -74,8 +79,12 @@ export default defineComponent({
       isForm: computed(() =>
         isFormFirst(state.jobTitle, state.devStartDate, state.devEndDate)
       ),
-      minStartDate: computed(() =>
-        minStartDate(state.devStartDate, state.devEndDate)
+      afterDevEndDate: computed(() =>
+        afterDevEndDate(state.devStartDate, state.devEndDate)
+      ),
+      beforeToDate: computed(() => beforeToDate(state.devStartDate)),
+      minPeriod: computed(() =>
+        minPeriod(state.devStartDate, state.devEndDate)
       ),
       nextCreateBtn,
     };
@@ -101,8 +110,14 @@ export default defineComponent({
             :remaining="true"
           />
         </div>
-        <p v-if="minStartDate" class="error-message mb-5">
-          開始日が終了日より前です
+        <p v-if="afterDevEndDate" class="error-message mb-5">
+          開発開始日を開発終了日より後に設定してください。
+        </p>
+        <p v-if="beforeToDate" class="error-message mb-5">
+          開発開始日を現在の日付より後に設定してください。
+        </p>
+        <p v-if="minPeriod" class="error-message mb-5">
+          開発期間を1ヶ月以上に設定してください。
         </p>
         <div class="time">
           <DatePickerArea
@@ -143,7 +158,7 @@ export default defineComponent({
       <router-link
         to="/job_create/2"
         class="btn-area"
-        v-if="isForm && !minStartDate"
+        v-if="isForm && !afterDevEndDate && !beforeToDate && !minPeriod"
       >
         <button class="next-btn" @click="nextCreateBtn">次へ 1/2</button>
       </router-link>

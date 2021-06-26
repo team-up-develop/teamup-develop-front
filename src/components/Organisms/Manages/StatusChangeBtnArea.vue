@@ -5,40 +5,30 @@ import {
   PropType,
 } from "@icare-jp/vue-props-type";
 import { defineComponent, computed } from "@vue/composition-api";
-import StatusChangeBtnArea from "@/components/Molecules/Manages/StatusChangeBtnArea.vue";
-import { doneParticipate, doneReject } from "@/modules/Manages/manages";
+import { doneParticipate, doneReject } from "@/modules/manages";
 
 const propsOption = {
-  id: { type: Number as PropType<number>, default: 0, required: true }, //? 詳細を見るユーザーのID
-  jobId: { type: Number as PropType<number>, default: 0, required: true },
-  applyId: { type: Number as PropType<number>, default: 0, required: true },
   statusId: { type: Number as PropType<number>, default: 0, required: true },
-  updatedAt: {
-    type: String,
-    default: "",
-    required: true,
-  },
+  openModal: { type: Function as PropType<() => void>, required: true },
+  openCancelModal: { type: Function as PropType<() => void>, required: true },
 } as const;
 
 type PropsOption = typeof propsOption;
 export type StatusChangeProps = OutsidePropsType<PropsOption>;
 
 export default defineComponent<InsidePropsType<PropsOption>>({
-  components: {
-    StatusChangeBtnArea,
-  },
   props: propsOption,
-  setup: (props, ctx) => {
-    const participate = () => {
-      ctx.emit("participate");
+  setup: (props) => {
+    const onModal = () => {
+      props.openModal?.();
     };
-    const reject = () => {
-      ctx.emit("reject");
+    const onCancelModal = () => {
+      props.openCancelModal?.();
     };
 
     return {
-      participate,
-      reject,
+      onCancelModal,
+      onModal,
       doneParticipate: computed(() => doneParticipate(props.statusId)),
       doneReject: computed(() => doneReject(props.statusId)),
     };
@@ -58,14 +48,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <span class="btn-done">お断りしました </span>
     </div>
     <v-row v-if="!doneParticipate && !doneReject" class="btn-area">
-      <StatusChangeBtnArea
-        :id="id"
-        :jobId="jobId"
-        :applyId="applyId"
-        :updatedAt="updatedAt"
-        @participate="participate"
-        @reject="reject"
-      />
+      <v-btn class="btn-applicant" @click="onModal">一緒に開発する</v-btn>
+      <v-btn class="btn-reject" @click="onCancelModal">お断りする</v-btn>
     </v-row>
   </v-container>
 </template>
@@ -79,18 +63,57 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 .btn-done {
   @include grey-btn;
   color: $white;
-  padding: 1.2rem 4rem;
+  padding: 0.6rem 2rem !important;
   transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
   text-align: center;
   margin: auto;
-  font-size: 1rem;
+  font-size: 0.85rem;
   display: inline-block;
   border: none;
   span {
     font-size: 0.5rem;
+  }
+}
+.btn-applicant {
+  @include red-btn;
+  @include neumorphism;
+  color: $white;
+  padding: 0rem 2.5rem !important;
+  transition: 0.3s;
+  border-radius: 50px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  margin: auto;
+  font-size: 0.8rem;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+
+  @media screen and (max-width: $ti) {
+    padding: 0rem 1.7rem !important;
+  }
+}
+.btn-reject {
+  @include neumorphismGrey;
+  color: $red;
+  padding: 0rem 2.8rem !important;
+  transition: 0.3s;
+  border-radius: 50px;
+  font-weight: 600;
+  line-height: 1;
+  text-align: center;
+  margin-left: 1rem;
+  font-size: 0.9rem;
+  display: inline-block;
+  cursor: pointer;
+  border: none;
+
+  @media screen and (max-width: $ti) {
+    padding: 0rem 1.9rem !important;
   }
 }
 </style>

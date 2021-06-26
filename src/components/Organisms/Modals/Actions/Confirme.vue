@@ -2,14 +2,11 @@
   <transition name="modal" appear>
     <div class="modal-overlay" @click.self="$emit('close')">
       <div class="modal-window">
-        <div class="modal-top">
-          <p></p>
-        </div>
         <div class="modal-content">
           <slot />
         </div>
         <footer class="modal-footer">
-          <slot name="footer">
+          <slot name="btnArea">
             <button @click="$emit('close')">Close</button>
           </slot>
         </footer>
@@ -40,14 +37,6 @@
   border-radius: 8px;
   overflow: hidden;
   position: relative;
-
-  @media screen and (max-width: $sm) {
-    width: 90%;
-  }
-
-  @media screen and (max-width: $ti) {
-    width: 100%;
-  }
 }
 
 .modal-top {
@@ -61,32 +50,29 @@
 }
 
 .modal-content {
-  position: relative;
-  padding: 5rem 6rem 4rem 6rem;
   margin: 0 auto;
+  min-width: 400px;
+  max-width: 420px;
+  padding: 1rem 2rem;
 
-  @media screen and (max-width: $sm) {
-    padding: 5rem 4rem 4rem 4rem;
-  }
   @media screen and (max-width: $ti) {
-    padding: 5rem 2rem 4rem 2rem;
+    padding: 1rem 1rem;
+    min-width: 350px;
   }
 }
 
 .modal-footer {
-  width: 87%;
-  padding: 1rem;
-  margin-left: 0.35rem;
+  min-height: 60px;
   text-align: right;
   display: inline-block;
   position: relative;
 
-  @media screen and (max-width: $sm) {
-    width: 100%;
-  }
-  @media screen and (max-width: $ti) {
-    padding: 1rem 0rem;
-  }
+  // @media screen and (max-width: $sm) {
+  //   width: 100%;
+  // }
+  // @media screen and (max-width: $ti) {
+  //   padding: 1rem 0rem;
+  // }
 }
 
 .modal-enter-active,
