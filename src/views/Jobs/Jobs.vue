@@ -18,7 +18,7 @@ import {
 } from "@/components/Organisms/Modals/Searches";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
-import ApplyModal from "@/components/Organisms/Modals/Applications/ApplyModal.vue";
+import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
@@ -88,7 +88,7 @@ export default defineComponent({
     Loading,
     CircleLoading,
     Applybtn,
-    ApplyModal,
+    Confirme,
     CardJob,
     LanguageSearchModal,
     FrameworkSearchModal,
@@ -398,15 +398,20 @@ const clickJob = (state: State, ctx: SetupContext) => {
       @compliteSearchSkill="compliteSearchSkill($event)"
     />
     <div class="modal-window">
-      <ApplyModal @close="() => (modal = false)" v-if="modal">
+      <Confirme @close="() => (modal = false)" v-if="modal">
+        <v-icon class="apply-icon pt-1 pb-4">
+          mdi mdi-handshake-outline
+        </v-icon>
         <p>応募を完了してよろしいですか？</p>
-        <template v-slot:footer>
-          <Applybtn @compliteEntry="() => (applyFlug = false)" :jobId="id" />
-          <v-btn @click="() => (modal = false)" class="modal-btn"
-            >キャンセル</v-btn
-          >
+        <template v-slot:btnArea>
+          <div class="d-flex justify-space-between">
+            <Applybtn @compliteEntry="() => (applyFlug = false)" :jobId="id" />
+            <v-btn @click="() => (modal = false)" class="modal-btn"
+              >キャンセル</v-btn
+            >
+          </div>
         </template>
-      </ApplyModal>
+      </Confirme>
     </div>
     <!-- 検索エリアバー -->
     <template>
@@ -641,6 +646,11 @@ const clickJob = (state: State, ctx: SetupContext) => {
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
+
+.apply-icon {
+  color: $apply;
+  font-size: 6em;
+}
 
 // * 詳細検索
 .search-area {
@@ -945,7 +955,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
 .modal-btn {
   @include neumorphismGrey;
   color: $red;
-  padding: 0rem 2.4rem !important;
+  padding: 0rem 2rem !important;
   height: 46px !important;
   border-radius: 50px;
   line-height: 1;
@@ -953,10 +963,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
   max-width: 280px;
   margin-left: 1.2rem;
   font-size: 1rem;
-  position: absolute;
-  top: 0;
-  right: 0;
-  margin: 1rem;
   outline: none;
 }
 

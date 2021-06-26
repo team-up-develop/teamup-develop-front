@@ -2,7 +2,7 @@
 import Vue from "vue";
 import VueCompositionApi from "@vue/composition-api";
 Vue.use(VueCompositionApi);
-import { checkSelfJob } from "@/modules/Jobs/jobs";
+import { checkSelfJob } from "@/modules/jobs";
 import { manageJobs } from "@/mocks/jobs";
 // import JobDetail from "@/views/Jobs/JobDetail.vue";
 

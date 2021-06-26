@@ -17,7 +17,7 @@ import {
   DetailJob,
 } from "@/components/Organisms/Jobs/JobDetails";
 import { useJobs, useUtils } from "@/hooks";
-import { checkSelfJob } from "@/modules/Jobs/jobs";
+import { checkSelfJob } from "@/modules/jobs";
 type State = {
   userId: number;
 };

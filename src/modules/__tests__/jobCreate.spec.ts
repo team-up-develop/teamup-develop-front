@@ -1,9 +1,12 @@
 // import { shallowMount } from "@vue/test-utils";
 import {
   isFormFirst,
-  minStartDate,
+  afterDevEndDate,
+  beforeToDate,
   isFormSecond,
-} from "@/modules/Jobs/jobCreate";
+  minPeriod,
+} from "@/modules/jobCreate";
+import { dayjs } from "@/libs/dayjs";
 
 describe("jobCreate.ts", () => {
   describe("isFormFirst", () => {
@@ -25,11 +28,30 @@ describe("jobCreate.ts", () => {
     });
   });
 
-  describe("minStartDate", () => {
-    it("開発開始日より開発終了日の方が前なら「開始日が終了日より前です」を表示", () => {
+  describe("afterDevEndDate", () => {
+    it("開発開始日より開発終了日の方が前なら「開発開始日を開発終了日より後に設定してください。」を表示", () => {
       const devStartDate = "2021-10-30";
       const devEndDate = "2021-10-10";
-      const errorMessage = minStartDate(devStartDate, devEndDate);
+      const errorMessage = afterDevEndDate(devStartDate, devEndDate);
+      expect(errorMessage).toBe(true);
+    });
+  });
+
+  describe("beforeToDate", () => {
+    it("開発開始日が現在の日付より前の場合「開発開始日を現在の日付より後に設定してください。」を表示", () => {
+      const devStartDate = dayjs()
+        .startOf("month")
+        .format();
+      const errorMessage = beforeToDate(devStartDate);
+      expect(errorMessage).toBe(true);
+    });
+  });
+
+  describe("minPeriod", () => {
+    it("開発期間を1ヶ月未満の場合「開発期間を1ヶ月以上に設定してください。」を表示", () => {
+      const devStartDate = "2021-10-30";
+      const devEndDate = "2021-11-10";
+      const errorMessage = minPeriod(devStartDate, devEndDate);
       expect(errorMessage).toBe(true);
     });
   });

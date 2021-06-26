@@ -34,9 +34,7 @@ export default Vue.extend({
     hint="8文字以上で入力してください"
     value=""
     class="input-group--focused"
-    outlined
     @click:append="show2 = !show2"
-    single-line
     filled
   ></v-text-field>
 </template>

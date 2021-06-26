@@ -59,7 +59,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <button class="btn-applicant" @click="putApply">一緒に開発する</button>
+    <v-btn class="btn-applicant" @click="putApply">一緒に開発する</v-btn>
   </div>
 </template>
 
@@ -70,15 +70,14 @@ export default defineComponent({
   @include red-btn;
   @include neumorphism;
   color: $white;
-  padding: 1.1rem 4.2rem;
+  padding: 0.4rem 1.2rem !important;
   transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
   text-align: center;
   margin: auto;
-  font-size: 1rem;
-  display: inline-block;
+  font-size: 0.8rem;
   cursor: pointer;
   border: none;
 
@@ -87,15 +86,8 @@ export default defineComponent({
   }
 
   @media screen and (max-width: $sm) {
-    padding: 1.1rem 3rem;
   }
   @media screen and (max-width: $ti) {
-    padding: 1.1rem 2.4rem;
-    font-size: 1rem;
-  }
-  // TODO: px指定をしなくてもstyleがずれないようにする
-  @media screen and (max-width: 352px) {
-    padding: 1rem 1.5rem;
   }
 }
 </style>

@@ -58,7 +58,7 @@ export default defineComponent({
 
 <template>
   <div>
-    <button class="btn-reject" @click="applyUserReject">お断りする</button>
+    <v-btn class="btn-reject" @click="applyUserReject">お断りする</v-btn>
   </div>
 </template>
 
@@ -68,28 +68,21 @@ export default defineComponent({
 .btn-reject {
   @include neumorphismGrey;
   color: $red;
-  margin-left: 1.1rem;
-  padding: 1rem 5.5rem;
+  padding: 0.4rem 1.7rem !important;
   transition: 0.3s;
   border-radius: 50px;
   font-weight: 600;
   line-height: 1;
   text-align: center;
-  font-size: 1.1rem;
+  margin: auto;
+  font-size: 0.9rem;
   display: inline-block;
   cursor: pointer;
+  border: none;
 
   @media screen and (max-width: $sm) {
-    padding: 1.1rem 3.2rem;
-    margin-left: 0.3rem;
   }
   @media screen and (max-width: $ti) {
-    padding: 1.1rem 2.8rem;
-    font-size: 1rem;
-  }
-  // TODO: px指定をしなくてもstyleがずれないようにする
-  @media screen and (max-width: 352px) {
-    padding: 1rem 2.2rem;
   }
 }
 </style>

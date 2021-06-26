@@ -5,9 +5,9 @@ import {
   toRefs,
   onMounted,
   computed,
-  PropType,
   SetupContext,
 } from "@vue/composition-api";
+import { InsidePropsType, OutsidePropsType } from "@icare-jp/vue-props-type";
 import { $fetch } from "@/libs/axios";
 import {
   PostUser,
@@ -25,12 +25,17 @@ import { catchError } from "@/libs/errorHandler";
 import { useJobs, useUtils } from "@/hooks";
 import { FetchUser } from "@/types/fetch";
 import { FetchManageJobs } from "@/types/fetch";
+import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
+import ApplyPutBtn from "@/components/Atoms/Button/ApplyPutBtn.vue";
+import RejectBtn from "@/components/Atoms/Button/RejectBtn.vue";
 
-type Props = {
-  id: number; //? 詳細を見るユーザーのID
-  jobId: number;
-  applyId: number;
-};
+const propsOption = {
+  id: { type: Number, default: 0, required: true }, //? 詳細を見るユーザーのID
+  jobId: { type: Number, default: 0, required: true },
+  applyId: { type: Number, default: 0, required: true },
+} as const;
+type PropsOption = typeof propsOption;
+export type ManageUserProfile = OutsidePropsType<PropsOption>;
 
 type State = {
   loading: boolean;
@@ -41,6 +46,8 @@ type State = {
   currentTab: 0 | 1;
   statusId: number;
   updatedAt: Date | string;
+  modal: boolean;
+  cancelModal: boolean;
 };
 
 const initialState = (ctx: SetupContext): State => ({
@@ -52,9 +59,11 @@ const initialState = (ctx: SetupContext): State => ({
   currentTab: 0,
   statusId: m.APPLY_STATUS_APPLY,
   updatedAt: "",
+  modal: false,
+  cancelModal: false,
 });
 
-export default defineComponent({
+export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     PostUser,
     SkillUser,
@@ -64,13 +73,12 @@ export default defineComponent({
     CardJob,
     UserTabs,
     Loading,
+    Confirme,
+    ApplyPutBtn,
+    RejectBtn,
   },
-  props: {
-    id: { type: Number as PropType<number>, default: 0, required: true },
-    jobId: { type: Number as PropType<number>, default: 0, required: true },
-    applyId: { type: Number as PropType<number>, default: 0, required: true },
-  },
-  setup: (props: Props, ctx) => {
+  props: propsOption,
+  setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
     const { auth } = useUtils();
 
@@ -159,6 +167,50 @@ export default defineComponent({
 
 <template>
   <section>
+    <Confirme @close="() => (modal = false)" v-show="modal">
+      <v-icon class="icon pt-1 pb-4">
+        mdi mdi-handshake-outline
+      </v-icon>
+      <p>
+        <span class="user-name">{{ userInfo.user_name }}</span
+        >さんを採用しますか？
+      </p>
+      <template v-slot:btnArea>
+        <div class="d-flex justify-space-between">
+          <ApplyPutBtn
+            :id="id"
+            :jobId="jobId"
+            :updatedAt="updatedAt"
+            :applyId="applyId"
+            @participate="participate"
+          />
+          <v-btn @click="() => (modal = false)" class="modal-btn">閉じる</v-btn>
+        </div>
+      </template>
+    </Confirme>
+    <Confirme @close="() => (cancelModal = false)" v-show="cancelModal">
+      <v-icon class="icon pt-1 pb-4">
+        mdi mdi-hand-right
+      </v-icon>
+      <p>
+        <span class="user-name">{{ userInfo.user_name }}</span
+        >さんをお断りしますか？
+      </p>
+      <template v-slot:btnArea>
+        <div class="d-flex justify-space-between">
+          <RejectBtn
+            :id="id"
+            :jobId="jobId"
+            :updatedAt="updatedAt"
+            :applyId="applyId"
+            @reject="reject"
+          />
+          <v-btn @click="() => (cancelModal = false)" class="modal-btn"
+            >閉じる</v-btn
+          >
+        </div>
+      </template>
+    </Confirme>
     <Breadcrumbs :breadCrumbs="breadcrumbs" />
     <div class="detail-wrapper" v-show="!loading">
       <section class="user-area">
@@ -206,13 +258,9 @@ export default defineComponent({
       <div class="button-area">
         <section v-if="jobId">
           <StatusChangeBtnArea
-            :id="id"
-            :jobId="jobId"
-            :applyId="applyId"
             :statusId="statusId"
-            :updatedAt="updatedAt"
-            @participate="participate"
-            @reject="reject"
+            :openModal="() => (modal = true)"
+            :openCancelModal="() => (cancelModal = true)"
           />
         </section>
       </div>
@@ -230,6 +278,26 @@ export default defineComponent({
   font-size: 17px;
   font-weight: bold;
   margin-bottom: 0.7rem;
+}
+.icon {
+  color: $apply;
+  font-size: 6em;
+}
+.user-name {
+  text-decoration: underline;
+}
+.modal-btn {
+  @include grey-btn;
+  color: $white;
+  font-weight: bold;
+  padding: 1rem 2.5rem !important;
+  border-radius: 50px;
+  line-height: 1;
+  text-align: center;
+  max-width: 280px;
+  font-size: 0.8rem;
+  margin-left: 1.2rem;
+  outline: none;
 }
 
 .detail-wrapper {

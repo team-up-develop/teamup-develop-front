@@ -19,7 +19,7 @@ import { JobCreateParamsSecond } from "@/types/params";
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { useUtils } from "@/hooks";
-import { isFormSecond } from "@/modules/Jobs/jobCreate";
+import { isFormSecond } from "@/modules/jobCreate";
 
 type Select = { id: number };
 type State = {

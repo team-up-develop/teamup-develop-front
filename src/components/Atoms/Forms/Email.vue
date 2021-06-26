@@ -32,7 +32,6 @@ export default Vue.extend({
     :rules="emailRules"
     :label="placeholder"
     required
-    outlined
     filled
   />
 </template>

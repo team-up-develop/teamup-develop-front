@@ -16,7 +16,7 @@ import {
 } from "@/components/Organisms/Jobs/JobDetails";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { useJobs, useUtils } from "@/hooks";
-import { checkSelfJob } from "@/modules/Jobs/jobs";
+import { checkSelfJob } from "@/modules/jobs";
 
 type State = {
   userId: number;
