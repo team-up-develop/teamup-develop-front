@@ -80,6 +80,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   props: propsOption,
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
+    const router = ctx.root.$router;
     const { auth } = useUtils();
 
     const breadcrumbs = computed(() => [
@@ -126,6 +127,11 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             headers: auth.value,
           }
         );
+        // TODO: 応募者, 参加者, 拒否者 URL制御
+        // https://github.com/team-up-develop/teamup-develop-front/issues/202
+        if (res.data.response.length == 0) {
+          return router.push({ name: "BadRequest" });
+        }
         state.statusId = res.data.response[0].apply_status_id;
         state.updatedAt = res.data.response[0].updated_at;
         state.loading = false;
@@ -135,9 +141,11 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
 
     const participate = () => {
+      state.modal = false;
       state.statusId = m.APPLY_STATUS_PARTICIPATE;
     };
     const reject = () => {
+      state.cancelModal = false;
       state.statusId = m.APPLY_STATUS_REJECT;
     };
 
