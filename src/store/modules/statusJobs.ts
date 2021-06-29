@@ -74,15 +74,11 @@ const actions: ActionTree<State, GetStatus> = {
           },
         }
       );
-      const applyArray: ManageJob[] = [];
-      for (const job of responseApply.data.response) {
-        if (
-          job.apply_status_id === m.APPLY_STATUS_APPLY ||
-          job.apply_status_id === m.APPLY_STATUS_PARTICIPATE
-        ) {
-          applyArray.push(job);
-        }
-      }
+      const applyArray: ManageJob[] = responseApply.data.response.filter(
+        (v) =>
+          v.apply_status_id === m.APPLY_STATUS_APPLY ||
+          v.apply_status_id === m.APPLY_STATUS_PARTICIPATE
+      );
       commit("getJobsApplyNum", applyArray.length);
     } catch (error) {
       catchError(error);

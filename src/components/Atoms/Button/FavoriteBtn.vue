@@ -1,99 +1,116 @@
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  SetupContext,
+  watch,
+} from "@vue/composition-api";
+import { InsidePropsType } from "@icare-jp/vue-props-type";
 import { $fetch, $post, $delete } from "@/libs/axios";
 import { AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { FavoriteParams } from "@/types/params";
 import { FetchFavoriteJob } from "@/types/fetch";
-// import { useUtils } from "@/hooks";
+import { useUtils } from "@/hooks";
 
-type DataType = {
+type State = {
   userId: number;
   flag: boolean;
   token: string;
 };
 
-export default Vue.extend({
-  props: {
-    jobId: { type: Number as PropType<number>, default: 0 },
-  },
-  data(): DataType {
-    return {
-      userId: this.$store.getters.userId,
-      token: this.$store.getters.token,
-      flag: true,
-    };
-  },
-  async created() {
-    // * ログインユーザーが保存済みか応募済みではないかを判定する
-    try {
-      const res = await $fetch<FetchFavoriteJob>(
-        `${AUTH_URL}/favorite_jobs?user_id=${this.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${this.token}`,
-          },
+const initialState = (ctx: SetupContext): State => ({
+  userId: ctx.root.$store.getters.userId,
+  token: ctx.root.$store.getters.token,
+  flag: true,
+});
+
+const propsOption = {
+  jobId: { type: Number, default: 0, required: true },
+};
+type PropsOption = typeof propsOption;
+
+export default defineComponent<InsidePropsType<PropsOption>>({
+  props: propsOption,
+  setup(props, ctx) {
+    const state = reactive<State>(initialState(ctx));
+    const { auth } = useUtils();
+
+    const fetchFavorite = async () => {
+      try {
+        const res = await $fetch<FetchFavoriteJob>(
+          `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
+          {
+            headers: auth.value,
+          }
+        );
+        const result = res.data.response.map((v) => v.job_id);
+        if (result.includes(props.jobId)) {
+          state.flag = false;
+        } else {
+          state.flag = true;
         }
-      );
-      const array = [];
-      for (const favoriteJob of res.data.response) {
-        array.push(favoriteJob.job.id);
+      } catch (error) {
+        catchError(error);
       }
-      if (array.includes(this.jobId)) {
-        this.flag = false;
-      } else {
-        this.flag = true;
+    };
+
+    watch(
+      () => props.jobId,
+      () => {
+        fetchFavorite();
       }
-    } catch (error) {
-      catchError(error);
-    }
-  },
-  methods: {
-    // * 案件を保存する
-    async saveJob() {
+    );
+
+    const saveJob = async () => {
       const params: FavoriteParams = {
-        job_id: this.jobId,
-        user_id: this.userId,
+        job_id: props.jobId,
+        user_id: state.userId,
       };
       try {
         await $post<FavoriteParams>(`${AUTH_URL}/favorite_job`, params, {
           headers: {
-            Authorization: `Bearer ${this.token}`,
+            Authorization: `Bearer ${state.token}`,
             "Content-Type": "application/json",
             // "Cache-Control": "no-cache,no-store",
             // Pragma: "no-cache",
             // Expires: 0,
           },
         });
-        this.flag = false;
+        state.flag = false;
       } catch (error) {
         catchError(error);
       }
-    },
-    //* 案件削除
-    // TODO: DELETE ができていない
-    // https://myteam-qd67443.slack.com/archives/CNYQEFRK3/p1621171067005500
-    async deleteJob() {
+    };
+
+    const deleteJob = async () => {
       const params: FavoriteParams = {
-        job_id: this.jobId,
-        user_id: this.userId,
+        job_id: props.jobId,
+        user_id: state.userId,
       };
       try {
         const res = await $delete<FavoriteParams>(`${AUTH_URL}/favorite_job`, {
           headers: {
-            Authorization: `Bearer ${this.token}`,
+            Authorization: `Bearer ${state.token}`,
           },
           data: {
             ...params,
           },
         });
         if (res.data) {
-          this.flag = true;
+          state.flag = true;
         }
       } catch (error) {
         catchError(error);
       }
-    },
+    };
+
+    return {
+      ...toRefs(state),
+      saveJob,
+      deleteJob,
+    };
   },
 });
 </script>

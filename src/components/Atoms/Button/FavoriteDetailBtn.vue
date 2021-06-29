@@ -34,11 +34,8 @@ export default Vue.extend({
       }
     )
       .then((res) => {
-        const array = [];
-        for (const favoriteJob of res.data.response) {
-          array.push(favoriteJob.job.id);
-        }
-        if (array.includes(this.jobId)) {
+        const result = res.data.response.map((v) => v.job_id);
+        if (result.includes(this.jobId)) {
           this.flag = false;
         } else {
           this.flag = true;
