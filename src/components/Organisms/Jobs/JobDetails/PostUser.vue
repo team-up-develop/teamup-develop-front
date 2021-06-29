@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, PropType } from "@vue/composition-api";
 import { truncate } from "@/hooks/useUtils";
-import { dayJsFormat } from "@/libs/dayjs";
+import { dayjs } from "@/libs/dayjs";
 import { Job } from "@/types";
 
 export default defineComponent({
@@ -10,7 +10,7 @@ export default defineComponent({
   },
   setup: () => {
     return {
-      dayJsFormat,
+      dayjs,
       truncate,
     };
   },
@@ -36,7 +36,7 @@ export default defineComponent({
           <div class="user-introduce-area">
             <div class="introduce-tag">学習開始</div>
             <div class="introduce">
-              {{ dayJsFormat(job.user.learning_start_date, "YYYY年 M月 D日") }}
+              {{ dayjs(job.user.learning_start_date).format("YYYY年 M月 D日") }}
             </div>
           </div>
         </div>

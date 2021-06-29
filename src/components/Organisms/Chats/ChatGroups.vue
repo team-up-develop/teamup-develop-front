@@ -8,7 +8,7 @@ import {
   PropType,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import { Job, ManageJob } from "@/types/index";
+import { Job } from "@/types/index";
 import { m, AUTH_URL } from "@/master";
 import { truncate } from "@/hooks/useUtils";
 import { catchError } from "@/libs/errorHandler";
@@ -50,16 +50,11 @@ export default defineComponent({
             headers: auth.value,
           }
         );
-        const array: ManageJob[] = [];
-        for (const job of res.data.response) {
-          if (
-            job.apply_status_id == m.APPLY_STATUS_PARTICIPATE ||
-            job.apply_status_id == m.APPLY_STATUS_SELF
-          ) {
-            array.push(job);
-            state.chatGroups = array;
-          }
-        }
+        state.chatGroups = res.data.response.filter(
+          (v) =>
+            v.apply_status_id == m.APPLY_STATUS_PARTICIPATE ||
+            v.apply_status_id === m.APPLY_STATUS_SELF
+        );
       } catch (error) {
         catchError(error);
       }

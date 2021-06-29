@@ -58,16 +58,12 @@ export default defineComponent({
             headers: auth.value,
           }
         );
-        // TODO: API改正要望
-        for (const value of res.data.response) {
-          if (
-            value.apply_status_id === m.APPLY_STATUS_APPLY ||
-            value.apply_status_id === m.APPLY_STATUS_PARTICIPATE ||
-            value.apply_status_id === m.APPLY_STATUS_REJECT
-          ) {
-            state.applyJob.push(value);
-          }
-        }
+        state.applyJob = res.data.response.filter(
+          (v) =>
+            v.apply_status_id === m.APPLY_STATUS_APPLY ||
+            v.apply_status_id === m.APPLY_STATUS_PARTICIPATE ||
+            v.apply_status_id === m.APPLY_STATUS_REJECT
+        );
       } catch (error) {
         catchError(error);
       }

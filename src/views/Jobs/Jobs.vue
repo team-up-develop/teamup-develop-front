@@ -24,7 +24,7 @@ import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { dayJsFormat } from "@/libs/dayjs";
 import { Job } from "@/types/index";
-import { FetchJobs, FetchFavoriteJob, FetchManageJobs } from "@/types/fetch";
+import { FetchJobs, FetchManageJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
 import { encode } from "@/libs/jsBase64";
 import { useUtils } from "@/hooks";
@@ -44,7 +44,6 @@ type State = {
   applyFlug: boolean; //?応募済みかの判定フラグ
   id: number; //? clickした案件のIdを取得
   modal: boolean; //?モーダルを開いてるか否か
-  saveFlag: boolean; //? 案件保存しているかを判定
   userId: number;
   entryRedirect: boolean; //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
   langModal: boolean; //? 言語モーダル
@@ -70,7 +69,6 @@ const initialState = (ctx: SetupContext): State => ({
   applyFlug: true,
   id: 0,
   modal: false,
-  saveFlag: true,
   userId: ctx.root.$store.getters.userId,
   entryRedirect: false,
   langModal: false,
@@ -309,7 +307,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
     if (state.userId) {
       await selfJobCheck();
       await applyCheck();
-      await favoriteCheck();
     }
     state.circleLoading = false;
     // * 登録 or ログインしてない場合
@@ -347,28 +344,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
       }
       if (arrayApply.includes(state.jobDetail.id)) {
         state.applyFlug = false;
-      }
-    } catch (error) {
-      catchError(error);
-    }
-  };
-  // * 保存済みか保存済みではないかを判定する
-  const favoriteCheck = async () => {
-    try {
-      const res = await $fetch<FetchFavoriteJob>(
-        `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
-        {
-          headers: auth.value,
-        }
-      );
-      const array: number[] = [];
-      for (const favoriteData of res.data.response) {
-        array.push(favoriteData.job.id);
-      }
-      if (array.includes(state.jobDetail.id)) {
-        state.saveFlag = false;
-      } else {
-        state.saveFlag = true;
       }
     } catch (error) {
       catchError(error);
@@ -514,7 +489,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
                   </button>
                   <div class="btn-box-apply-false" v-else>応募済み</div>
                   <div class="btn-box-save">
-                    <FavoriteBtn :jobId="id" />
+                    <FavoriteBtn :jobId="jobDetail.id" />
                   </div>
                   <div class="label-area mt-5">
                     <JobStatusNew :job="jobDetail" />
