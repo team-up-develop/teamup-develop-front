@@ -118,9 +118,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       );
       state.languages = res.data.response;
       state.selectedLang = props.userInfo.programing_languages;
-      for (const selectlangValue of state.selectedLang) {
-        state.selectlangValue.push(selectlangValue.id);
-      }
+      state.selectlangValue = state.selectedLang.map((v) => v.id);
     };
 
     const fetchFram = async () => {
@@ -129,18 +127,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       );
       state.framworks = res.data.response;
       state.selectedFramwork = props.userInfo.programing_frameworks;
-      for (const selectedFramwork of state.selectedFramwork) {
-        state.selectFramValue.push(selectedFramwork.id);
-      }
+      state.selectFramValue = state.selectedFramwork.map((v) => v.id);
     };
 
     const fetchSkill = async () => {
       const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
       state.skills = res.data.response;
       state.selectedSkill = props.userInfo.skills;
-      for (const selectedSkill of state.selectedSkill) {
-        state.selectSkillValue.push(selectedSkill.id);
-      }
+      state.selectSkillValue = state.selectedSkill.map((v) => v.id);
     };
 
     onMounted(() => {
@@ -208,9 +202,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         programing_framework_ids: framworksArray,
         skill_ids: skillArray,
       };
-      console.log(params);
-      const a = JSON.stringify(params);
-      console.log(a);
+      // console.log(params);
+      // const a = JSON.stringify(params);
+      // console.log(a);
       console.log(ctx);
       $put<EditProfileParams>(`${AUTH_URL}/user/${state.id}`, params, {
         headers: { Authorization: `Bearer ${state.token}` },

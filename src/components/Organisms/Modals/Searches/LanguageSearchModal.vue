@@ -36,7 +36,7 @@ export default defineComponent({
     onMounted(() => {
       fetchLanguages();
     });
-    // * 開発言語一覧取得
+
     const fetchLanguages = async () => {
       try {
         const res = await $fetch<FetchLanguages>(
@@ -47,7 +47,7 @@ export default defineComponent({
         catchError(error);
       }
     };
-    // * 開発言語検索
+
     const searchLanguage = async () => {
       const array: string[] = [];
       const languageState: number[] = [];
@@ -59,18 +59,16 @@ export default defineComponent({
         const queryParams: string = "pl_id=" + languageParams + "&";
         array.push(queryParams);
       }
-      const languageStateEnd: number[] = languageState.slice(0);
+      // const languageStateEnd: number[] = languageState.slice(0);
       const result: string = array.join("");
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
         state.jobs = res.data.response;
         ctx.emit("compliteSearchLanguage", state.jobs);
 
-        // * 言語 検索語 Vuexに値を格納する
         Vuex.dispatch("languageSearch", {
-          language: languageStateEnd,
+          language: languageState,
         });
-        // * 言語が１つも選択されていない時の処理
         if (params.language.length == 0) {
           Vuex.dispatch("languageSearch", {
             language: [],

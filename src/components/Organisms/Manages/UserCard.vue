@@ -3,8 +3,8 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
   SetupContext,
+  watch,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 
@@ -27,11 +27,19 @@ const initialState = (ctx: SetupContext): State => ({
 export default defineComponent({
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    onMounted(() => {
-      Vuex.dispatch("getJobNum", {
-        userId: state.userId,
-      });
+    Vuex.dispatch("getJobNum", {
+      userId: state.userId,
     });
+
+    watch(
+      () => ctx.root.$store.getters.fetchStateJobs,
+      (val) => {
+        state.manageNum = val.jobsManageNum;
+        state.favoriteNum = val.jobsFavoriteJobsNum;
+        state.applyNum = val.jobsApplyNum;
+      },
+      { deep: true }
+    );
     return {
       ...toRefs(state),
     };

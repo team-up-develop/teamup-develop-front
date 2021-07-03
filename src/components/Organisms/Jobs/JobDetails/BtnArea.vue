@@ -14,7 +14,6 @@ import { Job } from "@/types";
 import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
 import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
-// import EditJobModal from "@/components/Organisms/Modals/Edit/EditJobModal.vue";
 
 const propsOption = {
   id: { type: Number, default: 0, required: true },
@@ -40,13 +39,10 @@ type PropsOption = typeof propsOption;
 export type BtnAreaProps = OutsidePropsType<PropsOption>;
 
 type State = {
-  selfJobPost: boolean;
   modal: boolean;
-  // editModal: boolean;
 };
 
 const initialState = (): State => ({
-  selfJobPost: false,
   modal: false,
 });
 
@@ -55,7 +51,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     FavoriteDetailBtn,
     Confirme,
     Applybtn,
-    // EditJobModal,
   },
   props: propsOption,
   setup: (_, ctx) => {
@@ -97,10 +92,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         </template>
       </Confirme>
     </div>
-    <!-- 編集 モーダル画面 -->
-    <!-- <div class="example-modal-window">
-      <EditJobModal @close="closeEditModal" v-if="editModal" :job="job" />
-    </div> -->
     <div class="button-area" v-if="isLogin">
       <div class="button-area__action" v-if="!selfjob">
         <button @click="openModal" class="apply" v-if="applyFlug">
@@ -112,9 +103,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         </div>
       </div>
     </div>
-    <!-- <div v-else>
-        <button class="edit" @click="openEditModal">編集する</button>
-      </div> -->
     <!-- 非ログイン時 リダイレクトさせる -->
     <div class="button-area" v-else>
       <div class="button-area__action" @click="registerRedirect">

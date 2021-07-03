@@ -231,10 +231,6 @@ export default defineComponent({
       return router.push({ name: "Jobs" });
     };
 
-    const testComplete = () => {
-      state.complite = true;
-    };
-
     const redirectJobCreate = () => {
       return router.push({ name: "JobCreate" });
     };
@@ -247,7 +243,6 @@ export default defineComponent({
       isOpenPassword,
       register,
       redirectProfile,
-      testComplete,
       redirectJobCreate,
     };
   },

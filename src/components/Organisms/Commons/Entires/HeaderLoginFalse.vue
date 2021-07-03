@@ -1,15 +1,15 @@
 <script lang="ts">
-import Vue, { PropType } from "vue";
+import { defineComponent } from "@vue/composition-api";
 import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
 import BtnArea from "@/components/Molecules/Commons/BtnArea.vue";
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     Logo,
     BtnArea,
   },
   props: {
-    flag: { type: Boolean as PropType<boolean>, default: false },
+    flag: { type: Boolean, default: false },
   },
 });
 </script>

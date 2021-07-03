@@ -12,6 +12,8 @@
   },
   "dependencies": {
     "@icare-jp/vue-props-type": "0.0.22",
+    "@sentry/tracing": "^6.8.0",
+    "@sentry/vue": "^6.8.0",
     "@types/vue-select": "^2.5.1",
     "@vue/cli": "^4.5.9",
     "@vue/composition-api": "^1.0.0-beta.22",
