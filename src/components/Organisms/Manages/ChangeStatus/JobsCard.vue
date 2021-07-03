@@ -3,10 +3,9 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
   PropType,
   SetupContext,
-  // SetupContext,
+  watch,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import { truncate } from "@/hooks/useUtils";
@@ -35,20 +34,22 @@ export default defineComponent({
   },
   setup: (props: Props, ctx) => {
     const state = reactive<State>(initialState(ctx));
-
-    onMounted(() => {
+    (() => {
       Vuex.dispatch("getUserNum", {
         jobId: props.jobId,
       });
-      // TODO: stateの値を更新するために記載
-      setTimeout(() => {
-        state.applyNum = ctx.root.$store.getters.getUserApplyNum;
-        state.participateNum = ctx.root.$store.getters.getUserParticipateNum;
-        state.rejectNum = ctx.root.$store.getters.getUserRejectNum;
-        state.jobTitle = ctx.root.$store.getters.getJob;
-      }, 700);
-    });
+    })();
 
+    watch(
+      () => ctx.root.$store.getters.fetchStateUser,
+      (val) => {
+        state.applyNum = val.userApplyNum;
+        state.participateNum = val.userParticipateNum;
+        state.rejectNum = val.userRejectNum;
+        state.jobTitle = val.jobTitle;
+      },
+      { deep: true }
+    );
     return {
       ...toRefs(state),
       truncate,

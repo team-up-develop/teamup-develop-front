@@ -36,7 +36,7 @@ export default defineComponent({
     onMounted(() => {
       fetchFrameworks();
     });
-    // * フレームワーク一覧取得
+
     const fetchFrameworks = async () => {
       try {
         const res = await $fetch<FetchFrameworks>(
@@ -47,9 +47,9 @@ export default defineComponent({
         catchError(error);
       }
     };
-    // * フレームワーク検索
+
     const searchFramework = async () => {
-      const arrayFramework: string[] = [];
+      const apiStringFramework: string[] = [];
       const frameworkState: number[] = [];
       const params: SearchParams = {
         framework: state.selectedFramework,
@@ -57,20 +57,19 @@ export default defineComponent({
       for (const frameworkParams of params.framework) {
         frameworkState.push(frameworkParams);
         const queryParams: string = "pf_id=" + frameworkParams + "&";
-        arrayFramework.push(queryParams);
+        apiStringFramework.push(queryParams);
       }
-      const frameworkStateEnd: number[] = frameworkState.slice(0);
-      const result: string = arrayFramework.join("");
+      // const frameworkStateEnd: number[] = frameworkState.slice(0);
+      const result: string = apiStringFramework.join("");
 
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
         state.jobs = res.data.response;
         ctx.emit("compliteSearchFramework", state.jobs);
-        // * フレームワーク 検索語 Vuexに値を格納する
+
         Vuex.dispatch("framworkSearch", {
-          framwork: frameworkStateEnd,
+          framwork: frameworkState,
         });
-        // * フレームワークが１つも選択されていない時の処理
         if (params.framework.length == 0) {
           Vuex.dispatch("framworkSearch", {
             framwork: [],

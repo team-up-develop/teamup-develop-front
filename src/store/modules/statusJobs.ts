@@ -31,6 +31,7 @@ const getters: GetterTree<State, GetStatus> = {
   getJobsManageNum: (state: State) => state.jobsManageNum,
   getJobsFavoriteNum: (state: State) => state.jobsFavoriteJobsNum,
   getJobsApplyNum: (state: State) => state.jobsApplyNum,
+  fetchStateJobs: (state: State) => state,
 };
 
 const mutations: MutationTree<State> = {

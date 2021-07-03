@@ -7,7 +7,7 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import { API_URL, AUTH_URL } from "@/master";
+import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { truncate } from "@/hooks/useUtils";
 import { JobRightLogin, CardJob } from "@/components/Organisms/Jobs";
@@ -24,12 +24,11 @@ import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { dayJsFormat } from "@/libs/dayjs";
 import { Job } from "@/types/index";
-import { FetchJobs, FetchManageJobs } from "@/types/fetch";
+import { FetchJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
 import { encode } from "@/libs/jsBase64";
-import { useUtils } from "@/hooks";
-
-type Maybe<T> = T | null;
+import { useJobs } from "@/hooks";
+import { checkSelfJob } from "@/modules/jobs";
 
 type State = {
   jobs: Job[]; //? 案件一覧配列
@@ -39,8 +38,7 @@ type State = {
   circleLoading: boolean;
   jobDetail: any; //? 案件詳細
   detailFlag: boolean; //? 案件詳細を表示するためのフラグ
-  selfJobPost: boolean; //? 自分の案件かを判定
-  selfJob: Maybe<Job>; //? 自分の案件を格納する
+  isSelfJob: boolean; //? 自分の案件かを判定
   applyFlug: boolean; //?応募済みかの判定フラグ
   id: number; //? clickした案件のIdを取得
   modal: boolean; //?モーダルを開いてるか否か
@@ -64,8 +62,7 @@ const initialState = (ctx: SetupContext): State => ({
   circleLoading: true,
   jobDetail: null,
   detailFlag: false,
-  selfJobPost: false,
-  selfJob: null,
+  isSelfJob: false,
   applyFlug: true,
   id: 0,
   modal: false,
@@ -107,15 +104,18 @@ export default defineComponent({
         paginateJobs(state.jobs);
 
         //* トップページから フリーワード 検索をした際の処理
-        for (const job of res.data.response) {
-          if (job.job_description) {
-            if (job.job_description.indexOf(state.freeWord) !== -1) {
-              posts.push(job);
+        if (state.freeWord.length > 0) {
+          res.data.response.map((v) => {
+            if (
+              v.job_description?.indexOf(state.freeWord) !== -1 ||
+              v.job_title.indexOf(state.freeWord) !== -1
+            ) {
+              posts.push(v);
             }
-          }
+          });
+          state.jobs = posts;
+          paginateJobs(state.jobs);
         }
-        state.jobs = posts;
-        paginateJobs(state.jobs);
         // * トップページから 開発言語 検索した際の処理
         if (ctx.root.$store.getters.language.length !== 0) {
           skillQueryParameter(ctx.root.$store.getters.language, "pl_id");
@@ -132,7 +132,6 @@ export default defineComponent({
         else if (!state.jobs.length) {
           state.jobsNullFlag = true;
         }
-        // }, 1000);
         // * 非ログイン時は応募/いいねを押下した際にリダイレクトでログインに遷移させる
         if (!state.userId) {
           state.entryRedirect = true; //* 非ログイン時表示に
@@ -203,22 +202,25 @@ export default defineComponent({
     };
     // * フリーワード 検索
     const searchFreeword = async () => {
+      state.loading = true;
       const posts: Job[] = [];
       try {
         const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
-        for (const job of res.data.response) {
-          if (job.job_description) {
-            if (job.job_description.indexOf(state.freeWord) !== -1) {
-              posts.push(job);
-            }
+        res.data.response.map((v) => {
+          if (
+            v.job_description?.indexOf(state.freeWord) !== -1 ||
+            v.job_title.indexOf(state.freeWord) !== -1
+          ) {
+            posts.push(v);
           }
-        }
+        });
         // * フリーワード 検索語 Vuexに値を格納する
         Vuex.dispatch("freeWordSearch", {
           freeWord: state.freeWord,
         });
         state.jobs = posts;
         searchJobPagenate(state.jobs);
+        state.loading = false;
       } catch (error) {
         catchError(error);
       }
@@ -286,7 +288,7 @@ const utils = (state: State, ctx: SetupContext) => {
 };
 
 const clickJob = (state: State, ctx: SetupContext) => {
-  const { auth } = useUtils();
+  const { fetchManageJobs, manageJobs, checkApplyStatus, isApply } = useJobs();
   // * click して案件を取得 === 詳細
   const getJob = async (job: Job) => {
     if (state.id === job.id) {
@@ -296,7 +298,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
     state.jobDetail = job; //? clickした案件を取得
     state.detailFlag = true; //? 詳細画面を表示するか否かを判定する
     state.id = job.id; //? clickしたIdを this.idに格納する
-    state.selfJobPost = false; //? clickする度に 自分の案件では無くする
+    state.isSelfJob = false; //? clickする度に 自分の案件では無くする
     state.applyFlug = true; //? clickする度に 応募済み案件にする
 
     ctx.root.$router.push({
@@ -315,39 +317,14 @@ const clickJob = (state: State, ctx: SetupContext) => {
 
   // * 自分の案件かを判定
   const selfJobCheck = async () => {
-    try {
-      const res = await $fetch<FetchJobs>(
-        `${API_URL}/jobs?user_id=${state.userId}`
-      );
-      for (const selfJob of res.data.response) {
-        state.selfJob = selfJob;
-        if (state.selfJob.id === state.id) {
-          state.selfJobPost = true;
-        }
-      }
-    } catch (error) {
-      catchError(error);
-    }
+    await fetchManageJobs();
+    const result = checkSelfJob(manageJobs.value, state.id);
+    state.isSelfJob = result;
   };
   // * 応募済みか応募済みでないかを判断
   const applyCheck = async () => {
-    try {
-      const res = await $fetch<FetchManageJobs>(
-        `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
-        {
-          headers: auth.value,
-        }
-      );
-      const arrayApply: number[] = [];
-      for (const applyData of res.data.response) {
-        arrayApply.push(applyData.job.id);
-      }
-      if (arrayApply.includes(state.jobDetail.id)) {
-        state.applyFlug = false;
-      }
-    } catch (error) {
-      catchError(error);
-    }
+    await checkApplyStatus(state.id);
+    state.applyFlug = isApply.value;
   };
   return {
     getJob,
@@ -479,7 +456,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
             <!-- ログイン時 -->
             <template v-if="!entryRedirect">
               <div v-show="!circleLoading">
-                <div class="top-job-detail-bottom" v-if="!selfJobPost">
+                <div class="top-job-detail-bottom" v-if="!isSelfJob">
                   <button
                     @click="() => (modal = true)"
                     class="btn-box-apply"

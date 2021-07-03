@@ -22,14 +22,12 @@ type Props = {
 
 type State = {
   chatGroups: Job[] | {};
-  myselfJobs: any;
   isActive: boolean;
   hasError: boolean;
 };
 
 const initialState = (): State => ({
   chatGroups: [],
-  myselfJobs: [],
   isActive: true,
   hasError: false,
 });

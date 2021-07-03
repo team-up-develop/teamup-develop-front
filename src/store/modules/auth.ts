@@ -5,16 +5,25 @@ import { catchError } from "@/libs/errorHandler";
 import router from "@/router";
 import { encode, decode } from "@/libs/jsBase64";
 import { RegisterCompleteParams } from "@/types/params";
+
 interface State {
   userId: string;
   userName: string;
   token: string;
   errorFlag: boolean;
 }
-
-interface LoginData {
+interface LoginParams {
   email: string;
   login_password: string;
+}
+interface LoginResponse {
+  msg: string;
+  response: {
+    id: number;
+    token: string;
+    user_name: string;
+  };
+  status: string;
 }
 
 const state: State = {
@@ -24,7 +33,7 @@ const state: State = {
   errorFlag: false,
 };
 
-const getters: GetterTree<State, LoginData> = {
+const getters: GetterTree<State, LoginParams> = {
   userId: (state: State) => decode(state.userId),
   userName: (state: State) => state.userName,
   token: (state: State) => state.token,
@@ -32,56 +41,44 @@ const getters: GetterTree<State, LoginData> = {
 };
 
 const mutations: MutationTree<State> = {
-  loginUserId(state: State, userId: number) {
-    state.userId = encode(String(userId));
-  },
-  loginUserName(state: State, userName: string) {
-    state.userName = userName;
-  },
-  loginToken(state: State, token: string) {
-    state.token = token;
-  },
   loginError(state: State, errorFlag: boolean) {
     state.errorFlag = errorFlag;
   },
+  loginResponse(state: State, response: LoginResponse["response"]) {
+    state.userId = encode(String(response.id));
+    state.userName = response.user_name;
+    state.token = response.token;
+  },
 };
 
-const actions: ActionTree<State, LoginData> = {
-  // * ログイン
-  async login({ commit }, authData: LoginData) {
-    const params: LoginData = {
+const actions: ActionTree<State, LoginParams> = {
+  async login({ commit }, authData: LoginParams) {
+    const params: LoginParams = {
       email: authData.email,
       login_password: authData.login_password,
     };
     try {
-      // TODO: type fix any
-      const res = await $post<any>(`${API_URL}/login`, params);
-      console.log(res);
+      const res = await $post<LoginResponse>(`${API_URL}/login`, params);
+      commit("loginResponse", res.data.response);
       commit("loginError", false);
-      commit("loginUserId", res.data.response.id);
-      commit("loginUserName", res.data.response.user_name);
-      commit("loginToken", res.data.response.token);
-      router.push("/jobs");
+      await router.push("/jobs");
     } catch (error) {
-      const errorFlag = true;
       catchError(error);
-      commit("loginError", errorFlag);
+      commit("loginError", true);
     }
   },
-  // TODO: type fix any
   async register({ commit }, registerParams: RegisterCompleteParams) {
     try {
-      const res = await $post<any>(`${API_URL}/sign_up`, registerParams);
-      console.log(res, "res");
+      const res = await $post<LoginResponse>(
+        `${API_URL}/sign_up`,
+        registerParams
+      );
+      commit("loginResponse", res.data.response);
       commit("loginError", false);
-      commit("loginUserId", res.data.response.id);
-      commit("loginUserName", res.data.response.user_name);
-      commit("loginToken", res.data.response.token);
       await sessionStorage.clear();
     } catch (error) {
-      const errorFlag = true;
       catchError(error);
-      commit("loginError", errorFlag);
+      commit("loginError", true);
     }
   },
   // * ログアウト

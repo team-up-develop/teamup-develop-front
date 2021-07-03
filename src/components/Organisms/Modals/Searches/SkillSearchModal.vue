@@ -36,7 +36,7 @@ export default defineComponent({
     onMounted(() => {
       fetchSkills();
     });
-    // * その他スキル一覧取得
+
     const fetchSkills = async () => {
       try {
         const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
@@ -45,7 +45,7 @@ export default defineComponent({
         catchError(error);
       }
     };
-    // * その他スキル 検索
+
     const searchSkill = async () => {
       const arraySkill: string[] = [];
       const skillState: number[] = [];
@@ -54,22 +54,19 @@ export default defineComponent({
       };
       for (const skillParams of params.skill) {
         skillState.push(skillParams);
-        //* /jobs?skill_id=1&skill_id=4
         const queryParams: string = "skill_id=" + skillParams + "&";
         arraySkill.push(queryParams);
       }
-      const skillStateEnd: number[] = skillState.slice(0);
+      // const skillStateEnd: number[] = skillState.slice(0);
       const result: string = arraySkill.join("");
 
       $fetch<FetchJobs>(`${API_URL}/jobs?${result}`).then((res) => {
         state.jobs = res.data.response;
-
         ctx.emit("compliteSearchSkill", state.jobs);
-        // * その他スキル 検索語 Vuexに値を格納する
+
         Vuex.dispatch("skillSearch", {
-          skill: skillStateEnd,
+          skill: skillState,
         });
-        // * その他スキルが１つも選択されていない時の処理
         if (params.skill.length == 0) {
           Vuex.dispatch("skillSearch", {
             skill: [],

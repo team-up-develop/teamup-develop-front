@@ -1,11 +1,17 @@
 import router from "@/router";
 import { m } from "@/master";
+import * as Sentry from "@sentry/browser";
 
 // TODO: catch error の際のモーダルを作成し、移行する
 const catchError = (error: any) => {
   const { status, statusText } = error.response;
-  console.log(status, "status");
+  Sentry.captureException(
+    new Error(
+      `${status} エラー/${statusText}/response: ${error.response.data.message}`
+    )
+  );
   if (status == "401") {
+    // token有効期限切れ
     localStorage.clear();
     location.reload();
     return router.push({ name: "Unauthorized" });
