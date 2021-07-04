@@ -1,14 +1,14 @@
 module.exports = {
   presets: [
     "@vue/cli-plugin-babel/preset",
-    [
-      "@babel/preset-env",
-      {
-        modules: "false",
-        useBuiltIns: "usage",
-        targets: "> 0.25%, not dead",
-      },
-    ],
+    // [
+    //   "@babel/preset-env",
+    //   {
+    //     modules: "false",
+    //     useBuiltIns: "usage",
+    //     targets: "> 0.25%, not dead",
+    //   },
+    // ],
   ],
   /*
   Jestではテスト実行にnode.jsをつかうので、CommonJSのお作法に従う必要がある
