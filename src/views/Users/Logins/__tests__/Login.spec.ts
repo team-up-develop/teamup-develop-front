@@ -8,12 +8,12 @@ import Login from "@/views/Users/Logins/Login.vue";
 describe("ログイン画面がRenderされていること", () => {
   it("メールアドレスが存在すること", () => {
     const wrapper = shallowMount(Login);
-    console.log(wrapper, "wrapper");
+    // console.log(wrapper, "wrapper");
     expect(wrapper.html()).toContain("メールアドレス");
   });
   it("パスワードが存在すること", () => {
     const wrapper = shallowMount(Login);
-    console.log(wrapper, "wrapper");
+    // console.log(wrapper, "wrapper");
     expect(wrapper.html()).toContain("パスワード");
   });
   it("ログインボタンが正しく存在すること", () => {
