@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import Login from "@/views/Users/Logins/Login.vue";
+import Login from "@/views/Accounts/Login.vue";
 
 // beforeEach(() => {
 
