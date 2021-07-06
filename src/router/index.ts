@@ -1,37 +1,54 @@
 import Vue from "vue";
 import VueRouter, { RouteConfig } from "vue-router";
-import About from "../views/Commons/About.vue";
-import TopPage from "../views/Commons/TopPage.vue";
-import Jobs from "@/views/Jobs/Jobs.vue";
-import JobDetail from "@/views/Jobs/JobDetail.vue";
-import JobCreate from "@/views/Jobs/JobCreate.vue";
-import JobCreateSkill from "@/views/Jobs/JobCreateSkill.vue";
-import JobCreateComplete from "@/views/Jobs/JobCreateComplete.vue";
-import ProfileUser from "@/views/Users/Profiles/ProfileUser.vue";
-import ManageUserProfile from "@/views/Users/Manages/ManageUserProfile.vue";
-import Login from "@/views/Users/Logins/Login.vue";
-// import Register from "@/views/Users/Registers/Register.vue";
-import SentMailComplete from "@/views/Users/Registers/SentMailComplete.vue";
-import RegisterStepBase from "@/views/Users/Registers/RegisterStepBase.vue";
-import RegisterStepSkill from "@/views/Users/Registers/RegisterStepSkill.vue";
-import RegisterStepComplete from "@/views/Users/Registers/RegisterStepComplete.vue";
-import RegisterConfirm from "@/views/Users/Registers/RegisterConfirm.vue";
-import Manage from "@/views/Manages/Manage.vue";
-import Participate from "@/views/Manages/StatusChanges/Participate.vue";
-import Applicant from "@/views/Manages/StatusChanges/Applicant.vue";
-import Reject from "@/views/Manages/StatusChanges/Reject.vue";
-import Favorite from "@/views/Manages/Favorites/Favorite.vue";
-import FavoriteJobDetail from "@/views/Manages/Favorites/FavoriteJobDetail.vue";
-import Apply from "@/views/Manages/Applications/Apply.vue";
-import ApplyJobDetail from "@/views/Manages/Applications/ApplyJobDetail.vue";
-import Chat from "@/views/Chats/Chat.vue";
-import ChatDetail from "@/views/Chats/ChatDetail.vue";
-import NotFound from "@/views/Commons/Errors/404.vue";
-import ServerError from "@/views/Commons/Errors/500.vue";
-import BadRequest from "@/views/Commons/Errors/400.vue";
-import Unauthorized from "@/views/Commons/Errors/401.vue";
-Vue.use(VueRouter);
+/*
+ * base
+ */
+import About from "../views/base/About.vue";
+import TopPage from "../views/base/index.vue";
+import NotFound from "@/views/base/errors/404.vue";
+import ServerError from "@/views/base/errors/500.vue";
+import BadRequest from "@/views/base/errors/400.vue";
+import Unauthorized from "@/views/base/errors/401.vue";
+/*
+ * jobs
+ */
+import Jobs from "@/views/jobs/index.vue";
+import JobDetail from "@/views/jobs/_id/Detail.vue";
+/*
+ * job_create
+ */
+import JobCreate from "@/views/job_create/index.vue";
+import JobCreateSkill from "@/views/job_create/JobCreateSkill.vue";
+import JobCreateComplete from "@/views/job_create/JobCreateComplete.vue";
+/*
+ * accounts
+ */
+import Login from "@/views/accounts/Login.vue";
+import ProfileUser from "@/views/accounts/profile/Detail.vue";
+import SentMailComplete from "@/views/accounts/registers/SentMailComplete.vue";
+import RegisterStepBase from "@/views/accounts/registers/RegisterStepBase.vue";
+import RegisterStepSkill from "@/views/accounts/registers/RegisterStepSkill.vue";
+import RegisterStepComplete from "@/views/accounts/registers/RegisterStepComplete.vue";
+import RegisterConfirm from "@/views/accounts/registers/RegisterConfirm.vue";
+/*
+ * manage
+ */
+import Manage from "@/views/manage/index.vue";
+import Apply from "@/views/manage/apply_jobs/index.vue";
+import ApplyJobDetail from "@/views/manage/apply_jobs/_id/Detail.vue";
+import Favorite from "@/views/manage/favorite_jobs/index.vue";
+import FavoriteJobDetail from "@/views/manage/favorite_jobs/_id/Detail.vue";
+import Participate from "@/views/manage/apply_users/Participate.vue";
+import Applicant from "@/views/manage/apply_users/Applicant.vue";
+import Reject from "@/views/manage/apply_users/Reject.vue";
+import ManageUserProfile from "@/views/manage/apply_users/profile/Detail.vue";
+/*
+ * chats
+ */
+import Chat from "@/views/chats/index.vue";
+import ChatDetail from "@/views/chats/_id/index.vue";
 
+Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
   // * 共通
   {
