@@ -1,11 +1,35 @@
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/composition-api";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  PropType,
+} from "@vue/composition-api";
 import {
   JobsCard,
   UserCard,
 } from "@/components/Organisms/Manages/ChangeStatus";
 import { User } from "@/types/index";
 import { useUtils } from "@/hooks";
+import { md } from "@/master";
+
+type State = {
+  tabs: { id: number; tabName: string }[];
+  currentTab: 0 | 1 | 2;
+};
+export type ApplyUsersStatus = {
+  applyUsersStatus: {
+    jobTitle: string | undefined;
+    applyUsersNumber: number;
+    assignUsersNumber: number;
+    rejectUsersNumber: number;
+  };
+};
+
+const initialState = (): State => ({
+  tabs: md.applyUsersTabs,
+  currentTab: 0,
+});
 
 export default defineComponent({
   components: {
@@ -13,20 +37,39 @@ export default defineComponent({
     JobsCard,
   },
   props: {
-    jobId: { type: Number as PropType<number>, defalut: 0, required: true },
-    activeCss: {
-      type: Number as PropType<1 | 2 | 3>,
-      defalut: 1,
+    jobId: { type: Number, defalut: 0, required: true },
+    userId: { type: Number, defalut: 0, required: true },
+    applyUsers: {
+      type: Array as PropType<User[]>,
+      defalut: [],
       required: true,
-    }, //? 1: 応募者, 2: 参加者, 3: 拒否者
-    userId: { type: Number as PropType<number>, defalut: 0, required: true },
-    users: { type: Array as PropType<User[]>, defalut: [], required: true },
+    },
+    assignUsers: {
+      type: Array as PropType<User[]>,
+      defalut: [],
+      required: true,
+    },
+    rejectUsers: {
+      type: Array as PropType<User[]>,
+      defalut: [],
+      required: true,
+    },
+    applyUsersStatus: {
+      type: Object as PropType<ApplyUsersStatus["applyUsersStatus"]>,
+      required: true,
+    },
   },
   setup: () => {
+    const state = reactive<State>(initialState());
     const { isLogin } = useUtils();
 
+    const clickTab = (index: 0 | 1 | 2) => {
+      state.currentTab = index;
+    };
     return {
+      ...toRefs(state),
       isLogin,
+      clickTab,
     };
   },
 });
@@ -36,62 +79,54 @@ export default defineComponent({
   <section>
     <v-container class="wrapper" v-if="isLogin">
       <v-row>
-        <JobsCard :jobId="jobId" />
+        <JobsCard :jobId="jobId" :applyUsersStatus="applyUsersStatus" />
         <v-sheet class="manage" elevation="1">
           <v-row class="manage__header">
-            <router-link
-              v-if="activeCss === 1"
-              :to="`/manage/${jobId}/applicant`"
-              class="router-link-active-click"
+            <button
+              v-for="(tab, index) in tabs"
+              :key="tab.name"
+              :class="{ active: currentTab === index }"
+              @click="clickTab(index)"
             >
-              <span>応募者</span>
-            </router-link>
-            <router-link
-              v-else
-              :to="`/manage/${jobId}/applicant`"
-              class="router-link"
-            >
-              <span>応募者</span>
-            </router-link>
-            <router-link
-              v-if="activeCss === 2"
-              :to="`/manage/${jobId}/participate`"
-              class="router-link-active-click"
-            >
-              <span>参加者</span>
-            </router-link>
-            <router-link
-              v-else
-              :to="`/manage/${jobId}/participate`"
-              class="router-link"
-            >
-              <span>参加者</span>
-            </router-link>
-            <router-link
-              v-if="activeCss === 3"
-              :to="`/manage/${jobId}/reject`"
-              class="router-link-active-click"
-            >
-              <span>拒否者</span>
-            </router-link>
-            <router-link
-              v-else
-              :to="`/manage/${jobId}/reject`"
-              class="router-link"
-            >
-              <span>拒否者</span>
-            </router-link>
+              {{ tab.tabName }}
+            </button>
+            <v-col v-show="currentTab === 0">
+              <router-link
+                :to="
+                  `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
+                "
+                v-for="user in applyUsers"
+                :key="user.id"
+                class="users"
+              >
+                <UserCard :user="user" />
+              </router-link>
+            </v-col>
+            <v-col v-show="currentTab === 1">
+              <router-link
+                :to="
+                  `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
+                "
+                v-for="user in assignUsers"
+                :key="user.id"
+                class="users"
+              >
+                <UserCard :user="user" />
+              </router-link>
+            </v-col>
+            <v-col v-show="currentTab === 2">
+              <router-link
+                :to="
+                  `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
+                "
+                v-for="user in rejectUsers"
+                :key="user.id"
+                class="users"
+              >
+                <UserCard :user="user" />
+              </router-link>
+            </v-col>
           </v-row>
-          <v-col>
-            <router-link
-              :to="`/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`"
-              v-for="user in users"
-              :key="user.id"
-              class="users"
-            >
-              <UserCard :user="user" />
-            </router-link>
-          </v-col>
         </v-sheet>
       </v-row>
     </v-container>
@@ -137,18 +172,17 @@ export default defineComponent({
   }
 
   &__header {
-    .router-link {
+    button {
       color: $text-main-color;
       text-decoration: none;
       width: 33.3%;
       padding: 0.7rem 0;
       border-bottom: $dark-grey 1px solid;
     }
-    .router-link:hover {
+    button:hover {
       @include tab-hover;
     }
-
-    .router-link-active-click {
+    button.active {
       font-weight: bold;
       color: $text-main-color;
       text-decoration: none;

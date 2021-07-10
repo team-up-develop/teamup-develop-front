@@ -1,57 +1,61 @@
 <script lang="ts">
 import {
   defineComponent,
-  reactive,
-  toRefs,
+  // reactive,
+  // toRefs,
   PropType,
-  SetupContext,
-  watch,
+  // SetupContext,
+  // watch,
 } from "@vue/composition-api";
-import Vuex from "@/store/index";
+// import Vuex from "@/store/index";
 import { truncate } from "@/hooks/useUtils";
+import { ApplyUsersStatus } from "@/components/Templates/Manages/StatusChanges.vue";
+// type Props = {
+//   jobId: number;
+//   applyUsersStatus: Object;
+// };
 
-type Props = {
-  jobId: number;
-};
+// type State = {
+//   applyNum: number;
+//   rejectNum: number;
+//   participateNum: number;
+//   jobTitle: string;
+// };
 
-type State = {
-  applyNum: number;
-  rejectNum: number;
-  participateNum: number;
-  jobTitle: string;
-};
-
-const initialState = (ctx: SetupContext): State => ({
-  applyNum: ctx.root.$store.getters.getUserApplyNum,
-  participateNum: ctx.root.$store.getters.getUserParticipateNum,
-  rejectNum: ctx.root.$store.getters.getUserRejectNum,
-  jobTitle: ctx.root.$store.getters.getJob,
-});
+// const initialState = (ctx: SetupContext): State => ({
+//   applyNum: ctx.root.$store.getters.getUserApplyNum,
+//   participateNum: ctx.root.$store.getters.getUserParticipateNum,
+//   rejectNum: ctx.root.$store.getters.getUserRejectNum,
+//   jobTitle: ctx.root.$store.getters.getJob,
+// });
 
 export default defineComponent({
   props: {
     jobId: { type: Number as PropType<number>, default: 0, required: true },
+    applyUsersStatus: {
+      type: Object as PropType<ApplyUsersStatus["applyUsersStatus"]>,
+    },
   },
-  setup: (props: Props, ctx) => {
-    const state = reactive<State>(initialState(ctx));
-    (() => {
-      Vuex.dispatch("getUserNum", {
-        jobId: props.jobId,
-      });
-    })();
-
-    watch(
-      () => ctx.root.$store.getters.fetchStateUser,
-      (val) => {
-        state.applyNum = val.userApplyNum;
-        state.participateNum = val.userParticipateNum;
-        state.rejectNum = val.userRejectNum;
-        state.jobTitle = val.jobTitle;
-      },
-      { deep: true }
-    );
+  setup: () => {
+    // const state = reactive<State>(initialState(ctx));
+    // (() => {
+    //   Vuex.dispatch("getUserNum", {
+    //     jobId: props.jobId,
+    //   });
+    // })();
+    // console.log("applyUsersStatus", props.applyUsersStatus);
+    // watch(
+    //   () => ctx.root.$store.getters.fetchStateUser,
+    //   (val) => {
+    //     state.applyNum = val.userApplyNum;
+    //     state.participateNum = val.userParticipateNum;
+    //     state.rejectNum = val.userRejectNum;
+    //     state.jobTitle = val.jobTitle;
+    //   },
+    //   { deep: true }
+    // );
     return {
-      ...toRefs(state),
+      // ...toRefs(state),
       truncate,
     };
   },
@@ -62,7 +66,7 @@ export default defineComponent({
     <v-card class="card">
       <v-col>
         <v-row class="card__top">
-          {{ truncate(jobTitle, 60) }}
+          {{ truncate(applyUsersStatus.jobTitle, 50) }}
         </v-row>
         <v-row class="card__center">
           <router-link :to="`/jobs/${jobId}/detail`">
@@ -70,15 +74,15 @@ export default defineComponent({
           </router-link>
           <v-row class="data-area">
             <div class="value">
-              <div class="num">{{ applyNum }}</div>
+              <div class="num">{{ applyUsersStatus.applyUsersNumber }}</div>
               <label for="name">応募数</label>
             </div>
             <div class="value">
-              <div class="num">{{ participateNum }}</div>
+              <div class="num">{{ applyUsersStatus.assignUsersNumber }}</div>
               <label for="name">参加数</label>
             </div>
             <div class="value">
-              <div class="num">{{ rejectNum }}</div>
+              <div class="num">{{ applyUsersStatus.rejectUsersNumber }}</div>
               <label for="name">拒否数</label>
             </div>
           </v-row>

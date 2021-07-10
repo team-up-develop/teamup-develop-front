@@ -67,4 +67,9 @@ export const md = {
     { id: 0, tabName: "スキル情報" },
     { id: 1, tabName: "基本情報" },
   ],
+  applyUsersTabs: [
+    { id: 0, tabName: "応募者" },
+    { id: 1, tabName: "参加者" },
+    { id: 2, tabName: "拒否者" },
+  ],
 };

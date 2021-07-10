@@ -474,7 +474,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
                 </div>
                 <template v-else>
                   <div class="top-job-detail-bottom">
-                    <router-link :to="`/manage/${jobDetail.id}/applicant`">
+                    <router-link :to="`/manage/${jobDetail.id}/apply_users`">
                       <button class="btn-box-manage">管理画面</button>
                     </router-link>
                     <div class="label-area mt-5">
