@@ -25,7 +25,6 @@ import JobCreateComplete from "@/views/job_create/JobCreateComplete.vue";
  */
 import Login from "@/views/accounts/Login.vue";
 import ProfileUser from "@/views/accounts/profile/Detail.vue";
-import SentMailComplete from "@/views/accounts/registers/SentMailComplete.vue";
 import RegisterStepBase from "@/views/accounts/registers/RegisterStepBase.vue";
 import RegisterStepSkill from "@/views/accounts/registers/RegisterStepSkill.vue";
 import RegisterStepComplete from "@/views/accounts/registers/RegisterStepComplete.vue";
@@ -130,11 +129,6 @@ const routes: Array<RouteConfig> = [
     path: "/login",
     component: Login,
     name: "Login",
-  },
-  {
-    path: "/register/sent_mail",
-    name: "SentMailComplete",
-    component: SentMailComplete,
   },
   // * 本登録登録
   {

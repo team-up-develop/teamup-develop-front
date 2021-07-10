@@ -13,7 +13,7 @@ export default defineComponent({
     <v-row>
       <v-card class="container">
         <div class="title">STEP 1</div>
-        <img class="img" src="@/assets/images/howto-search.png" width="100%" />
+        <img class="img" src="@/assets/images/top-search.png" width="100%" />
         <div class="description">
           <div class="title">開発したい案件を作成しよう！</div>
           <div class="text">
@@ -24,7 +24,7 @@ export default defineComponent({
       </v-card>
       <v-card class="container">
         <div class="title">STEP 2</div>
-        <img class="img" src="@/assets/images/howto-chat.png" width="95%" />
+        <img class="img" src="@/assets/images/top-chat.png" width="95%" />
         <div class="description">
           <div class="title">チャットで連絡を取り合おう！</div>
           <div class="text">
@@ -35,11 +35,7 @@ export default defineComponent({
       </v-card>
       <v-card class="container">
         <div class="title">STEP 3</div>
-        <img
-          class="img"
-          src="@/assets/images/howto-complite.png"
-          width="100%"
-        />
+        <img class="img" src="@/assets/images/top-complite.png" width="100%" />
         <div class="description">
           <div class="title">さあ！チーム開発を進めよう！</div>
           <div class="text">

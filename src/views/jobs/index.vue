@@ -307,8 +307,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
 
     // * ログインしていれば以下の処理が走る
     if (state.userId) {
-      await selfJobCheck();
-      await applyCheck();
+      await Promise.all([selfJobCheck(), applyCheck()]);
     }
     state.circleLoading = false;
     // * 登録 or ログインしてない場合

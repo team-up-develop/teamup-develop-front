@@ -384,7 +384,7 @@ export default defineComponent({
         </v-col>
         <v-col v-else>
           <div class="false-card">
-            <img class="alert-img py-4" src="@/assets/images/alert.png" />
+            <img class="alert-img py-4" src="@/assets/images/alert-icon.png" />
             <div class="alert-message">
               <span
                 >入力されていない項目があるようです。 <br />
@@ -497,6 +497,10 @@ export default defineComponent({
 }
 .false-card {
   min-height: 380px;
+
+  .alert-img {
+    width: 50%;
+  }
 }
 .password-btn {
   background-color: $error-message-color;

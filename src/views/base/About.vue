@@ -52,7 +52,7 @@ export default Vue.extend({
           <div class="top-img">
             <img
               class="img"
-              src="@/assets/images/teamUp.png"
+              src="@/assets/images/lp-top.png"
               alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
               width="100%"
               height="350px"
@@ -70,7 +70,7 @@ export default Vue.extend({
         <div class="top-area__right">
           <img
             class="img"
-            src="@/assets/images/teamUp.png"
+            src="@/assets/images/lp-top.png"
             alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
             width="100%"
             height="350px"
@@ -145,7 +145,7 @@ export default Vue.extend({
         <div class="bottom-img">
           <img
             class="img"
-            src="@/assets/images/lp-value.png"
+            src="@/assets/images/lp-bottom.png"
             alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア "
             width="90%"
             height="500px"
@@ -184,7 +184,7 @@ export default Vue.extend({
           <div class="bottom_contents_right">
             <img
               class="img"
-              src="@/assets/images/lp-value.png"
+              src="@/assets/images/lp-bottom.png"
               alt="チームアップ, teamUp, team up, チーム開発, 開発, 駆け出しエンジニア, エンジニア, 未経験エンジニア"
               width="100%"
               height="700px"
