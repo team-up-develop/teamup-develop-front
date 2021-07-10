@@ -10,7 +10,7 @@ import { useUtils } from "@/hooks";
 type State = {
   userId: number;
   jobs: Job[];
-  job: Job | {};
+  job: Job | null;
   manageJobs: ManageJob[];
   profileJobs: ManageJob[];
   favoriteJobs: FavoriteJob[];
@@ -21,7 +21,7 @@ type State = {
 const initialState = (): State => ({
   userId: Vuex.getters.userId,
   jobs: [],
-  job: {},
+  job: null,
   manageJobs: [],
   profileJobs: [],
   favoriteJobs: [],
@@ -44,7 +44,7 @@ const useJobs = () => {
   // *詳細
   const fetchJobDetail = async (jobId: number) => {
     try {
-      const res = await $fetch<FetchJobs>(`${API_URL}/job/${jobId}`);
+      const res = await $fetch<any>(`${API_URL}/job/${jobId}`);
       await fetchError(res.data.status);
       state.job = res.data.response;
       // state.loading = false;

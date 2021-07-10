@@ -38,9 +38,7 @@ import Apply from "@/views/manage/apply_jobs/index.vue";
 import ApplyJobDetail from "@/views/manage/apply_jobs/_id/Detail.vue";
 import Favorite from "@/views/manage/favorite_jobs/index.vue";
 import FavoriteJobDetail from "@/views/manage/favorite_jobs/_id/Detail.vue";
-import Participate from "@/views/manage/apply_users/Participate.vue";
-import Applicant from "@/views/manage/apply_users/Applicant.vue";
-import Reject from "@/views/manage/apply_users/Reject.vue";
+import ApplyUsers from "@/views/manage/apply_users/index.vue";
 import ManageUserProfile from "@/views/manage/apply_users/profile/Detail.vue";
 /*
  * chats
@@ -133,11 +131,6 @@ const routes: Array<RouteConfig> = [
     component: Login,
     name: "Login",
   },
-  // {
-  //   path: "/register",
-  //   name: "register",
-  //   component: Register,
-  // },
   {
     path: "/register/sent_mail",
     name: "SentMailComplete",
@@ -173,22 +166,8 @@ const routes: Array<RouteConfig> = [
   },
   // ? 案件管理詳細
   {
-    path: "/manage/:id/applicant",
-    component: Applicant,
-    props: (route) => ({
-      id: Number(route.params.id),
-    }),
-  },
-  {
-    path: "/manage/:id/participate",
-    component: Participate,
-    props: (route) => ({
-      id: Number(route.params.id),
-    }),
-  },
-  {
-    path: "/manage/:id/reject",
-    component: Reject,
+    path: "/manage/:id/apply_users",
+    component: ApplyUsers,
     props: (route) => ({
       id: Number(route.params.id),
     }),

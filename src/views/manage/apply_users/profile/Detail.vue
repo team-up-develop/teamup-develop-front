@@ -97,7 +97,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       {
         text: "応募者一覧",
         disabled: false,
-        href: `/manage/${props.jobId}/applicant`,
+        href: `/manage/${props.jobId}/apply_users`,
       },
       {
         text: "ユーザー詳細",
