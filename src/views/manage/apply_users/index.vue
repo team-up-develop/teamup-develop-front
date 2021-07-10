@@ -54,13 +54,15 @@ export default defineComponent({
     const { fetchJobDetail, job } = useJobs();
 
     (async () => {
-      await fetchJobDetail(props.id);
+      await Promise.all([
+        fetchJobDetail(props.id),
+        fetchApplyUser(props.id),
+        fetchAssignUsers(props.id),
+        fetchRejectUser(props.id),
+      ]);
       state.applyUsersStatus.jobTitle = job?.value?.job_title;
-      await fetchApplyUser(props.id);
       state.applyUsersStatus.applyUsersNumber = applyUsers.value.length;
-      await fetchAssignUsers(props.id);
       state.applyUsersStatus.assignUsersNumber = assignUsers.value.length;
-      await fetchRejectUser(props.id);
       state.applyUsersStatus.rejectUsersNumber = rejectUsers.value.length;
     })();
 
