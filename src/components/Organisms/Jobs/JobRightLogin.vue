@@ -25,7 +25,7 @@ export default defineComponent({
   <section>
     <v-card class="card">
       <div v-if="isLogin" class="content">
-        <img class="img" src="@/assets/images/skills.png" width="100%" />
+        <img class="img" src="@/assets/images/jobs-skills.png" width="100%" />
         <h3><span>開発したいスキル</span>を設定して案件を作成しよう！</h3>
         <div class="btn-area mt-2">
           <button class="register-btn" @click="onCreateJob">
@@ -34,7 +34,7 @@ export default defineComponent({
         </div>
       </div>
       <div v-else class="content">
-        <img class="img" src="@/assets/images/search.png" width="100%" />
+        <img class="img" src="@/assets/images/jobs-search.png" width="100%" />
         <h3><span>使いたいスキル</span>すぐにチーム開発を始めよう！</h3>
         <div class="btn-area">
           <button class="register-btn mt-3" @click="onRegister">

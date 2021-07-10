@@ -16,7 +16,7 @@ export default Vue.extend({
       <section>
         <div class="image-area">
           <img
-            src="@/assets/images/complete.png"
+            src="@/assets/images/jobCreate-complete.png"
             alt="投稿完了"
             class="image"
           />

@@ -78,13 +78,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 <img
                   class="img"
                   @click="gitTab()"
-                  src="@/assets/github.png"
+                  src="@/assets/images/github-icon.png"
                   width="35"
                 />
                 <img
                   class="twitter-img"
                   @click="twitterTab()"
-                  src="@/assets/images/twitter.png"
+                  src="@/assets/images/twitter-icon.png"
                   width="35"
                 />
               </v-row>
@@ -137,7 +137,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     }
 
     .url-area {
-      padding: 0rem 0rem 0 1rem;
+      padding: 0.2rem 0rem 0 1rem;
       .img {
         cursor: pointer;
         padding: 0 0 0 0.5rem;
