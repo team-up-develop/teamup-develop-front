@@ -86,7 +86,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:btnArea>
           <div class="d-flex justify-space-between">
-            <Applybtn :jobId="id" @compliteEntry="compliteEntry" />
+            <Applybtn :job-id="id" @compliteEntry="compliteEntry" />
             <v-btn @click="doSend" class="modal-btn">キャンセル</v-btn>
           </div>
         </template>
@@ -99,7 +99,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         </button>
         <div class="apply-false" v-else>応募済み</div>
         <div class="favorite">
-          <FavoriteDetailBtn :jobId="id" />
+          <FavoriteDetailBtn :job-id="id" />
         </div>
       </div>
     </div>

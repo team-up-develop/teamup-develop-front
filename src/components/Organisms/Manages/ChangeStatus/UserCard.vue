@@ -82,7 +82,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       </v-row>
       <div class="card__user">
         <v-row>
-          <div class="card__user__image"></div>
+          <div class="card__user__image"/>
           <v-col>
             <div class="card__user__name">
               {{ truncate(user.user.user_name, 26) }}

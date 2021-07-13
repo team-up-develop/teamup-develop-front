@@ -80,7 +80,6 @@ export default defineComponent({
       v-for="chatGroup in chatGroups"
       :key="chatGroup.job.id"
       v-bind:class="{ active: isActive, 'text-danger': hasError }"
-      class="group"
     >
       <div class="group__area">
         <p>{{ truncate(chatGroup.job.job_title, 36) }}</p>
@@ -115,15 +114,14 @@ export default defineComponent({
 }
 .active {
   text-decoration: none;
+  border-bottom: $card-border-color 1px solid;
+  border-radius: none;
 }
 .router-link-exact-active.router-link-active.active {
   font-weight: bold;
 }
 
 .group {
-  border-bottom: $card-border-color 1px solid;
-  border-radius: none;
-
   &__area {
     width: 90%;
     height: 102px;

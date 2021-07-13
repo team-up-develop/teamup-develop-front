@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <div>
     <Error
-      :errorNumber="500"
+      :error-number="500"
       title="エラーが発生しました"
       describe="システム管理者にお問い合わせください"
     />

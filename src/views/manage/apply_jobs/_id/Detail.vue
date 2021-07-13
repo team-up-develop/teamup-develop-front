@@ -94,7 +94,7 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <div class="detail-wrapper">
       <section v-if="!loading">
         <div class="detail-post-user-area">
@@ -114,9 +114,9 @@ export default defineComponent({
         <BtnArea
           :id="id"
           :job="job"
-          :isLogin="isLogin"
+          :is-login="isLogin"
           :selfjob="selfJobPost"
-          :applyFlug="isApply"
+          :apply-flug="isApply"
           @applied="applied"
         />
       </section>

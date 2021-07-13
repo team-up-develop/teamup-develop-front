@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <div>
     <Error
-      :errorNumber="400"
+      :error-number="400"
       title="リクエストに失敗しました"
       describe="システム管理者にお問い合わせください"
     />

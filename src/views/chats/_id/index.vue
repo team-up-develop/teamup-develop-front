@@ -158,12 +158,12 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <div class="wrapper">
       <v-sheet class="chat-card">
         <div class="chat-card__left">
           <div class="title" />
-          <ChatGroups :userId="userId" />
+          <ChatGroups :user-id="userId" />
         </div>
         <div class="chat-card__right">
           <div class="main" ref="target" v-show="!loading">

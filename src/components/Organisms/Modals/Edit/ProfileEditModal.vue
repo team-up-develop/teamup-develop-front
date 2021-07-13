@@ -248,9 +248,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 v-model="userName"
                 type="text"
                 name="userName"
-                textLabel="ユーザー名"
+                text-label="ユーザー名"
                 :mandatory="true"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="TeamUp"
                 maxlength="60"
                 :remaining="false"
@@ -261,17 +261,17 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 placeholder="学習を始めた日にちを入力してください"
                 name="learningStartDate"
                 type="text"
-                textLabel="開発開始時期"
+                text-label="開発開始時期"
                 :mandatory="true"
-                mandatoryText=""
+                mandatory-text=""
               />
               <DescriptionArea
                 v-model="bio"
                 type="text"
                 name="bio"
-                textLabel="自己紹介"
+                text-label="自己紹介"
                 :mandatory="false"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="自己紹介(250文字以内)(500文字以内)"
                 maxlength="500"
                 :remaining="true"
@@ -281,9 +281,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 v-model="githubAccount"
                 type="text"
                 name="githubAccount"
-                textLabel="GitHubアカウント"
+                text-label="GitHubアカウント"
                 :mandatory="false"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="TeamUp"
                 maxlength="128"
                 :remaining="false"
@@ -293,9 +293,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 v-model="twitterAccount"
                 type="text"
                 name="twitterAccount"
-                textLabel="Twitterアカウント"
+                text-label="Twitterアカウント"
                 :mandatory="false"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="TeamUp"
                 maxlength="128"
                 :remaining="false"
@@ -305,28 +305,28 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 v-model="selectlangValue"
                 :options="languages"
                 name="languages"
-                textLabel="開発言語"
+                text-label="開発言語"
                 :mandatory="true"
                 :max="15"
-                mandatoryText="15個まで"
+                mandatory-text="15個まで"
               />
               <SkillSelectArea
                 v-model="selectFramValue"
                 :options="framworks"
                 name="framworks"
-                textLabel="フレームワーク"
+                text-label="フレームワーク"
                 :mandatory="true"
                 :max="15"
-                mandatoryText="15個まで"
+                mandatory-text="15個まで"
               />
               <SkillSelectArea
                 v-model="selectSkillValue"
                 :options="skills"
                 name="skills"
-                textLabel="その他スキル"
+                text-label="その他スキル"
                 :mandatory="true"
                 :max="15"
-                mandatoryText="15個まで"
+                mandatory-text="15個まで"
               />
             </div>
             <div v-show="currentTab === 1">
@@ -337,9 +337,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 v-model="lastName"
                 type="text"
                 name="lastName"
-                textLabel="姓"
+                text-label="姓"
                 :mandatory="true"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="チームアップ"
                 maxlength="60"
                 :remaining="false"
@@ -349,9 +349,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 v-model="firstName"
                 type="text"
                 name="firstName"
-                textLabel="名"
+                text-label="名"
                 :mandatory="true"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="太郎"
                 maxlength="60"
                 :remaining="false"
@@ -362,17 +362,17 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 placeholder="生年月日"
                 name="birthday"
                 type="text"
-                textLabel="生年月日"
+                text-label="生年月日"
                 :mandatory="true"
-                mandatoryText=""
+                mandatory-text=""
               />
               <InputArea
                 v-model="email"
                 type="text"
                 name="email"
-                textLabel="メールアドレス"
+                text-label="メールアドレス"
                 :mandatory="true"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="test@teamup.com"
                 maxlength="128"
                 :remaining="false"
@@ -382,9 +382,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 v-model="password"
                 type="text"
                 name="password"
-                textLabel="パスワード"
+                text-label="パスワード"
                 :mandatory="true"
-                mandatoryText=""
+                mandatory-text=""
                 placeholder="*******"
                 maxlength="128"
                 :remaining="false"
@@ -395,11 +395,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           <slot />
         </div>
         <footer class="modal-footer">
-          <template>
-            <v-btn :disabled="!validEdit" class="btn" @click="editProfile">
-              編集する
-            </v-btn>
-          </template>
+          <v-btn :disabled="!validEdit" class="btn" @click="editProfile">
+            編集する
+          </v-btn>
         </footer>
       </div>
     </div>

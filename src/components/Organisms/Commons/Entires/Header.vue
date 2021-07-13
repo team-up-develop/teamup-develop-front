@@ -51,11 +51,11 @@ export default defineComponent({
             <v-menu left bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn icon v-bind="attrs" v-on="on">
-                  <div class="user-image"></div>
+                  <div class="user-image" />
                 </v-btn>
               </template>
               <v-list-item-group color="primary">
-                <v-list style="z-index: 100;">
+                <v-list>
                   <v-list-item>
                     <router-link
                       :to="`/account/profile/${userId}/detail`"
@@ -69,7 +69,7 @@ export default defineComponent({
                       </v-list-item-title>
                     </router-link>
                   </v-list-item>
-                  <div class="boder-line"></div>
+                  <div class="boder-line" />
                   <v-list-item>
                     <router-link to="/chat" class="menu-list">
                       <v-list-item-title>

@@ -187,9 +187,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         <div class="d-flex justify-space-between">
           <ApplyPutBtn
             :id="id"
-            :jobId="jobId"
-            :updatedAt="updatedAt"
-            :applyId="applyId"
+            :job-id="jobId"
+            :updated-at="updatedAt"
+            :apply-id="applyId"
             @participate="participate"
           />
           <v-btn @click="() => (modal = false)" class="modal-btn">閉じる</v-btn>
@@ -208,9 +208,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         <div class="d-flex justify-space-between">
           <RejectBtn
             :id="id"
-            :jobId="jobId"
-            :updatedAt="updatedAt"
-            :applyId="applyId"
+            :job-id="jobId"
+            :updated-at="updatedAt"
+            :apply-id="applyId"
             @reject="reject"
           />
           <v-btn @click="() => (cancelModal = false)" class="modal-btn"
@@ -219,19 +219,19 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         </div>
       </template>
     </Confirme>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <div class="detail-wrapper" v-show="!loading">
       <section class="user-area">
         <div class="user-area__post">
           <PostUser
             :user="userInfo"
             @editEmit="editEmit()"
-            :myselfFlag="myselfFlag"
+            :myself-flag="myselfFlag"
           />
           <v-row>
             <UserTabs
-              :myselfFlag="false"
-              :currentTab="currentTab"
+              :myself-flag="false"
+              :current-tab="currentTab"
               @clickTab="clickTabs($event)"
             />
           </v-row>
@@ -266,9 +266,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <div class="button-area">
         <section v-if="jobId">
           <StatusChangeBtnArea
-            :statusId="statusId"
-            :openModal="() => (modal = true)"
-            :openCancelModal="() => (cancelModal = true)"
+            :status-id="statusId"
+            :open-modal="() => (modal = true)"
+            :open-cancel-modal="() => (cancelModal = true)"
           />
         </section>
       </div>

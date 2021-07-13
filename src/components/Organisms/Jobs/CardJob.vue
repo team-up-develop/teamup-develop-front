@@ -64,7 +64,7 @@ const useUtils = () => {
         </div>
       </div>
       <div class="post-user-area">
-        <div class="post-user-image"></div>
+        <div class="post-user-image"/>
         <div class="post-user-name-area">
           <div class="post-user-name">
             {{ truncate(job.user.user_name, 12) }}

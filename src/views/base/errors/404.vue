@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <div>
     <Error
-      :errorNumber="404"
+      :error-number="404"
       title="ページが存在しません"
       describe="URLをご確認ください。"
     />

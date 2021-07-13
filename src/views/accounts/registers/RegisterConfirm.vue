@@ -253,21 +253,21 @@ export default defineComponent({
   <section>
     <Complete
       v-if="complite"
-      :imageNumber="Number(1)"
+      :image-number="Number(1)"
       title="登録が完了しました"
       content="早速チーム開発を始めよう！"
-      btnMain="案件を作る"
-      btnSub="案件を探す"
+      btn-main="案件を作る"
+      btn-sub="案件を探す"
       @subFunction="redirectProfile"
       @mainFunction="redirectJobCreate"
       @close="redirectProfile"
     />
     <Confirme
       v-if="confirm"
-      :onFunction="register"
+      :on-function="register"
       title="登録完了しますか？"
-      btnMain="登録する"
-      btnSub="閉じる"
+      btn-main="登録する"
+      btn-sub="閉じる"
       @close="confirm = false"
     />
     <div class="wrapper">

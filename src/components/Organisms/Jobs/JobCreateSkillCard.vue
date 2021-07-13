@@ -194,10 +194,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             v-model="selectedLang"
             :options="languages"
             name="languages"
-            textLabel="開発言語"
+            text-label="開発言語"
             :mandatory="true"
             :max="5"
-            mandatoryText="5つまで"
+            mandatory-text="5つまで"
           />
         </div>
         <div class="create-area">
@@ -205,10 +205,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             v-model="selectedFramwork"
             :options="framworks"
             name="framworks"
-            textLabel="フレームワーク"
+            text-label="フレームワーク"
             :mandatory="true"
             :max="5"
-            mandatoryText="5つまで"
+            mandatory-text="5つまで"
           />
         </div>
         <div class="create-area">
@@ -216,10 +216,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             v-model="selectedSkill"
             :options="skills"
             name="skills"
-            textLabel="その他技術"
+            text-label="その他技術"
             :mandatory="true"
             :max="5"
-            mandatoryText="5つまで"
+            mandatory-text="5つまで"
           />
         </div>
         <div class="create-area">
@@ -227,7 +227,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             v-model="recruitNumber"
             :options="md.optionsRecruitNumber"
             name="recruitNumber"
-            textLabel="募集人数"
+            text-label="募集人数"
             :mandatory="true"
           />
         </div>
@@ -247,7 +247,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             v-model="jobStatusId"
             :options="md.optionsJobStatus"
             name="jobStatusId"
-            textLabel="開発フェーズ"
+            text-label="開発フェーズ"
             :mandatory="true"
           />
         </div>

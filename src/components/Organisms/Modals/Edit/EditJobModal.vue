@@ -119,7 +119,7 @@ export default Vue.extend({
           </div>
           <div class="job-create-detail-area">
             <label for="name" class="label">開発詳細</label>
-            <textarea type="text" v-model="jobDescription"></textarea>
+            <textarea type="text" v-model="jobDescription"/>
           </div>
           <div class="job-create-area">
             <label for="name" class="label">開発言語</label
