@@ -79,7 +79,7 @@ export default defineComponent({
   <section>
     <v-container class="wrapper" v-if="isLogin">
       <v-row>
-        <JobsCard :jobId="jobId" :applyUsersStatus="applyUsersStatus" />
+        <JobsCard :job-id="jobId" :apply-users-status="applyUsersStatus" />
         <v-sheet class="manage" elevation="1">
           <v-row class="manage__header">
             <button

@@ -136,7 +136,7 @@ export default Vue.extend({
         </div>
       </section>
     </div>
-    <Loading v-show="loading"> </Loading>
+    <Loading v-show="loading"/>
   </section>
 </template>
 

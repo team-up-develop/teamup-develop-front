@@ -21,7 +21,7 @@ export default defineComponent({
   <section>
     <v-sheet class="post-user-area">
       <div class="left-user-area">
-        <div class="user-image"></div>
+        <div class="user-image"/>
       </div>
       <div class="right-user-area">
         <div class="user-profile-area">

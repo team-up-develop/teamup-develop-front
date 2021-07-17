@@ -32,7 +32,7 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <v-container class="wrapper">
       <v-row>
         <UserCard />

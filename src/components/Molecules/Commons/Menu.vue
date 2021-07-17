@@ -8,7 +8,7 @@ export default {};
     <v-menu left bottom>
       <template v-slot:activator="{ on, attrs }">
         <v-btn icon v-bind="attrs" v-on="on">
-          <div class="user-image"></div>
+          <div class="user-image"/>
         </v-btn>
       </template>
       <v-list-item-group color="primary">

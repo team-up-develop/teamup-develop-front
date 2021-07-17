@@ -8,7 +8,7 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import Template from "@/components/Templates/Manages/StatusChanges.vue";
+import Pages from "@/components/Templates/Manages/StatusChanges.vue";
 import { useUsers, useJobs } from "@/hooks";
 
 type State = {
@@ -34,7 +34,7 @@ const initialState = (ctx: SetupContext): State => ({
 export default defineComponent({
   components: {
     Breadcrumbs,
-    Template,
+    Pages,
   },
   props: {
     // * job.id
@@ -97,14 +97,14 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
-    <Template
-      :jobId="id"
-      :userId="userId"
-      :applyUsers="applyUsers"
-      :assignUsers="assignUsers"
-      :rejectUsers="rejectUsers"
-      :applyUsersStatus="applyUsersStatus"
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
+    <Pages
+      :job-id="id"
+      :user-id="userId"
+      :apply-users="applyUsers"
+      :assign-users="assignUsers"
+      :reject-users="rejectUsers"
+      :apply-users-status="applyUsersStatus"
     />
   </section>
 </template>

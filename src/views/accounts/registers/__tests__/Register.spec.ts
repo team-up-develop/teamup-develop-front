@@ -1,5 +1,5 @@
 import { shallowMount } from "@vue/test-utils";
-import RegisterStepBase from "@/views/Accounts/registers/RegisterStepBase.vue";
+import RegisterStepBase from "@/views/accounts/registers/RegisterStepBase.vue";
 
 // beforeEach(() => {
 //   let wrapper = shallow(RegisterStepBase, {

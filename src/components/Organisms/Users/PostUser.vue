@@ -58,7 +58,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     <div class="post">
       <v-row>
         <div class="left">
-          <div class="user-image"></div>
+          <div class="user-image"/>
         </div>
         <div class="right">
           <div class="profile-area">
@@ -67,7 +67,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 {{ user.user_name }}
               </div>
             </v-col>
-            <v-col class="introduce-area" style="padding: none">
+            <v-col class="introduce-area">
               <div class="introduce">
                 学習開始
                 {{ dayJsFormat(user.learning_start_date, "YYYY年 M月 D日") }}

@@ -52,7 +52,7 @@ export default defineComponent({
     <v-card class="card">
       <v-col>
         <v-row class="card__top">
-          <div class="user-image"></div>
+          <div class="user-image"/>
           <div class="user-name">{{ userName }}</div>
         </v-row>
         <v-row class="card__center">

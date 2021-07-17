@@ -15,7 +15,7 @@ export default defineComponent({
 <template>
   <div>
     <Error
-      :errorNumber="401"
+      :error-number="401"
       title="認証に失敗しました"
       describe="再度ログインをお試しください"
     />

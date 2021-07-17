@@ -77,7 +77,7 @@ export default Vue.extend({
           </div>
         </div>
         <div class="post-user-area">
-          <div class="post-user-image"></div>
+          <div class="post-user-image" />
           <div class="post-user-name-area">
             <div class="post-user-name">
               {{ newJob.user.userName }}
@@ -86,7 +86,7 @@ export default Vue.extend({
         </div>
       </div>
     </router-link>
-    <v-row :align="align" no-gutters style="height: 150px;">
+    <v-row :align="align" no-gutters>
       <!-- 通常時案件カード -->
       <v-card
         :to="`/jobs/${newJob.id}/detail`"
@@ -131,7 +131,7 @@ export default Vue.extend({
             </div>
           </div>
           <div class="post-user-area">
-            <div class="post-user-image"></div>
+            <div class="post-user-image" />
             <div class="post-user-name-area">
               <div class="post-user-name">
                 {{ newJob.user.userName }}

@@ -52,7 +52,7 @@ export default Vue.extend({
             dense
             filled
             height="42px"
-          ></v-text-field>
+          />
         </template>
         <v-date-picker
           color="#2196F3"
@@ -61,7 +61,7 @@ export default Vue.extend({
           locale="jp-ja"
           :day-format="(date) => new Date(date).getDate()"
         >
-          <v-spacer></v-spacer>
+          <v-spacer/>
           <v-btn text color="$primary-color" @click="modal = false">
             閉じる
           </v-btn>

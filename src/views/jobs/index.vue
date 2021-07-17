@@ -356,7 +356,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:btnArea>
           <div class="d-flex justify-space-between">
-            <Applybtn @compliteEntry="() => (applyFlug = false)" :jobId="id" />
+            <Applybtn @compliteEntry="() => (applyFlug = false)" :job-id="id" />
             <v-btn @click="() => (modal = false)" class="modal-btn"
               >キャンセル</v-btn
             >
@@ -365,59 +365,57 @@ const clickJob = (state: State, ctx: SetupContext) => {
       </Confirme>
     </div>
     <!-- 検索エリアバー -->
-    <template>
-      <div class="search-area">
-        <button
-          v-if="this.$store.state.search.language.length == 0"
-          class="search-area__modal-btn"
-          @click="() => (langModal = true)"
-        >
-          開発言語
-        </button>
-        <button
-          v-else
-          class="search-area__modal-btn-active"
-          @click="() => (langModal = true)"
-        >
-          開発言語
-        </button>
-        <button
-          v-if="this.$store.state.search.framwork.length == 0"
-          class="search-area__modal-btn"
-          @click="() => (frameworkModal = true)"
-        >
-          フレームワーク
-        </button>
-        <button
-          v-else
-          class="search-area__modal-btn-active"
-          @click="() => (frameworkModal = true)"
-        >
-          フレームワーク
-        </button>
-        <button
-          v-if="this.$store.state.search.skill.length == 0"
-          class="search-area__modal-btn"
-          @click="() => (skillModal = true)"
-        >
-          その他技術
-        </button>
-        <button
-          v-else
-          class="search-area__modal-btn-active"
-          @click="() => (skillModal = true)"
-        >
-          その他技術
-        </button>
-        <input
-          type="text"
-          v-model="freeWord"
-          placeholder="フリーワードで探す"
-          class="search-area__freewrod"
-          @keyup.enter="searchFreeword"
-        />
-      </div>
-    </template>
+    <div class="search-area">
+      <button
+        v-if="this.$store.state.search.language.length == 0"
+        class="search-area__modal-btn"
+        @click="() => (langModal = true)"
+      >
+        開発言語
+      </button>
+      <button
+        v-else
+        class="search-area__modal-btn-active"
+        @click="() => (langModal = true)"
+      >
+        開発言語
+      </button>
+      <button
+        v-if="this.$store.state.search.framwork.length == 0"
+        class="search-area__modal-btn"
+        @click="() => (frameworkModal = true)"
+      >
+        フレームワーク
+      </button>
+      <button
+        v-else
+        class="search-area__modal-btn-active"
+        @click="() => (frameworkModal = true)"
+      >
+        フレームワーク
+      </button>
+      <button
+        v-if="this.$store.state.search.skill.length == 0"
+        class="search-area__modal-btn"
+        @click="() => (skillModal = true)"
+      >
+        その他技術
+      </button>
+      <button
+        v-else
+        class="search-area__modal-btn-active"
+        @click="() => (skillModal = true)"
+      >
+        その他技術
+      </button>
+      <input
+        type="text"
+        v-model="freeWord"
+        placeholder="フリーワードで探す"
+        class="search-area__freewrod"
+        @keyup.enter="searchFreeword"
+      />
+    </div>
     <!-- 案件表示エリア -->
     <div class="job-wrapper-center" v-show="!loading">
       <div class="job-wrapper-left" v-if="jobsNullFlag === false">
@@ -465,7 +463,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
                   </button>
                   <div class="btn-box-apply-false" v-else>応募済み</div>
                   <div class="btn-box-save">
-                    <FavoriteBtn :jobId="jobDetail.id" />
+                    <FavoriteBtn :job-id="jobDetail.id" />
                   </div>
                   <div class="label-area mt-5">
                     <JobStatusNew :job="jobDetail" />

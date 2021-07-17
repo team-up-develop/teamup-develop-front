@@ -36,7 +36,7 @@ export default Vue.extend({
     class="input-group--focused"
     @click:append="show2 = !show2"
     filled
-  ></v-text-field>
+  />
 </template>
 
 <style lang="scss" scoped>

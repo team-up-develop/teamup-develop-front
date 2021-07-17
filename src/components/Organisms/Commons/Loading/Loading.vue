@@ -6,7 +6,7 @@ type DataType = {
   loading: boolean;
 };
 export default Vue.extend({
-  name: "loading",
+  name: "Loading",
   data(): DataType {
     return {
       loading: true,
@@ -21,13 +21,12 @@ export default Vue.extend({
 <template>
   <div class="container" v-show="loading">
     <div class="fullview">
-      <div class="loading-spacer"></div>
+      <div class="loading-spacer"/>
       <vue-loading
         type="bubbles"
         color="#2196f3"
         :size="{ width: '120px', height: '65px' }"
-      >
-      </vue-loading>
+      />
     </div>
   </div>
 </template>

@@ -141,10 +141,10 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <div class="detail-wrapper">
       <ProfileEditModal
-        :userInfo="userInfo"
+        :user-info="userInfo"
         @close="closeModal"
         @compliteEdit="compliteEdit()"
         v-if="modal"
@@ -154,54 +154,52 @@ export default defineComponent({
           <PostUser
             :user="userInfo"
             @editEmit="editEmit()"
-            :myselfFlag="myselfFlag"
+            :myself-flag="myselfFlag"
           />
           <v-row>
             <UserTabs
-              :myselfFlag="myselfFlag"
-              :currentTab="currentTab"
+              :myself-flag="myselfFlag"
+              :current-tab="currentTab"
               @clickTab="clickTabs($event)"
             />
           </v-row>
         </div>
       </section>
-      <template>
-        <div v-show="currentTab === 0">
-          <v-col class="area">
-            <div class="area__card">
-              <div class="detail-tag">開発スキル</div>
-              <SkillUser :user="userInfo" />
-            </div>
-          </v-col>
-          <v-col class="area">
-            <div class="area__card">
-              <div class="detail-tag">自己紹介</div>
-              <IntroduceUser :user="userInfo" />
-            </div>
-          </v-col>
-        </div>
-        <div v-show="currentTab === 1">
-          <v-row class="jobs">
-            <router-link
-              :to="`/jobs/${jobs.id}/detail`"
-              v-for="jobs in profileJobs"
-              :key="jobs.id"
-              class="jobs__card"
-            >
-              <CardJob :job="jobs" />
-            </router-link>
-          </v-row>
-        </div>
-        <template v-if="myselfFlag">
-          <div v-show="currentTab === 2">
-            <v-col class="area">
-              <div class="area__card">
-                <div class="detail-tag">基本情報</div>
-                <UserBasicInfo :user="userInfo" />
-              </div>
-            </v-col>
+      <div v-show="currentTab === 0">
+        <v-col class="area">
+          <div class="area__card">
+            <div class="detail-tag">開発スキル</div>
+            <SkillUser :user="userInfo" />
           </div>
-        </template>
+        </v-col>
+        <v-col class="area">
+          <div class="area__card">
+            <div class="detail-tag">自己紹介</div>
+            <IntroduceUser :user="userInfo" />
+          </div>
+        </v-col>
+      </div>
+      <div v-show="currentTab === 1">
+        <v-row class="jobs">
+          <router-link
+            :to="`/jobs/${jobs.id}/detail`"
+            v-for="jobs in profileJobs"
+            :key="jobs.id"
+            class="jobs__card"
+          >
+            <CardJob :job="jobs" />
+          </router-link>
+        </v-row>
+      </div>
+      <template v-if="myselfFlag">
+        <div v-show="currentTab === 2">
+          <v-col class="area">
+            <div class="area__card">
+              <div class="detail-tag">基本情報</div>
+              <UserBasicInfo :user="userInfo" />
+            </div>
+          </v-col>
+        </div>
         <div class="button-area">
           <div v-if="myselfFlag" class="button-action-area">
             <button @click="openModal" class="btn-box-edit">編集する</button>

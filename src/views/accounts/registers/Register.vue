@@ -72,7 +72,7 @@ export default Vue.extend({
               outlined
               single-line
               filled
-            ></v-text-field>
+            />
           </v-row>
         </div>
         <div class="name-form-password">
@@ -92,7 +92,7 @@ export default Vue.extend({
               @click:append="show2 = !show2"
               single-line
               filled
-            ></v-text-field>
+            />
           </v-row>
         </div>
         <div class="btn-area">

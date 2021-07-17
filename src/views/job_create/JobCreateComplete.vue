@@ -69,7 +69,7 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <v-container class="wrapper" v-show="!loading">
       <v-row v-if="isLogin">
         <UserCard />
@@ -83,7 +83,7 @@ export default defineComponent({
         ログインが必要です
       </template>
     </v-container>
-    <Loading v-show="loading"> </Loading>
+    <Loading v-show="loading"/>
   </section>
 </template>
 

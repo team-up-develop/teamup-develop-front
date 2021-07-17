@@ -102,9 +102,9 @@ export default defineComponent({
             v-model="jobTitle"
             type="text"
             name="jobTitle"
-            textLabel="案件タイトル"
+            text-label="案件タイトル"
             :mandatory="true"
-            mandatoryText=""
+            mandatory-text=""
             placeholder="Go と Vue.js で 未経験エンジニアのためのサービスを作りたい(60文字以内で入力してください)"
             maxlength="60"
             :remaining="true"
@@ -125,9 +125,9 @@ export default defineComponent({
             placeholder="開発を開始した日"
             name="devStartDate"
             type="text"
-            textLabel="開発開始時期"
+            text-label="開発開始時期"
             :mandatory="true"
-            mandatoryText=""
+            mandatory-text=""
           />
         </div>
         <div class="time">
@@ -136,9 +136,9 @@ export default defineComponent({
             placeholder="開発を終了する予定日"
             name="devEndDate"
             type="text"
-            textLabel="開発終了時期"
+            text-label="開発終了時期"
             :mandatory="true"
-            mandatoryText=""
+            mandatory-text=""
           />
         </div>
         <div class="detail">
@@ -146,9 +146,9 @@ export default defineComponent({
             v-model="jobDescription"
             type="text"
             name="jobDescription"
-            textLabel="概要"
+            text-label="概要"
             :mandatory="false"
-            mandatoryText=""
+            mandatory-text=""
             placeholder="詳しい内容や現在の状況を記載してください(500文字以内)"
             maxlength="500"
             :remaining="true"

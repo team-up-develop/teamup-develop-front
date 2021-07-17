@@ -60,17 +60,17 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <v-container class="wrapper">
       <v-row v-if="isValue">
         <UserCard />
         <v-sheet class="create" elevation="1">
           <v-col>
             <JobCreateSkillCard
-              :jobTitle="jobTitle"
-              :devStartDate="devStartDate"
-              :devEndDate="devEndDate"
-              :jobDescription="jobDescription"
+              :job-title="jobTitle"
+              :dev-start-date="devStartDate"
+              :dev-end-date="devEndDate"
+              :job-description="jobDescription"
             />
           </v-col>
         </v-sheet>

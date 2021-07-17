@@ -51,11 +51,11 @@ export default defineComponent({
 
 <template>
   <section>
-    <Breadcrumbs :breadCrumbs="breadcrumbs" />
+    <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <ApplyFavorite
       :jobs="favoriteJobs"
-      :activeCss="3"
-      routingParams="favorite_job"
+      :active-css="3"
+      routing-params="favorite_job"
     />
   </section>
 </template>

@@ -41,7 +41,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   <div>
     <div class="balloon" v-for="chat in chats" :key="chat.id">
       <div class="balloon-image-left">
-        <div class="balloon-img"></div>
+        <div class="balloon-img"/>
       </div>
       <div class="user-name">
         {{ chat.user.user_name }}
