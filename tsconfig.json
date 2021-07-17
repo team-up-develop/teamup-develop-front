@@ -1,5 +1,8 @@
 {
+  // * https://zenn.dev/unemployed/articles/typescript-compiler-options
+  "compileOnSave": true,
   "compilerOptions": {
+    // * コンパイルする js の version Babelなどの専用のコンパイラやモジュールバンドラに処理を任せたい
     "target": "esnext",
     "module": "esnext",
     "strict": true,
@@ -15,6 +18,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    // * targetに指定しているjsのバージョンには含まれていない組み込みライブラリを使用する場合は、明示的な指定
     "lib": ["esnext", "dom", "dom.iterable", "scripthost"]
   },
   "include": [
@@ -24,5 +28,25 @@
     "tests/**/*.ts",
     "tests/**/*.tsx"
   ],
-  "exclude": ["node_modules"]
+  "experimentalDecorators": true,
+  "esModuleInterop": true,
+  "exclude": ["node_modules"],
+  "noEmit": true,
+  // * .jsと.jsxもコンパイル対象に含まれる
+  "allowJs": true,
+  "checkJs": true,
+  // * 以前コンパイルを実行したコードと現在のコードとの差分を検出して、必要なファイルだけをコンパイル
+  "incremental": true,
+  // * `this` におけるデータプロパティに対して厳密な推論を可能にします
+  "strict": true,
+  //* 大文字小文字を区別して参照を解決するようにする
+  "forceConsistentCasingInFileNames": true,
+  // *自分で型定義を行う必要なく json ファイルを扱うことを可能に
+  "resolveJsonModule": true
+  // * 変数の方が any 型と推論できる場合、エラー
+  // "noImplicitAny": true,
+  // * 関数が明示的に return してない場合、エラー
+  // "noImplicitReturns": true,
+  // * null と undefined にはそれぞれ異なる型とし、具体的な値が期待される場所でこれらを使用しようとするとエラー
+  // "strictNullChecks": true,
 }
