@@ -1,5 +1,5 @@
 <script lang="ts">
-import { defineComponent } from "@vue/composition-api";
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 import {
   InsidePropsType,
   OutsidePropsType,
@@ -7,6 +7,7 @@ import {
 } from "@icare-jp/vue-props-type";
 import { dayJsFormat } from "@/libs/dayjs";
 import { User } from "@/types/index";
+import ImageUpload from "@/components/Organisms/Modals/Base/ImageUpload.vue";
 
 const propsOption = {
   user: { type: Object as PropType<User>, required: true },
@@ -17,12 +18,32 @@ const propsOption = {
   },
 } as const;
 
+type State = {
+  userImage: {
+    imageData: any;
+    fileName: any;
+  };
+  imageDialog: boolean;
+};
+const initialState = (): State => ({
+  userImage: {
+    imageData: "",
+    fileName: "",
+  },
+  imageDialog: false,
+});
+
 type PropsOption = typeof propsOption;
 export type PostUserProps = OutsidePropsType<PropsOption>;
 
 export default defineComponent<InsidePropsType<PropsOption>>({
+  components: {
+    ImageUpload,
+  },
   props: propsOption,
-  setup: (props, context) => {
+  setup: (props, ctx) => {
+    const state = reactive<State>(initialState());
+
     const twitterTab = () => {
       if (props.user?.twitter_account) {
         const url: string = props.user.twitter_account;
@@ -39,15 +60,52 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       return;
     };
 
+    const onFileChange = (file: any) => {
+      if (!file) {
+        state.userImage.fileName = "";
+        state.userImage.imageData = "";
+        return;
+      }
+      state.userImage.imageData = file.name;
+      createImage(file);
+      // TODO: api 繋ぎ込み
+    };
+    //* アップロードした画像を表示
+    const createImage = (file: any) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        state.userImage.fileName = e?.target?.result;
+      };
+      reader.readAsDataURL(file);
+    };
+
+    const uplpadImage = () => {
+      const params = {
+        user_image: {
+          ...state.userImage,
+        },
+      };
+      console.log(params, "params");
+    };
+
     const editEmit = () => {
-      context.emit("editEmit");
+      ctx.emit("editEmit");
+    };
+
+    const closeImageDialog = () => {
+      state.imageDialog = false;
+      state.userImage.fileName = "";
     };
 
     return {
+      ...toRefs(state),
       dayJsFormat,
       twitterTab,
       gitTab,
       editEmit,
+      onFileChange,
+      closeImageDialog,
+      uplpadImage,
     };
   },
 });
@@ -55,10 +113,19 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <template>
   <section>
+    <ImageUpload
+      :image-dialog="imageDialog"
+      :on-file-change="onFileChange"
+      :file-name="userImage.fileName"
+      :close="closeImageDialog"
+      :uplpad-image="uplpadImage"
+    />
     <div class="post">
       <v-row>
         <div class="left">
-          <div class="user-image"/>
+          <div class="user-image" @click="() => (imageDialog = true)">
+            <v-icon class="add">mdi-camera</v-icon>
+          </div>
         </div>
         <div class="right">
           <div class="profile-area">
@@ -116,6 +183,15 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       @include user-image;
       width: 150px;
       height: 150px;
+      position: relative;
+      cursor: pointer;
+
+      .add {
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        margin-bottom: 10px;
+      }
     }
   }
 

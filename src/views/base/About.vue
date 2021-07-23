@@ -193,7 +193,7 @@ export default Vue.extend({
         </div>
       </div>
       <div class="image">
-        <div class="image_inner"/>
+        <div class="image_inner" />
       </div>
     </div>
     <Loading v-show="loading" />
