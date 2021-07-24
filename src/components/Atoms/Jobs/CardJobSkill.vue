@@ -68,7 +68,7 @@ export default defineComponent({
   text-align: left;
   display: inline-block;
   font-size: 12px;
-  padding: 7px 1.2rem;
+  padding: 4px 1.2rem;
   border-radius: 5px / 5px;
   font-weight: bold;
   pointer-events: none;
@@ -81,7 +81,7 @@ export default defineComponent({
   display: inline-block;
   color: $framework-color;
   font-size: 12px;
-  padding: 7px 1.2rem;
+  padding: 4px 1.2rem;
   border-radius: 5px / 5px;
   font-weight: bold;
   pointer-events: none;
@@ -94,7 +94,7 @@ export default defineComponent({
   text-align: left;
   display: inline-block;
   font-size: 12px;
-  padding: 7px 1.2rem;
+  padding: 4px 1.2rem;
   border-radius: 5px / 5px;
   font-weight: bold;
   pointer-events: none;

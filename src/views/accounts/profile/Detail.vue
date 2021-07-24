@@ -107,9 +107,6 @@ export default defineComponent({
     const closeModal = () => {
       state.modal = false;
     };
-    const doSend = () => {
-      closeModal();
-    };
 
     // * 編集完了 emit
     const compliteEdit = async () => {
@@ -129,7 +126,6 @@ export default defineComponent({
       breadcrumbs,
       openModal,
       closeModal,
-      doSend,
       compliteEdit,
       editEmit,
       profileJobs,
@@ -144,10 +140,10 @@ export default defineComponent({
     <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <div class="detail-wrapper">
       <ProfileEditModal
+        v-if="modal"
         :user-info="userInfo"
         @close="closeModal"
         @compliteEdit="compliteEdit()"
-        v-if="modal"
       />
       <section class="user-area">
         <div class="user-area__post">
@@ -279,7 +275,7 @@ export default defineComponent({
     display: flex;
     flex-direction: column;
     text-align: left;
-    margin: 1.3rem auto 2rem auto;
+    margin: 1rem auto;
 
     @media screen and (max-width: $la) {
       width: 95%;

@@ -6,7 +6,7 @@ import {
   PropType,
 } from "@icare-jp/vue-props-type";
 import { dayJsFormat } from "@/libs/dayjs";
-import { User } from "@/types/index";
+import { User, ImageFile } from "@/types/index";
 import ImageUpload from "@/components/Organisms/Modals/Base/ImageUpload.vue";
 
 const propsOption = {
@@ -20,7 +20,7 @@ const propsOption = {
 
 type State = {
   userImage: {
-    imageData: any;
+    imageData: string;
     fileName: any;
   };
   imageDialog: boolean;
@@ -60,7 +60,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       return;
     };
 
-    const onFileChange = (file: any) => {
+    const onFileChange = (file: ImageFile) => {
       if (!file) {
         state.userImage.fileName = "";
         state.userImage.imageData = "";
@@ -94,7 +94,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
     const closeImageDialog = () => {
       state.imageDialog = false;
-      state.userImage.fileName = "";
+      state.userImage = {
+        imageData: "",
+        fileName: "",
+      };
     };
 
     return {
@@ -123,9 +126,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     <div class="post">
       <v-row>
         <div class="left">
-          <div class="user-image" @click="() => (imageDialog = true)">
+          <div
+            v-if="myselfFlag"
+            class="user-image"
+            @click="() => (imageDialog = true)"
+          >
             <v-icon class="add">mdi-camera</v-icon>
           </div>
+          <div v-else class="user-image" />
         </div>
         <div class="right">
           <div class="profile-area">
@@ -143,12 +151,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             <v-col class="url-area">
               <v-row>
                 <img
+                  v-if="user.github_account"
                   class="img"
                   @click="gitTab()"
                   src="@/assets/images/github-icon.png"
                   width="35"
                 />
                 <img
+                  v-if="user.twitter_account"
                   class="twitter-img"
                   @click="twitterTab()"
                   src="@/assets/images/twitter-icon.png"

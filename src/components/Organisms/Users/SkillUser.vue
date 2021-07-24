@@ -2,6 +2,7 @@
 import { defineComponent } from "@vue/composition-api";
 import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
 import { User } from "@/types/index";
+import InputSet from "@/components/Molecules/Forms/InputSet.vue";
 
 const propsOption = {
   user: { type: Object as PropType<User>, required: true, defalut: {} },
@@ -9,6 +10,9 @@ const propsOption = {
 
 type PropsOption = typeof propsOption;
 export default defineComponent<InsidePropsType<PropsOption>>({
+  components: {
+    InputSet,
+  },
   props: propsOption,
 });
 </script>
@@ -17,36 +21,21 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   <section>
     <v-sheet class="skill-detail-area" elevation="1">
       <div class="lang-area">
-        <label for="name" class="name-tag">開発言語</label>
-        <div class="lang-box">
-          <div
-            class="skill-tag"
-            v-for="langage in user.programing_languages"
-            :key="langage.id"
-          >
-            {{ langage.name }}
-          </div>
-        </div>
+        <InputSet
+          :skills="user.programing_languages"
+          label="開発言語"
+          color="#651fff"
+        />
       </div>
       <div class="lang-area">
-        <label for="name" class="name-tag">フレームワーク</label>
-        <div class="lang-box">
-          <div
-            v-for="framework in user.programing_frameworks"
-            :key="framework.id"
-            class="flame-tag"
-          >
-            {{ framework.name }}
-          </div>
-        </div>
+        <InputSet
+          :skills="user.programing_frameworks"
+          label="フレームワーク"
+          color="#2196f3"
+        />
       </div>
       <div class="lang-area">
-        <label for="name" class="name-tag">その他関連スキル</label>
-        <div class="lang-box">
-          <div class="other-tag" v-for="skill in user.skills" :key="skill.id">
-            {{ skill.name }}
-          </div>
-        </div>
+        <InputSet :skills="user.skills" label="その他スキル" color="#00bcd4" />
       </div>
     </v-sheet>
   </section>
@@ -68,43 +57,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   .lang-area {
     width: 100%;
     position: relative;
-
-    .name-tag {
-      font-weight: bold;
-      text-align: left;
-      position: absolute;
-      left: 0;
-    }
-
-    .lang-box {
-      width: 100%;
-      text-align: left;
-      padding: 10px 0px 2rem 0;
-
-      .skill-tag {
-        @include detail-language;
-
-        @media screen and (max-width: $sm) {
-          @include language-responsive;
-        }
-      }
-
-      .flame-tag {
-        @include detail-framework;
-
-        @media screen and (max-width: $sm) {
-          @include framework-responsive;
-        }
-      }
-
-      .other-tag {
-        @include detail-skill;
-
-        @media screen and (max-width: $sm) {
-          @include skill-responsive;
-        }
-      }
-    }
   }
 }
 </style>

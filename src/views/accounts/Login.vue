@@ -1,8 +1,13 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "@vue/composition-api";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  computed,
+} from "@vue/composition-api";
 import Vuex from "@/store/index";
-import Email from "@/components/Atoms/Forms/Email.vue";
-import Password from "@/components/Atoms/Forms/Password.vue";
+import { isEmailValid, isPasswordValid } from "@/modules/user";
+import InputArea from "@/components/Molecules/Forms/InputArea.vue";
 
 type State = {
   email: string;
@@ -18,8 +23,9 @@ const initialState = (): State => ({
 
 export default defineComponent({
   components: {
-    Email,
-    Password,
+    // Email,
+    // Password,
+    InputArea,
   },
   setup: () => {
     const state = reactive<State>(initialState());
@@ -45,6 +51,8 @@ export default defineComponent({
       ...toRefs(state),
       fetchError,
       login,
+      isEmailValid: computed(() => isEmailValid(state.email)),
+      isPasswordValid: computed(() => isPasswordValid(state.password)),
     };
   },
 });
@@ -52,26 +60,38 @@ export default defineComponent({
 
 <template>
   <section>
-    <div class="wrapper">
+    <div class="wrapper  mt-8">
       <div class="title">LOGIN</div>
-      <v-card class="card  py-4">
+      <v-card class="card py-4">
         <div class="text-left mt-6">
-          <label class="font-weight-bold" for="name">メールアドレス</label>
-          <br /><br />
-          <v-row class="px-3" cols="12">
-            <Email
-              v-model="email"
-              placeholder="example@teamUp.com"
-              type="text"
-            />
-          </v-row>
+          <InputArea
+            v-model="email"
+            type="email"
+            name="email"
+            text-label="メールアドレス"
+            :mandatory="false"
+            mandatory-text=""
+            placeholder="example@teamUp.com"
+            maxlength="100"
+            :remaining="false"
+            valid-message="メールアドレスの形式が正しくありません"
+            :is-valid="isEmailValid"
+          />
         </div>
-        <div class="text-left mt-2">
-          <label class="font-weight-bold" for="name">パスワード</label>
-          <br /><br />
-          <v-row class="px-3" cols="12" md="1">
-            <Password v-model="password" type="password" />
-          </v-row>
+        <div class="text-left mt-6">
+          <InputArea
+            v-model="password"
+            type="password"
+            name="password"
+            text-label="パスワード"
+            :mandatory="false"
+            mandatory-text=""
+            placeholder="パスワード"
+            maxlength="100"
+            :remaining="false"
+            valid-message="8文字以上で入力してください"
+            :is-valid="isPasswordValid"
+          />
         </div>
         <div class="error-flag" v-if="loginErrorFlag == true">
           <span>メールアドレス か パスワードが違います</span>
@@ -95,8 +115,7 @@ export default defineComponent({
 @import "@/assets/scss/_variables.scss";
 
 .wrapper {
-  width: 550px;
-  height: 90%;
+  width: 500px;
   margin: 0 auto;
   position: relative;
 
@@ -105,7 +124,7 @@ export default defineComponent({
   }
 
   .card {
-    min-height: 550px;
+    min-height: 380px;
     padding: 0 2.8rem;
 
     @media (max-width: $sm) {

@@ -9,18 +9,19 @@ import { RegisterSessionFirstParams } from "@/types/params";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import DatePickerArea from "@/components/Molecules/Forms/DatePickerArea.vue";
 import InputArea from "@/components/Molecules/Forms/InputArea.vue";
+import { isEmailValid, isPasswordValid, isFormBaseInfo } from "@/modules/user";
 
-type Maybe<T> = T | null;
+// type Maybe<T> = T | null;
 
 type State = {
-  userName: Maybe<string>;
-  lastName: Maybe<string>;
-  firstName: Maybe<string>;
-  userBirthday: Maybe<string>;
-  learningStartDate: Maybe<string>;
+  userName: string;
+  lastName: string;
+  firstName: string;
+  userBirthday: string;
+  learningStartDate: string;
   dialog: boolean;
-  password: Maybe<string>;
-  email: Maybe<string>;
+  password: string;
+  email: string;
 };
 
 const initialState = (): State => ({
@@ -52,26 +53,14 @@ export default defineComponent({
       const password = sessionStorage.getItem("password");
       const userBirthday = sessionStorage.getItem("userBirthday");
       const learningStartDate = sessionStorage.getItem("learningStartDate");
-      state.userName = userName;
-      state.lastName = lastName;
-      state.firstName = firstName;
-      state.password = password;
-      state.email = email;
-      state.userBirthday = userBirthday;
-      state.learningStartDate = learningStartDate;
+      state.userName = userName!;
+      state.lastName = lastName!;
+      state.firstName = firstName!;
+      state.password = password!;
+      state.email = email!;
+      state.userBirthday = userBirthday!;
+      state.learningStartDate = learningStartDate!;
     })();
-
-    const isForm = computed(() => {
-      return state.userName &&
-        state.firstName &&
-        state.lastName &&
-        state.userBirthday &&
-        state.learningStartDate &&
-        state.password &&
-        state.email
-        ? true
-        : false;
-    });
 
     const nextStep2 = () => {
       if (
@@ -109,7 +98,19 @@ export default defineComponent({
     return {
       ...toRefs(state),
       nextStep2,
-      isForm,
+      isForm: computed(() =>
+        isFormBaseInfo(
+          state.userName,
+          state.lastName,
+          state.firstName,
+          state.userBirthday,
+          state.learningStartDate,
+          state.password,
+          state.email
+        )
+      ),
+      isEmailValid: computed(() => isEmailValid(state.email)),
+      isPasswordValid: computed(() => isPasswordValid(state.password)),
     };
   },
 });
@@ -174,19 +175,23 @@ export default defineComponent({
               placeholder="example@teamUp.com"
               maxlength="100"
               :remaining="false"
+              valid-message="メールアドレスの形式が正しくありません"
+              :is-valid="isEmailValid"
             />
           </div>
           <div class="input-area">
             <InputArea
               v-model="password"
               type="password"
-              name="email"
+              name="password"
               text-label="パスワード"
               :mandatory="true"
               mandatory-text=""
               placeholder="パスワードを入力してください"
               maxlength="100"
               :remaining="false"
+              valid-message="8文字以上で入力してください"
+              :is-valid="isPasswordValid"
             />
           </div>
           <div class="input-area">
@@ -211,7 +216,7 @@ export default defineComponent({
               mandatory-text=""
             />
           </div>
-          <div class="bottom" v-if="isForm">
+          <div class="bottom" v-if="isForm && isEmailValid && isPasswordValid">
             <v-btn class="next-btn" @click="nextStep2">次へ1/3</v-btn>
           </div>
           <div class="bottom" v-else>

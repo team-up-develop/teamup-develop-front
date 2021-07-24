@@ -17,6 +17,8 @@ import { catchError } from "@/libs/errorHandler";
 import { dayJsFormat } from "@/libs/dayjs";
 import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
 import Complete from "@/components/Organisms/Modals/Base/Complete.vue";
+import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
+import InputSet from "@/components/Molecules/Forms/InputSet.vue";
 
 type Maybe<T> = T | null;
 type Select = { id: number };
@@ -37,6 +39,7 @@ type State = {
   twitter: Maybe<string>;
   confirm: boolean;
   complite: boolean;
+  loading: boolean;
 };
 
 type SkillState = {
@@ -65,6 +68,7 @@ const initialState = (): State => ({
   twitter: "",
   confirm: false,
   complite: false,
+  loading: true,
 });
 
 const skillState = (): SkillState => ({
@@ -81,6 +85,8 @@ export default defineComponent({
     Session,
     Confirme,
     Complete,
+    Loading,
+    InputSet,
   },
   setup(_, ctx) {
     const state = reactive<State>(initialState());
@@ -152,6 +158,7 @@ export default defineComponent({
         )!;
         skills.displaySkills.push(foundSkill);
       }
+      state.loading = false;
     };
 
     onMounted(async () => {
@@ -276,127 +283,109 @@ export default defineComponent({
         <div class="session">
           <Session :num="4" />
         </div>
-        <v-col class="container text-left" v-if="isForm">
-          <div class="input-area">
-            <label for="name" class="label">ユーザー名</label>
-            <p>{{ userName }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">姓</label>
-            <p>{{ lastName }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">名</label>
-            <p>{{ firstName }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">メールアドレス</label>
-            <p>{{ email }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">パスワード</label>
-            <section v-if="!isOpenPassword">
-              <button
-                @click="() => (passwordModal = true)"
-                class="password-btn"
-              >
-                開く
-              </button>
-              <p>*********</p>
-            </section>
-            <section v-else>
-              <button
-                @click="() => (passwordModal = false)"
-                class="password-btn"
-              >
-                閉じる
-              </button>
-              <p>{{ password }}</p>
-            </section>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">誕生日</label>
-            <p>{{ dayJsFormat(userBirthday, "YYYY年 M月 D日") }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">学習開始日</label>
-            <p>{{ dayJsFormat(learningStartDate, "YYYY年 M月 D日") }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">開発言語</label>
-            <p>
-              <span
-                class="langage"
-                v-for="lang in displayLanguages"
-                :key="lang.id"
-              >
-                {{ lang.name }}
-              </span>
-            </p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">フレームワーク</label>
-            <p>
-              <span
-                class="framework"
-                v-for="frame in displayFramworks"
-                :key="frame.id"
-              >
-                {{ frame.name }}
-              </span>
-            </p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">その他スキル</label>
-            <p>
-              <span
-                class="skill"
-                v-for="skill in displaySkills"
-                :key="skill.id"
-              >
-                {{ skill.name }}
-              </span>
-            </p>
-          </div>
-          <div class="input-area pre-wrap">
-            <label for="name" class="label">自己紹介</label>
-            <p>{{ bio }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">GitHub URL</label>
-            <p>{{ github }}</p>
-          </div>
-          <div class="input-area">
-            <label for="name" class="label">Twitter URL</label>
-            <p>{{ twitter }}</p>
-          </div>
-          <div class="alert-message">
-            <span
-              >こちらで登録を完了させ、案件を作成、又は応募がすることができます。※今後はプロフィールからも変更ができます。</span
-            >
-          </div>
-          <div class="bottom">
-            <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
-            <v-btn class="next-btn" @click="() => (confirm = true)"
-              >登録完了する</v-btn
-            >
-          </div>
-        </v-col>
-        <v-col v-else>
-          <div class="false-card">
-            <img class="alert-img py-4" src="@/assets/images/alert-icon.png" />
+        <div v-show="!loading">
+          <v-col class="container text-left" v-if="isForm">
+            <div class="input-area">
+              <InputSet :value="userName" label="ユーザー名" />
+            </div>
+            <div class="input-area">
+              <InputSet :value="lastName" label="姓" />
+            </div>
+            <div class="input-area">
+              <InputSet :value="firstName" label="名" />
+            </div>
+            <div class="input-area">
+              <InputSet :value="email" label="メールアドレス" />
+            </div>
+            <div class="input-area">
+              <label for="name" class="label">パスワード</label>
+              <section v-show="!isOpenPassword">
+                <button
+                  @click="() => (passwordModal = true)"
+                  class="password-btn"
+                >
+                  開く
+                </button>
+                <p>*********</p>
+              </section>
+              <section v-show="isOpenPassword">
+                <button
+                  @click="() => (passwordModal = false)"
+                  class="password-btn"
+                >
+                  閉じる
+                </button>
+                <p>{{ password }}</p>
+              </section>
+            </div>
+            <div class="input-area">
+              <InputSet :day-value="userBirthday" label="誕生日" />
+            </div>
+            <div class="input-area">
+              <InputSet :day-value="learningStartDate" label="学習開始日" />
+            </div>
+            <div class="input-area">
+              <InputSet
+                :skills="displayLanguages"
+                label="開発言語"
+                color="#651fff"
+              />
+            </div>
+            <div class="input-area">
+              <InputSet
+                :skills="displayFramworks"
+                label="フレームワーク"
+                color="#2196f3"
+              />
+            </div>
+            <div class="input-area">
+              <InputSet
+                :skills="displaySkills"
+                label="その他スキル"
+                color="#00bcd4"
+              />
+            </div>
+            <div class="input-area pre-wrap">
+              <InputSet :value="bio" label="自己紹介" />
+            </div>
+            <div class="input-area">
+              <InputSet :value="github" label="GitHub URL" />
+            </div>
+            <div class="input-area">
+              <InputSet :value="twitter" label="Twitter URL" />
+            </div>
             <div class="alert-message">
               <span
-                >入力されていない項目があるようです。 <br />
-                入力内容をご確認ください。
-              </span>
+                >こちらで登録を完了させ、案件を作成、又は応募がすることができます。※今後はプロフィールからも変更ができます。</span
+              >
             </div>
-          </div>
-          <div class="bottom">
-            <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
-            <v-btn class="next-btn-false">登録完了する</v-btn>
-          </div>
-        </v-col>
+            <div class="bottom">
+              <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
+              <v-btn class="next-btn" @click="() => (confirm = true)"
+                >登録完了する</v-btn
+              >
+            </div>
+          </v-col>
+          <v-col v-else>
+            <div class="false-card">
+              <img
+                class="alert-img py-4"
+                src="@/assets/images/alert-icon.png"
+              />
+              <div class="alert-message">
+                <span
+                  >入力されていない項目があるようです。 <br />
+                  入力内容をご確認ください。
+                </span>
+              </div>
+            </div>
+            <div class="bottom">
+              <v-btn class="back-btn" @click="backStep">内容修正する</v-btn>
+              <v-btn class="next-btn-false">登録完了する</v-btn>
+            </div>
+          </v-col>
+        </div>
+        <Loading v-show="loading" />
       </v-card>
     </div>
   </section>
@@ -404,44 +393,6 @@ export default defineComponent({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
-
-.langage {
-  @include border_language;
-  color: $language-color;
-  text-decoration: none;
-  margin: 5px 0px 0px 5px;
-  text-align: left;
-  display: inline-block;
-  font-size: 12px;
-  padding: 4px 1.2rem;
-  border-radius: 5px / 5px;
-  font-weight: bold;
-  pointer-events: none;
-}
-.framework {
-  @include border_framework;
-  margin: 5px 0px 0 5px;
-  text-align: left;
-  display: inline-block;
-  color: $framework-color;
-  font-size: 12px;
-  padding: 7px 1.2rem;
-  border-radius: 5px / 5px;
-  font-weight: bold;
-  pointer-events: none;
-}
-.skill {
-  @include border-skill;
-  color: $skill-color;
-  margin: 5px 0px 0 5px;
-  text-align: left;
-  display: inline-block;
-  font-size: 12px;
-  padding: 7px 1.2rem;
-  border-radius: 5px / 5px;
-  font-weight: bold;
-  pointer-events: none;
-}
 
 .wrapper {
   width: 550px;
@@ -479,9 +430,7 @@ export default defineComponent({
 
 .input-area {
   min-height: 60px;
-}
-.label {
-  font-weight: bold;
+  margin-bottom: 5px;
 }
 
 .pre-wrap {

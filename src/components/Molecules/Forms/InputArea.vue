@@ -30,6 +30,8 @@ const propsOption = {
     required: true,
     defalut: false,
   },
+  validMessage: { type: String, default: "" },
+  isValid: { type: Boolean },
 } as const;
 
 type PropsOption = typeof propsOption;
@@ -54,7 +56,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     const mandatoryLabel = computed(() => {
       return props.mandatory ? true : false;
     });
-
     const remainingLabel = computed(() => {
       return props.remaining ? true : false;
     });
@@ -89,6 +90,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       class="mt-1"
     />
     <small id="rem" v-if="remainingLabel">残り{{ 60 - titleLimit }}文字</small>
+    <p v-if="!isValid" class="valid-message">{{ validMessage }}</p>
   </section>
 </template>
 
@@ -110,6 +112,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   padding: 0.25rem 0.9rem;
   text-align: center;
   margin-left: 10px;
+}
+
+.valid-message {
+  color: $error-message-color;
 }
 
 #rem {

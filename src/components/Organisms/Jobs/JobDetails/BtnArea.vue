@@ -17,7 +17,7 @@ import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 
 const propsOption = {
   id: { type: Number, default: 0, required: true },
-  job: { type: Object as PropType<Job>, defalut: {}, required: true },
+  job: { type: Object as PropType<Job> },
   selfjob: {
     type: Boolean as PropType<boolean>,
     default: false,
