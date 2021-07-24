@@ -1,19 +1,25 @@
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 import { VueLoading } from "vue-loading-template";
 
-type DataType = {
+type State = {
   loading: boolean;
 };
-export default Vue.extend({
+
+const initialState = (): State => ({
+  loading: true,
+});
+export default defineComponent({
   name: "Loading",
-  data(): DataType {
-    return {
-      loading: true,
-    };
-  },
   components: {
     VueLoading,
+  },
+  setup: () => {
+    const state = reactive<State>(initialState());
+
+    return {
+      ...toRefs(state),
+    };
   },
 });
 </script>
@@ -21,7 +27,7 @@ export default Vue.extend({
 <template>
   <div class="container" v-show="loading">
     <div class="fullview">
-      <div class="loading-spacer"/>
+      <div class="loading-spacer" />
       <vue-loading
         type="bubbles"
         color="#2196f3"

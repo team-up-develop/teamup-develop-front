@@ -18,15 +18,16 @@ import {
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { RegisterSessionSecondParams } from "@/types/params";
+import { isFormSkillInfo } from "@/modules/user";
 
 type Maybe<T> = T | null;
 type Select = { id: number };
 type State = {
-  selectedLang: [];
+  selectedLang: number[];
   languages: Language[];
-  selectedFramwork: [];
+  selectedFramwork: number[];
   framworks: Framework[];
-  selectedSkill: [];
+  selectedSkill: number[];
   skills: Skill[];
   bio: string;
   github: Maybe<string>;
@@ -98,14 +99,6 @@ export default defineComponent({
       fetchSkill();
     });
 
-    const isForm = computed(() => {
-      return state.selectedLang.length !== 0 &&
-        state.selectedFramwork.length !== 0 &&
-        state.selectedSkill.length !== 0
-        ? true
-        : false;
-    });
-
     const backStep = () => {
       return router.push({ name: "RegisterStepBase" });
     };
@@ -155,7 +148,13 @@ export default defineComponent({
 
     return {
       ...toRefs(state),
-      isForm,
+      isForm: computed(() =>
+        isFormSkillInfo(
+          state.selectedLang,
+          state.selectedFramwork,
+          state.selectedSkill
+        )
+      ),
       backStep,
       nextStep,
     };

@@ -81,6 +81,8 @@ export default defineComponent<InsidePropsType<Props>>({
 @import "@/assets/scss/_variables.scss";
 
 .preview-file {
-  max-width: 200px;
+  @include user-image;
+  max-width: 150px;
+  height: 150px;
 }
 </style>

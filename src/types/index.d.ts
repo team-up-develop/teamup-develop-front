@@ -122,6 +122,15 @@ type Message = {
   created_at: Date;
 };
 
+type ImageFile = {
+  lastModified: number;
+  lastModifiedDate: Date;
+  name: string;
+  size: number;
+  type: string;
+  webkitRelativePath: string;
+};
+
 export {
   Job,
   User,
@@ -134,4 +143,5 @@ export {
   Framework,
   Skill,
   Message,
+  ImageFile,
 };

@@ -6,7 +6,7 @@ import { Job } from "@/types";
 
 export default defineComponent({
   props: {
-    job: { type: Object as PropType<Job>, required: true },
+    job: { type: Object as PropType<Job> },
   },
   setup: () => {
     return {
@@ -21,7 +21,7 @@ export default defineComponent({
   <section>
     <v-sheet class="post-user-area">
       <div class="left-user-area">
-        <div class="user-image"/>
+        <div class="user-image" />
       </div>
       <div class="right-user-area">
         <div class="user-profile-area">

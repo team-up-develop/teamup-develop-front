@@ -53,10 +53,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <div class="d-flex justify-start">
         <div class="card__area">
           <label for="name" class="font-weight-bold text-left">姓</label>
-          <p>{{ user.first_name }}</p>
+          <p>{{ user.last_name }}</p>
         </div>
         <div class="card__area">
-          <label for="name" class="font-weight-bold text-left">姓</label>
+          <label for="name" class="font-weight-bold text-left">名</label>
           <p>{{ user.first_name }}</p>
         </div>
       </div>
