@@ -29,6 +29,7 @@ import Vuex from "@/store/index";
 import { encode } from "@/libs/jsBase64";
 import { useJobs } from "@/hooks";
 import { checkSelfJob } from "@/modules/jobs";
+import { InputSet } from "@/components/Molecules/Forms";
 
 type State = {
   jobs: Job[]; //? 案件一覧配列
@@ -91,6 +92,7 @@ export default defineComponent({
     JobRightLogin,
     FavoriteBtn,
     JobStatusNew,
+    InputSet,
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
@@ -511,42 +513,21 @@ const clickJob = (state: State, ctx: SetupContext) => {
                 {{ truncate(jobDetail.user.user_name, 55) }}
               </div>
             </router-link>
-            <div class="tag-area">
-              開発言語
-            </div>
-            <div class="post-user-area">
-              <div
-                class="detail-langage"
-                v-for="langage in jobDetail.programing_languages.slice(0, 5)"
-                :key="langage.name"
-              >
-                {{ langage.name }}
-              </div>
-            </div>
-            <div class="tag-area">
-              フレームワーク
-            </div>
-            <div class="post-user-area">
-              <div
-                class="detail-framework"
-                v-for="framework in jobDetail.programing_frameworks.slice(0, 5)"
-                :key="framework.name"
-              >
-                {{ framework.name }}
-              </div>
-            </div>
-            <div class="tag-area">
-              その他スキル
-            </div>
-            <div class="post-user-area">
-              <div
-                class="detail-skill"
-                v-for="skill in jobDetail.skills.slice(0, 5)"
-                :key="skill.name"
-              >
-                {{ skill.name }}
-              </div>
-            </div>
+            <InputSet
+              :skills="jobDetail.programing_languages"
+              label="開発言語"
+              color="#651fff"
+            />
+            <InputSet
+              :skills="jobDetail.programing_frameworks"
+              label="フレームワーク"
+              color="#2196f3"
+            />
+            <InputSet
+              :skills="jobDetail.skills"
+              label="その他スキル"
+              color="#00bcd4"
+            />
             <div class="tag-area">
               開発期間
             </div>
@@ -766,7 +747,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
 
   .tag-area {
     font-weight: bold;
-    margin: 1rem 0 0.5rem 0;
+    margin: 1rem 0 0rem 0;
     font-size: 1em;
 
     .icon {

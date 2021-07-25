@@ -18,7 +18,7 @@ import { dayJsFormat } from "@/libs/dayjs";
 import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
 import Complete from "@/components/Organisms/Modals/Base/Complete.vue";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import InputSet from "@/components/Molecules/Forms/InputSet.vue";
+import { InputSet } from "@/components/Molecules/Forms";
 
 type Maybe<T> = T | null;
 type Select = { id: number };

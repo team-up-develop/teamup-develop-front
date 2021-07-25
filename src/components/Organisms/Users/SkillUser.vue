@@ -2,7 +2,7 @@
 import { defineComponent } from "@vue/composition-api";
 import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
 import { User } from "@/types/index";
-import InputSet from "@/components/Molecules/Forms/InputSet.vue";
+import { InputSet } from "@/components/Molecules/Forms";
 
 const propsOption = {
   user: { type: Object as PropType<User>, required: true, defalut: {} },
