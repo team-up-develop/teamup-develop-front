@@ -35,6 +35,20 @@ describe("jobCreate.ts", () => {
       const errorMessage = afterDevEndDate(devStartDate, devEndDate);
       expect(errorMessage).toBe(true);
     });
+
+    it("開発開始日より開発終了日の方が後なら「開発開始日を開発終了日より後に設定してください。」を非表示", () => {
+      const devStartDate = "2021-10-30";
+      const devEndDate = "2021-12-18";
+      const errorMessage = afterDevEndDate(devStartDate, devEndDate);
+      expect(errorMessage).toBe(false);
+    });
+
+    it("開発開始日、開発終了日どちらかが入力されていなければ「開発開始日を開発終了日より後に設定してください。」を非表示", () => {
+      const devStartDate = "2021-10-30";
+      const devEndDate = "";
+      const errorMessage = afterDevEndDate(devStartDate, devEndDate);
+      expect(errorMessage).toBe(false);
+    });
   });
 
   describe("beforeToDate", () => {
@@ -45,6 +59,21 @@ describe("jobCreate.ts", () => {
       const errorMessage = beforeToDate(devStartDate);
       expect(errorMessage).toBe(true);
     });
+
+    it("開発開始日が現在の日付より後の場合「開発開始日を現在の日付より後に設定してください。」を非表示", () => {
+      const devStartDate = dayjs()
+        .startOf("month")
+        .add(3, "month")
+        .format();
+      const errorMessage = beforeToDate(devStartDate);
+      expect(errorMessage).toBe(false);
+    });
+
+    it("開発開始日が入力されていない場合「開発開始日を現在の日付より後に設定してください。」を非表示", () => {
+      const devStartDate = "";
+      const errorMessage = beforeToDate(devStartDate);
+      expect(errorMessage).toBe(false);
+    });
   });
 
   describe("minPeriod", () => {
@@ -53,6 +82,20 @@ describe("jobCreate.ts", () => {
       const devEndDate = "2021-11-10";
       const errorMessage = minPeriod(devStartDate, devEndDate);
       expect(errorMessage).toBe(true);
+    });
+
+    it("開発期間を1ヶ月以上の場合「開発期間を1ヶ月以上に設定してください。」を非表示", () => {
+      const devStartDate = "2021-10-30";
+      const devEndDate = "2021-12-18";
+      const errorMessage = minPeriod(devStartDate, devEndDate);
+      expect(errorMessage).toBe(false);
+    });
+
+    it("開発期間が指定されていなかった場合「開発期間を1ヶ月以上に設定してください。」を非表示", () => {
+      const devStartDate = "";
+      const devEndDate = "";
+      const errorMessage = minPeriod(devStartDate, devEndDate);
+      expect(errorMessage).toBe(false);
     });
   });
 
@@ -71,6 +114,22 @@ describe("jobCreate.ts", () => {
         jobStatusId
       );
       expect(result).toBe(true);
+    });
+
+    it("必須項目の案件タイトル, 開発言語, 開発フレームワーク, その他スキル, 募集人数, ステータス が1つでも入力されていなければボタンが非活性", () => {
+      const selectedLang = [1, 2, 3];
+      const selectedFramwork = [1, 2, 3];
+      const selectedSkill = [1, 2, 3];
+      const recruitNumber = "";
+      const jobStatusId = ""; //新規募集
+      const result = isFormSecond(
+        selectedLang,
+        selectedFramwork,
+        selectedSkill,
+        recruitNumber,
+        jobStatusId
+      );
+      expect(result).toBe(false);
     });
   });
 });
