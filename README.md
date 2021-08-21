@@ -31,6 +31,18 @@ $ npm i
 $ npm run dev
 ```
 
+## その他コマンド
+
+### jest test 
+```
+npm run test
+```
+
+### storybook
+```
+npm run storybook
+```
+
 ## Tips
 ### bundle size 
 
