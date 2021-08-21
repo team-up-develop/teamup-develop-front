@@ -5,8 +5,11 @@ import {
   toRefs,
   SetupContext,
   watch,
+  computed,
 } from "@vue/composition-api";
 import Vuex from "@/store/index";
+import { backGroundImage } from "@/modules/images";
+import { User } from "@/types";
 
 type State = {
   userId: number;
@@ -14,6 +17,7 @@ type State = {
   favoriteNum: number;
   applyNum: number;
   userName: string;
+  userImage: User["user_image"];
 };
 
 const initialState = (ctx: SetupContext): State => ({
@@ -22,6 +26,7 @@ const initialState = (ctx: SetupContext): State => ({
   manageNum: ctx.root.$store.getters.getJobsManageNum,
   favoriteNum: ctx.root.$store.getters.getJobsFavoriteNum,
   applyNum: ctx.root.$store.getters.getJobsApplyNum,
+  userImage: ctx.root.$store.getters.getUserImage,
 });
 
 export default defineComponent({
@@ -37,11 +42,13 @@ export default defineComponent({
         state.manageNum = val.jobsManageNum;
         state.favoriteNum = val.jobsFavoriteJobsNum;
         state.applyNum = val.jobsApplyNum;
+        state.userImage = val.userImage;
       },
       { deep: true }
     );
     return {
       ...toRefs(state),
+      backGroundImage: computed(() => backGroundImage(state.userImage)),
     };
   },
 });
@@ -52,7 +59,10 @@ export default defineComponent({
     <v-card class="card">
       <v-col>
         <v-row class="card__top">
-          <div class="user-image"/>
+          <div v-if="userImage" class="user-image" :style="backGroundImage" />
+          <div v-else class="user-image">
+            <v-icon class="icon">mdi-account</v-icon>
+          </div>
           <div class="user-name">{{ userName }}</div>
         </v-row>
         <v-row class="card__center">
@@ -113,6 +123,12 @@ section {
       width: 52px;
       height: 52px;
       @include user-image;
+
+      .icon {
+        font-size: 40px;
+        margin-top: 0.3rem;
+        color: $primary-color;
+      }
     }
     .user-name {
       margin-left: 1rem;

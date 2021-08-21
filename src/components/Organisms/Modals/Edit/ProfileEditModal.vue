@@ -201,6 +201,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         programing_language_ids: languageArray,
         programing_framework_ids: framworksArray,
         skill_ids: skillArray,
+        // user_image: {
+        //   image_data: image,
+        //   file_name: "sample",
+        // },
       };
       // console.log(params);
       // const a = JSON.stringify(params);
@@ -424,26 +428,23 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   background: $white;
   border-radius: 8px;
   overflow: hidden;
+  width: 75%;
+  @media screen and (max-width: $me) {
+    width: 80%;
+  }
+  @media screen and (max-width: $sm) {
+    min-width: 90%;
+  }
 }
 
 .modal-content {
   padding: 2rem 2rem;
-  min-width: 660px;
-  max-width: 950px;
-  height: 74vh;
+  height: 80vh;
   text-align: left;
   overflow: scroll;
 
-  @media screen and (max-width: $me) {
-    min-width: 80vw;
-  }
   @media screen and (max-width: $sm) {
     padding: 2rem 1rem;
-    width: 52vh;
-  }
-  @media screen and (max-width: $ti) {
-    padding: 2rem 1rem;
-    width: 49vh;
   }
 
   // * モーダル

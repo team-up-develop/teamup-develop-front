@@ -6,12 +6,14 @@ import { API_URL, AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import Vuex from "@/store/index";
 interface State {
+  userImage: ManageJob["user"]["user_image"];
   jobsManageNum: number;
   jobsFavoriteJobsNum: number;
   jobsApplyNum: number;
 }
 
 interface GetStatus {
+  userImage: ManageJob["user"]["user_image"];
   jobsManageNum: number;
   jobsFavoriteJobsNum: number;
   jobsApplyNum: number;
@@ -22,12 +24,14 @@ interface ActionsUser {
 }
 
 const state: State = {
+  userImage: null,
   jobsManageNum: 0,
   jobsFavoriteJobsNum: 0,
   jobsApplyNum: 0,
 };
 
 const getters: GetterTree<State, GetStatus> = {
+  getUserImage: (state: State) => state.userImage,
   getJobsManageNum: (state: State) => state.jobsManageNum,
   getJobsFavoriteNum: (state: State) => state.jobsFavoriteJobsNum,
   getJobsApplyNum: (state: State) => state.jobsApplyNum,
@@ -35,6 +39,9 @@ const getters: GetterTree<State, GetStatus> = {
 };
 
 const mutations: MutationTree<State> = {
+  getUserImage(state: State, userImage: ManageJob["user"]["user_image"]) {
+    state.userImage = userImage;
+  },
   getJobsManageNum(state: State, manageNum: number) {
     state.jobsManageNum = manageNum;
   },
@@ -55,6 +62,8 @@ const actions: ActionTree<State, GetStatus> = {
       const responseManage = await $fetch<FetchManageJobs>(
         `${API_URL}/jobs?user_id=${userObject.userId}`
       );
+      const userImage = responseManage.data.response[0].user.user_image;
+      commit("getUserImage", userImage);
       commit("getJobsManageNum", responseManage.data.response.length);
 
       const responseFavorite = await $fetch<FetchFavoriteJob>(

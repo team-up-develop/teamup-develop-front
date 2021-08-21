@@ -5,7 +5,8 @@ import Vue from "vue";
 export default Vue.extend({
   methods: {
     logout() {
-      this.$store.dispatch("logout", {});
+      console.log("test storybook");
+      // this.$store.dispatch("logout", {});
     },
   },
 });

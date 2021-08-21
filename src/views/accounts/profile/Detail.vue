@@ -176,16 +176,16 @@ export default defineComponent({
         </v-col>
       </div>
       <div v-show="currentTab === 1">
-        <v-row class="jobs">
+        <div class="jobs d-flex flex-wrap">
           <router-link
             :to="`/jobs/${jobs.id}/detail`"
             v-for="jobs in profileJobs"
             :key="jobs.id"
-            class="jobs__card"
+            class="jobs__card d-flex justify-start"
           >
             <CardJob :job="jobs" />
           </router-link>
-        </v-row>
+        </div>
       </div>
       <template v-if="myselfFlag">
         <div v-show="currentTab === 2">
@@ -252,8 +252,9 @@ export default defineComponent({
 
 // * 案件カード
 .jobs {
-  width: 85%;
+  width: 80%;
   margin: 2rem auto;
+  max-width: 789px;
 
   @media screen and (max-width: $sm) {
     width: 95%;
@@ -261,8 +262,8 @@ export default defineComponent({
 
   &__card {
     margin-left: 1rem;
-    width: 500px;
     margin: 0 auto;
+    text-decoration: none;
   }
 }
 

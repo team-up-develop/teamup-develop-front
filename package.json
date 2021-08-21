@@ -7,13 +7,16 @@
     "prod": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build",
     "prod-build": "vue-cli-service build --mode production",
-    "test:unit": "vue-cli-service test:unit --env=jsdom --verbose",
-    "lint": "vue-cli-service lint"
+    "test": "vue-cli-service test:unit --env=jsdom --verbose",
+    "lint": "vue-cli-service lint",
+    "storybook": "start-storybook -p 3031",
+    "build-storybook": "build-storybook"
   },
   "dependencies": {
     "@icare-jp/vue-props-type": "0.0.22",
     "@sentry/tracing": "^6.8.0",
     "@sentry/vue": "^6.8.0",
+    "@storybook/addon-postcss": "^2.0.0",
     "@types/vue-select": "^2.5.1",
     "@vue/cli": "^4.5.9",
     "@vue/composition-api": "^1.0.0-beta.22",
@@ -33,6 +36,11 @@
     "vuex-persistedstate": "^4.0.0-beta.1"
   },
   "devDependencies": {
+    "@babel/core": "^7.15.0",
+    "@storybook/addon-actions": "^6.3.7",
+    "@storybook/addon-essentials": "^6.3.7",
+    "@storybook/addon-links": "^6.3.7",
+    "@storybook/vue": "^6.3.7",
     "@types/jest": "^24.0.19",
     "@typescript-eslint/eslint-plugin": "^4.11.0",
     "@typescript-eslint/parser": "^4.11.0",
@@ -45,6 +53,7 @@
     "@vue/cli-service": "~4.5.0",
     "@vue/eslint-config-typescript": "^5.0.2",
     "@vue/test-utils": "^1.0.3",
+    "babel-loader": "^8.2.2",
     "eslint": "^6.7.2",
     "eslint-config-prettier": "^7.1.0",
     "eslint-config-standard": "^16.0.2",
