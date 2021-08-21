@@ -11,6 +11,7 @@ const props = {
   close: { type: Function as PropType<() => void>, required: true },
   onFileChange: { type: Function as PropType<() => void> },
   fileName: { type: String, default: "" },
+  imageData: { type: String, default: "" },
   uplpadImage: { type: Function as PropType<() => void> },
 } as const;
 type Props = typeof props;
@@ -46,14 +47,14 @@ export default defineComponent<InsidePropsType<Props>>({
               truncate-length="24"
             />
           </div>
-          <div v-if="!fileName">
+          <div v-if="!imageData">
             画像が選択されていません
           </div>
           <div>
             <img
-              v-show="fileName"
+              v-show="imageData"
               class="preview-file"
-              :src="fileName"
+              :src="imageData"
               alt=""
             />
           </div>
@@ -61,7 +62,7 @@ export default defineComponent<InsidePropsType<Props>>({
         <v-card-actions>
           <v-spacer />
           <v-btn
-            v-if="fileName"
+            v-if="imageData"
             color="blue lighten-1"
             text
             @click="uplpadImage"

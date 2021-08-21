@@ -50,17 +50,15 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
-    <v-row>
-      <router-link
-        :to="`/jobs/${newJob.id}/detail`"
-        class="card"
-        v-for="newJob in newJobs"
-        :key="newJob.id"
-      >
-        <CardJob :job="newJob" />
-      </router-link>
-    </v-row>
+  <section class="d-flex justify-space-between">
+    <router-link
+      :to="`/jobs/${newJob.id}/detail`"
+      class="card"
+      v-for="newJob in newJobs"
+      :key="newJob.id"
+    >
+      <CardJob :job="newJob" />
+    </router-link>
   </section>
 </template>
 
@@ -69,11 +67,17 @@ export default defineComponent({
 
 section {
   margin: 2rem auto;
-  width: 98%;
+  width: 99%;
+
+  @media screen and (max-width: $la) {
+    flex-flow: column;
+    align-items: center;
+  }
 }
 .card {
-  margin: 0 auto;
+  // margin: 0 auto;
   max-width: 420px;
+  text-decoration: none;
 
   @media screen and (max-width: $sm) {
     max-width: 90%;

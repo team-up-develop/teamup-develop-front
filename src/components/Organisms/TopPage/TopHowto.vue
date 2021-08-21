@@ -9,41 +9,38 @@ export default defineComponent({
 </script>
 
 <template>
-  <section>
-    <v-row>
-      <v-card class="container">
-        <div class="title">STEP 1</div>
-        <img class="img" src="@/assets/images/top-search.png" width="100%" />
-        <div class="description">
-          <div class="title">開発したい案件を作成しよう！</div>
-          <div class="text">
-            気になるスキルの案件を
-            簡単な2ステップで案件を作成することができます。
-          </div>
+  <section class="d-flex justify-space-between">
+    <v-card class="container">
+      <div class="title">STEP 1</div>
+      <img class="img" src="@/assets/images/top-search.png" width="100%" />
+      <div class="description">
+        <div class="title">開発したい案件を作成しよう！</div>
+        <div class="text">
+          気になるスキルの案件を 簡単な2ステップで案件を作成することができます。
         </div>
-      </v-card>
-      <v-card class="container">
-        <div class="title">STEP 2</div>
-        <img class="img" src="@/assets/images/top-chat.png" width="95%" />
-        <div class="description">
-          <div class="title">チャットで連絡を取り合おう！</div>
-          <div class="text">
-            一緒に開発したいメンバーを決めると自動的にグループに参加し、
-            チャットで連絡が取れます。
-          </div>
+      </div>
+    </v-card>
+    <v-card class="container">
+      <div class="title">STEP 2</div>
+      <img class="img" src="@/assets/images/top-chat.png" width="95%" />
+      <div class="description">
+        <div class="title">チャットで連絡を取り合おう！</div>
+        <div class="text">
+          一緒に開発したいメンバーを決めると自動的にグループに参加し、
+          チャットで連絡が取れます。
         </div>
-      </v-card>
-      <v-card class="container">
-        <div class="title">STEP 3</div>
-        <img class="img" src="@/assets/images/top-complite.png" width="100%" />
-        <div class="description">
-          <div class="title">さあ！チーム開発を進めよう！</div>
-          <div class="text">
-            Slackやbacklogなどを使用して連絡を取り合いながら開発進めることができます。
-          </div>
+      </div>
+    </v-card>
+    <v-card class="container">
+      <div class="title">STEP 3</div>
+      <img class="img" src="@/assets/images/top-complite.png" width="100%" />
+      <div class="description">
+        <div class="title">さあ！チーム開発を進めよう！</div>
+        <div class="text">
+          Slackやbacklogなどを使用して連絡を取り合いながら開発進めることができます。
         </div>
-      </v-card>
-    </v-row>
+      </div>
+    </v-card>
   </section>
 </template>
 
@@ -52,7 +49,12 @@ export default defineComponent({
 
 section {
   margin: 2rem auto;
-  width: 85%;
+  width: 98%;
+
+  @media screen and (max-width: $la) {
+    flex-flow: column;
+    align-items: center;
+  }
 }
 .container {
   margin-top: 1rem;

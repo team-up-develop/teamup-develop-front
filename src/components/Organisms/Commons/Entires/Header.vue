@@ -4,19 +4,28 @@ import {
   reactive,
   toRefs,
   SetupContext,
+  computed,
 } from "@vue/composition-api";
 import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
 import CreateBtn from "@/components/Atoms/Commons/Entires/CreateBtn.vue";
 import { truncate } from "@/hooks/useUtils";
+import { $fetch } from "@/libs/axios";
+import { API_URL } from "@/master";
+import { fetchError, catchError } from "@/libs/errorHandler";
+import { User } from "@/types/index";
+import { FetchUser } from "@/types/fetch";
+import { backGroundImage } from "@/modules/images";
 
 type State = {
   userId: number;
   userName: string;
+  userImage: User["user_image"];
 };
 
 const initialState = (ctx: SetupContext): State => ({
   userId: ctx.root.$store.getters.userId,
   userName: ctx.root.$store.getters.userName,
+  userImage: null,
 });
 
 export default defineComponent({
@@ -28,9 +37,22 @@ export default defineComponent({
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
 
+    const fetchUser = async () => {
+      // * ユーザー情報取得
+      try {
+        const res = await $fetch<FetchUser>(`${API_URL}/user/${state.userId}`);
+        fetchError(res.data.status);
+        state.userImage = res.data.response.user_image;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+    fetchUser();
+
     return {
       ...toRefs(state),
       truncate,
+      backGroundImage: computed(() => backGroundImage(state.userImage)),
     };
   },
 });
@@ -51,17 +73,24 @@ export default defineComponent({
             <v-menu left bottom>
               <template v-slot:activator="{ on, attrs }">
                 <v-btn icon v-bind="attrs" v-on="on">
-                  <div class="user-image" />
+                  <div
+                    v-if="userImage"
+                    class="user-image"
+                    :style="backGroundImage"
+                  />
+                  <div v-else class="user-image">
+                    <v-icon class="use-icon">mdi-account</v-icon>
+                  </div>
                 </v-btn>
               </template>
               <v-list-item-group color="primary">
-                <v-list>
+                <v-list class="list">
                   <v-list-item>
                     <router-link
                       :to="`/account/profile/${userId}/detail`"
                       class="menu-list"
                     >
-                      <v-list-item-title>
+                      <v-list-item-title class="font-weight-bold">
                         <v-icon class="icon"
                           >mdi-card-account-details-outline</v-icon
                         >
@@ -72,7 +101,7 @@ export default defineComponent({
                   <div class="boder-line" />
                   <v-list-item>
                     <router-link to="/chat" class="menu-list">
-                      <v-list-item-title>
+                      <v-list-item-title class="font-weight-bold">
                         <v-icon class="icon">mdi-chat-plus-outline</v-icon>
                         チャット
                       </v-list-item-title>
@@ -80,7 +109,7 @@ export default defineComponent({
                   </v-list-item>
                   <v-list-item>
                     <router-link to="/manage" class="menu-list">
-                      <v-list-item-title>
+                      <v-list-item-title class="font-weight-bold">
                         <v-icon class="icon"
                           >mdi-clipboard-multiple-outline</v-icon
                         >
@@ -101,10 +130,12 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-.menu-list {
-  color: $text-sub-color;
-  font-size: 14px;
-  text-decoration: none;
+.list {
+  .menu-list {
+    color: $text-sub-color;
+    font-size: 12px;
+    text-decoration: none;
+  }
 }
 
 .boder-line {
@@ -112,14 +143,10 @@ export default defineComponent({
   border-bottom: 1px solid rgba(128, 128, 128, 0.442);
 }
 
-.icon {
-  color: $text-sub-color;
-}
-
 .v-icon.v-icon {
-  margin-right: 1rem;
+  margin-right: 0.5rem;
   font-size: 1.5em;
-  color: $text-sub-color;
+  color: $primary-color;
 }
 
 .header-wrapper {
@@ -148,7 +175,7 @@ export default defineComponent({
       top: 0;
 
       .header-main-left {
-        width: 180px;
+        width: 150px;
         height: 100%;
         padding: 1.2rem 0 0rem 2rem;
 
@@ -190,6 +217,13 @@ export default defineComponent({
             height: 2.6rem;
             border-radius: 50%;
             cursor: pointer;
+
+            .use-icon {
+              font-size: 30px;
+              margin-left: 0.5rem;
+              margin-top: 0.5rem;
+              color: $primary-color;
+            }
           }
         }
 

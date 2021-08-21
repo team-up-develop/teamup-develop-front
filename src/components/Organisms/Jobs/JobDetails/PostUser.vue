@@ -1,17 +1,21 @@
 <script lang="ts">
-import { defineComponent, PropType } from "@vue/composition-api";
+import { defineComponent, PropType, computed } from "@vue/composition-api";
 import { truncate } from "@/hooks/useUtils";
 import { dayjs } from "@/libs/dayjs";
 import { Job } from "@/types";
+import { backGroundImage } from "@/modules/images";
 
 export default defineComponent({
   props: {
-    job: { type: Object as PropType<Job> },
+    job: { type: Object as PropType<Job>, required: true },
   },
-  setup: () => {
+  setup: (props) => {
     return {
       dayjs,
       truncate,
+      backGroundImage: computed(() =>
+        backGroundImage(props.job.user?.user_image)
+      ),
     };
   },
 });
@@ -21,7 +25,14 @@ export default defineComponent({
   <section>
     <v-sheet class="post-user-area">
       <div class="left-user-area">
-        <div class="user-image" />
+        <div
+          v-if="job.user.user_image"
+          class="user-image"
+          :style="backGroundImage"
+        />
+        <div v-else class="user-image">
+          <v-icon class="icon">mdi-account</v-icon>
+        </div>
       </div>
       <div class="right-user-area">
         <div class="user-profile-area">
@@ -70,6 +81,19 @@ export default defineComponent({
       @media screen and (max-width: $sm) {
         width: 100px;
         height: 100px;
+      }
+
+      .icon {
+        font-size: 80px;
+        margin-left: 1.5rem;
+        margin-top: 1.5rem;
+        color: $primary-color;
+        @media screen and (max-width: $sm) {
+          font-size: 60px;
+          margin-left: 1.2rem;
+          margin-top: 1rem;
+          color: $primary-color;
+        }
       }
     }
   }

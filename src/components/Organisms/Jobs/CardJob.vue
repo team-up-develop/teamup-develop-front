@@ -6,6 +6,8 @@ import { truncate } from "@/hooks/useUtils";
 import { dayjs } from "@/libs/dayjs";
 import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
 import { Job } from "@/types/index";
+import { backGroundImage } from "@/modules/images";
+import { isStatusNew } from "@/modules/jobs";
 
 export default defineComponent({
   components: {
@@ -15,9 +17,13 @@ export default defineComponent({
   props: {
     job: { type: Object as PropType<Job>, defalut: null, required: true },
   },
-  setup: () => {
+  setup: (props) => {
     return {
       ...useUtils(),
+      backGroundImage: computed(() =>
+        backGroundImage(props.job.user?.user_image)
+      ),
+      isStatusNew: computed(() => isStatusNew(props.job.job_status_id)),
       // ...useJobStatus(props),
     };
   },
@@ -45,6 +51,9 @@ const useUtils = () => {
 
 <template>
   <v-sheet elevation="1" class="job-cards">
+    <div v-if="isStatusNew" class="pb-2">
+      <JobStatusNew :job="job" />
+    </div>
     <div class="job-cards__top">
       <span>{{ truncate(job.job_title, 40) }}</span>
       <p>{{ truncate(job.job_title, 30) }}</p>
@@ -64,14 +73,18 @@ const useUtils = () => {
         </div>
       </div>
       <div class="post-user-area">
-        <div class="post-user-image"/>
+        <div
+          v-if="job.user.user_image"
+          class="post-user-image"
+          :style="backGroundImage"
+        />
+        <div v-else class="post-user-image">
+          <v-icon class="icon">mdi-account</v-icon>
+        </div>
         <div class="post-user-name-area">
           <div class="post-user-name">
             {{ truncate(job.user.user_name, 12) }}
           </div>
-        </div>
-        <div class="label-area mt-5">
-          <JobStatusNew :job="job" />
         </div>
       </div>
     </div>
@@ -89,6 +102,8 @@ const useUtils = () => {
   transition: 0.3s;
   color: $text-main-color;
   cursor: pointer;
+  min-width: 300px;
+  position: relative;
 
   @media screen and (max-width: $la) {
     width: 100%;
@@ -198,6 +213,13 @@ const useUtils = () => {
         -moz-box-shadow: 0 0 0 3px $primary-color;
         pointer-events: none;
         position: relative;
+
+        .icon {
+          font-size: 40px;
+          margin-left: 0.5rem;
+          margin-top: 0.3rem;
+          color: $primary-color;
+        }
       }
 
       .post-user-name-area {
@@ -220,30 +242,10 @@ const useUtils = () => {
         }
       }
 
-      // TODO: 修正
       .label-area {
-        margin-left: 1rem;
-        width: 140px;
-
-        @media screen and (max-width: 1100px) {
-          margin-left: 0.2rem;
-        }
-
-        @media screen and (max-width: 999px) {
-          margin-left: 4rem;
-        }
-        @media screen and (max-width: 800px) {
-          margin-left: 2rem;
-        }
-        @media screen and (max-width: 768px) {
-          margin-left: 1rem;
-        }
-        @media screen and (max-width: 500px) {
-          margin-left: 0.5rem;
-        }
-        @media screen and (max-width: 430px) {
-          margin-left: 0rem;
-        }
+        position: absolute;
+        right: 0;
+        margin-right: 1rem;
       }
     }
   }

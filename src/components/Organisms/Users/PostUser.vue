@@ -44,6 +44,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   setup: (props, ctx) => {
     const state = reactive<State>(initialState());
 
+    if (props.user.user_image) {
+      state.userImage.imageData = props.user.user_image.image_url;
+    }
+
     const twitterTab = () => {
       if (props.user?.twitter_account) {
         const url: string = props.user.twitter_account;
@@ -120,6 +124,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       :image-dialog="imageDialog"
       :on-file-change="onFileChange"
       :file-name="userImage.fileName"
+      :image-data="userImage.imageData"
       :close="closeImageDialog"
       :uplpad-image="uplpadImage"
     />
@@ -131,9 +136,26 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             class="user-image"
             @click="() => (imageDialog = true)"
           >
+            <v-img
+              v-if="user.user_image"
+              :src="user.user_image.image_url"
+              class="user-image"
+            />
+            <div v-else class="user-image d-flex">
+              <v-icon class="icon">mdi-account</v-icon>
+            </div>
             <v-icon class="add">mdi-camera</v-icon>
           </div>
-          <div v-else class="user-image" />
+          <template v-else>
+            <img
+              v-if="user.user_image"
+              :src="user.user_image.image_url"
+              class="user-image"
+            />
+            <div v-else class="user-image d-flex">
+              <v-icon class="icon">mdi-account</v-icon>
+            </div>
+          </template>
         </div>
         <div class="right">
           <div class="profile-area">
@@ -201,6 +223,12 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         bottom: 0;
         right: 0;
         margin-bottom: 10px;
+      }
+
+      .icon {
+        font-size: 80px;
+        margin-left: 2.1rem;
+        color: $primary-color;
       }
     }
   }

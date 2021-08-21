@@ -14,6 +14,8 @@ const user = {
   github_account: "github.com",
   birthday: new Date("1995-11-30T00:00:00+09:00"),
   user_name: "testUser;",
+  user_image_id: 1,
+  user_image: null,
   first_name: "テスト",
   last_name: "太郎",
   login_password: "password",

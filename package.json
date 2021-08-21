@@ -7,7 +7,7 @@
     "prod": "vue-cli-service serve --mode production",
     "build": "vue-cli-service build",
     "prod-build": "vue-cli-service build --mode production",
-    "test:unit": "vue-cli-service test:unit --env=jsdom --verbose",
+    "test": "vue-cli-service test:unit --env=jsdom --verbose",
     "lint": "vue-cli-service lint",
     "storybook": "start-storybook -p 3031",
     "build-storybook": "build-storybook"

@@ -41,6 +41,11 @@ type User = {
   first_name: string;
   last_name: string;
   login_password: string;
+  user_image_id: number;
+  user_image: Maybe<{
+    id: number;
+    image_url: string;
+  }>;
   programing_languages: Language[];
   programing_frameworks: Framework[];
   skills: Skill[];

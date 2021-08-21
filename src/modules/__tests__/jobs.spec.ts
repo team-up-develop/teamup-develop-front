@@ -1,10 +1,9 @@
-// import { shallowMount } from "@vue/test-utils";
 import Vue from "vue";
 import VueCompositionApi from "@vue/composition-api";
 Vue.use(VueCompositionApi);
-import { checkSelfJob } from "@/modules/jobs";
+import { checkSelfJob, isStatusNew } from "@/modules/jobs";
 import { manageJobs } from "@/mocks/jobs";
-// import JobDetail from "@/views/Jobs/JobDetail.vue";
+import { m } from "@/master";
 
 describe("jobs.ts", () => {
   describe("checkSelfJob", () => {
@@ -19,6 +18,19 @@ describe("jobs.ts", () => {
       const jobId = 5;
       const result = checkSelfJob(manageJobs, jobId);
 
+      expect(result).toBe(false);
+    });
+  });
+
+  describe("isStatusNew", () => {
+    it("新規募集案件だったら、ラベルは表示", () => {
+      const jobStatusId = m.JOB_STATUS_NEW;
+      const result = isStatusNew(jobStatusId);
+      expect(result).toBe(true);
+    });
+    it("新規募集案件でなければ、ラベルは非表示", () => {
+      const jobStatusId = m.JOB_STATUS_ADD;
+      const result = isStatusNew(jobStatusId);
       expect(result).toBe(false);
     });
   });

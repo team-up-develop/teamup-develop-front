@@ -1,53 +1,58 @@
 <script lang="ts">
-import { defineComponent, computed, PropType } from "@vue/composition-api";
-import { m } from "@/master";
+import { defineComponent, PropType } from "@vue/composition-api";
 import { Job } from "@/types/index";
-
-type Props = {
-  job: Job;
-};
 
 export default defineComponent({
   props: {
     job: { type: Object as PropType<Job>, defalut: {}, required: true },
   },
-  setup: (props: Props) => {
-    const isStatusNew = computed(() => {
-      return props.job.job_status_id == m.JOB_STATUS_NEW ? true : false;
-    });
-
-    return {
-      isStatusNew,
-    };
-  },
+  setup: () => {},
 });
 </script>
 
 <template>
-  <section>
-    <label v-if="isStatusNew" class="label pa-2 pr-4" label>
-      <v-icon left>
-        mdi-label
-      </v-icon>
-      <span>新規募集</span>
-    </label>
-  </section>
+  <h3 class="ribbon">新規募集</h3>
 </template>
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-.label {
-  width: 106px;
+.ribbon {
+  display: inline-block;
+  position: absolute;
+  left: 0;
+  top: 5px;
+  box-sizing: border-box;
+  padding: 0 12px;
+  margin: 0;
+  height: 30px;
+  line-height: 30px;
   font-size: 14px;
-  background-color: $primary-color;
+  letter-spacing: 0.1em;
   color: $white;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-
-  @media screen and (max-width: $ti) {
-    display: none;
-  }
+  background: $primary-color;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.12);
+}
+.ribbon:before {
+  position: absolute;
+  content: "";
+  top: 0;
+  left: -7px;
+  border: none;
+  height: 38px;
+  width: 7px;
+  background: $primary-color;
+  border-radius: 6px 0 0 6px;
+}
+.ribbon:after {
+  position: absolute;
+  content: "";
+  bottom: -7px;
+  left: -5px;
+  border: none;
+  height: 7px;
+  width: 5px;
+  background: $primary-color;
+  border-radius: 6px 0 0 6px;
 }
 </style>

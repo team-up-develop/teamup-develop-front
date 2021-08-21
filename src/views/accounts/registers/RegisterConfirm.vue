@@ -219,6 +219,11 @@ export default defineComponent({
         bio: state.bio,
         github_account: state.github,
         twitter_account: state.twitter,
+        // TODO: ユーザー登録 画像投稿
+        user_image: {
+          image_data: "",
+          file_name: "",
+        },
       };
       console.log(JSON.stringify(params), "res");
       const data = Vuex.dispatch("register", {

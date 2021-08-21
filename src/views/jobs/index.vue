@@ -5,6 +5,7 @@ import {
   toRefs,
   onMounted,
   SetupContext,
+  computed,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
@@ -21,14 +22,14 @@ import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.
 import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
-import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
+import Chip from "@/components/Atoms/Commons/Chip.vue";
 import { dayJsFormat } from "@/libs/dayjs";
 import { Job } from "@/types/index";
 import { FetchJobs } from "@/types/fetch";
 import Vuex from "@/store/index";
 import { encode } from "@/libs/jsBase64";
 import { useJobs } from "@/hooks";
-import { checkSelfJob } from "@/modules/jobs";
+import { checkSelfJob, isStatusNew } from "@/modules/jobs";
 import { InputSet } from "@/components/Molecules/Forms";
 
 type State = {
@@ -91,7 +92,7 @@ export default defineComponent({
     SkillSearchModal,
     JobRightLogin,
     FavoriteBtn,
-    JobStatusNew,
+    Chip,
     InputSet,
   },
   setup: (_, ctx) => {
@@ -329,6 +330,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
   };
   return {
     getJob,
+    isStatusNew: computed(() => isStatusNew(state.jobDetail.job_status_id)),
   };
 };
 </script>
@@ -467,8 +469,8 @@ const clickJob = (state: State, ctx: SetupContext) => {
                   <div class="btn-box-save">
                     <FavoriteBtn :job-id="jobDetail.id" />
                   </div>
-                  <div class="label-area mt-5">
-                    <JobStatusNew :job="jobDetail" />
+                  <div v-if="isStatusNew" class="label-area">
+                    <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
                   </div>
                 </div>
                 <template v-else>
@@ -476,8 +478,8 @@ const clickJob = (state: State, ctx: SetupContext) => {
                     <router-link :to="`/manage/${jobDetail.id}/apply_users`">
                       <button class="btn-box-manage">管理画面</button>
                     </router-link>
-                    <div class="label-area mt-5">
-                      <JobStatusNew :job="jobDetail" />
+                    <div v-if="isStatusNew" class="label-area">
+                      <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
                     </div>
                   </div>
                 </template>
@@ -497,8 +499,8 @@ const clickJob = (state: State, ctx: SetupContext) => {
                     >mdi-heart</v-icon
                   >
                 </div>
-                <div class="label-area mt-5">
-                  <JobStatusNew :job="jobDetail" />
+                <div v-if="isStatusNew" class="label-area">
+                  <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
                 </div>
               </div>
             </template>
@@ -717,6 +719,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
 
       .label-area {
         float: right;
+        margin-top: 0.6rem;
 
         .label {
           width: 146px;
@@ -979,6 +982,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
 
   .router-1 {
     display: block;
+    text-decoration: none;
   }
 
   .job-wrapper-left,
