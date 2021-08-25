@@ -187,7 +187,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="2.1" />
+      <Session :num="Number(2)" />
       <section>
         <div class="create-area">
           <SkillSelectArea

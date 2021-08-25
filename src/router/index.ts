@@ -44,6 +44,10 @@ import ManageUserProfile from "@/views/manage/apply_users/profile/Detail.vue";
  */
 import Chat from "@/views/chats/index.vue";
 import ChatDetail from "@/views/chats/_id/index.vue";
+/*
+ * test
+ */
+import Story from "@/views/story/index.vue";
 
 Vue.use(VueRouter);
 const routes: Array<RouteConfig> = [
@@ -204,6 +208,12 @@ const routes: Array<RouteConfig> = [
     props: (route) => ({
       id: Number(route.params.id),
     }),
+  },
+  // * テスト
+  {
+    path: "/story",
+    name: "Story",
+    component: Story,
   },
 ];
 

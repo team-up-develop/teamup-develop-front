@@ -1,10 +1,19 @@
 <script lang="ts">
-import Vue from "vue";
+import { defineComponent, reactive, toRefs } from "@vue/composition-api";
 import Session from "@/components/Atoms/Commons/Session.vue";
+const initialState = () => ({
+  e1: 1,
+});
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     Session,
+  },
+  setup: () => {
+    const state = reactive(initialState());
+    return {
+      ...toRefs(state),
+    };
   },
 });
 </script>
@@ -12,7 +21,7 @@ export default Vue.extend({
 <template>
   <section>
     <v-sheet class="card">
-      <Session :num="4.4" />
+      <Session :num="Number(3)" />
       <section>
         <div class="image-area">
           <img
