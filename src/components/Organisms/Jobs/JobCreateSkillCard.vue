@@ -72,7 +72,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     const router = ctx.root.$router;
     const { auth } = useUtils();
 
-    (async () => {
+    const fetchLanguages = async () => {
       try {
         const res = await $fetch<FetchLanguages>(
           `${API_URL}/programing_languages`
@@ -81,6 +81,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       } catch (error) {
         catchError(error);
       }
+    };
+    const fetchFrameworks = async () => {
       try {
         const res = await $fetch<FetchFrameworks>(
           `${API_URL}/programing_frameworks`
@@ -89,12 +91,17 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       } catch (error) {
         catchError(error);
       }
+    };
+    const fetchSkills = async () => {
       try {
         const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
         state.skills = res.data.response;
       } catch (error) {
         catchError(error);
       }
+    };
+    (async () => {
+      await Promise.all([fetchLanguages(), fetchFrameworks(), fetchSkills()]);
     })();
 
     const createJob = async () => {

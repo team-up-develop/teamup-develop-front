@@ -27,10 +27,15 @@ const useUtils = () => {
     return { Authorization: `Bearer ${state.token}` };
   });
 
+  const headerAuth = computed(() => {
+    return { headers: { Authorization: `Bearer ${state.token}` } };
+  });
+
   return {
     ...toRefs(state),
     isLogin,
     auth,
+    headerAuth,
   };
 };
 

@@ -3,7 +3,6 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
   computed,
   PropType,
   onBeforeMount,
@@ -65,6 +64,12 @@ export default defineComponent({
   setup: (props: Props, ctx) => {
     const state = reactive<State>(initialState(ctx));
 
+    onBeforeMount(() => {
+      if (state.userId == props.id) {
+        state.myselfFlag = true;
+      }
+    });
+
     const breadcrumbs = computed(() => [
       {
         text: "探す",
@@ -78,7 +83,6 @@ export default defineComponent({
     ]);
 
     const { fetchProfileJobs, profileJobs } = useJobs();
-    fetchProfileJobs(props.id);
 
     const fetchUser = async () => {
       // * ユーザー情報取得
@@ -90,16 +94,9 @@ export default defineComponent({
         catchError(error);
       }
     };
-
-    onBeforeMount(() => {
-      if (state.userId == props.id) {
-        state.myselfFlag = true;
-      }
-    });
-
-    onMounted(() => {
-      fetchUser();
-    });
+    (async () => {
+      await Promise.all([fetchProfileJobs(props.id), fetchUser()]);
+    })();
 
     const openModal = () => {
       state.modal = true;
