@@ -286,7 +286,7 @@ export default defineComponent({
       <div class="title">入力確認</div>
       <v-card class="pa-1 card">
         <div class="session">
-          <Session :num="4" />
+          <Session :num="Number(3)" />
         </div>
         <div v-show="!loading">
           <v-col class="container text-left" v-if="isForm">

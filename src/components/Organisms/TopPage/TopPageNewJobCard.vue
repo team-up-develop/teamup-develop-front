@@ -42,7 +42,6 @@ export default defineComponent({
     return {
       ...toRefs(state),
       fetchNewJobsa,
-      fetchJobs,
       jobs,
     };
   },

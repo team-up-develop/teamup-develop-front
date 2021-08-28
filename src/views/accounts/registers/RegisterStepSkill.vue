@@ -168,7 +168,7 @@ export default defineComponent({
       <div class="title">スキル情報入力</div>
       <v-card class="pa-1 card">
         <div class="session">
-          <Session :num="3" />
+          <Session :num="Number(2)" />
         </div>
         <v-col class="container text-left">
           <div class="input-area">

@@ -1,5 +1,11 @@
 <script lang="ts">
-import Vue from "vue";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  SetupContext,
+} from "@vue/composition-api";
+import Vuex from "@/store/index";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
@@ -14,15 +20,22 @@ import {
 import { Language, Framework, Skill } from "@/types/index";
 import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 
-type DataType = {
+type State = {
   languages: Language[];
   framworks: Framework[];
   skills: Skill[];
   freeWord: string;
   loading: boolean;
 };
+const initialState = (ctx: SetupContext): State => ({
+  languages: [],
+  framworks: [],
+  skills: [],
+  freeWord: ctx.root.$store.getters.freeWord,
+  loading: true,
+});
 
-export default Vue.extend({
+export default defineComponent({
   components: {
     Loading,
     HeaderArea,
@@ -31,47 +44,55 @@ export default Vue.extend({
     TopHowto,
     TopPageNewJobCard,
   },
-  data(): DataType {
-    return {
-      languages: [], //? 開発言語
-      framworks: [], //? フレームワーク
-      skills: [], //? その他スキル
-      freeWord: this.$store.state.search.freeWord, //? フリーワード 検索
-      loading: true,
+  setup: (_, ctx) => {
+    const state = reactive<State>(initialState(ctx));
+
+    const fetchLanguages = async () => {
+      $fetch<FetchLanguages>(`${API_URL}/programing_languages`)
+        .then((res) => {
+          state.languages = res.data.response;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
     };
-  },
-  async mounted() {
-    // * ページ遷移知れてきたらVuexの中身を消す
-    this.$store.state.search.freeWord = "";
-    this.$store.state.search.language = [];
-    this.$store.state.search.framwork = [];
-    this.$store.state.search.skill = [];
-    // * 開発言語 取得
-    await $fetch<FetchLanguages>(`${API_URL}/programing_languages`)
-      .then((res) => {
-        // .slice(5)
-        this.languages = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
+    const fetchFrameworks = async () => {
+      $fetch<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+        .then((res) => {
+          state.framworks = res.data.response;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
+    };
+    const fetchSkills = async () => {
+      $fetch<FetchSkills>(`${API_URL}/skills`)
+        .then((res) => {
+          state.skills = res.data.response;
+        })
+        .catch((error) => {
+          catchError(error);
+        });
+      state.loading = false;
+    };
+    (async () => {
+      Vuex.dispatch("freeWordSearch", {
+        freeWord: "",
       });
-    // * フレームワーク
-    await $fetch<FetchFrameworks>(`${API_URL}/programing_frameworks`)
-      .then((res) => {
-        this.framworks = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
+      Vuex.dispatch("languageSearch", {
+        language: [],
       });
-    // * その他スキル
-    await $fetch<FetchSkills>(`${API_URL}/skills`)
-      .then((res) => {
-        this.skills = res.data.response;
-      })
-      .catch((error) => {
-        catchError(error);
+      Vuex.dispatch("framworkSearch", {
+        framwork: [],
       });
-    this.loading = false;
+      Vuex.dispatch("skillSearch", {
+        skill: [],
+      });
+      await Promise.all([fetchLanguages(), fetchFrameworks(), fetchSkills()]);
+    })();
+    return {
+      ...toRefs(state),
+    };
   },
 });
 </script>
@@ -136,7 +157,7 @@ export default Vue.extend({
         </div>
       </section>
     </div>
-    <Loading v-show="loading"/>
+    <Loading v-show="loading" />
   </section>
 </template>
 

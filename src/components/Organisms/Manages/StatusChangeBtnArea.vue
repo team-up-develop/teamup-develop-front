@@ -38,16 +38,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <template>
   <v-container>
-    <div v-if="doneParticipate">
-      <span class="btn-done">
-        既に開発メンバーです <br />
-        <span>※チャットをご覧ください</span>
-      </span>
-    </div>
-    <div v-if="doneReject">
-      <span class="btn-done">お断りしました </span>
-    </div>
-    <v-row v-if="!doneParticipate && !doneReject" class="btn-area">
+    <div v-if="doneParticipate || doneReject" />
+    <v-row v-else class="mb-1">
       <v-btn class="btn-applicant" @click="onModal">一緒に開発する</v-btn>
       <v-btn class="btn-reject" @click="onCancelModal">お断りする</v-btn>
     </v-row>
@@ -57,26 +49,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
-.btn-area {
-  margin-bottom: 1rem;
-}
-.btn-done {
-  @include grey-btn;
-  color: $white;
-  padding: 0.6rem 2rem !important;
-  transition: 0.3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 0.85rem;
-  display: inline-block;
-  border: none;
-  span {
-    font-size: 0.5rem;
-  }
-}
 .btn-applicant {
   @include red-btn;
   @include neumorphism;

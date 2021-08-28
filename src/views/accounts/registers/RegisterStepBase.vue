@@ -122,7 +122,7 @@ export default defineComponent({
       <div class="title">基本情報入力</div>
       <v-card class="pa-1">
         <div class="session">
-          <Session :num="2" />
+          <Session :num="Number(1)" />
         </div>
         <v-col class="container text-left">
           <div class="input-area">

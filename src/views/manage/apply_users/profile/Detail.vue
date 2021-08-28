@@ -23,11 +23,11 @@ import { User } from "@/types/index";
 import { m, API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { useJobs, useUtils } from "@/hooks";
-import { FetchUser } from "@/types/fetch";
-import { FetchManageJobs } from "@/types/fetch";
+import { FetchUser, FetchManageJobs } from "@/types/fetch";
 import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import ApplyPutBtn from "@/components/Atoms/Button/ApplyPutBtn.vue";
 import RejectBtn from "@/components/Atoms/Button/RejectBtn.vue";
+import get from "lodash/get";
 
 const propsOption = {
   id: { type: Number, default: 0, required: true }, //? 詳細を見るユーザーのID
@@ -81,7 +81,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
     const router = ctx.root.$router;
-    const { auth } = useUtils();
+    const { headerAuth } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -123,17 +123,15 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         const res = await $fetch<FetchManageJobs>(
           `
           ${AUTH_URL}/apply_jobs?job_id=${props.jobId}&user_id=${props.id}`,
-          {
-            headers: auth.value,
-          }
+          headerAuth.value
         );
         // TODO: 応募者, 参加者, 拒否者 URL制御
         // https://github.com/team-up-develop/teamup-develop-front/issues/202
         if (res.data.response.length == 0) {
           return router.push({ name: "BadRequest" });
         }
-        state.statusId = res.data.response[0].apply_status_id;
-        state.updatedAt = res.data.response[0].updated_at;
+        state.statusId = get(res, "data.response[0].apply_status_id");
+        state.updatedAt = get(res, "data.response[0].updated_at");
         state.loading = false;
       } catch (error) {
         catchError(error);
