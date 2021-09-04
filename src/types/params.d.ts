@@ -113,6 +113,10 @@ interface EditProfileParams {
   programing_language_ids: {}[];
   programing_framework_ids: {}[];
   skill_ids: {}[];
+  user_image: Maybe<{
+    image_data: string;
+    file_name: string;
+  }>;
 }
 
 export {

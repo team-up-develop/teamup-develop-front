@@ -1,4 +1,4 @@
-export const isEmailValid = (email: string) => {
+const isEmailValid = (email: string) => {
   if (!email) {
     return true;
   }
@@ -6,14 +6,14 @@ export const isEmailValid = (email: string) => {
   return EMAIL_VALID.test(email!);
 };
 
-export const isPasswordValid = (password: string) => {
+const isPasswordValid = (password: string) => {
   if (!password) {
     return true;
   }
   return password.length > 7 ? true : false;
 };
 
-export const isFormBaseInfo = (
+const isFormBaseInfo = (
   userName: string,
   firstName: string,
   lastName: string,
@@ -33,7 +33,7 @@ export const isFormBaseInfo = (
     : false;
 };
 
-export const isFormSkillInfo = (
+const isFormSkillInfo = (
   selectedLang: number[],
   selectedFramwork: number[],
   selectedSkill: number[]
@@ -43,4 +43,19 @@ export const isFormSkillInfo = (
     selectedSkill.length !== 0
     ? true
     : false;
+};
+
+const blankURL = (url: string) => {
+  if (url.match("https://")) {
+    return window.open(url, "_blank");
+  }
+  return window.open("https://" + url, "_blank");
+};
+
+export {
+  isEmailValid,
+  isPasswordValid,
+  isFormBaseInfo,
+  isFormSkillInfo,
+  blankURL,
 };
