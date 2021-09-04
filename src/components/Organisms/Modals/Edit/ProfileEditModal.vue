@@ -8,7 +8,6 @@ import {
   defineComponent,
   reactive,
   toRefs,
-  onMounted,
   computed,
   SetupContext,
 } from "@vue/composition-api";
@@ -112,7 +111,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       state.currentTab = value;
     };
 
-    const fetchLang = async () => {
+    const fetchLanguages = async () => {
       const res = await $fetch<FetchLanguages>(
         `${API_URL}/programing_languages`
       );
@@ -121,7 +120,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       state.selectlangValue = state.selectedLang.map((v) => v.id);
     };
 
-    const fetchFram = async () => {
+    const fetchFrameworks = async () => {
       const res = await $fetch<FetchFrameworks>(
         `${API_URL}/programing_frameworks`
       );
@@ -137,11 +136,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       state.selectSkillValue = state.selectedSkill.map((v) => v.id);
     };
 
-    onMounted(() => {
-      fetchLang();
-      fetchFram();
-      fetchSkill();
-    });
+    (async () => {
+      await Promise.all([fetchLanguages(), fetchFrameworks(), fetchSkill()]);
+    })();
 
     const validEdit = computed(() => {
       if (
@@ -201,12 +198,12 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         programing_language_ids: languageArray,
         programing_framework_ids: framworksArray,
         skill_ids: skillArray,
-        // user_image: {
-        //   image_data: image,
-        //   file_name: "sample",
-        // },
+        user_image: {
+          image_data: "image",
+          file_name: "sample",
+        },
       };
-      // console.log(params);
+      console.log(params);
       // const a = JSON.stringify(params);
       // console.log(a);
       console.log(ctx);

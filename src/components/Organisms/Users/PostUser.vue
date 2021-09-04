@@ -8,6 +8,7 @@ import {
 import { dayJsFormat } from "@/libs/dayjs";
 import { User, ImageFile } from "@/types/index";
 import ImageUpload from "@/components/Organisms/Modals/Base/ImageUpload.vue";
+import { blankURL } from "@/modules/user";
 
 const propsOption = {
   user: { type: Object as PropType<User>, required: true },
@@ -20,8 +21,8 @@ const propsOption = {
 
 type State = {
   userImage: {
-    imageData: string;
-    fileName: any;
+    imageData: any;
+    fileName: string;
   };
   imageDialog: boolean;
 };
@@ -48,29 +49,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       state.userImage.imageData = props.user.user_image.image_url;
     }
 
-    const twitterTab = () => {
-      if (props.user?.twitter_account) {
-        const url: string = props.user.twitter_account;
-        return window.open(url, "_blank");
-      }
-      return;
-    };
-
-    const gitTab = () => {
-      if (props.user?.github_account) {
-        const url: string = props.user.github_account;
-        return window.open(url, "_blank");
-      }
-      return;
-    };
-
     const onFileChange = (file: ImageFile) => {
       if (!file) {
         state.userImage.fileName = "";
         state.userImage.imageData = "";
         return;
       }
-      state.userImage.imageData = file.name;
+      state.userImage.fileName = file.name;
       createImage(file);
       // TODO: api 繋ぎ込み
     };
@@ -78,7 +63,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     const createImage = (file: any) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        state.userImage.fileName = e?.target?.result;
+        state.userImage.imageData = e?.target?.result;
       };
       reader.readAsDataURL(file);
     };
@@ -107,8 +92,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     return {
       ...toRefs(state),
       dayJsFormat,
-      twitterTab,
-      gitTab,
+      blankURL,
       editEmit,
       onFileChange,
       closeImageDialog,
@@ -175,14 +159,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 <img
                   v-if="user.github_account"
                   class="img"
-                  @click="gitTab()"
+                  @click="blankURL(user.github_account)"
                   src="@/assets/images/github-icon.png"
                   width="35"
                 />
                 <img
                   v-if="user.twitter_account"
                   class="twitter-img"
-                  @click="twitterTab()"
+                  @click="blankURL(user.twitter_account)"
                   src="@/assets/images/twitter-icon.png"
                   width="35"
                 />
