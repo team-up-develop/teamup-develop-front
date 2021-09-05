@@ -14,6 +14,7 @@ import { Job } from "@/types";
 import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
 import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
+import { encode } from "@/libs/jsBase64";
 
 const propsOption = {
   id: { type: Number, default: 0, required: true },
@@ -53,7 +54,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     Applybtn,
   },
   props: propsOption,
-  setup: (_, ctx) => {
+  setup: (props, ctx) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
@@ -61,7 +62,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     const closeModal = () => (state.modal = false);
     const doSend = () => closeModal();
     const compliteEntry = () => ctx.emit("applied");
-    const registerRedirect = () => router.push("/register/step/1");
+    const registerRedirect = () => {
+      localStorage.setItem("cji_data_en", encode(String(props.id)));
+      router.push("/register/step/1");
+    };
 
     return {
       ...toRefs(state),
