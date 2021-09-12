@@ -1,10 +1,7 @@
 import { ActionTree, GetterTree, MutationTree } from "vuex";
-import { $fetch } from "@/libs/axios";
 import { ManageJob } from "@/types/index";
-import { FetchManageJobs, FetchFavoriteJob } from "@/types/fetch";
-import { API_URL, AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-import Vuex from "@/store/index";
+import { useAccountMe } from "@/hooks";
 interface State {
   userImage: ManageJob["user"]["user_image"];
   jobsManageNum: number;
@@ -59,37 +56,36 @@ const actions: ActionTree<State, GetStatus> = {
       if (!userObject) {
         return;
       }
-      const responseManage = await $fetch<FetchManageJobs>(
-        `${API_URL}/jobs?user_id=${userObject.userId}`
-      );
-      const userImage = responseManage.data.response[0].user.user_image;
-      commit("getUserImage", userImage);
-      commit("getJobsManageNum", responseManage.data.response.length);
+      const {
+        fetchAccountMe,
+        fetchManageJobsNum,
+        fetchApplyJobsNum,
+        fetchFavoriteJobsNum,
+      } = useAccountMe();
 
-      const responseFavorite = await $fetch<FetchFavoriteJob>(
-        `${AUTH_URL}/favorite_jobs?user_id=${userObject.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Vuex.getters.token}`,
-          },
-        }
-      );
-      commit("getJobsFavoriteNum", responseFavorite.data.response.length);
+      const getAccountMe = async () => {
+        const result = await fetchAccountMe();
+        commit("getUserImage", result?.user_image);
+      };
+      const getManageJob = async () => {
+        const result = await fetchManageJobsNum();
+        commit("getJobsManageNum", result);
+      };
+      const getApplyJobs = async () => {
+        const result = await fetchApplyJobsNum();
+        commit("getJobsApplyNum", result);
+      };
+      const getFavoriteJobs = async () => {
+        const result = await fetchFavoriteJobsNum();
+        commit("getJobsFavoriteNum", result);
+      };
 
-      const responseApply = await $fetch<FetchManageJobs>(
-        `${AUTH_URL}/apply_jobs?user_id=${userObject.userId}`,
-        {
-          headers: {
-            Authorization: `Bearer ${Vuex.getters.token}`,
-          },
-        }
-      );
-      const applyArray: ManageJob[] = responseApply.data.response.filter(
-        (v) =>
-          v.apply_status_id === m.APPLY_STATUS_APPLY ||
-          v.apply_status_id === m.APPLY_STATUS_PARTICIPATE
-      );
-      commit("getJobsApplyNum", applyArray.length);
+      await Promise.all([
+        getAccountMe(),
+        getManageJob(),
+        getApplyJobs(),
+        getFavoriteJobs(),
+      ]);
     } catch (error) {
       catchError(error);
     }

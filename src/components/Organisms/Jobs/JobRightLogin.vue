@@ -7,7 +7,7 @@ export default defineComponent({
     const { isLogin } = useUtils();
 
     const onRegister = () => {
-      return ctx.root.$router.push({ name: "RegisterStepBase" });
+      return ctx.root.$router.push({ name: "RegisterPersonal" });
     };
     const onCreateJob = () => {
       return ctx.root.$router.push({ name: "JobCreate" });

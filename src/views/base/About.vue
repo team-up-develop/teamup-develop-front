@@ -19,13 +19,13 @@ export default Vue.extend({
   },
   methods: {
     register() {
-      this.$router.push("/register/step/1");
+      this.$router.push("/register/personal");
     },
     login() {
       this.$router.push("login");
     },
     createJob() {
-      this.$router.push("/job_create/1");
+      this.$router.push("/job_create");
     },
     searchJob() {
       this.$router.push("/jobs");

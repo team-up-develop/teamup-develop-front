@@ -11,18 +11,19 @@ import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { truncate } from "@/hooks/useUtils";
-import { JobRightLogin, CardJob } from "@/components/Organisms/Jobs";
+import {
+  JobRightLogin,
+  CardJob,
+  JobCardDetail,
+} from "@/components/Organisms/Jobs";
 import {
   LanguageSearchModal,
   FrameworkSearchModal,
   SkillSearchModal,
 } from "@/components/Organisms/Modals/Searches";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
 import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
-import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
-import Chip from "@/components/Atoms/Commons/Chip.vue";
 import { dayJsFormat } from "@/libs/dayjs";
 import { Job } from "@/types/index";
 import { FetchJobs } from "@/types/fetch";
@@ -30,30 +31,28 @@ import Vuex from "@/store/index";
 import { encode } from "@/libs/jsBase64";
 import { useJobs } from "@/hooks";
 import { checkSelfJob, isStatusNew } from "@/modules/jobs";
-import { InputSet } from "@/components/Molecules/Forms";
 
 type State = {
-  jobs: Job[]; //? 案件一覧配列
-  jobsNullFlag: boolean; //? 案件が存在しない場合 表示のため
+  jobs: Job[];
+  jobsNullFlag: boolean;
   freeWord: string;
   loading: boolean;
   circleLoading: boolean;
-  jobDetail: any; //? 案件詳細
-  detailFlag: boolean; //? 案件詳細を表示するためのフラグ
-  isSelfJob: boolean; //? 自分の案件かを判定
-  applyFlug: boolean; //?応募済みかの判定フラグ
+  jobDetail: any;
+  detailFlag: boolean;
+  isSelfJob: boolean;
+  applyFlug: boolean;
   id: number; //? clickした案件のIdを取得
-  modal: boolean; //?モーダルを開いてるか否か
+  modal: boolean;
   userId: number;
-  entryRedirect: boolean; //? 非ログイン時にエントリー押下後 登録にリダイレクトするためのフラグ
-  langModal: boolean; //? 言語モーダル
-  frameworkModal: boolean; //? フレームワークモーダル
-  skillModal: boolean; //? その他スキルモーダル
-  buttonActive: boolean; //? 右側浮いてるボタン
-  page: number; //? 現在のページ
-  displayJobs: Job[]; //? 表示する案件
-  jobsPageSize: number; //? ページに表示する案件の数
-  paginationLength: number; //? ページネーション番号
+  entryRedirect: boolean;
+  langModal: boolean;
+  frameworkModal: boolean;
+  skillModal: boolean;
+  page: number;
+  displayJobs: Job[];
+  jobsPageSize: number;
+  paginationLength: number;
 };
 
 const initialState = (ctx: SetupContext): State => ({
@@ -73,7 +72,6 @@ const initialState = (ctx: SetupContext): State => ({
   langModal: false,
   frameworkModal: false,
   skillModal: false,
-  buttonActive: false,
   page: 1,
   displayJobs: [],
   jobsPageSize: 10, //FIXME: 開発に応じて仮で置いています。正規 20
@@ -83,7 +81,7 @@ const initialState = (ctx: SetupContext): State => ({
 export default defineComponent({
   components: {
     Loading,
-    CircleLoading,
+    // CircleLoading,
     Applybtn,
     Confirme,
     CardJob,
@@ -91,9 +89,7 @@ export default defineComponent({
     FrameworkSearchModal,
     SkillSearchModal,
     JobRightLogin,
-    FavoriteBtn,
-    Chip,
-    InputSet,
+    JobCardDetail,
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
@@ -265,8 +261,8 @@ const utils = (state: State, ctx: SetupContext) => {
 
   // * 非ログイン時 登録リダイレクト
   const registerRedirect = () => {
-    localStorage.setItem("cji_data_en", encode(String(state.id)));
-    router.push({ name: "RegisterStepBase" });
+    localStorage.setItem("CJI_DATA_EN", encode(String(state.id)));
+    router.push({ name: "RegisterPersonal" });
   };
 
   // * ページネーション
@@ -371,43 +367,31 @@ const clickJob = (state: State, ctx: SetupContext) => {
     <!-- 検索エリアバー -->
     <div class="search-area">
       <button
-        v-if="this.$store.state.search.language.length == 0"
-        class="search-area__modal-btn"
+        :class="[
+          this.$store.state.search.language.length == 0
+            ? 'search-area__modal-btn'
+            : 'search-area__modal-btn-active',
+        ]"
         @click="() => (langModal = true)"
       >
         開発言語
       </button>
       <button
-        v-else
-        class="search-area__modal-btn-active"
-        @click="() => (langModal = true)"
-      >
-        開発言語
-      </button>
-      <button
-        v-if="this.$store.state.search.framwork.length == 0"
-        class="search-area__modal-btn"
+        :class="[
+          this.$store.state.search.framwork.length == 0
+            ? 'search-area__modal-btn'
+            : 'search-area__modal-btn-active',
+        ]"
         @click="() => (frameworkModal = true)"
       >
         フレームワーク
       </button>
       <button
-        v-else
-        class="search-area__modal-btn-active"
-        @click="() => (frameworkModal = true)"
-      >
-        フレームワーク
-      </button>
-      <button
-        v-if="this.$store.state.search.skill.length == 0"
-        class="search-area__modal-btn"
-        @click="() => (skillModal = true)"
-      >
-        その他技術
-      </button>
-      <button
-        v-else
-        class="search-area__modal-btn-active"
+        :class="[
+          this.$store.state.search.skill.length == 0
+            ? 'search-area__modal-btn'
+            : 'search-area__modal-btn-active',
+        ]"
         @click="() => (skillModal = true)"
       >
         その他技術
@@ -420,7 +404,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
         @keyup.enter="searchFreeword"
       />
     </div>
-    <!-- 案件表示エリア -->
+
     <div class="job-wrapper-center" v-show="!loading">
       <div class="job-wrapper-left" v-if="jobsNullFlag === false">
         <div
@@ -431,7 +415,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
           @click="getJob(job)"
           :jobId="job"
         >
-          <!-- 案件カード コンポーネント -->
           <CardJob :job="job" />
         </div>
       </div>
@@ -449,118 +432,22 @@ const clickJob = (state: State, ctx: SetupContext) => {
         <CardJob :job="job" />
       </router-link>
       <template v-if="detailFlag">
-        <v-card class="job-wrapper-right">
-          <div class="top-job-detail-area">
-            <div class="top-job-detail-area__title">
-              {{ truncate(jobDetail.job_title, 60) }}
-            </div>
-            <!-- ログイン時 -->
-            <template v-if="!entryRedirect">
-              <div v-show="!circleLoading">
-                <div class="top-job-detail-bottom" v-if="!isSelfJob">
-                  <button
-                    @click="() => (modal = true)"
-                    class="btn-box-apply"
-                    v-if="applyFlug"
-                  >
-                    応募する
-                  </button>
-                  <div class="btn-box-apply-false" v-else>応募済み</div>
-                  <div class="btn-box-save">
-                    <FavoriteBtn :job-id="jobDetail.id" />
-                  </div>
-                  <div v-if="isStatusNew" class="label-area">
-                    <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
-                  </div>
-                </div>
-                <template v-else>
-                  <div class="top-job-detail-bottom">
-                    <router-link :to="`/manage/${jobDetail.id}/apply_users`">
-                      <button class="btn-box-manage">管理画面</button>
-                    </router-link>
-                    <div v-if="isStatusNew" class="label-area">
-                      <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
-                    </div>
-                  </div>
-                </template>
-              </div>
-              <div v-show="circleLoading" class="pb-4">
-                <CircleLoading />
-              </div>
-            </template>
-            <!-- 非ログイン時 リダイレクトさせる -->
-            <template v-else>
-              <div class="top-job-detail-bottom">
-                <button class="btn-box-apply" @click="registerRedirect">
-                  応募する
-                </button>
-                <div class="btn-box-save">
-                  <v-icon class="save-icon" @click="registerRedirect"
-                    >mdi-heart</v-icon
-                  >
-                </div>
-                <div v-if="isStatusNew" class="label-area">
-                  <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
-                </div>
-              </div>
-            </template>
-          </div>
-          <!-- 右側案件詳細 -->
-          <div class="main-job-detail-area">
-            <div class="tag-area">
-              投稿者
-            </div>
-            <router-link :to="`/account/profile/${jobDetail.user_id}/detail`">
-              <div class="post-user-name-area">
-                {{ truncate(jobDetail.user.user_name, 55) }}
-              </div>
-            </router-link>
-            <InputSet
-              :skills="jobDetail.programing_languages"
-              label="開発言語"
-              color="#651fff"
-            />
-            <InputSet
-              :skills="jobDetail.programing_frameworks"
-              label="フレームワーク"
-              color="#2196f3"
-            />
-            <InputSet
-              :skills="jobDetail.skills"
-              label="その他スキル"
-              color="#00bcd4"
-            />
-            <div class="tag-area">
-              開発期間
-            </div>
-            <div class="post-user-area">
-              {{ dayJsFormat(jobDetail.dev_start_date, "YYYY年 M月 D日") }} ~
-              {{ dayJsFormat(jobDetail.dev_end_date, "YYYY年 M月 D日") }}
-            </div>
-            <div class="tag-area">
-              募集人数
-            </div>
-            <div class="post-user-area">
-              {{ jobDetail.recruitment_numbers }} 人
-            </div>
-            <div class="tag-area">
-              開発詳細
-            </div>
-            <div class="post-user-area pre-wrap">
-              {{ jobDetail.job_description }}
-            </div>
-            <div class="jobDetail-time-area">
-              投稿期日 {{ dayJsFormat(jobDetail.created_at, "YYYY年 M月 D日") }}
-            </div>
-          </div>
-        </v-card>
+        <JobCardDetail
+          :job="jobDetail"
+          :not-login="entryRedirect"
+          :register-redirect="registerRedirect"
+          :circle-loading="circleLoading"
+          :is-self-job="isSelfJob"
+          :is-status-new="isStatusNew"
+          :apply-flug="applyFlug"
+          :on-apply="() => (modal = true)"
+        />
       </template>
       <template v-else>
         <div class="job-wrapper-right-false">
           <JobRightLogin />
         </div>
       </template>
-      <!-- ページネーション -->
       <v-main>
         <div class="text-center">
           <v-pagination
@@ -684,206 +571,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
   }
 }
 
-// * 案件詳細画面
-.job-wrapper-right {
-  width: 52%;
-  height: 90vh;
-  margin-left: 2rem;
-  margin-top: 1rem;
-  background-color: $white;
-  position: sticky;
-  display: inline-block;
-  margin-bottom: 0.2rem;
-  bottom: 0;
-  border-radius: 8px;
-  color: $text-main-color;
-  text-align: left;
-
-  .top-job-detail-area {
-    font-weight: bold;
-    padding: 1.5rem 2rem 1rem 2rem;
-    box-shadow: 2px 4px 3px -2px rgba(3, 29, 41, 0.15);
-
-    &__title {
-      width: 100%;
-      height: 50%;
-      font-size: 1.2em;
-    }
-
-    .top-job-detail-bottom {
-      width: 100%;
-      height: 65%;
-      display: inline-block;
-      position: relative;
-      margin-top: 0.8rem;
-
-      .label-area {
-        float: right;
-        margin-top: 0.6rem;
-
-        .label {
-          width: 146px;
-          font-size: 14px;
-          background-color: $third-dark;
-          color: $white;
-          border-radius: 8px;
-          font-weight: bold;
-          text-decoration: none;
-        }
-      }
-    }
-  }
-}
-
-.btn-box-save {
-  display: inline-block;
-  padding: 0.3rem 0 0 1.2rem;
-  position: absolute;
-  top: 0;
-}
-
-.job-wrapper-right .main-job-detail-area {
-  height: calc(79% - 1rem);
-  overflow: auto;
-  padding: 0 2rem 1rem 2rem;
-  position: relative;
-
-  .tag-area {
-    font-weight: bold;
-    margin: 1rem 0 0rem 0;
-    font-size: 1em;
-
-    .icon {
-      color: $primary-color;
-    }
-  }
-}
-
-.post-user-area {
-  line-height: 1.8;
-  font-size: 14px;
-}
-
-.jobDetail-time-area {
-  margin-top: 1rem;
-  font-size: 12px;
-  color: $dark-grey;
-  float: right;
-}
-
-.post-user-name-area {
-  line-height: 1.8;
-  text-decoration: underline;
-  cursor: pointer;
-  margin-bottom: 0.3rem;
-  font-size: 16px;
-
-  &:hover {
-    color: $primary-color;
-    transition: 0.3s;
-  }
-}
-
-.detail-langage {
-  @include border_language;
-  color: $language-color;
-  margin: 0 0px 0px 5px;
-  text-align: left;
-  display: inline-block;
-  font-size: 14px;
-  padding: 2px 23px;
-  border-radius: 5px / 5px;
-  font-weight: bold;
-  pointer-events: none;
-}
-
-.detail-framework {
-  @include border_framework;
-  margin: 0px 0px 0 5px;
-  text-align: left;
-  display: inline-block;
-  color: $framework-color;
-  font-size: 14px;
-  padding: 2px 23px;
-  border-radius: 5px / 5px;
-  font-weight: bold;
-  pointer-events: none;
-}
-
-.detail-skill {
-  @include border-skill;
-  color: $skill-color;
-  margin: 0px 0px 0 5px;
-  text-align: left;
-  display: inline-block;
-  font-size: 14px;
-  padding: 2px 23px;
-  border-radius: 5px / 5px;
-  font-weight: bold;
-  pointer-events: none;
-}
-
-// * 管理画面遷移ボタン
-.btn-box-manage {
-  @include neumorphismGrey;
-  padding: 0.75rem 3rem;
-  border-radius: 8px;
-  font-weight: 600;
-  color: $primary-color;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  font-size: 1.1em;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-  margin-top: 4px;
-  appearance: none;
-  border: none;
-  outline: none;
-}
-
-// * 応募するボタン
-.btn-box-apply {
-  @include red-btn;
-  @include neumorphism;
-  padding: 0.75rem 3rem;
-  border-radius: 8px;
-  font-weight: 600;
-  color: $white;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  font-size: 1.1em;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-  margin-top: 4px;
-  appearance: none;
-  border: none;
-  transition: 0.3s;
-  outline: none;
-}
-
-// * 応募済みボタン
-.btn-box-apply-false {
-  @include grey-btn;
-  display: block;
-  padding: 0.75rem 3rem;
-  border-radius: 8px;
-  font-weight: 600;
-  color: $white;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  margin-top: 4px;
-  font-size: 1.1em;
-  display: inline-block;
-}
-
 // * モーダル内のキャンセルボタン
 .modal-btn {
   @include neumorphismGrey;
@@ -899,28 +586,13 @@ const clickJob = (state: State, ctx: SetupContext) => {
   outline: none;
 }
 
-// * 保存アイコン
-.save-icon {
-  font-size: 20px;
-  width: 42px;
-  height: 42px;
-  padding: 0.5rem;
-  color: $white;
-  cursor: pointer;
-  background-color: #d8d6d6;
-  border-radius: 5px / 5px;
-}
-
 // * 右側 詳細を表示しない際に
 .job-wrapper-right-false {
   width: 52%;
-  // height: 40vh;
   float: right;
   position: sticky;
-  // display: inline-block;
   margin-left: 2rem;
   margin-bottom: 0.2rem;
-  // bottom: 0;
   top: 0;
   border-radius: 8px;
   color: $text-main-color;
@@ -945,27 +617,13 @@ const clickJob = (state: State, ctx: SetupContext) => {
   display: inline-block;
 }
 
-.label-lang {
-  font-weight: bold;
-  font-size: 1.5em;
-  color: #111111;
-}
-
 .router-1 {
   display: none;
-}
-
-.pre-wrap {
-  white-space: pre-wrap;
 }
 
 @media screen and (max-width: 1289px) {
   .job-wrapper .job-wrapper-center {
     width: 99%;
-  }
-
-  .job-wrapper-right {
-    margin-left: 0.5rem;
   }
 }
 
@@ -975,19 +633,10 @@ const clickJob = (state: State, ctx: SetupContext) => {
     width: 100%;
     padding: 0;
   }
-  // * 右側案件をdisplaynone
-  .job-wrapper-right {
-    display: none;
-  }
 
   .router-1 {
     display: block;
     text-decoration: none;
-  }
-
-  .job-wrapper-left,
-  .job-wrapper-right-false {
-    display: none;
   }
 
   .job-wrapper-left {
@@ -996,6 +645,11 @@ const clickJob = (state: State, ctx: SetupContext) => {
 
   .job-wrapper .job-wrapper-center {
     width: 80%;
+  }
+
+  .job-wrapper-left,
+  .job-wrapper-right-false {
+    display: none;
   }
 }
 

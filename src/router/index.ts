@@ -18,17 +18,17 @@ import JobDetail from "@/views/jobs/_id/Detail.vue";
  * job_create
  */
 import JobCreate from "@/views/job_create/index.vue";
-import JobCreateSkill from "@/views/job_create/JobCreateSkill.vue";
-import JobCreateComplete from "@/views/job_create/JobCreateComplete.vue";
+import JobCreateSkill from "@/views/job_create/skills/index.vue";
+import JobCreateComplete from "@/views/job_create/complete/index.vue";
 /*
  * accounts
  */
 import Login from "@/views/accounts/Login.vue";
 import ProfileUser from "@/views/accounts/profile/Detail.vue";
-import RegisterStepBase from "@/views/accounts/registers/RegisterStepBase.vue";
-import RegisterStepSkill from "@/views/accounts/registers/RegisterStepSkill.vue";
-import RegisterStepComplete from "@/views/accounts/registers/RegisterStepComplete.vue";
-import RegisterConfirm from "@/views/accounts/registers/RegisterConfirm.vue";
+import RegisterPersonal from "@/views/accounts/registers/Personal.vue";
+import RegisterDetailInfo from "@/views/accounts/registers/DetailInfo.vue";
+import RegisterComplete from "@/views/accounts/registers/Complete.vue";
+import RegisterConfirm from "@/views/accounts/registers/Confirm.vue";
 /*
  * manage
  */
@@ -97,17 +97,17 @@ const routes: Array<RouteConfig> = [
   },
   // ? 作成
   {
-    path: "/job_create/1",
+    path: "/job_create",
     name: "JobCreate",
     component: JobCreate,
   },
   {
-    path: "/job_create/2",
+    path: "/job_create/skills",
     name: "JobCreateSkill",
     component: JobCreateSkill,
   },
   {
-    path: "/job_create/3",
+    path: "/job_create/complete",
     name: "JobCreateComplete",
     component: JobCreateComplete,
   },
@@ -136,24 +136,24 @@ const routes: Array<RouteConfig> = [
   },
   // * 本登録登録
   {
-    path: "/register/step/1",
-    name: "RegisterStepBase",
-    component: RegisterStepBase,
+    path: "/register/personal",
+    name: "RegisterPersonal",
+    component: RegisterPersonal,
   },
   {
-    path: "/register/step/2",
-    name: "RegisterStepSkill",
-    component: RegisterStepSkill,
+    path: "/register/detail_info",
+    name: "RegisterDetailInfo",
+    component: RegisterDetailInfo,
   },
   {
-    path: "/register/step/confirm",
+    path: "/register/confirm",
     name: "RegisterConfirm",
     component: RegisterConfirm,
   },
   {
-    path: "/register/step/complete",
-    name: "RegisterStepComplete",
-    component: RegisterStepComplete,
+    path: "/register/complete",
+    name: "RegisterComplete",
+    component: RegisterComplete,
   },
   // * 管理
   // ? 管理 管理

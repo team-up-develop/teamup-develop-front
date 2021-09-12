@@ -58,20 +58,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
-    const openModal = () => (state.modal = true);
-    const closeModal = () => (state.modal = false);
-    const doSend = () => closeModal();
     const compliteEntry = () => ctx.emit("applied");
     const registerRedirect = () => {
-      localStorage.setItem("cji_data_en", encode(String(props.id)));
-      router.push("/register/step/1");
+      localStorage.setItem("CJI_DATA_EN", encode(String(props.id)));
+      return router.push("/register/personal");
     };
 
     return {
       ...toRefs(state),
-      openModal,
-      closeModal,
-      doSend,
       registerRedirect,
       compliteEntry,
     };
@@ -83,7 +77,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   <section class="wrap">
     <!-- 応募する モーダル画面 -->
     <div class="example-modal-window">
-      <Confirme @close="closeModal" v-if="modal">
+      <Confirme @close="() => (modal = false)" v-if="modal">
         <v-icon class="apply-icon pt-1 pb-4">
           mdi mdi-handshake-outline
         </v-icon>
@@ -91,14 +85,16 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         <template v-slot:btnArea>
           <div class="d-flex justify-space-between">
             <Applybtn :job-id="id" @compliteEntry="compliteEntry" />
-            <v-btn @click="doSend" class="modal-btn">キャンセル</v-btn>
+            <v-btn @click="() => (modal = false)" class="modal-btn"
+              >キャンセル</v-btn
+            >
           </div>
         </template>
       </Confirme>
     </div>
     <div class="button-area" v-if="isLogin">
       <div class="button-area__action" v-if="!selfjob">
-        <button @click="openModal" class="apply" v-if="applyFlug">
+        <button @click="() => (modal = true)" class="apply" v-if="applyFlug">
           応募する
         </button>
         <div class="apply-false" v-else>応募済み</div>

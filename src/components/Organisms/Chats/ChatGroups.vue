@@ -79,7 +79,7 @@ export default defineComponent({
       :to="`/chat/${chatGroup.job.id}`"
       v-for="chatGroup in chatGroups"
       :key="chatGroup.job.id"
-      v-bind:class="{ active: isActive, 'text-danger': hasError }"
+      :class="{ active: isActive, 'text-danger': hasError }"
     >
       <div class="group__area">
         <p>{{ truncate(chatGroup.job.job_title, 36) }}</p>

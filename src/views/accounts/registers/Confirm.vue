@@ -4,7 +4,6 @@ import {
   reactive,
   toRefs,
   computed,
-  onMounted,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import Vuex from "@/store/index";
@@ -19,6 +18,7 @@ import Confirme from "@/components/Organisms/Modals/Base/Confirme.vue";
 import Complete from "@/components/Organisms/Modals/Base/Complete.vue";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { InputSet } from "@/components/Molecules/Forms";
+import { decode } from "@/libs/jsBase64";
 
 type Maybe<T> = T | null;
 type Select = { id: number };
@@ -40,6 +40,8 @@ type State = {
   confirm: boolean;
   complite: boolean;
   loading: boolean;
+  clickJob: number;
+  btnMain: "案件を探す" | "案件に戻る";
 };
 
 type SkillState = {
@@ -69,6 +71,8 @@ const initialState = (): State => ({
   confirm: false,
   complite: false,
   loading: true,
+  clickJob: 0,
+  btnMain: "案件を探す",
 });
 
 const skillState = (): SkillState => ({
@@ -93,7 +97,7 @@ export default defineComponent({
     const skills = reactive<SkillState>(skillState());
     const router = ctx.root.$router;
 
-    const fetchSkill = async () => {
+    const fetchLanguages = async () => {
       try {
         const res = await $fetch<FetchLanguages>(
           `${API_URL}/programing_languages`
@@ -102,6 +106,8 @@ export default defineComponent({
       } catch (error) {
         catchError(error);
       }
+    };
+    const fetchFrameworks = async () => {
       try {
         const res = await $fetch<FetchFrameworks>(
           `${API_URL}/programing_frameworks`
@@ -110,6 +116,8 @@ export default defineComponent({
       } catch (error) {
         catchError(error);
       }
+    };
+    const fetchSkills = async () => {
       try {
         const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
         skills.skills = res.data.response;
@@ -158,13 +166,18 @@ export default defineComponent({
         )!;
         skills.displaySkills.push(foundSkill);
       }
+      const clickJob = localStorage.getItem("CJI_DATA_EN");
+      if (clickJob) {
+        state.clickJob = Number(decode(clickJob));
+        state.btnMain = "案件に戻る";
+      }
       state.loading = false;
     };
 
-    onMounted(async () => {
-      await fetchSkill();
+    (async () => {
+      await Promise.all([fetchLanguages(), fetchFrameworks(), fetchSkills()]);
       await strageGet();
-    });
+    })();
 
     const isForm = computed(() => {
       if (
@@ -188,7 +201,7 @@ export default defineComponent({
     });
 
     const backStep = () => {
-      return router.push({ name: "RegisterStepSkill" });
+      return router.push({ name: "RegisterDetailInfo" });
     };
 
     // TODO: 登録周りパラメーター確認 エラー処理
@@ -240,12 +253,17 @@ export default defineComponent({
     };
 
     const redirectProfile = () => {
+      if (state.clickJob) {
+        localStorage.removeItem("CJI_DATA_EN");
+        return router.push("/jobs/" + state.clickJob + "/detail");
+      }
       return router.push({ name: "Jobs" });
     };
 
     const redirectJobCreate = () => {
       return router.push({ name: "JobCreate" });
     };
+
     return {
       ...toRefs(state),
       ...toRefs(skills),
@@ -269,7 +287,7 @@ export default defineComponent({
       title="登録が完了しました"
       content="早速チーム開発を始めよう！"
       btn-main="案件を作る"
-      btn-sub="案件を探す"
+      :btn-sub="btnMain"
       @subFunction="redirectProfile"
       @mainFunction="redirectJobCreate"
       @close="redirectProfile"
