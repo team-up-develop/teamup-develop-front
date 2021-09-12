@@ -100,7 +100,7 @@ export default defineComponent({
     });
 
     const backStep = () => {
-      return router.push({ name: "RegisterStepBase" });
+      return router.push({ name: "RegisterPersonal" });
     };
 
     const nextStep = () => {

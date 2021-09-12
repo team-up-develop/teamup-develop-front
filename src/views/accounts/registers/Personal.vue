@@ -89,7 +89,7 @@ export default defineComponent({
         sessionStorage.setItem("password", params.password);
         sessionStorage.setItem("email", params.email);
 
-        return router.push({ name: "RegisterStepSkill" });
+        return router.push({ name: "RegisterDetailInfo" });
       } else {
         console.log("必須が入力されていません");
       }

@@ -156,7 +156,7 @@ export default defineComponent({
         </div>
       </section>
       <router-link
-        to="/job_create/2"
+        to="/job_create/skills"
         class="btn-area"
         v-if="isForm && !afterDevEndDate && !beforeToDate && !minPeriod"
       >

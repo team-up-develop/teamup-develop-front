@@ -39,7 +39,7 @@ export default defineComponent({
       </div>
     </v-col>
     <div class="right" v-if="isLogin">
-      <button class="register-btn" @click="$router.push('/job_create/1')">
+      <button class="register-btn" @click="$router.push('/job_create')">
         案件を作る
       </button>
       <button class="search-btn" @click="$router.push('/jobs')">
@@ -47,7 +47,7 @@ export default defineComponent({
       </button>
     </div>
     <div class="right" v-else>
-      <button class="register-btn" @click="$router.push('/register/step/1')">
+      <button class="register-btn" @click="$router.push('/register/personal')">
         登録する
       </button>
       <button class="login-btn" @click="$router.push('/login')">

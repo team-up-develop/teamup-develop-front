@@ -271,7 +271,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           </template>
           <span>必須項目が入力されていません</span>
         </v-tooltip>
-        <router-link to="/job_create/1" class="post-job-back">
+        <router-link to="/job_create" class="post-job-back">
           戻る 1/2
         </router-link>
       </div>

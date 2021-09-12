@@ -1,6 +1,6 @@
 <template>
   <section>
-    <router-link to="/job_create/1" class="router">
+    <router-link to="/job_create" class="router">
       <button class="create-btn">
         募集する
       </button>

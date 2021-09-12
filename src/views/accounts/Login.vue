@@ -99,7 +99,7 @@ export default defineComponent({
         <div class="btn-area">
           <p>
             登録してない方は<router-link
-              to="/register/step/1"
+              to="/register/personal"
               class="router-link"
               ><span>こちら</span></router-link
             >

@@ -3,7 +3,12 @@ import { $fetch } from "@/libs/axios";
 import { API_URL, AUTH_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
 import { ManageJob, FavoriteJob, Job } from "@/types/index";
-import { FetchManageJobs, FetchJobs, FetchFavoriteJob } from "@/types/fetch";
+import {
+  FetchManageJobs,
+  FetchJobs,
+  FetchJob,
+  FetchFavoriteJob,
+} from "@/types/fetch";
 import Vuex from "@/store/index";
 import { useUtils } from "@/hooks";
 
@@ -44,7 +49,7 @@ const useJobs = () => {
   // *詳細
   const fetchJobDetail = async (jobId: number) => {
     try {
-      const res = await $fetch<any>(`${API_URL}/job/${jobId}`);
+      const res = await $fetch<FetchJob>(`${API_URL}/job/${jobId}`);
       await fetchError(res.data.status);
       state.job = res.data.response;
       // state.loading = false;
@@ -99,7 +104,7 @@ const useJobs = () => {
         }
       );
       const result: boolean = res.data.response
-        .map((v) => v.job.id)
+        .map((v: ManageJob) => v.job.id)
         .includes(jobId);
       state.isApply = !result;
       state.loading = false;

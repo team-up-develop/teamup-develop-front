@@ -36,7 +36,7 @@ export default defineComponent({
           <p>勉強したい技術や、やってみたい技術をどんどん投稿してみよう！</p>
         </div>
         <div class="btn-area">
-          <router-link to="/job_create/1" class="create-link">
+          <router-link to="/job_create" class="create-link">
             続けて投稿する
           </router-link>
           <router-link to="/manage" class="manage-link">
