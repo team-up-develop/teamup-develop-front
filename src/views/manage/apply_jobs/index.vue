@@ -19,11 +19,13 @@ import { useUtils } from "@/hooks";
 type State = {
   applyJob: ManageJob[];
   userId: number;
+  loading: boolean;
 };
 
 const initialState = (ctx: SetupContext): State => ({
   applyJob: [],
   userId: ctx.root.$store.getters.userId,
+  loading: false,
 });
 
 export default defineComponent({
@@ -52,6 +54,7 @@ export default defineComponent({
         return;
       }
       try {
+        state.loading = true;
         const res = await $fetch<FetchManageJobs>(
           `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
           {
@@ -64,6 +67,7 @@ export default defineComponent({
             v.apply_status_id === m.APPLY_STATUS_PARTICIPATE ||
             v.apply_status_id === m.APPLY_STATUS_REJECT
         );
+        state.loading = false;
       } catch (error) {
         catchError(error);
       }
@@ -89,6 +93,7 @@ export default defineComponent({
       :jobs="applyJob"
       :active-css="2"
       routing-params="apply_job"
+      :loading="loading"
     />
   </section>
 </template>

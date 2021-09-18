@@ -5,13 +5,19 @@ import {
   OutsidePropsType,
   PropType,
 } from "@icare-jp/vue-props-type";
-import { UserCard, JobsCard } from "@/components/Organisms/Manages";
+import {
+  UserCard,
+  JobsCard,
+  NotDataCard,
+} from "@/components/Organisms/Manages";
 import { ManageJob } from "@/types/index";
 import { useUtils } from "@/hooks";
+import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
 
 const propsOption = {
   activeCss: { type: Number as PropType<1>, defalut: 1, required: true }, //? 管理案件
   jobs: { type: Array as PropType<ManageJob[]>, defalut: [], required: true },
+  loading: { type: Boolean, defalut: false },
 } as const;
 
 type PropsOption = typeof propsOption;
@@ -21,11 +27,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     UserCard,
     JobsCard,
+    NotDataCard,
+    CircleLoading,
   },
   props: propsOption,
-  setup: () => {
+  setup: (props) => {
     const { isLogin } = useUtils();
-
+    console.log(props.loading, "props.lodaing");
     return {
       isLogin,
     };
@@ -57,15 +65,23 @@ export default defineComponent<InsidePropsType<PropsOption>>({
               <span>保存案件</span>
             </router-link>
           </v-row>
-          <v-col>
-            <router-link
-              :to="`/manage/${job.id}/apply_users`"
-              v-for="job in jobs"
-              :key="job.id"
-              class="jobs"
-            >
-              <JobsCard :job="job" />
-            </router-link>
+          <v-col v-show="!loading">
+            <template v-if="jobs.length > 0">
+              <router-link
+                :to="`/manage/${job.id}/apply_users`"
+                v-for="job in jobs"
+                :key="job.id"
+                class="jobs"
+              >
+                <JobsCard :job="job" />
+              </router-link>
+            </template>
+            <div v-else>
+              <NotDataCard text="まだ案件を作成していません。" />
+            </div>
+          </v-col>
+          <v-col v-show="loading">
+            <CircleLoading />
           </v-col>
         </v-sheet>
       </v-row>

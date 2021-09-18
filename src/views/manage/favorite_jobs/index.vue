@@ -25,7 +25,7 @@ export default defineComponent({
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
-    const { fetchFavoriteJobs, favoriteJobs } = useJobs();
+    const { fetchFavoriteJobs, favoriteJobs, loading } = useJobs();
     fetchFavoriteJobs();
 
     const breadcrumbs = computed(() => [
@@ -44,6 +44,7 @@ export default defineComponent({
       ...toRefs(state),
       breadcrumbs,
       favoriteJobs,
+      loading,
     };
   },
 });
@@ -56,6 +57,7 @@ export default defineComponent({
       :jobs="favoriteJobs"
       :active-css="3"
       routing-params="favorite_job"
+      :loading="loading"
     />
   </section>
 </template>

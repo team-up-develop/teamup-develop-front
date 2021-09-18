@@ -59,11 +59,13 @@ const useJobs = () => {
   };
   // *管理案件
   const fetchManageJobs = async () => {
+    state.loading = true;
     try {
       const res = await $fetch<FetchManageJobs>(
         `${API_URL}/jobs?user_id=${state.userId}`
       );
       state.manageJobs = res.data.response;
+      state.loading = false;
     } catch (error) {
       catchError(error);
     }
@@ -83,6 +85,7 @@ const useJobs = () => {
   // * お気に入り案件
   const fetchFavoriteJobs = async () => {
     try {
+      state.loading = true;
       const res = await $fetch<FetchFavoriteJob>(
         `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
         {
@@ -90,6 +93,7 @@ const useJobs = () => {
         }
       );
       state.favoriteJobs = res.data.response;
+      state.loading = false;
     } catch (error) {
       catchError(error);
     }

@@ -9,6 +9,7 @@ import {
   JobsCard,
   UserCard,
 } from "@/components/Organisms/Manages/ChangeStatus";
+import { NotDataCard } from "@/components/Organisms/Manages";
 import { User } from "@/types/index";
 import { useUtils } from "@/hooks";
 import { md } from "@/master";
@@ -35,6 +36,7 @@ export default defineComponent({
   components: {
     UserCard,
     JobsCard,
+    NotDataCard,
   },
   props: {
     jobId: { type: Number, defalut: 0, required: true },
@@ -91,40 +93,55 @@ export default defineComponent({
               {{ tab.tabName }}
             </button>
             <v-col v-show="currentTab === 0">
-              <router-link
-                :to="
-                  `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
-                "
-                v-for="user in applyUsers"
-                :key="user.id"
-                class="users"
-              >
-                <UserCard :user="user" />
-              </router-link>
+              <template v-if="applyUsers.length > 0">
+                <router-link
+                  :to="
+                    `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
+                  "
+                  v-for="user in applyUsers"
+                  :key="user.id"
+                  class="users"
+                >
+                  <UserCard :user="user" />
+                </router-link>
+              </template>
+              <div v-else>
+                <NotDataCard text="まだ応募者が存在しません。" />
+              </div>
             </v-col>
             <v-col v-show="currentTab === 1">
-              <router-link
-                :to="
-                  `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
-                "
-                v-for="user in assignUsers"
-                :key="user.id"
-                class="users"
-              >
-                <UserCard :user="user" />
-              </router-link>
+              <template v-if="assignUsers.length > 0">
+                <router-link
+                  :to="
+                    `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
+                  "
+                  v-for="user in assignUsers"
+                  :key="user.id"
+                  class="users"
+                >
+                  <UserCard :user="user" />
+                </router-link>
+              </template>
+              <div v-else>
+                <NotDataCard text="まだ参加者が存在しません。" />
+              </div>
             </v-col>
             <v-col v-show="currentTab === 2">
-              <router-link
-                :to="
-                  `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
-                "
-                v-for="user in rejectUsers"
-                :key="user.id"
-                class="users"
-              >
-                <UserCard :user="user" />
-              </router-link>
+              <template v-if="rejectUsers.length > 0">
+                <router-link
+                  :to="
+                    `/manage/profile/${jobId}/${user.user_id}/${user.id}/detail`
+                  "
+                  v-for="user in rejectUsers"
+                  :key="user.id"
+                  class="users"
+                >
+                  <UserCard :user="user" />
+                </router-link>
+              </template>
+              <div v-else>
+                <NotDataCard text="まだ拒否者が存在しません。" />
+              </div>
             </v-col>
           </v-row>
         </v-sheet>

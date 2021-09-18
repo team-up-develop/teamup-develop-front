@@ -118,7 +118,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 <template>
   <section>
     <v-icon class="icon" @click="saveJob" v-if="flag">mdi-heart</v-icon>
-    <v-icon class="end-icon" @click="deleteJob" v-if="flag == false"
+    <v-icon class="save-icon" @click="deleteJob" v-if="flag == false"
       >mdi-heart</v-icon
     >
   </section>
@@ -138,7 +138,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   border-radius: 5px / 5px;
 }
 
-.end-icon {
+.save-icon {
   font-size: 20px;
   width: 42px;
   height: 42px;
