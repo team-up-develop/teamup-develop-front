@@ -77,11 +77,11 @@ export default Vue.extend({
             Authorization: `Bearer ${this.token}`,
           },
           data: {
-            params,
+            ...params,
           },
         });
         if (res.data) {
-          this.flag = false;
+          this.flag = true;
         }
       } catch (error) {
         catchError(error);
@@ -102,47 +102,6 @@ export default Vue.extend({
 
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
-
-// * 現在は使用していない
-.btn-box-save {
-  @include blue-btn;
-  display: block;
-  padding: 1.4rem 4.3rem;
-  box-shadow: 0 0px 5px 2px #d4d4d4;
-  border-radius: 50px;
-  font-weight: 600;
-  // color: $white;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  font-size: 1.1rem;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-
-  :hover {
-    background-color: red;
-    font-size: 100px;
-  }
-}
-
-.btn-box-save-false {
-  @include grey-btn;
-  display: block;
-  padding: 1.4rem 4.3rem;
-  box-shadow: 0 0px 10px 5px #d4d4d4;
-  border-radius: 50px;
-  font-weight: 600;
-  // color: $white;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  font-size: 1.1rem;
-  display: inline-block;
-  cursor: pointer;
-}
 
 .icon {
   font-size: 30px;

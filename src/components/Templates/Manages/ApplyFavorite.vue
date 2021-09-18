@@ -5,9 +5,14 @@ import {
   OutsidePropsType,
   PropType,
 } from "@icare-jp/vue-props-type";
-import { UserCard, JobsCard } from "@/components/Organisms/Manages";
+import {
+  UserCard,
+  JobsCard,
+  NotDataCard,
+} from "@/components/Organisms/Manages";
 import { FavoriteJob } from "@/types/index";
 import { useUtils } from "@/hooks";
+import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
 
 const propsOption = {
   activeCss: { type: Number as PropType<2 | 3>, defalut: 2, required: true }, //? 2:応募案件 3: 保存案件
@@ -21,6 +26,7 @@ const propsOption = {
     defalut: "",
     required: true,
   },
+  loading: { type: Boolean, defalut: false },
 } as const;
 
 type PropsOption = typeof propsOption;
@@ -30,6 +36,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     UserCard,
     JobsCard,
+    NotDataCard,
+    CircleLoading,
   },
   props: propsOption,
   setup: () => {
@@ -80,15 +88,28 @@ export default defineComponent<InsidePropsType<PropsOption>>({
               <span>保存案件</span>
             </router-link>
           </v-row>
-          <v-col>
-            <router-link
-              :to="`/manage/${routingParams}/${job.job_id}/detail`"
-              v-for="job in jobs"
-              :key="job.job_id"
-              class="jobs"
-            >
-              <JobsCard :job="job.job" />
-            </router-link>
+          <v-col v-show="!loading">
+            <template v-if="jobs.length > 0">
+              <router-link
+                :to="`/manage/${routingParams}/${job.job_id}/detail`"
+                v-for="job in jobs"
+                :key="job.job_id"
+                class="jobs"
+              >
+                <JobsCard :job="job.job" />
+              </router-link>
+            </template>
+            <div v-else>
+              <div v-if="activeCss == 2">
+                <NotDataCard text="まだ案件に応募していません。" />
+              </div>
+              <div v-if="activeCss == 3">
+                <NotDataCard text="まだ案件を保存していません。" />
+              </div>
+            </div>
+          </v-col>
+          <v-col v-show="loading">
+            <CircleLoading />
           </v-col>
         </v-sheet>
       </v-row>

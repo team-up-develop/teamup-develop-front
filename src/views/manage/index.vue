@@ -40,13 +40,14 @@ export default defineComponent({
       },
     ]);
 
-    const { fetchManageJobs, manageJobs } = useJobs();
+    const { fetchManageJobs, manageJobs, loading } = useJobs();
     fetchManageJobs();
 
     return {
       ...toRefs(state),
       breadcrumbs,
       manageJobs,
+      loading,
     };
   },
 });
@@ -56,7 +57,7 @@ export default defineComponent({
   <section>
     <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <!-- <ApplyFavorite :userId="userId" :jobs="manageJobs" /> -->
-    <Manage :jobs="manageJobs" :active-css="1" />
+    <Manage :jobs="manageJobs" :active-css="1" :loading="loading" />
   </section>
 </template>
 
