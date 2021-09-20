@@ -31,9 +31,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     CircleLoading,
   },
   props: propsOption,
-  setup: (props) => {
+  setup: () => {
     const { isLogin } = useUtils();
-    console.log(props.loading, "props.lodaing");
+
     return {
       isLogin,
     };

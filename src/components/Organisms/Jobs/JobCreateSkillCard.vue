@@ -146,14 +146,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         job_status_id: Number(state.jobStatusId),
       };
       try {
-        const res = await $post<JobCreateParamsSecond>(
-          `${AUTH_URL}/job`,
-          params,
-          {
-            headers: auth.value,
-          }
-        );
-        console.log(res.data);
+        await $post<JobCreateParamsSecond>(`${AUTH_URL}/job`, params, {
+          headers: auth.value,
+        });
         await removeItem();
         router.push({ name: "JobCreateComplete" });
       } catch (error) {
