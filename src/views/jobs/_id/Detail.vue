@@ -73,8 +73,8 @@ export default defineComponent({
 
     onMounted(async () => {
       if (state.userId) {
-        await fetchManageJobs();
         await checkApplyStatus(props.id);
+        await fetchManageJobs();
       } else {
         setTimeout(() => {
           loading.value = false;
