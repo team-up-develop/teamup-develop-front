@@ -75,8 +75,8 @@ Atomic Design 導入
 ```
 //* 処理の内容(必要に応じて)
 //? 処理の中の子説明 or paramsの説明
-// TODO: すること
-// FIXME: 私が修正します
+// TODO: issueURL
+// FIXME: issueURL
 ```
 
 ### color
