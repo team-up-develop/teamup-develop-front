@@ -4,7 +4,7 @@ import { $fetch, $post, $delete } from "@/libs/axios";
 import { AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { FavoriteParams } from "@/types/params";
-import { FetchFavoriteJob } from "@/types/fetch";
+import { FavoriteJob, Fetch } from "@/types/index";
 
 type DataType = {
   userId: number;
@@ -25,7 +25,7 @@ export default Vue.extend({
   },
   mounted() {
     // * ログインユーザーが保存済みか応募済みではないかを判定する
-    $fetch<FetchFavoriteJob>(
+    $fetch<Fetch<FavoriteJob[]>>(
       `${AUTH_URL}/favorite_jobs?user_id=${this.userId}`,
       {
         headers: {

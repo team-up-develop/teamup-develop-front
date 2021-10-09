@@ -6,8 +6,7 @@ import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import vSelect from "vue-select";
 // import 'vue-select/dist/vue-select.css';
-import { Language } from "@/types/index";
-import { FetchLanguages } from "@/types/fetch";
+import { Language, Fetch } from "@/types/index";
 
 type DataType = {
   jobId: number;
@@ -47,7 +46,7 @@ export default Vue.extend({
   },
   created() {
     // * 開発言語
-    $fetch<FetchLanguages>(`${API_URL}/programing_language`).then((res) => {
+    $fetch<Fetch<Language[]>>(`${API_URL}/programing_language`).then((res) => {
       this.languages = res.data.response;
     });
     this.selectedLang = this.job.programingLanguage;
@@ -119,7 +118,7 @@ export default Vue.extend({
           </div>
           <div class="job-create-detail-area">
             <label for="name" class="label">開発詳細</label>
-            <textarea type="text" v-model="jobDescription"/>
+            <textarea type="text" v-model="jobDescription" />
           </div>
           <div class="job-create-area">
             <label for="name" class="label">開発言語</label

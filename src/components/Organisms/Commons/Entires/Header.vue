@@ -12,8 +12,7 @@ import { truncate } from "@/hooks/useUtils";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
-import { User } from "@/types/index";
-import { FetchUser } from "@/types/fetch";
+import { User, Fetch } from "@/types/index";
 import { backGroundImage } from "@/modules/images";
 
 type State = {
@@ -40,7 +39,9 @@ export default defineComponent({
     const fetchUser = async () => {
       // * ユーザー情報取得
       try {
-        const res = await $fetch<FetchUser>(`${API_URL}/user/${state.userId}`);
+        const res = await $fetch<Fetch<User>>(
+          `${API_URL}/user/${state.userId}`
+        );
         fetchError(res.data.status);
         state.userImage = res.data.response.user_image;
       } catch (error) {

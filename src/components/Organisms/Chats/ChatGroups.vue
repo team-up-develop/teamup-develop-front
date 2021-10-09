@@ -8,12 +8,11 @@ import {
   PropType,
 } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
-import { Job } from "@/types/index";
+import { Job, Fetch, ManageJob } from "@/types/index";
 import { m, AUTH_URL } from "@/master";
 import { truncate } from "@/hooks/useUtils";
 import { catchError } from "@/libs/errorHandler";
 import { dayJsFormat } from "@/libs/dayjs";
-import { FetchManageJobs } from "@/types/fetch";
 import { useUtils } from "@/hooks";
 
 type Props = {
@@ -42,7 +41,7 @@ export default defineComponent({
 
     const getChatGroups = async () => {
       try {
-        const res = await $fetch<FetchManageJobs>(
+        const res = await $fetch<Fetch<ManageJob[]>>(
           `${AUTH_URL}/apply_jobs?user_id=${props.userId}`,
           {
             headers: auth.value,

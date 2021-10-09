@@ -7,10 +7,11 @@ import {
   SetupContext,
   computed,
 } from "@vue/composition-api";
-import { $fetch } from "@/libs/axios";
-import { API_URL } from "@/master";
+import { $fetch, $post } from "@/libs/axios";
+import { API_URL, AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { truncate } from "@/hooks/useUtils";
+import VButton from "@/components/Atoms/VButton/VButton.vue";
 import {
   JobRightLogin,
   CardJob,
@@ -23,14 +24,14 @@ import {
 } from "@/components/Organisms/Modals/Searches";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
-import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
 import { dayJsFormat } from "@/libs/dayjs";
-import { Job } from "@/types/index";
-import { FetchJobs } from "@/types/fetch";
+import { Job, Fetch } from "@/types/index";
 import Vuex from "@/store/index";
 import { encode } from "@/libs/jsBase64";
 import { useJobs } from "@/hooks";
 import { checkSelfJob, isStatusNew } from "@/modules/jobs";
+import { ApplyParams } from "@/types/params";
+import { useUtils } from "@/hooks";
 
 type State = {
   jobs: Job[];
@@ -82,7 +83,7 @@ export default defineComponent({
   components: {
     Loading,
     // CircleLoading,
-    Applybtn,
+    // Applybtn,
     Confirme,
     CardJob,
     LanguageSearchModal,
@@ -90,6 +91,7 @@ export default defineComponent({
     SkillSearchModal,
     JobRightLogin,
     JobCardDetail,
+    VButton,
   },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
@@ -98,7 +100,7 @@ export default defineComponent({
       // * 投稿一覧取得
       const posts: Job[] = [];
       try {
-        const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
+        const res = await $fetch<Fetch<Job[]>>(`${API_URL}/jobs`);
         state.jobs = res.data.response;
         paginateJobs(state.jobs);
 
@@ -152,7 +154,7 @@ export default defineComponent({
       }
       const LastLanguageURL: string = arrayLanguage.join("");
       try {
-        const res = await $fetch<FetchJobs>(
+        const res = await $fetch<Fetch<Job[]>>(
           `${API_URL}/jobs?${LastLanguageURL}`
         );
         state.jobs = res.data.response;
@@ -204,7 +206,7 @@ export default defineComponent({
       state.loading = true;
       const posts: Job[] = [];
       try {
-        const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
+        const res = await $fetch<Fetch<Job[]>>(`${API_URL}/jobs`);
         res.data.response.map((v) => {
           if (
             v.job_description?.indexOf(state.freeWord) !== -1 ||
@@ -288,6 +290,8 @@ const utils = (state: State, ctx: SetupContext) => {
 
 const clickJob = (state: State, ctx: SetupContext) => {
   const { fetchManageJobs, manageJobs, checkApplyStatus, isApply } = useJobs();
+  const { auth } = useUtils();
+
   // * click して案件を取得 === 詳細
   const getJob = async (job: Job) => {
     if (state.id === job.id) {
@@ -324,9 +328,28 @@ const clickJob = (state: State, ctx: SetupContext) => {
     await checkApplyStatus(state.id);
     state.applyFlug = isApply.value;
   };
+  // * 応募する
+  const onApply = async () => {
+    const params: ApplyParams = {
+      job_id: state.id,
+      user_id: state.userId,
+      apply_status_id: m.APPLY_STATUS_APPLY,
+    };
+    try {
+      await $post<ApplyParams>(`${AUTH_URL}/apply_job`, params, {
+        headers: auth.value,
+      });
+      state.applyFlug = false;
+      state.modal = false;
+    } catch (error) {
+      catchError(error);
+    }
+  };
+
   return {
     getJob,
     isStatusNew: computed(() => isStatusNew(state.jobDetail.job_status_id)),
+    onApply,
   };
 };
 </script>
@@ -356,9 +379,9 @@ const clickJob = (state: State, ctx: SetupContext) => {
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:btnArea>
           <div class="d-flex justify-space-between">
-            <Applybtn @compliteEntry="() => (applyFlug = false)" :job-id="id" />
-            <v-btn @click="() => (modal = false)" class="modal-btn"
-              >キャンセル</v-btn
+            <VButton bc="red" @click="onApply" class="px-6">応募する</VButton>
+            <VButton @click="() => (modal = false)" bc="redWhite" class="ml-6"
+              >キャンセル</VButton
             >
           </div>
         </template>
@@ -569,21 +592,6 @@ const clickJob = (state: State, ctx: SetupContext) => {
       cursor: pointer;
     }
   }
-}
-
-// * モーダル内のキャンセルボタン
-.modal-btn {
-  @include neumorphismGrey;
-  color: $red;
-  padding: 0rem 2rem !important;
-  height: 46px !important;
-  border-radius: 50px;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin-left: 1.2rem;
-  font-size: 1rem;
-  outline: none;
 }
 
 // * 右側 詳細を表示しない際に

@@ -8,9 +8,8 @@ import {
 import { $fetch } from "@/libs/axios";
 import Vuex from "@/store/index";
 import Session from "@/components/Atoms/Commons/Session.vue";
-import { Language, Framework, Skill } from "@/types/index";
+import { Fetch, Language, Framework, Skill } from "@/types/index";
 import { RegisterCompleteParams } from "@/types/params";
-import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
 import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { dayJsFormat } from "@/libs/dayjs";
@@ -99,7 +98,7 @@ export default defineComponent({
 
     const fetchLanguages = async () => {
       try {
-        const res = await $fetch<FetchLanguages>(
+        const res = await $fetch<Fetch<Language[]>>(
           `${API_URL}/programing_languages`
         );
         skills.languages = res.data.response;
@@ -109,7 +108,7 @@ export default defineComponent({
     };
     const fetchFrameworks = async () => {
       try {
-        const res = await $fetch<FetchFrameworks>(
+        const res = await $fetch<Fetch<Framework[]>>(
           `${API_URL}/programing_frameworks`
         );
         skills.framworks = res.data.response;
@@ -119,7 +118,7 @@ export default defineComponent({
     };
     const fetchSkills = async () => {
       try {
-        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
+        const res = await $fetch<Fetch<Skill[]>>(`${API_URL}/skills`);
         skills.skills = res.data.response;
       } catch (error) {
         catchError(error);

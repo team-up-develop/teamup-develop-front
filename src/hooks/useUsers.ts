@@ -2,12 +2,7 @@ import { reactive, toRefs } from "@vue/composition-api";
 import Vuex from "@/store/index";
 import { $fetch } from "@/libs/axios";
 import { catchError } from "@/libs/errorHandler";
-import { ApplyJob, ParticipateJob, RejectJob } from "@/types/index";
-import {
-  FetchApplyJob,
-  FetchParticipateJob,
-  FetchRejectJob,
-} from "@/types/fetch";
+import { Fetch, ApplyJob, ParticipateJob, RejectJob } from "@/types/index";
 import { m, AUTH_URL } from "@/master";
 import { useUtils } from "@/hooks";
 
@@ -32,7 +27,7 @@ const useUsers = () => {
   // * 応募者
   const fetchApplyUser = async (jobId: number) => {
     try {
-      const res = await $fetch<FetchApplyJob>(
+      const res = await $fetch<Fetch<ApplyJob[]>>(
         `
         ${AUTH_URL}/apply_jobs?job_id=${jobId}&apply_status_id=${m.APPLY_STATUS_APPLY}`,
         {
@@ -47,7 +42,7 @@ const useUsers = () => {
   // * 参加者
   const fetchAssignUsers = async (jobId: number) => {
     try {
-      const res = await $fetch<FetchParticipateJob>(
+      const res = await $fetch<Fetch<ParticipateJob[]>>(
         `
           ${AUTH_URL}/apply_jobs?job_id=${jobId}&apply_status_id=${m.APPLY_STATUS_PARTICIPATE}
           `,
@@ -63,7 +58,7 @@ const useUsers = () => {
   // * 拒否者
   const fetchRejectUser = async (jobId: number) => {
     try {
-      const res = await $fetch<FetchRejectJob>(
+      const res = await $fetch<Fetch<RejectJob[]>>(
         `
           ${AUTH_URL}/apply_jobs?job_id=${jobId}&apply_status_id=${m.APPLY_STATUS_REJECT}`,
         {

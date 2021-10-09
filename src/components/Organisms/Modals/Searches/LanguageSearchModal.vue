@@ -9,8 +9,7 @@ import {
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-import { Job, Language } from "@/types/index";
-import { FetchLanguages, FetchJobs } from "@/types/fetch";
+import { Job, Language, Fetch } from "@/types/index";
 import Vuex from "@/store/index";
 
 type State = {
@@ -39,7 +38,7 @@ export default defineComponent({
 
     const fetchLanguages = async () => {
       try {
-        const res = await $fetch<FetchLanguages>(
+        const res = await $fetch<Fetch<Language[]>>(
           `${API_URL}/programing_languages`
         );
         state.languages = res.data.response;
@@ -62,7 +61,7 @@ export default defineComponent({
       // const languageStateEnd: number[] = languageState.slice(0);
       const result: string = array.join("");
       try {
-        const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
+        const res = await $fetch<Fetch<Job[]>>(`${API_URL}/jobs?${result}`);
         state.jobs = res.data.response;
         ctx.emit("compliteSearchLanguage", state.jobs);
 

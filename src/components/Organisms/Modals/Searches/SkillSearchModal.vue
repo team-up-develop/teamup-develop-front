@@ -9,8 +9,7 @@ import {
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-import { Job, Skill } from "@/types/index";
-import { FetchSkills, FetchJobs } from "@/types/fetch";
+import { Job, Skill, Fetch } from "@/types/index";
 import Vuex from "@/store/index";
 
 type State = {
@@ -39,7 +38,7 @@ export default defineComponent({
 
     const fetchSkills = async () => {
       try {
-        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
+        const res = await $fetch<Fetch<Skill[]>>(`${API_URL}/skills`);
         state.skills = res.data.response;
       } catch (error) {
         catchError(error);
@@ -60,7 +59,7 @@ export default defineComponent({
       // const skillStateEnd: number[] = skillState.slice(0);
       const result: string = arraySkill.join("");
 
-      $fetch<FetchJobs>(`${API_URL}/jobs?${result}`).then((res) => {
+      $fetch<Fetch<Job[]>>(`${API_URL}/jobs?${result}`).then((res) => {
         state.jobs = res.data.response;
         ctx.emit("compliteSearchSkill", state.jobs);
 

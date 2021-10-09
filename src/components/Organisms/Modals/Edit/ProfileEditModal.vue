@@ -15,8 +15,7 @@ import { $fetch, $put } from "@/libs/axios";
 import { md, API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { EditProfileParams } from "@/types/params";
-import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
-import { Language, Framework, Skill, User } from "@/types/index";
+import { Language, Framework, Skill, User, Fetch } from "@/types/index";
 import {
   SkillSelectArea,
   InputArea,
@@ -112,7 +111,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
 
     const fetchLanguages = async () => {
-      const res = await $fetch<FetchLanguages>(
+      const res = await $fetch<Fetch<Language[]>>(
         `${API_URL}/programing_languages`
       );
       state.languages = res.data.response;
@@ -121,7 +120,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
 
     const fetchFrameworks = async () => {
-      const res = await $fetch<FetchFrameworks>(
+      const res = await $fetch<Fetch<Framework[]>>(
         `${API_URL}/programing_frameworks`
       );
       state.framworks = res.data.response;
@@ -130,7 +129,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
 
     const fetchSkill = async () => {
-      const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
+      const res = await $fetch<Fetch<Skill[]>>(`${API_URL}/skills`);
       state.skills = res.data.response;
       state.selectedSkill = props.userInfo.skills;
       state.selectSkillValue = state.selectedSkill.map((v) => v.id);
@@ -199,7 +198,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         programing_framework_ids: framworksArray,
         skill_ids: skillArray,
         user_image: {
-          image_data: "image",
+          image_data:
+            "https://pics.prcm.jp/4f519f398831a/82957765/jpeg/82957765.jpeg",
           file_name: "sample",
         },
       };

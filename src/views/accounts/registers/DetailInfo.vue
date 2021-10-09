@@ -15,8 +15,7 @@ import {
   DescriptionArea,
   SkillSelectArea,
 } from "@/components/Molecules/Forms";
-import { Language, Framework, Skill } from "@/types/index";
-import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
+import { Fetch, Language, Framework, Skill } from "@/types/index";
 import { RegisterSessionSecondParams } from "@/types/params";
 import { isFormSkillInfo } from "@/modules/user";
 
@@ -72,7 +71,7 @@ export default defineComponent({
 
     const fetchSkill = async () => {
       try {
-        const res = await $fetch<FetchLanguages>(
+        const res = await $fetch<Fetch<Language[]>>(
           `${API_URL}/programing_languages`
         );
         state.languages = res.data.response;
@@ -80,7 +79,7 @@ export default defineComponent({
         catchError(error);
       }
       try {
-        const res = await $fetch<FetchFrameworks>(
+        const res = await $fetch<Fetch<Framework[]>>(
           `${API_URL}/programing_frameworks`
         );
         state.framworks = res.data.response;
@@ -88,7 +87,7 @@ export default defineComponent({
         catchError(error);
       }
       try {
-        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
+        const res = await $fetch<Fetch<Skill[]>>(`${API_URL}/skills`);
         state.skills = res.data.response;
       } catch (error) {
         catchError(error);

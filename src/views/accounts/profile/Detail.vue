@@ -22,8 +22,7 @@ import {
 } from "@/components/Organisms/Users";
 // import Logout from '@/components/button/Logout'
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
-import { User } from "@/types/index";
-import { FetchUser } from "@/types/fetch";
+import { User, Fetch } from "@/types/index";
 import useJobs from "@/hooks/useJobs";
 
 type Props = {
@@ -87,7 +86,7 @@ export default defineComponent({
     const fetchUser = async () => {
       // * ユーザー情報取得
       try {
-        const res = await $fetch<FetchUser>(`${API_URL}/user/${props.id}`);
+        const res = await $fetch<Fetch<User>>(`${API_URL}/user/${props.id}`);
         fetchError(res.data.status);
         state.userInfo = res.data.response;
       } catch (error) {
