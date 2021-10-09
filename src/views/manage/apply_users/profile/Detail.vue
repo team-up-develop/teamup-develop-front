@@ -19,11 +19,10 @@ import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import { StatusChangeBtnArea } from "@/components/Organisms/Manages";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
-import { User } from "@/types/index";
+import { Fetch, User, ManageJob } from "@/types/index";
 import { m, API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { useJobs, useUtils } from "@/hooks";
-import { FetchUser, FetchManageJobs } from "@/types/fetch";
 import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
 import ApplyPutBtn from "@/components/Atoms/Button/ApplyPutBtn.vue";
 import RejectBtn from "@/components/Atoms/Button/RejectBtn.vue";
@@ -110,7 +109,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
     const fetchUser = async () => {
       try {
-        const res = await $fetch<FetchUser>(`${API_URL}/user/${props.id}`);
+        const res = await $fetch<Fetch<User>>(`${API_URL}/user/${props.id}`);
         state.userInfo = res.data.response;
       } catch (error) {
         catchError(error);
@@ -120,7 +119,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     // * 表示中のユーザーのステータスを格納
     const getStatus = async () => {
       try {
-        const res = await $fetch<FetchManageJobs>(
+        const res = await $fetch<Fetch<ManageJob[]>>(
           `
           ${AUTH_URL}/apply_jobs?job_id=${props.jobId}&user_id=${props.id}`,
           headerAuth.value

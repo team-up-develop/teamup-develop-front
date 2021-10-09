@@ -16,8 +16,7 @@ import { catchError } from "@/libs/errorHandler";
 import { SkillSelectArea, RadioArea } from "@/components/Molecules/Forms";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsSecond } from "@/types/params";
-import { Language, Framework, Skill } from "@/types/index";
-import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
+import { Fetch, Language, Framework, Skill } from "@/types/index";
 import { useUtils } from "@/hooks";
 import { isFormSecond } from "@/modules/jobCreate";
 
@@ -74,7 +73,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
     const fetchLanguages = async () => {
       try {
-        const res = await $fetch<FetchLanguages>(
+        const res = await $fetch<Fetch<Language[]>>(
           `${API_URL}/programing_languages`
         );
         state.languages = res.data.response;
@@ -84,7 +83,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
     const fetchFrameworks = async () => {
       try {
-        const res = await $fetch<FetchFrameworks>(
+        const res = await $fetch<Fetch<Framework[]>>(
           `${API_URL}/programing_frameworks`
         );
         state.framworks = res.data.response;
@@ -94,7 +93,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     };
     const fetchSkills = async () => {
       try {
-        const res = await $fetch<FetchSkills>(`${API_URL}/skills`);
+        const res = await $fetch<Fetch<Skill[]>>(`${API_URL}/skills`);
         state.skills = res.data.response;
       } catch (error) {
         catchError(error);

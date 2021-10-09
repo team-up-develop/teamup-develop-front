@@ -10,8 +10,7 @@ import {
 import { $fetch } from "@/libs/axios";
 import { AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-import { ManageJob } from "@/types/index";
-import { FetchManageJobs } from "@/types/fetch";
+import { Fetch, ManageJob } from "@/types/index";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import ApplyFavorite from "@/components/Templates/Manages/ApplyFavorite.vue";
 import { useUtils } from "@/hooks";
@@ -55,7 +54,7 @@ export default defineComponent({
       }
       try {
         state.loading = true;
-        const res = await $fetch<FetchManageJobs>(
+        const res = await $fetch<Fetch<ManageJob[]>>(
           `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
           {
             headers: auth.value,

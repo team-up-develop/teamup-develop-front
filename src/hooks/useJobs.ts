@@ -2,13 +2,7 @@ import { reactive, toRefs } from "@vue/composition-api";
 import { $fetch } from "@/libs/axios";
 import { API_URL, AUTH_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
-import { ManageJob, FavoriteJob, Job } from "@/types/index";
-import {
-  FetchManageJobs,
-  FetchJobs,
-  FetchJob,
-  FetchFavoriteJob,
-} from "@/types/fetch";
+import { Fetch, ManageJob, FavoriteJob, Job } from "@/types/index";
 import Vuex from "@/store/index";
 import { useUtils } from "@/hooks";
 
@@ -40,7 +34,7 @@ const useJobs = () => {
 
   const fetchJobs = async () => {
     try {
-      const res = await $fetch<FetchJobs>(`${API_URL}/jobs`);
+      const res = await $fetch<Fetch<Job[]>>(`${API_URL}/jobs`);
       state.jobs = res.data.response;
     } catch (error) {
       catchError(error);
@@ -49,7 +43,7 @@ const useJobs = () => {
   // *詳細
   const fetchJobDetail = async (jobId: number) => {
     try {
-      const res = await $fetch<FetchJob>(`${API_URL}/job/${jobId}`);
+      const res = await $fetch<Fetch<Job>>(`${API_URL}/job/${jobId}`);
       await fetchError(res.data.status);
       state.job = res.data.response;
       // state.loading = false;
@@ -61,7 +55,7 @@ const useJobs = () => {
   const fetchManageJobs = async () => {
     state.loading = true;
     try {
-      const res = await $fetch<FetchManageJobs>(
+      const res = await $fetch<Fetch<ManageJob[]>>(
         `${API_URL}/jobs?user_id=${state.userId}`
       );
       state.manageJobs = res.data.response;
@@ -73,7 +67,7 @@ const useJobs = () => {
   // * 指定したユーザーの案件
   const fetchProfileJobs = async (userId: number) => {
     try {
-      const res = await $fetch<FetchManageJobs>(
+      const res = await $fetch<Fetch<ManageJob[]>>(
         `${API_URL}/jobs?user_id=${userId}`
       );
       state.profileJobs = res.data.response;
@@ -86,7 +80,7 @@ const useJobs = () => {
   const fetchFavoriteJobs = async () => {
     try {
       state.loading = true;
-      const res = await $fetch<FetchFavoriteJob>(
+      const res = await $fetch<Fetch<FavoriteJob[]>>(
         `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
         {
           headers: auth.value,
@@ -101,7 +95,7 @@ const useJobs = () => {
   // * 応募済みか判別
   const checkApplyStatus = async (jobId: number) => {
     try {
-      const res = await $fetch<FetchManageJobs>(
+      const res = await $fetch<Fetch<ManageJob[]>>(
         `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
         {
           headers: auth.value,

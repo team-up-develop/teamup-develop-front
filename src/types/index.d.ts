@@ -7,6 +7,12 @@ export { APPLY_STATUS_APPLY, APPLY_STATUS_PARTICIPATE, APPLY_STATUS_REJECT };
 
 type Maybe<T> = T | null;
 
+interface Fetch<R> {
+  msg: string;
+  response: R;
+  status: string;
+}
+
 type Job = {
   created_at: Date;
   deleted_at: Maybe<Date>;
@@ -137,6 +143,7 @@ type ImageFile = {
 };
 
 export {
+  Fetch,
   Job,
   User,
   ManageJob,

@@ -4,8 +4,7 @@ import { $fetch } from "@/libs/axios";
 import { catchError } from "@/libs/errorHandler";
 import { API_URL, AUTH_URL, m } from "@/master";
 import { useUtils } from "@/hooks";
-import { ManageJob, User } from "@/types/index";
-import { FetchManageJobs, FetchFavoriteJob, FetchUser } from "@/types/fetch";
+import { FavoriteJob, ManageJob, User, Fetch } from "@/types/index";
 
 type Maybe<T> = T | {};
 
@@ -26,7 +25,7 @@ const useAccountMe = () => {
   // * ログインユーザー
   const fetchAccountMe = async () => {
     try {
-      const res = await $fetch<FetchUser>(
+      const res = await $fetch<Fetch<User>>(
         `
         ${API_URL}/user/${state.userId}`,
         {
@@ -41,7 +40,7 @@ const useAccountMe = () => {
 
   // *管理案件数
   const fetchManageJobsNum = async () => {
-    const res = await $fetch<FetchManageJobs>(
+    const res = await $fetch<Fetch<ManageJob[]>>(
       `${API_URL}/jobs?user_id=${state.userId}`
     );
     return res.data.response.length;
@@ -49,7 +48,7 @@ const useAccountMe = () => {
 
   // *応募案件数
   const fetchApplyJobsNum = async () => {
-    const res = await $fetch<FetchManageJobs>(
+    const res = await $fetch<Fetch<ManageJob[]>>(
       `${AUTH_URL}/apply_jobs?user_id=${state.userId}`,
       {
         headers: {
@@ -67,7 +66,7 @@ const useAccountMe = () => {
 
   // *保存案件数
   const fetchFavoriteJobsNum = async () => {
-    const res = await $fetch<FetchFavoriteJob>(
+    const res = await $fetch<Fetch<FavoriteJob[]>>(
       `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
       {
         headers: {

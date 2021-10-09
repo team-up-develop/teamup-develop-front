@@ -9,8 +9,7 @@ import {
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
-import { Job, Framework } from "@/types/index";
-import { FetchFrameworks, FetchJobs } from "@/types/fetch";
+import { Job, Framework, Fetch } from "@/types/index";
 import Vuex from "@/store/index";
 
 type State = {
@@ -39,7 +38,7 @@ export default defineComponent({
 
     const fetchFrameworks = async () => {
       try {
-        const res = await $fetch<FetchFrameworks>(
+        const res = await $fetch<Fetch<Framework[]>>(
           `${API_URL}/programing_frameworks`
         );
         state.frameworks = res.data.response;
@@ -63,7 +62,7 @@ export default defineComponent({
       const result: string = apiStringFramework.join("");
 
       try {
-        const res = await $fetch<FetchJobs>(`${API_URL}/jobs?${result}`);
+        const res = await $fetch<Fetch<Job[]>>(`${API_URL}/jobs?${result}`);
         state.jobs = res.data.response;
         ctx.emit("compliteSearchFramework", state.jobs);
 

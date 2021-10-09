@@ -17,8 +17,7 @@ import {
   TopHowto,
   TopPageNewJobCard,
 } from "@/components/Organisms/TopPage";
-import { Language, Framework, Skill } from "@/types/index";
-import { FetchLanguages, FetchFrameworks, FetchSkills } from "@/types/fetch";
+import { Fetch, Language, Framework, Skill } from "@/types/index";
 
 type State = {
   languages: Language[];
@@ -48,7 +47,7 @@ export default defineComponent({
     const state = reactive<State>(initialState(ctx));
 
     const fetchLanguages = async () => {
-      $fetch<FetchLanguages>(`${API_URL}/programing_languages`)
+      $fetch<Fetch<Language[]>>(`${API_URL}/programing_languages`)
         .then((res) => {
           state.languages = res.data.response;
         })
@@ -57,7 +56,7 @@ export default defineComponent({
         });
     };
     const fetchFrameworks = async () => {
-      $fetch<FetchFrameworks>(`${API_URL}/programing_frameworks`)
+      $fetch<Fetch<Framework[]>>(`${API_URL}/programing_frameworks`)
         .then((res) => {
           state.framworks = res.data.response;
         })
@@ -66,7 +65,7 @@ export default defineComponent({
         });
     };
     const fetchSkills = async () => {
-      $fetch<FetchSkills>(`${API_URL}/skills`)
+      $fetch<Fetch<Skill[]>>(`${API_URL}/skills`)
         .then((res) => {
           state.skills = res.data.response;
         })

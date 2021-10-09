@@ -15,8 +15,7 @@ import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
 import ChatGroups from "@/components/Organisms/Chats/ChatGroups.vue";
 import SendMessage from "@/components/Organisms/Chats/SendMessage.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
-import { Message } from "@/types/index";
-import { FetchMessage, FetchJob } from "@/types/fetch";
+import { Message, Fetch, Job } from "@/types/index";
 import { m, API_URL, AUTH_URL } from "@/master";
 import { truncate } from "@/hooks/useUtils";
 import { catchError } from "@/libs/errorHandler";
@@ -100,7 +99,7 @@ export default defineComponent({
 
     const fetchJob = async (id: number) => {
       try {
-        const res = await $fetch<FetchJob>(`${API_URL}/job/${id}`);
+        const res = await $fetch<Fetch<Job>>(`${API_URL}/job/${id}`);
         state.jobTitle = res.data.response.job_title;
         state.clickJobId = res.data.response.id;
       } catch (error) {
@@ -112,7 +111,7 @@ export default defineComponent({
       let chatLength = 0;
       // state.loading = false;
       try {
-        const res = await $fetch<FetchMessage>(
+        const res = await $fetch<Fetch<Message[]>>(
           `${AUTH_URL}/chat_messages?job_id=${id}`,
           {
             headers: auth.value,

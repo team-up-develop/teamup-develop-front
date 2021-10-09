@@ -11,7 +11,7 @@ import { $fetch, $post, $delete } from "@/libs/axios";
 import { AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { FavoriteParams } from "@/types/params";
-import { FetchFavoriteJob } from "@/types/fetch";
+import { FavoriteJob, Fetch } from "@/types/index";
 import { useUtils } from "@/hooks";
 
 type State = {
@@ -39,7 +39,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
     const fetchFavorite = async () => {
       try {
-        const res = await $fetch<FetchFavoriteJob>(
+        const res = await $fetch<Fetch<FavoriteJob[]>>(
           `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
           {
             headers: auth.value,

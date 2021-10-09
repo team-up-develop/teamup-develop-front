@@ -12,6 +12,7 @@ import { dayJsFormat } from "@/libs/dayjs";
 import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
 import Chip from "@/components/Atoms/Commons/Chip.vue";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
+import VButton from "@/components/Atoms/VButton/VButton.vue";
 
 type State = {
   userId: number;
@@ -40,6 +41,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     CircleLoading,
     Chip,
     FavoriteBtn,
+    VButton,
   },
   props: propsOption,
   setup: (_, ctx) => {
@@ -64,10 +66,17 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       <template v-if="!notLogin">
         <div v-show="!circleLoading">
           <div class="top-job-detail-bottom" v-if="!isSelfJob">
-            <button @click="onApply" class="btn-box-apply" v-if="applyFlug">
-              応募する
-            </button>
-            <div class="btn-box-apply-false" v-else>応募済み</div>
+            <VButton
+              v-if="applyFlug"
+              bc="red"
+              size="lg"
+              class="px-12 body-1"
+              @click="onApply"
+              >応募する</VButton
+            >
+            <VButton v-else bc="grey" size="lg" class="px-12 body-1"
+              >応募済み</VButton
+            >
             <div class="btn-box-save">
               <FavoriteBtn :job-id="job.id" />
             </div>
@@ -77,8 +86,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           </div>
           <template v-else>
             <div class="top-job-detail-bottom">
-              <router-link :to="`/manage/${job.id}/apply_users`">
-                <button class="btn-box-manage">管理画面</button>
+              <router-link
+                class="manamge-btn"
+                :to="`/manage/${job.id}/apply_users`"
+              >
+                <VButton bc="primaryWhite" size="lg" class="px-12 body-1"
+                  >管理画面</VButton
+                >
               </router-link>
               <div v-if="isStatusNew" class="label-area">
                 <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
@@ -93,9 +107,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
       <template v-else>
         <div class="top-job-detail-bottom">
-          <button class="btn-box-apply" @click="registerRedirect">
-            応募する
-          </button>
+          <VButton
+            bc="red"
+            size="lg"
+            class="px-12 body-1"
+            @click="registerRedirect"
+            >応募する</VButton
+          >
           <div class="btn-box-save">
             <v-icon class="save-icon" @click="registerRedirect"
               >mdi-heart</v-icon
@@ -208,7 +226,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 .btn-box-save {
   display: inline-block;
-  padding: 0.3rem 0 0 1.2rem;
+  padding: 0rem 0 0 1.2rem;
   position: absolute;
   top: 0;
 }
@@ -256,24 +274,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 }
 
 // * 管理画面遷移ボタン
-.btn-box-manage {
-  @include neumorphismGrey;
-  padding: 0.75rem 3rem;
-  border-radius: 8px;
-  font-weight: 600;
-  color: $primary-color;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  font-size: 1.1em;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-  margin-top: 4px;
-  appearance: none;
-  border: none;
-  outline: none;
+.manamge-btn {
+  text-decoration: none;
 }
 
 // * 応募するボタン
@@ -297,23 +299,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   border: none;
   transition: 0.3s;
   outline: none;
-}
-
-// * 応募済みボタン
-.btn-box-apply-false {
-  @include grey-btn;
-  display: block;
-  padding: 0.75rem 3rem;
-  border-radius: 8px;
-  font-weight: 600;
-  color: $white;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  margin-top: 4px;
-  font-size: 1.1em;
-  display: inline-block;
 }
 
 // * 保存アイコン
