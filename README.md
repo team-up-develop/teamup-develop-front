@@ -86,8 +86,7 @@ Atomic Design 導入
 [src/assets/scss/_variables.scss](https://github.com/team-up-develop/teamup-develop-front/blob/7ec7379dd1886ca19b29d75ed89b1e1cd8482e73/src/assets/scss/_variables.scss#L7)
 
 ### 型定義
-- index (type of entire)
-- fetch (type of get response)
+- index (type of fetch)
 - params (type of post & put & delete parameter)
 
 [src/types](https://github.com/team-up-develop/teamup-develop-front/tree/main/src/types)
