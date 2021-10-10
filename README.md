@@ -87,7 +87,7 @@ Atomic Design 導入
 
 ### 型定義
 - index (type of fetch)
-- params (type of post & put & delete parameter)
+- params (type of request parameter)
 
 [src/types](https://github.com/team-up-develop/teamup-develop-front/tree/main/src/types)
 
