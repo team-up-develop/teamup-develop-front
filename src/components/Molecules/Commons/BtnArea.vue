@@ -1,12 +1,10 @@
 <script lang="ts">
 import Vue from "vue";
-import LoginBtn from "@/components/Atoms/Commons/Entires/LoginBtn.vue";
-import RegisteBtn from "@/components/Atoms/Commons/Entires/RegisteBtn.vue";
+import VButton from "@/components/Atoms/VButton/VButton.vue";
 
 export default Vue.extend({
   components: {
-    LoginBtn,
-    RegisteBtn,
+    VButton,
   },
 });
 </script>
@@ -17,10 +15,14 @@ export default Vue.extend({
       <router-link to="/jobs" class="menu-list">
         <!-- <v-icon class="icon">mdi-magnify</v-icon> -->
       </router-link>
-      <LoginBtn />
+      <router-link class="router" to="/login">
+        <VButton bc="primaryWhite">ログイン</VButton>
+      </router-link>
     </v-row>
     <v-row class="right-create-btn">
-      <RegisteBtn />
+      <router-link class="router" to="/register/personal">
+        <VButton bc="primary">登録する</VButton>
+      </router-link>
     </v-row>
   </section>
 </template>
@@ -31,7 +33,6 @@ export default Vue.extend({
 .icon {
   margin-right: 0.5rem;
 }
-
 .router {
   text-decoration: none;
 }

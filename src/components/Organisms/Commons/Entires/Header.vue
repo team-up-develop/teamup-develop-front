@@ -7,13 +7,13 @@ import {
   computed,
 } from "@vue/composition-api";
 import Logo from "@/components/Atoms/Commons/Entires/Logo.vue";
-import CreateBtn from "@/components/Atoms/Commons/Entires/CreateBtn.vue";
 import { truncate } from "@/hooks/useUtils";
 import { $fetch } from "@/libs/axios";
 import { API_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
 import { User, Fetch } from "@/types/index";
 import { backGroundImage } from "@/modules/images";
+import VButton from "@/components/Atoms/VButton/VButton.vue";
 
 type State = {
   userId: number;
@@ -30,7 +30,7 @@ const initialState = (ctx: SetupContext): State => ({
 export default defineComponent({
   components: {
     Logo,
-    CreateBtn,
+    VButton,
   },
 
   setup: (_, ctx) => {
@@ -68,7 +68,9 @@ export default defineComponent({
         </div>
         <div class="header-main-right">
           <v-row class="left-create-btn">
-            <CreateBtn />
+            <router-link class="router" to="/job_create">
+              <VButton bc="primary">募集する</VButton>
+            </router-link>
           </v-row>
           <v-row class="right-user-menu">
             <v-menu left bottom>
@@ -131,6 +133,9 @@ export default defineComponent({
 <style lang="scss" scoped>
 @import "@/assets/scss/_variables.scss";
 
+.router {
+  text-decoration: none;
+}
 .list {
   .menu-list {
     color: $text-sub-color;
@@ -138,12 +143,10 @@ export default defineComponent({
     text-decoration: none;
   }
 }
-
 .boder-line {
   width: 100%;
   border-bottom: 1px solid rgba(128, 128, 128, 0.442);
 }
-
 .v-icon.v-icon {
   margin-right: 0.5rem;
   font-size: 1.5em;
