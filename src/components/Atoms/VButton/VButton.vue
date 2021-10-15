@@ -91,7 +91,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
      */
     textColor: { type: String as PropType<TextColors>, default: "white" },
     /**
-     * 背景色の色（`primary`, `red`, `redWhite`）
+     * 背景色の色（`primary`, `primaryWhite , `red`, `redWhite`, `grey`）
      */
     bc: {
       type: String as PropType<BackgroundColor>,
