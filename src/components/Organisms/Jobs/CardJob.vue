@@ -1,18 +1,18 @@
 <script lang="ts">
 import { defineComponent, computed, PropType } from "@vue/composition-api";
-import CardJobSkill from "@/components/Atoms/Jobs/CardJobSkill.vue";
 import { m } from "@/master";
 import { truncate } from "@/hooks/useUtils";
 import { dayjs } from "@/libs/dayjs";
-import JobStatusNew from "@/components/Atoms/Jobs/JobStatusNew.vue";
+import JobStatusNew from "@/components/Atoms/Ribon/JobStatusNew.vue";
 import { Job } from "@/types/index";
 import { backGroundImage } from "@/modules/images";
 import { isStatusNew } from "@/modules/jobs";
+import { VChip } from "@/components/Atoms";
 
 export default defineComponent({
   components: {
-    CardJobSkill,
     JobStatusNew,
+    VChip,
   },
   props: {
     job: { type: Object as PropType<Job>, defalut: null, required: true },
@@ -58,9 +58,50 @@ const useUtils = () => {
       <span>{{ truncate(job.job_title, 40) }}</span>
       <p>{{ truncate(job.job_title, 30) }}</p>
     </div>
-    <div class="job-cards__center">
-      <!-- カード スキルコンポーネント -->
-      <CardJobSkill :job="job" />
+    <div class="job-cards__center d-flex flex-wrap">
+      <!-- TODO:  カード スキルコンポーネント -->
+      <div
+        v-for="(langage, index) in job.programing_languages.slice(0, 3)"
+        :key="`language-${index}`"
+      >
+        <VChip color="purp" class="mr-1 mb-1 font-weight-bold langage">{{
+          langage.name
+        }}</VChip>
+        <VChip
+          size="sm"
+          color="purp"
+          class="mr-1 mb-1 font-weight-bold langage-responsive"
+          >{{ langage.name }}</VChip
+        >
+      </div>
+      <div
+        v-for="(framework, index) in job.programing_frameworks.slice(0, 3)"
+        :key="`framework-${index}`"
+      >
+        <VChip color="pri" class="mr-1 mb-1 font-weight-bold framework">{{
+          framework.name
+        }}</VChip>
+        <VChip
+          size="sm"
+          color="pri"
+          class="mr-1 mb-1 font-weight-bold framework-responsive"
+          >{{ framework.name }}</VChip
+        >
+      </div>
+      <div
+        v-for="(skill, index) in job.skills.slice(0, 4)"
+        :key="`skill-${index}`"
+      >
+        <VChip color="gree" class="mr-1 mb-1 font-weight-bold skill">{{
+          skill.name
+        }}</VChip>
+        <VChip
+          size="sm"
+          color="gree"
+          class="mr-1 mb-1 font-weight-bold skill-responsive"
+          >{{ skill.name }}</VChip
+        >
+      </div>
     </div>
     <div class="job-cards__bottom">
       <div class="product-start-end">
@@ -141,11 +182,31 @@ const useUtils = () => {
     min-height: 88px;
     padding: 10px 1.5rem 0 1.5rem;
     text-align: left;
+    width: 100%;
     pointer-events: none;
 
     @media screen and (max-width: $me) {
       padding: 0 0.5rem 0 0.8rem;
       min-height: 75px;
+    }
+    // TODO: あまり良くない書き方だが...
+    .langage-responsive,
+    .framework-responsive,
+    .skill-responsive {
+      display: none;
+    }
+
+    @media screen and (max-width: $sm) {
+      .langage-responsive,
+      .framework-responsive,
+      .skill-responsive {
+        display: block;
+      }
+      .langage,
+      .framework,
+      .skill {
+        display: none;
+      }
     }
   }
 

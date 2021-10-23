@@ -10,9 +10,8 @@ import { InputSet } from "@/components/Molecules/Forms";
 import { truncate } from "@/hooks/useUtils";
 import { dayJsFormat } from "@/libs/dayjs";
 import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
-import Chip from "@/components/Atoms/Commons/Chip.vue";
 import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
-import VButton from "@/components/Atoms/VButton/VButton.vue";
+import { VButton, VChip } from "@/components/Atoms";
 
 type State = {
   userId: number;
@@ -39,9 +38,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     InputSet,
     CircleLoading,
-    Chip,
     FavoriteBtn,
     VButton,
+    VChip,
   },
   props: propsOption,
   setup: (_, ctx) => {
@@ -81,7 +80,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
               <FavoriteBtn :job-id="job.id" />
             </div>
             <div v-if="isStatusNew" class="label-area">
-              <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
+              <VChip color="pri"
+                ><v-icon class="mr-1">mdi-label</v-icon>新規募集</VChip
+              >
             </div>
           </div>
           <template v-else>
@@ -95,7 +96,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
                 >
               </router-link>
               <div v-if="isStatusNew" class="label-area">
-                <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
+                <VChip color="pri"
+                  ><v-icon class="mr-1">mdi-label</v-icon>新規募集</VChip
+                >
               </div>
             </div>
           </template>
@@ -120,7 +123,9 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             >
           </div>
           <div v-if="isStatusNew" class="label-area">
-            <Chip color="#2196f3" icon="mdi-label" title="新規募集" />
+            <VChip color="pri"
+              ><v-icon class="mr-1">mdi-label</v-icon>新規募集</VChip
+            >
           </div>
         </div>
       </template>
