@@ -1,3 +1,2 @@
-import Icon from "@/components/Atoms/VIcon/Icon.vue";
-
-export { Icon };
+export * from "./VButton";
+export * from "./VChip";
