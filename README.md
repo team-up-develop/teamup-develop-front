@@ -11,22 +11,22 @@
 - [テスト環境](https://teamup-dev.netlify.app/jobs) 
 
 ## 環境構築
-### コンテナ作成 / 起動
+### (1) コンテナ作成 / 起動
 ```
 $ docker-compose up -d --build
 ```
 
-### in container & bash start up
+### (2) in container & bash start up
 ```
 $ docker-compose exec app sh
 ```
 
-### node package install
+### (3) node package install
 ```
 $ npm i
 ```
 
-### runServer
+### (4) runServer
 ```
 $ npm run dev
 ```
