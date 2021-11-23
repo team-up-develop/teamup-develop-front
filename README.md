@@ -98,5 +98,7 @@ Atomic Design 導入
 - [unDraw](https://undraw.co/illustrations)
 - [freepik](https://www.freepik.com/)
 
-### deploy関連
-- [netlify](https://app.netlify.com/teams/kazuya-sakamoto/overview) 
+### deploy
+- テスト環境
+  - [netlify](https://app.netlify.com/teams/kazuya-sakamoto/overview) 
+
