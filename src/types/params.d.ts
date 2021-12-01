@@ -91,12 +91,6 @@ interface RegisterCompleteParams {
   twitter_account: Maybe<string>;
 }
 
-interface messageParams {
-  message: string;
-  user_id: number;
-  job_id: number;
-}
-
 interface EditProfileParams {
   id: number;
   user_name: string;
@@ -129,6 +123,5 @@ export {
   RegisterSessionFirstParams,
   RegisterSessionSecondParams,
   RegisterCompleteParams,
-  messageParams,
   EditProfileParams,
 };
