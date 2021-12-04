@@ -40,11 +40,6 @@ import FavoriteJobDetail from "@/views/manage/favorite_jobs/_id/Detail.vue";
 import ApplyUsers from "@/views/manage/apply_users/index.vue";
 import ManageUserProfile from "@/views/manage/apply_users/profile/Detail.vue";
 /*
- * chats
- */
-import Chat from "@/views/chats/index.vue";
-import ChatDetail from "@/views/chats/_id/index.vue";
-/*
  * test
  */
 import Story from "@/views/story/index.vue";
@@ -192,19 +187,6 @@ const routes: Array<RouteConfig> = [
   {
     path: "/manage/apply_job/:id/detail",
     component: ApplyJobDetail,
-    props: (route) => ({
-      id: Number(route.params.id),
-    }),
-  },
-  // * チャット
-  {
-    path: "/chat",
-    name: "Chat",
-    component: Chat,
-  },
-  {
-    path: "/chat/:id/",
-    component: ChatDetail,
     props: (route) => ({
       id: Number(route.params.id),
     }),

@@ -122,17 +122,6 @@ type Skill = {
   updated_at: Date;
 };
 
-type Message = {
-  id: number;
-  job: Job;
-  job_id: number;
-  message: string;
-  updated_at: Date;
-  user: User;
-  user_id: number;
-  created_at: Date;
-};
-
 type ImageFile = {
   lastModified: number;
   lastModifiedDate: Date;
@@ -154,6 +143,5 @@ export {
   Language,
   Framework,
   Skill,
-  Message,
   ImageFile,
 };

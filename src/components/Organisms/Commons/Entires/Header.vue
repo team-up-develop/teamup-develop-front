@@ -103,14 +103,6 @@ export default defineComponent({
                   </v-list-item>
                   <div class="boder-line" />
                   <v-list-item>
-                    <router-link to="/chat" class="menu-list">
-                      <v-list-item-title class="font-weight-bold">
-                        <v-icon class="icon">mdi-chat-plus-outline</v-icon>
-                        チャット
-                      </v-list-item-title>
-                    </router-link>
-                  </v-list-item>
-                  <v-list-item>
                     <router-link to="/manage" class="menu-list">
                       <v-list-item-title class="font-weight-bold">
                         <v-icon class="icon"
