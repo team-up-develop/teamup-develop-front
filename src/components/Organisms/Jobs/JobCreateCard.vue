@@ -10,6 +10,7 @@ import {
   DescriptionArea,
   DatePickerArea,
 } from "@/components/Molecules/Forms";
+import { VButton } from "@/components/Atoms";
 import Session from "@/components/Atoms/Commons/Session.vue";
 import { JobCreateParamsFirst } from "@/types/params";
 import {
@@ -40,6 +41,7 @@ export default defineComponent({
     InputArea,
     DescriptionArea,
     DatePickerArea,
+    VButton,
   },
   setup: () => {
     const state = reactive<JobCreateSession1>(initialState());
@@ -86,6 +88,7 @@ export default defineComponent({
       minPeriod: computed(() =>
         minPeriod(state.devStartDate, state.devEndDate)
       ),
+      link: computed(() => `/job_create/skills`),
       nextCreateBtn,
     };
   },
@@ -155,23 +158,30 @@ export default defineComponent({
           />
         </div>
       </section>
-      <router-link
-        to="/job_create/skills"
-        class="btn-area"
-        v-if="isForm && !afterDevEndDate && !beforeToDate && !minPeriod"
-      >
-        <button class="next-btn" @click="nextCreateBtn">次へ 1/2</button>
-      </router-link>
-      <span class="btn-area" v-else>
-        <v-tooltip bottom>
+      <div class="btn-area">
+        <VButton
+          v-if="isForm && !afterDevEndDate && !beforeToDate && !minPeriod"
+          :to="link"
+          class="float-right px-8"
+          @click="nextCreateBtn"
+          bc="primary"
+          size="lg"
+          >次へ 1/2</VButton
+        >
+        <v-tooltip bottom v-else>
           <template v-slot:activator="{ on, attrs }">
-            <button class="next-btn-false" v-on="on" v-bind="attrs">
-              次へ 1/2
-            </button>
+            <VButton
+              class="float-right px-8"
+              bc="grey"
+              size="lg"
+              v-on="on"
+              v-bind="attrs"
+              >次へ 1/2</VButton
+            >
           </template>
           <span>必須項目が入力されていません</span>
         </v-tooltip>
-      </span>
+      </div>
     </v-sheet>
   </section>
 </template>
@@ -231,47 +241,12 @@ section {
   }
 }
 
-.btn-area {
-  .next-btn {
-    @include neumorphism;
-    @include blue-btn;
-    color: $white;
-    text-align: left;
-    display: block;
-    padding: 1.1rem 4rem;
-    border-radius: 8px;
-    border: none;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    float: right;
-    cursor: pointer;
-    outline: none;
-  }
-
-  .next-btn-false {
-    @include box-shadow-btn;
-    @include grey-btn;
-    color: $white;
-    text-align: left;
-    display: block;
-    padding: 1.1rem 4rem;
-    border-radius: 8px;
-    border: none;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    float: right;
-    transition: 0.3s;
-    outline: none;
+/* スマホ */
+@media (max-width: $sm) {
+  .btn-area {
+    display: flex;
+    flex-direction: column;
+    float: none;
   }
 }
 </style>

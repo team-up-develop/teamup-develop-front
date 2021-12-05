@@ -12,19 +12,19 @@ import {
 } from "@icare-jp/vue-props-type";
 import { Job } from "@/types";
 import FavoriteDetailBtn from "@/components/Atoms/Button/FavoriteDetailBtn.vue";
-import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
-import Applybtn from "@/components/Atoms/Button/Applybtn.vue";
+import ConfirmDialog from "@/components/Organisms/Modals/Actions/ConfirmDialog.vue";
 import { encode } from "@/libs/jsBase64";
+import { VButton } from "@/components/Atoms";
 
 const propsOption = {
   id: { type: Number, default: 0, required: true },
   job: { type: Object as PropType<Job> },
-  selfjob: {
+  isSelfJob: {
     type: Boolean as PropType<boolean>,
     default: false,
     required: true,
   },
-  applyFlug: {
+  isApply: {
     type: Boolean as PropType<boolean>,
     default: false,
     required: true,
@@ -32,6 +32,10 @@ const propsOption = {
   isLogin: {
     type: Boolean as PropType<boolean>,
     default: false,
+    required: true,
+  },
+  onApply: {
+    type: Function as PropType<() => Promise<void>>,
     required: true,
   },
 } as const;
@@ -50,24 +54,28 @@ const initialState = (): State => ({
 export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     FavoriteDetailBtn,
-    Confirme,
-    Applybtn,
+    ConfirmDialog,
+    VButton,
   },
   props: propsOption,
   setup: (props, ctx) => {
     const state = reactive<State>(initialState());
     const router = ctx.root.$router;
 
-    const compliteEntry = () => ctx.emit("applied");
-    const registerRedirect = () => {
-      localStorage.setItem("CJI_DATA_EN", encode(String(props.id)));
+    const registerRedirect = async () => {
+      await localStorage.setItem("CJI_DATA_EN", encode(String(props.id)));
       return router.push("/register/personal");
+    };
+
+    const onApplyEvent = async () => {
+      await props.onApply();
+      state.modal = false;
     };
 
     return {
       ...toRefs(state),
       registerRedirect,
-      compliteEntry,
+      onApplyEvent,
     };
   },
 });
@@ -77,26 +85,41 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   <section class="wrap">
     <!-- 応募する モーダル画面 -->
     <div class="example-modal-window">
-      <Confirme @close="() => (modal = false)" v-if="modal">
+      <ConfirmDialog @close="() => (modal = false)" v-if="modal">
         <v-icon class="apply-icon pt-1 pb-4">
           mdi mdi-handshake-outline
         </v-icon>
         <p>応募を完了してよろしいですか？</p>
         <template v-slot:btnArea>
           <div class="d-flex justify-space-between">
-            <Applybtn :job-id="id" @compliteEntry="compliteEntry" />
-            <v-btn @click="() => (modal = false)" class="modal-btn"
-              >キャンセル</v-btn
+            <VButton
+              class="rounded-pill modal-btn-apply mr-4"
+              @click="onApplyEvent()"
+              bc="red"
+              size="lg"
+              >応募する</VButton
+            >
+            <VButton
+              class="rounded-pill modal-btn mr-4"
+              @click="() => (modal = false)"
+              bc="redWhite"
+              size="lg"
+              >キャンセル</VButton
             >
           </div>
         </template>
-      </Confirme>
+      </ConfirmDialog>
     </div>
     <div class="button-area" v-if="isLogin">
-      <div class="button-area__action" v-if="!selfjob">
-        <button @click="() => (modal = true)" class="apply" v-if="applyFlug">
-          応募する
-        </button>
+      <div class="button-area__action" v-if="!isSelfJob">
+        <VButton
+          v-if="isApply"
+          class="rounded-pill apply mr-4"
+          @click="() => (modal = true)"
+          bc="red"
+          size="lg"
+          >応募する</VButton
+        >
         <div class="apply-false" v-else>応募済み</div>
         <div class="favorite">
           <FavoriteDetailBtn :job-id="id" />
@@ -105,8 +128,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     </div>
     <!-- 非ログイン時 リダイレクトさせる -->
     <div class="button-area" v-else>
-      <div class="button-area__action" @click="registerRedirect">
-        <button class="apply">応募する</button>
+      <div class="button-area__action">
+        <VButton
+          class="rounded-pill apply mr-4"
+          @click="registerRedirect"
+          bc="red"
+          size="lg"
+          >応募する</VButton
+        >
         <div class="favorite">
           <v-icon class="icon">mdi-heart</v-icon>
         </div>
@@ -174,24 +203,12 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 //* 応募するボタン
 .apply {
-  @include red-btn;
-  @include neumorphism;
-  color: $white;
+  font-size: 1.3rem;
+  padding: 1.2rem 4rem;
   position: absolute;
   left: 0;
   top: 0;
   width: 70%;
-  padding: 1.2rem 4rem;
-  transition: 0.3s;
-  border-radius: 50px;
-  font-weight: 600;
-  line-height: 1;
-  text-align: center;
-  margin: auto;
-  font-size: 1.3rem;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
 
   @media screen and (max-width: $la) {
     width: 75%;
@@ -233,37 +250,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   }
 }
 
-//* 編集するボタン
-// .edit {
-//   @include box-shadow-btn;
-//   background-color: $secondary-color;
-//   color: $white;
-//   padding: 1.2rem 8rem;
-//   transition: 0.3s;
-//   border-radius: 50px;
-//   font-weight: 600;
-//   line-height: 1;
-//   text-align: center;
-//   margin: auto;
-//   font-size: 1.3rem;
-//   display: inline-block;
-//   margin-bottom: 0.5rem;
-//   cursor: pointer;
-//   border: none;
-//   appearance: none;
-//   border: none;
-//   transition: 0.3s;
-//   outline: none;
-
-//   @media screen and (max-width: $sm) {
-//     font-size: 1rem;
-//   }
-
-//   &:hover {
-//     @include btn-hover;
-//   }
-// }
-
 .favorite {
   position: absolute;
   right: 0;
@@ -282,21 +268,14 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   }
 }
 
-// * モーダル内のキャンセルボタン
 .modal-btn {
-  @include neumorphismGrey;
-  color: $red;
   padding: 0rem 2rem !important;
   height: 46px !important;
-  border-radius: 50px;
-  line-height: 1;
-  text-align: center;
   max-width: 280px;
-  margin-left: 1.2rem;
-  font-size: 1rem;
-  // position: absolute;
-  // top: 0;
-  // right: 0;
-  outline: none;
+}
+.modal-btn-apply {
+  padding: 0rem 2.5rem !important;
+  height: 46px !important;
+  max-width: 280px;
 }
 </style>

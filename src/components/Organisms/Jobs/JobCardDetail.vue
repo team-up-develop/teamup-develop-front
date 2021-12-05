@@ -24,12 +24,12 @@ const initialState = (ctx: SetupContext): State => ({
 const propsOption = {
   job: { type: Object as PropType<any>, required: true },
   notLogin: { type: Boolean, required: true },
-  registerRedirect: { type: Function, required: true },
+  registerRedirect: { type: Function as PropType<() => void>, required: true },
   circleLoading: { type: Boolean, required: true },
   isSelfJob: { type: Boolean, required: true },
   isStatusNew: { type: Boolean, required: true },
   applyFlug: { type: Boolean, required: true },
-  onApply: { type: Function, required: true },
+  onApply: { type: Function as PropType<() => Promise<void>>, required: true },
 } as const;
 
 type PropsOption = typeof propsOption;

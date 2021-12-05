@@ -23,7 +23,7 @@ import { Fetch, User, ManageJob } from "@/types/index";
 import { m, API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { useJobs, useUtils } from "@/hooks";
-import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
+import ConfirmDialog from "@/components/Organisms/Modals/Actions/ConfirmDialog.vue";
 import ApplyPutBtn from "@/components/Atoms/Button/ApplyPutBtn.vue";
 import RejectBtn from "@/components/Atoms/Button/RejectBtn.vue";
 import get from "lodash/get";
@@ -72,7 +72,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     CardJob,
     UserTabs,
     Loading,
-    Confirme,
+    ConfirmDialog,
     ApplyPutBtn,
     RejectBtn,
   },
@@ -172,7 +172,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <template>
   <section>
-    <Confirme @close="() => (modal = false)" v-show="modal">
+    <ConfirmDialog @close="() => (modal = false)" v-show="modal">
       <v-icon class="icon pt-1 pb-4">
         mdi mdi-handshake-outline
       </v-icon>
@@ -192,8 +192,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           <v-btn @click="() => (modal = false)" class="modal-btn">閉じる</v-btn>
         </div>
       </template>
-    </Confirme>
-    <Confirme @close="() => (cancelModal = false)" v-show="cancelModal">
+    </ConfirmDialog>
+    <ConfirmDialog @close="() => (cancelModal = false)" v-show="cancelModal">
       <v-icon class="icon pt-1 pb-4">
         mdi mdi-hand-right
       </v-icon>
@@ -215,7 +215,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           >
         </div>
       </template>
-    </Confirme>
+    </ConfirmDialog>
     <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <div class="detail-wrapper" v-show="!loading">
       <section class="user-area">
