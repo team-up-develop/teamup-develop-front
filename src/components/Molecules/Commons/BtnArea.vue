@@ -1,6 +1,6 @@
 <script lang="ts">
 import Vue from "vue";
-import VButton from "@/components/Atoms/VButton/VButton.vue";
+import { VButton } from "@/components/Atoms";
 
 export default Vue.extend({
   components: {

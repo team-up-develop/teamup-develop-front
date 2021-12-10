@@ -19,6 +19,7 @@ import { JobCreateParamsSecond } from "@/types/params";
 import { Fetch, Language, Framework, Skill } from "@/types/index";
 import { useUtils } from "@/hooks";
 import { isFormSecond } from "@/modules/jobCreate";
+import { VButton } from "@/components/Atoms";
 
 type Select = { id: number };
 type State = {
@@ -64,6 +65,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     Session,
     RadioArea,
     SkillSelectArea,
+    VButton,
   },
   props: propsOption,
   setup: (props, ctx) => {
@@ -179,6 +181,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           state.jobStatusId
         )
       ),
+      link: computed(() => `/job_create`),
       createJob,
     };
   },
@@ -254,20 +257,30 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         </div>
       </section>
       <div class="btn-area">
-        <button @click="createJob" class="post-job-btn" v-if="isForm">
-          案件投稿する
-        </button>
+        <VButton
+          v-if="isForm"
+          @click="createJob"
+          class="float-right px-8"
+          bc="primary"
+          size="lg"
+          >案件投稿する</VButton
+        >
         <v-tooltip bottom v-else>
           <template v-slot:activator="{ on, attrs }">
-            <button class="next-btn-false" v-on="on" v-bind="attrs">
-              案件投稿する
-            </button>
+            <VButton
+              class="float-right px-8"
+              bc="grey"
+              size="lg"
+              v-on="on"
+              v-bind="attrs"
+              >案件投稿する</VButton
+            >
           </template>
           <span>必須項目が入力されていません</span>
         </v-tooltip>
-        <router-link to="/job_create" class="post-job-back">
-          戻る 1/2
-        </router-link>
+        <VButton :to="link" class="px-10 back-btn" bc="primaryWhite" size="lg"
+          >戻る 1/2</VButton
+        >
       </div>
     </v-sheet>
   </section>
@@ -311,80 +324,12 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   margin-left: 0.5rem;
 }
 
-.btn-area {
-  .post-job-btn {
-    @include neumorphism;
-    @include blue-btn;
-    width: 191px;
-    color: $white;
-    text-align: left;
-    display: block;
-    padding: 1.1rem 1rem;
-    border-radius: 8px;
-    border: none;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    float: right;
-    cursor: pointer;
-  }
-
-  .next-btn-false {
-    @include box-shadow-btn;
-    @include grey-btn;
-    width: 191px;
-    color: $white;
-    text-align: left;
-    display: block;
-    padding: 1.1rem 1rem;
-    border-radius: 8px;
-    border: none;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    float: right;
-    transition: 0.3s;
-    outline: none;
-  }
-
-  .post-job-back {
-    @include neumorphismGrey;
-    color: $primary-color;
-    font-weight: 600;
-    width: 191px;
-    text-align: left;
-    display: block;
-    padding: 1.1rem 2rem;
-    border-radius: 8px;
-    font-size: 0.875rem;
-    font-weight: 600;
-    line-height: 1;
-    text-align: center;
-    max-width: 280px;
-    margin: auto;
-    font-size: 1rem;
-    float: left;
-    transition: 0.3s;
-    outline: none;
-    text-decoration: none;
-  }
-}
-
 /* スマホ */
 @media (max-width: $sm) {
   .btn-area {
     display: flex;
     flex-direction: column;
-
-    .post-job-back {
+    .back-btn {
       margin-top: 1rem;
     }
   }

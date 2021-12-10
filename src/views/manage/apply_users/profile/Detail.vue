@@ -8,7 +8,7 @@ import {
   SetupContext,
 } from "@vue/composition-api";
 import { InsidePropsType, OutsidePropsType } from "@icare-jp/vue-props-type";
-import { $fetch } from "@/libs/axios";
+import { $fetch, $put } from "@/libs/axios";
 import {
   PostUser,
   SkillUser,
@@ -23,13 +23,13 @@ import { Fetch, User, ManageJob } from "@/types/index";
 import { m, API_URL, AUTH_URL } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { useJobs, useUtils } from "@/hooks";
-import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
-import ApplyPutBtn from "@/components/Atoms/Button/ApplyPutBtn.vue";
-import RejectBtn from "@/components/Atoms/Button/RejectBtn.vue";
+import ConfirmDialog from "@/components/Organisms/Modals/Actions/ConfirmDialog.vue";
 import get from "lodash/get";
+import { VButton } from "@/components/Atoms";
+import { ParticipateParams, RejectParams } from "@/types/params";
 
 const propsOption = {
-  id: { type: Number, default: 0, required: true }, //? 詳細を見るユーザーのID
+  id: { type: Number, default: 0, required: true }, //? ユーザーのID
   jobId: { type: Number, default: 0, required: true },
   applyId: { type: Number, default: 0, required: true },
 } as const;
@@ -44,7 +44,7 @@ type State = {
   doneStatusFlag: boolean;
   currentTab: 0 | 1;
   statusId: number;
-  updatedAt: Date | string;
+  updatedAt: Date | null;
   modal: boolean;
   cancelModal: boolean;
 };
@@ -57,7 +57,7 @@ const initialState = (ctx: SetupContext): State => ({
   doneStatusFlag: false,
   currentTab: 0,
   statusId: m.APPLY_STATUS_APPLY,
-  updatedAt: "",
+  updatedAt: null,
   modal: false,
   cancelModal: false,
 });
@@ -72,15 +72,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     CardJob,
     UserTabs,
     Loading,
-    Confirme,
-    ApplyPutBtn,
-    RejectBtn,
+    ConfirmDialog,
+    VButton,
   },
   props: propsOption,
   setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
     const router = ctx.root.$router;
-    const { headerAuth } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -106,6 +104,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
     const { fetchProfileJobs, profileJobs } = useJobs();
     fetchProfileJobs(props.id);
+    const { headerAuth } = useUtils();
 
     const fetchUser = async () => {
       try {
@@ -137,13 +136,48 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       }
     };
 
-    const participate = () => {
-      state.modal = false;
-      state.statusId = m.APPLY_STATUS_PARTICIPATE;
+    const onChangeParticipate = async () => {
+      const params: ParticipateParams = {
+        id: props.applyId,
+        job_id: props.jobId,
+        user_id: props.id,
+        apply_status_id: m.APPLY_STATUS_PARTICIPATE,
+        updated_at: state.updatedAt!,
+      };
+      try {
+        await $put<ParticipateParams>(
+          `${AUTH_URL}/apply_job/${props.jobId}`,
+          params,
+          headerAuth.value
+        );
+
+        state.modal = false;
+        state.statusId = m.APPLY_STATUS_PARTICIPATE;
+      } catch (error) {
+        catchError(error);
+      }
     };
-    const reject = () => {
-      state.cancelModal = false;
-      state.statusId = m.APPLY_STATUS_REJECT;
+
+    const onChangeReject = async () => {
+      const params: RejectParams = {
+        id: props.applyId,
+        job_id: props.jobId,
+        user_id: props.id,
+        apply_status_id: m.APPLY_STATUS_REJECT,
+        updated_at: state.updatedAt!,
+      };
+      try {
+        await $put<RejectParams>(
+          `${AUTH_URL}/apply_job/${props.jobId}`,
+          params,
+          headerAuth.value
+        );
+
+        state.cancelModal = false;
+        state.statusId = m.APPLY_STATUS_REJECT;
+      } catch (error) {
+        catchError(error);
+      }
     };
 
     const clickTabs = (emitValue: 0 | 1) => {
@@ -163,8 +197,8 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       breadcrumbs,
       profileJobs,
       clickTabs,
-      participate,
-      reject,
+      onChangeReject,
+      onChangeParticipate,
     };
   },
 });
@@ -172,7 +206,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
 
 <template>
   <section>
-    <Confirme @close="() => (modal = false)" v-show="modal">
+    <ConfirmDialog @close="() => (modal = false)" v-show="modal">
       <v-icon class="icon pt-1 pb-4">
         mdi mdi-handshake-outline
       </v-icon>
@@ -182,18 +216,24 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       </p>
       <template v-slot:btnArea>
         <div class="d-flex justify-space-between">
-          <ApplyPutBtn
-            :id="id"
-            :job-id="jobId"
-            :updated-at="updatedAt"
-            :apply-id="applyId"
-            @participate="participate"
-          />
-          <v-btn @click="() => (modal = false)" class="modal-btn">閉じる</v-btn>
+          <VButton
+            class="rounded-pill"
+            @click="onChangeParticipate()"
+            bc="red"
+            size="lg"
+            >一緒に開発する</VButton
+          >
+          <VButton
+            class="rounded-pill modal-btn ml-3"
+            @click="() => (modal = false)"
+            bc="grey"
+            size="lg"
+            >閉じる</VButton
+          >
         </div>
       </template>
-    </Confirme>
-    <Confirme @close="() => (cancelModal = false)" v-show="cancelModal">
+    </ConfirmDialog>
+    <ConfirmDialog @close="() => (cancelModal = false)" v-show="cancelModal">
       <v-icon class="icon pt-1 pb-4">
         mdi mdi-hand-right
       </v-icon>
@@ -203,19 +243,23 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       </p>
       <template v-slot:btnArea>
         <div class="d-flex justify-space-between">
-          <RejectBtn
-            :id="id"
-            :job-id="jobId"
-            :updated-at="updatedAt"
-            :apply-id="applyId"
-            @reject="reject"
-          />
-          <v-btn @click="() => (cancelModal = false)" class="modal-btn"
-            >閉じる</v-btn
+          <VButton
+            class="rounded-pill btn-reject"
+            @click="onChangeReject()"
+            bc="redWhite"
+            size="lg"
+            >お断りする</VButton
+          >
+          <VButton
+            class="rounded-pill modal-btn ml-3"
+            @click="() => (cancelModal = false)"
+            bc="grey"
+            size="lg"
+            >閉じる</VButton
           >
         </div>
       </template>
-    </Confirme>
+    </ConfirmDialog>
     <Breadcrumbs :bread-crumbs="breadcrumbs" />
     <div class="detail-wrapper" v-show="!loading">
       <section class="user-area">
@@ -250,14 +294,21 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       </div>
       <div v-show="currentTab === 1">
         <v-row class="jobs">
-          <router-link
-            :to="`/jobs/${jobs.id}/detail`"
-            v-for="jobs in profileJobs"
-            :key="jobs.id"
-            class="jobs__card"
-          >
-            <CardJob :job="jobs" />
-          </router-link>
+          <template v-if="profileJobs.length > 0">
+            <router-link
+              :to="`/jobs/${jobs.id}/detail`"
+              v-for="jobs in profileJobs"
+              :key="jobs.id"
+              class="jobs__card"
+            >
+              <CardJob :job="jobs" />
+            </router-link>
+          </template>
+          <template v-else>
+            <div>
+              まだ案件がありません
+            </div>
+          </template>
         </v-row>
       </div>
       <div class="button-area">
@@ -292,17 +343,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   text-decoration: underline;
 }
 .modal-btn {
-  @include grey-btn;
-  color: $white;
-  font-weight: bold;
-  padding: 1rem 2.5rem !important;
-  border-radius: 50px;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  font-size: 0.8rem;
-  margin-left: 1.2rem;
-  outline: none;
+  padding: 1rem 2.7rem !important;
+}
+.btn-reject {
+  padding: 0.4rem 2rem !important;
 }
 
 .detail-wrapper {

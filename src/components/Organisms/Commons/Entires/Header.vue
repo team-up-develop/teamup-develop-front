@@ -13,7 +13,7 @@ import { API_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
 import { User, Fetch } from "@/types/index";
 import { backGroundImage } from "@/modules/images";
-import VButton from "@/components/Atoms/VButton/VButton.vue";
+import { VButton } from "@/components/Atoms";
 
 type State = {
   userId: number;

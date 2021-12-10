@@ -11,7 +11,7 @@ import { $fetch, $post } from "@/libs/axios";
 import { API_URL, AUTH_URL, m } from "@/master";
 import { catchError } from "@/libs/errorHandler";
 import { truncate } from "@/hooks/useUtils";
-import VButton from "@/components/Atoms/VButton/VButton.vue";
+import { VButton } from "@/components/Atoms";
 import {
   JobRightLogin,
   CardJob,
@@ -23,7 +23,7 @@ import {
   SkillSearchModal,
 } from "@/components/Organisms/Modals/Searches";
 import Loading from "@/components/Organisms/Commons/Loading/Loading.vue";
-import Confirme from "@/components/Organisms/Modals/Actions/Confirme.vue";
+import ConfirmDialog from "@/components/Organisms/Modals/Actions/ConfirmDialog.vue";
 import { dayJsFormat } from "@/libs/dayjs";
 import { Job, Fetch } from "@/types/index";
 import Vuex from "@/store/index";
@@ -84,7 +84,7 @@ export default defineComponent({
     Loading,
     // CircleLoading,
     // Applybtn,
-    Confirme,
+    ConfirmDialog,
     CardJob,
     LanguageSearchModal,
     FrameworkSearchModal,
@@ -372,7 +372,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
       @compliteSearchSkill="compliteSearchSkill($event)"
     />
     <div class="modal-window">
-      <Confirme @close="() => (modal = false)" v-if="modal">
+      <ConfirmDialog @close="() => (modal = false)" v-if="modal">
         <v-icon class="apply-icon pt-1 pb-4">
           mdi mdi-handshake-outline
         </v-icon>
@@ -385,7 +385,7 @@ const clickJob = (state: State, ctx: SetupContext) => {
             >
           </div>
         </template>
-      </Confirme>
+      </ConfirmDialog>
     </div>
     <!-- 検索エリアバー -->
     <div class="search-area">

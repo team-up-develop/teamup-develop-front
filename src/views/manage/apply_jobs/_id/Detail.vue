@@ -69,8 +69,6 @@ export default defineComponent({
       },
     ]);
 
-    const applied = () => (isApply.value = false);
-
     onMounted(async () => {
       if (state.userId) {
         await checkApplyStatus(props.id);
@@ -84,7 +82,6 @@ export default defineComponent({
       selfJobPost: computed(() => checkSelfJob(manageJobs.value, props.id)),
       job,
       loading,
-      applied,
       isLogin,
       isApply,
     };
@@ -115,9 +112,9 @@ export default defineComponent({
           :id="id"
           :job="job"
           :is-login="isLogin"
-          :selfjob="selfJobPost"
-          :apply-flug="isApply"
-          @applied="applied"
+          :is-self-job="selfJobPost"
+          :is-apply="isApply"
+          :on-apply="() => {}"
         />
       </section>
       <Loading v-else />

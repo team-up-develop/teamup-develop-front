@@ -99,7 +99,6 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     },
   },
   setup(props) {
-    console.log(themes.bc[props.bc].class);
     const propsObj = computed(() => ({
       ...props,
       ...themes.variants[props.variant],

@@ -18,6 +18,10 @@ import {
 } from "@/components/Organisms/Jobs/JobDetails";
 import { useJobs, useUtils } from "@/hooks";
 import { checkSelfJob } from "@/modules/jobs";
+import { ApplyParams } from "@/types/params";
+import { $post } from "@/libs/axios";
+import { m, AUTH_URL } from "@/master";
+
 type State = {
   userId: number;
 };
@@ -51,7 +55,7 @@ export default defineComponent({
     } = useJobs();
     fetchJobDetail(props.id);
 
-    const { isLogin } = useUtils();
+    const { isLogin, headerAuth } = useUtils();
 
     const breadcrumbs = computed(() => [
       {
@@ -82,7 +86,20 @@ export default defineComponent({
       }
     });
 
-    const applied = () => (isApply.value = false);
+    const onApply = async () => {
+      const params: ApplyParams = {
+        job_id: props.id,
+        user_id: state.userId,
+        apply_status_id: m.APPLY_STATUS_APPLY,
+      };
+
+      await $post<ApplyParams>(
+        `${AUTH_URL}/apply_job`,
+        params,
+        headerAuth.value
+      );
+      isApply.value = false;
+    };
 
     return {
       ...toRefs(state),
@@ -90,9 +107,9 @@ export default defineComponent({
       breadcrumbs,
       job,
       loading,
-      applied,
       isLogin,
       isApply,
+      onApply,
     };
   },
 });
@@ -119,9 +136,9 @@ export default defineComponent({
           :id="id"
           :job="job"
           :is-login="isLogin"
-          :selfjob="selfJobPost"
-          :apply-flug="isApply"
-          @applied="applied"
+          :is-self-job="selfJobPost"
+          :is-apply="isApply"
+          :on-apply="onApply"
         />
       </section>
       <Loading v-show="loading" />

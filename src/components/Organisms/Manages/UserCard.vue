@@ -10,6 +10,7 @@ import {
 import Vuex from "@/store/index";
 import { backGroundImage } from "@/modules/images";
 import { User } from "@/types";
+import { VButton } from "@/components/Atoms";
 
 type State = {
   userId: number;
@@ -30,6 +31,9 @@ const initialState = (ctx: SetupContext): State => ({
 });
 
 export default defineComponent({
+  components: {
+    VButton,
+  },
   setup: (_, ctx) => {
     const state = reactive<State>(initialState(ctx));
     Vuex.dispatch("getJobNum", {
@@ -49,6 +53,7 @@ export default defineComponent({
     return {
       ...toRefs(state),
       backGroundImage: computed(() => backGroundImage(state.userImage)),
+      link: computed(() => `/account/profile/${state.userId}/detail`),
     };
   },
 });
@@ -65,11 +70,11 @@ export default defineComponent({
           </div>
           <div class="user-name">{{ userName }}</div>
         </v-row>
-        <v-row class="card__center">
-          <router-link :to="`/account/profile/${userId}/detail`" class="">
-            <button class="btn">詳細をみる</button>
-          </router-link>
-          <v-row class="data-area">
+        <v-row class="card__center pt-6">
+          <VButton class="btn" :to="link" bc="primary" size="md">
+            詳細をみる
+          </VButton>
+          <v-row class="pt-8">
             <div class="value">
               <div class="num">{{ manageNum }}</div>
               <label for="name">投稿数</label>
@@ -138,35 +143,17 @@ section {
   }
 
   &__center {
-    padding: 24px 0 0 0;
     height: 120px;
-    position: relative;
 
     .btn {
-      @include neumorphism;
-      background-color: $secondary-color;
-      color: $white;
-      padding: 0.5rem 4rem;
-      position: absolute;
-      left: 0;
       width: 100%;
-      font-weight: bold;
-      font-size: 0.8em;
-      border-radius: 8px;
-      appearance: none;
-      border: none;
-      transition: 0.3s;
-      outline: none;
     }
-    .data-area {
-      padding: 3.5rem 0 0 0;
 
-      .value {
-        width: 33%;
+    .value {
+      width: 33%;
 
-        .num {
-          font-size: 1.5em;
-        }
+      .num {
+        font-size: 1.5em;
       }
     }
   }

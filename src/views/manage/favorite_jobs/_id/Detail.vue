@@ -17,6 +17,9 @@ import {
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
 import { useJobs, useUtils } from "@/hooks";
 import { checkSelfJob } from "@/modules/jobs";
+import { ApplyParams } from "@/types/params";
+import { $post } from "@/libs/axios";
+import { m, AUTH_URL } from "@/master";
 
 type State = {
   userId: number;
@@ -69,7 +72,7 @@ export default defineComponent({
       },
     ]);
 
-    const { isLogin } = useUtils();
+    const { isLogin, headerAuth } = useUtils();
 
     onMounted(async () => {
       if (state.userId) {
@@ -78,7 +81,20 @@ export default defineComponent({
       }
     });
 
-    const applied = () => (isApply.value = false);
+    const onApply = async () => {
+      const params: ApplyParams = {
+        job_id: props.id,
+        user_id: state.userId,
+        apply_status_id: m.APPLY_STATUS_APPLY,
+      };
+
+      await $post<ApplyParams>(
+        `${AUTH_URL}/apply_job`,
+        params,
+        headerAuth.value
+      );
+      isApply.value = false;
+    };
 
     return {
       ...toRefs(state),
@@ -87,8 +103,8 @@ export default defineComponent({
       job,
       loading,
       isLogin,
-      applied,
       isApply,
+      onApply,
     };
   },
 });
@@ -117,9 +133,9 @@ export default defineComponent({
           :id="id"
           :job="job"
           :is-login="isLogin"
-          :selfjob="selfJobPost"
-          :apply-flug="isApply"
-          @applied="applied"
+          :is-self-job="selfJobPost"
+          :is-apply="isApply"
+          :on-apply="onApply"
         />
       </section>
       <Loading v-else />
