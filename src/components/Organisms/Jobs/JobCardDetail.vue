@@ -4,21 +4,31 @@ import {
   reactive,
   toRefs,
   SetupContext,
+  watch,
 } from "@vue/composition-api";
 import { InsidePropsType, PropType } from "@icare-jp/vue-props-type";
 import { InputSet } from "@/components/Molecules/Forms";
 import { truncate } from "@/hooks/useUtils";
 import { dayJsFormat } from "@/libs/dayjs";
 import CircleLoading from "@/components/Organisms/Commons/Loading/CircleLoading.vue";
-import FavoriteBtn from "@/components/Atoms/Button/FavoriteBtn.vue";
-import { VButton, VChip } from "@/components/Atoms";
+import { VButton, VChip, VIcons } from "@/components/Atoms";
+import { $fetch, $post, $delete } from "@/libs/axios";
+import { AUTH_URL } from "@/master";
+import { catchError } from "@/libs/errorHandler";
+import { FavoriteParams } from "@/types/params";
+import { FavoriteJob, Fetch } from "@/types/index";
+import { useUtils } from "@/hooks";
 
 type State = {
   userId: number;
+  isFavorite: boolean;
+  token: string | undefined;
 };
 
 const initialState = (ctx: SetupContext): State => ({
   userId: ctx.root.$store.getters.userId,
+  isFavorite: true,
+  token: ctx.root.$store.getters.token,
 });
 
 const propsOption = {
@@ -38,18 +48,83 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   components: {
     InputSet,
     CircleLoading,
-    FavoriteBtn,
     VButton,
     VChip,
+    VIcons,
   },
   props: propsOption,
-  setup: (_, ctx) => {
+  setup: (props, ctx) => {
     const state = reactive<State>(initialState(ctx));
+    const { headerAuth } = useUtils();
+
+    const fetchFavorite = async () => {
+      try {
+        const res = await $fetch<Fetch<FavoriteJob[]>>(
+          `${AUTH_URL}/favorite_jobs?user_id=${state.userId}`,
+          headerAuth.value
+        );
+        const result = res.data.response.map((v) => v.job_id);
+        if (result.includes(props.job.id)) {
+          state.isFavorite = false;
+        } else {
+          state.isFavorite = true;
+        }
+      } catch (error) {
+        catchError(error);
+      }
+    };
+
+    watch(
+      () => props.job.id,
+      () => {
+        fetchFavorite();
+      }
+    );
+
+    const saveJob = async () => {
+      const params: FavoriteParams = {
+        job_id: props.job.id,
+        user_id: state.userId,
+      };
+      try {
+        await $post<FavoriteParams>(
+          `${AUTH_URL}/favorite_job`,
+          params,
+          headerAuth.value
+        );
+        state.isFavorite = false;
+      } catch (error) {
+        catchError(error);
+      }
+    };
+    const deleteJob = async () => {
+      const params: FavoriteParams = {
+        job_id: props.job.id,
+        user_id: state.userId,
+      };
+      try {
+        const res = await $delete<FavoriteParams>(`${AUTH_URL}/favorite_job`, {
+          headers: {
+            Authorization: `Bearer ${state.token}`,
+          },
+          data: {
+            ...params,
+          },
+        });
+        if (res.data) {
+          state.isFavorite = true;
+        }
+      } catch (error) {
+        catchError(error);
+      }
+    };
 
     return {
       ...toRefs(state),
       truncate,
       dayJsFormat,
+      saveJob,
+      deleteJob,
     };
   },
 });
@@ -77,7 +152,16 @@ export default defineComponent<InsidePropsType<PropsOption>>({
               >応募済み</VButton
             >
             <div class="btn-box-save">
-              <FavoriteBtn :job-id="job.id" />
+              <VIcons class="save-icon" @click="saveJob" v-if="isFavorite"
+                >mdi-heart</VIcons
+              >
+              <VIcons
+                class="saved-icon"
+                size="md"
+                @click="deleteJob"
+                v-if="isFavorite == false"
+                >mdi-heart</VIcons
+              >
             </div>
             <div v-if="isStatusNew" class="label-area">
               <VChip color="pri"
@@ -88,7 +172,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
           <template v-else>
             <div class="top-job-detail-bottom">
               <router-link
-                class="manamge-btn"
+                class="text-decoration-none"
                 :to="`/manage/${job.id}/apply_users`"
               >
                 <VButton bc="primaryWhite" size="lg" class="px-12 body-1"
@@ -118,13 +202,13 @@ export default defineComponent<InsidePropsType<PropsOption>>({
             >応募する</VButton
           >
           <div class="btn-box-save">
-            <v-icon class="save-icon" @click="registerRedirect"
-              >mdi-heart</v-icon
+            <VIcons class="save-icon" @click="registerRedirect"
+              >mdi-heart</VIcons
             >
           </div>
           <div v-if="isStatusNew" class="label-area">
             <VChip color="pri"
-              ><v-icon class="mr-1">mdi-label</v-icon>新規募集</VChip
+              ><VIcons class="mr-1">mdi-label</VIcons>新規募集</VChip
             >
           </div>
         </div>
@@ -278,41 +362,22 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   }
 }
 
-// * 管理画面遷移ボタン
-.manamge-btn {
-  text-decoration: none;
-}
-
-// * 応募するボタン
-.btn-box-apply {
-  @include red-btn;
-  @include neumorphism;
-  padding: 0.75rem 3rem;
-  border-radius: 8px;
-  font-weight: 600;
-  color: $white;
-  line-height: 1;
-  text-align: center;
-  max-width: 280px;
-  margin: auto;
-  font-size: 1.1em;
-  display: inline-block;
-  cursor: pointer;
-  border: none;
-  margin-top: 4px;
-  appearance: none;
-  border: none;
-  transition: 0.3s;
-  outline: none;
-}
-
 // * 保存アイコン
 .save-icon {
-  font-size: 20px;
-  width: 42px;
+  max-width: 42px !important;
   height: 42px;
   padding: 0.5rem;
   color: $white;
+  cursor: pointer;
+  background-color: #d8d6d6;
+  border-radius: 5px / 5px;
+}
+
+.saved-icon {
+  max-width: 42px !important;
+  height: 42px;
+  padding: 0.5rem;
+  color: red;
   cursor: pointer;
   background-color: #d8d6d6;
   border-radius: 5px / 5px;

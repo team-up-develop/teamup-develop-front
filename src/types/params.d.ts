@@ -41,7 +41,7 @@ interface ParticipateParams {
   job_id: number;
   user_id: number;
   apply_status_id: APPLY_STATUS_PARTICIPATE;
-  updated_at: string;
+  updated_at: Date;
 }
 
 interface RejectParams {
@@ -49,7 +49,7 @@ interface RejectParams {
   job_id: number;
   user_id: number;
   apply_status_id: APPLY_STATUS_REJECT;
-  updated_at: string;
+  updated_at: Date;
 }
 
 interface RegisterSessionFirstParams {
