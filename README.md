@@ -39,6 +39,8 @@ npm run test
 ```
 
 ### storybook
+※ 準備中
+
 ```
 npm run storybook
 ```
