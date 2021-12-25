@@ -1,5 +1,10 @@
 <script lang="ts">
-import { defineComponent, reactive, toRefs } from "@vue/composition-api";
+import {
+  defineComponent,
+  reactive,
+  toRefs,
+  SetupContext,
+} from "@vue/composition-api";
 import {
   InsidePropsType,
   OutsidePropsType,
@@ -9,6 +14,7 @@ import { dayJsFormat } from "@/libs/dayjs";
 import { User, ImageFile } from "@/types/index";
 import ImageUpload from "@/components/Organisms/Modals/Base/ImageUpload.vue";
 import { blankURL } from "@/modules/user";
+import { Inputs } from "@/views/accounts/profile/Detail.vue";
 
 const propsOption = {
   user: { type: Object as PropType<User>, required: true },
@@ -17,21 +23,27 @@ const propsOption = {
     required: true,
     defalut: false,
   },
+  onUploadImage: {
+    type: Function as PropType<() => Promise<void>>,
+    required: true,
+  },
+  inputs: {
+    type: Object as PropType<Inputs>,
+    required: true,
+  },
+  onInput: {
+    type: Function,
+    required: true,
+  },
 } as const;
 
 type State = {
-  userImage: {
-    imageData: any;
-    fileName: string;
-  };
   imageDialog: boolean;
+  token: string;
 };
-const initialState = (): State => ({
-  userImage: {
-    imageData: "",
-    fileName: "",
-  },
+const initialState = (ctx: SetupContext): State => ({
   imageDialog: false,
+  token: ctx.root.$store.getters.token,
 });
 
 type PropsOption = typeof propsOption;
@@ -43,50 +55,45 @@ export default defineComponent<InsidePropsType<PropsOption>>({
   },
   props: propsOption,
   setup: (props, ctx) => {
-    const state = reactive<State>(initialState());
-
-    if (props.user.user_image) {
-      state.userImage.imageData = props.user.user_image.image_url;
-    }
+    const state = reactive<State>(initialState(ctx));
 
     const onFileChange = (file: ImageFile) => {
       if (!file) {
-        state.userImage.fileName = "";
-        state.userImage.imageData = "";
+        props?.onInput({
+          name: "fileName",
+          value: "",
+        });
+        props?.onInput({
+          name: "imageData",
+          value: "",
+        });
         return;
       }
-      state.userImage.fileName = file.name;
+      props?.onInput({
+        name: "fileName",
+        value: file.name,
+      });
       createImage(file);
-      // TODO: api 繋ぎ込み
     };
     //* アップロードした画像を表示
     const createImage = (file: any) => {
       const reader = new FileReader();
       reader.onload = (e) => {
-        state.userImage.imageData = e?.target?.result;
+        props?.onInput({
+          name: "imageData",
+          value: e?.target?.result,
+        });
       };
       reader.readAsDataURL(file);
     };
 
-    const uplpadImage = () => {
-      const params = {
-        user_image: {
-          ...state.userImage,
-        },
-      };
-      console.log(params, "params");
+    const onUpload = async () => {
+      await props?.onUploadImage();
+      state.imageDialog = false;
     };
 
     const editEmit = () => {
       ctx.emit("editEmit");
-    };
-
-    const closeImageDialog = () => {
-      state.imageDialog = false;
-      state.userImage = {
-        imageData: "",
-        fileName: "",
-      };
     };
 
     return {
@@ -95,8 +102,7 @@ export default defineComponent<InsidePropsType<PropsOption>>({
       blankURL,
       editEmit,
       onFileChange,
-      closeImageDialog,
-      uplpadImage,
+      onUpload,
     };
   },
 });
@@ -107,10 +113,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
     <ImageUpload
       :image-dialog="imageDialog"
       :on-file-change="onFileChange"
-      :file-name="userImage.fileName"
-      :image-data="userImage.imageData"
-      :close="closeImageDialog"
-      :uplpad-image="uplpadImage"
+      :file-name="inputs.userImage.fileName"
+      :image-data="inputs.userImage.imageData"
+      :close="() => (imageDialog = false)"
+      :on-upload="onUpload"
     />
     <div class="post">
       <v-row>

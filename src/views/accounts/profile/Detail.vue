@@ -8,8 +8,8 @@ import {
   onBeforeMount,
   SetupContext,
 } from "@vue/composition-api";
-import { $fetch } from "@/libs/axios";
-import { API_URL } from "@/master";
+import { $fetch, $put } from "@/libs/axios";
+import { API_URL, AUTH_URL } from "@/master";
 import { fetchError, catchError } from "@/libs/errorHandler";
 import ProfileEditModal from "@/components/Organisms/Modals/Edit/ProfileEditModal.vue";
 import Breadcrumbs from "@/components/Organisms/Commons/Entires/Breadcrumbs.vue";
@@ -20,10 +20,10 @@ import {
   SkillUser,
   IntroduceUser,
 } from "@/components/Organisms/Users";
-// import Logout from '@/components/button/Logout'
 import CardJob from "@/components/Organisms/Jobs/CardJob.vue";
 import { User, Fetch } from "@/types/index";
-import useJobs from "@/hooks/useJobs";
+import { useJobs, useUtils } from "@/hooks";
+import { EditProfileParams } from "@/types/params";
 
 type Props = {
   id: number;
@@ -31,10 +31,19 @@ type Props = {
 
 type State = {
   myselfFlag: boolean;
-  userInfo: User | {};
+  userInfo: User | any;
   userId: number;
   modal: boolean;
   currentTab: 0 | 1 | 2;
+  token: string;
+  inputs: Inputs;
+};
+
+export type Inputs = {
+  userImage: {
+    imageData: any;
+    fileName: string;
+  };
 };
 
 const initialState = (ctx: SetupContext): State => ({
@@ -43,6 +52,13 @@ const initialState = (ctx: SetupContext): State => ({
   userId: ctx.root.$store.getters.userId,
   modal: false,
   currentTab: 0,
+  token: ctx.root.$store.getters.token,
+  inputs: {
+    userImage: {
+      imageData: "",
+      fileName: "",
+    },
+  },
 });
 
 export default defineComponent({
@@ -82,6 +98,7 @@ export default defineComponent({
     ]);
 
     const { fetchProfileJobs, profileJobs } = useJobs();
+    const { headerAuth } = useUtils();
 
     const fetchUser = async () => {
       // * ユーザー情報取得
@@ -96,6 +113,58 @@ export default defineComponent({
     (async () => {
       await Promise.all([fetchProfileJobs(props.id), fetchUser()]);
     })();
+
+    const onInput = (item: { name: string; value: string }) => {
+      state.inputs.userImage = {
+        ...state.inputs.userImage,
+        [item.name]: item.value,
+      };
+    };
+
+    const onUploadImage = async () => {
+      // * 言語を {id: Number}に変換
+      const selectlangValue = state.userInfo.programing_languages.map(
+        (v: any) => v.id
+      );
+      const languageArray: {}[] = [];
+      for (const selectedLang of selectlangValue) {
+        languageArray.push({ id: selectedLang });
+      }
+      // * フレームワークを{id: Number}に変換
+      const selectFramValue = state.userInfo.programing_frameworks.map(
+        (v: any) => v.id
+      );
+      const framworksArray: {}[] = [];
+      for (const selectedFramwork of selectFramValue) {
+        framworksArray.push({ id: selectedFramwork });
+      }
+      // * その他スキルを {id: Number}に変換
+      const selectSkillValue = state.userInfo.skills.map((v: any) => v.id);
+      const skillArray: {}[] = [];
+      for (const selectedSkill of selectSkillValue) {
+        skillArray.push({ id: selectedSkill });
+      }
+      const params: EditProfileParams = {
+        ...state.userInfo,
+        user_image: {
+          image_data: state.inputs.userImage.imageData,
+          file_name: state.inputs.userImage.fileName,
+        },
+        programing_language_ids: languageArray,
+        programing_framework_ids: framworksArray,
+        skill_ids: skillArray,
+      };
+
+      try {
+        await $put<EditProfileParams>(
+          `${AUTH_URL}/user/${state.userInfo.id}`,
+          params,
+          headerAuth.value
+        );
+      } catch (error) {
+        catchError(error);
+      }
+    };
 
     const openModal = () => {
       state.modal = true;
@@ -113,6 +182,10 @@ export default defineComponent({
       openModal();
     };
 
+    const onEdit = (userInput: EditProfileParams) => {
+      console.log(userInput, "userInput");
+    };
+
     const clickTabs = (emitValue: 0 | 1 | 2) => {
       state.currentTab = emitValue;
     };
@@ -126,6 +199,9 @@ export default defineComponent({
       editEmit,
       profileJobs,
       clickTabs,
+      onEdit,
+      onUploadImage,
+      onInput,
     };
   },
 });
@@ -140,6 +216,7 @@ export default defineComponent({
         :user-info="userInfo"
         @close="closeModal"
         @compliteEdit="compliteEdit()"
+        :on-edit="onEdit"
       />
       <section class="user-area">
         <div class="user-area__post">
@@ -147,6 +224,9 @@ export default defineComponent({
             :user="userInfo"
             @editEmit="editEmit()"
             :myself-flag="myselfFlag"
+            :on-upload-image="onUploadImage"
+            :inputs="inputs"
+            :on-input="onInput"
           />
           <v-row>
             <UserTabs

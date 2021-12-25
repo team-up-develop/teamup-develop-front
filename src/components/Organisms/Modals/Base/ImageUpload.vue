@@ -12,7 +12,7 @@ const props = {
   onFileChange: { type: Function as PropType<() => void> },
   fileName: { type: String, default: "" },
   imageData: { type: String, default: "" },
-  uplpadImage: { type: Function as PropType<() => void> },
+  onUpload: { type: Function as PropType<() => void> },
 } as const;
 type Props = typeof props;
 export type ImageUpload = OutsidePropsType<Props>;
@@ -61,12 +61,7 @@ export default defineComponent<InsidePropsType<Props>>({
         </v-card-text>
         <v-card-actions>
           <v-spacer />
-          <v-btn
-            v-if="imageData"
-            color="blue lighten-1"
-            text
-            @click="uplpadImage"
-          >
+          <v-btn v-if="imageData" color="blue lighten-1" text @click="onUpload">
             登録する
           </v-btn>
           <v-btn color="blue lighten-1" text @click="close">
