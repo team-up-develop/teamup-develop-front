@@ -198,15 +198,10 @@ export default defineComponent<InsidePropsType<PropsOption>>({
         programing_framework_ids: framworksArray,
         skill_ids: skillArray,
         user_image: {
-          image_data:
-            "https://pics.prcm.jp/4f519f398831a/82957765/jpeg/82957765.jpeg",
-          file_name: "sample",
+          image_data: props.userInfo.imageData,
+          file_name: props.userInfo.fileName,
         },
       };
-      console.log(params);
-      // const a = JSON.stringify(params);
-      // console.log(a);
-      console.log(ctx);
       $put<EditProfileParams>(`${AUTH_URL}/user/${state.id}`, params, {
         headers: { Authorization: `Bearer ${state.token}` },
       })
