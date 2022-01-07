@@ -16,7 +16,7 @@
 $ docker-compose up -d --build
 ```
 
-### (2) in container & bash start up
+### (2) コンテナの中に入る
 ```
 $ docker-compose exec app sh
 ```
