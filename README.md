@@ -61,9 +61,14 @@ $ open dist/report.html
 $ npm cache verify --force
 ```
 
-### モジュールを削除 再インストール
+### modulesを削除 再インストール
 ```
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
+```
+
+### modulesの依存関係でうまくいかない場合
+```
+$ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i --legacy-peer-deps
 ```
 
 ## Doc
