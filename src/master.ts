@@ -1,7 +1,7 @@
 //* env file デバッグ
 // console.log(process.env);
-export const API_URL = process.env.VUE_APP_API_BASE_URL;
-export const AUTH_URL = process.env.VUE_APP_API_AUTH_URL;
+export const API_URL = 'https://dry-lowlands-65123.herokuapp.com/api/v1';
+export const AUTH_URL = 'https://dry-lowlands-65123.herokuapp.com/auth/api/v1';
 
 //* 応募のステータス
 // 1: 応募

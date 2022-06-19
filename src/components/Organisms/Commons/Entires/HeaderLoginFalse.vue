@@ -72,7 +72,6 @@ export default defineComponent({
 
       .header-main-right {
         width: 440px;
-        padding: 0.9rem 0rem 0 0;
         position: absolute;
         right: 0;
         top: 0;
