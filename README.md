@@ -1,54 +1,32 @@
-## fornt 環境 / version
-- node v12.12.0
-- vue/cli v4.3.1
-- vue v2.6.12 
-- typescript v3.8.3 
-- vuex v3.4.0
-- eslint v6.7.2
-- docker v19.03.13
-
 ## URL
 - [テスト環境](https://teamup-dev.netlify.app/jobs) 
 
 ## 環境構築
-### (1) コンテナ作成 / 起動
-```
+- コンテナ作成/起動
+
+```console
 $ docker-compose up -d --build
 ```
 
-### (2) コンテナの中に入る
-```
+- アプリケーションコンテナ内へ移動
+```console
 $ docker-compose exec app sh
 ```
 
-### (3) node package install
-```
+- node package install
+```console
 $ npm i
 ```
 
-### (4) runServer
-```
+- 起動
+```console
 $ npm run dev
 ```
 
-## その他コマンド
-
-### jest test 
-```
-npm run test
-```
-
-### storybook
-※ 準備中
-
-```
-npm run storybook
-```
-
 ## Tips
-### bundle size 
+- bundle size 
 
-```
+```console
 $ yarn build --analyze
 $ open dist/report.html 
 ```
@@ -56,18 +34,18 @@ $ open dist/report.html
 <img width="800" alt="スクリーンショット 2021-04-14 20 37 17" src="https://user-images.githubusercontent.com/56709557/114704374-7ed1cf80-9d61-11eb-8902-82385d1d0214.png">
 
 
-### cache クリア
-```
+- cache クリア
+```console
 $ npm cache verify --force
 ```
 
-### modulesを削除 再インストール
-```
+- modulesを削除 再インストール
+```console
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i
 ```
 
-### modulesの依存関係でうまくいかない場合
-```
+- modulesの依存関係でうまくいかない場合
+```console
 $ rm -rf node_modules && rm package-lock.json && npm cache clear --force && npm cache clean --force && npm i --legacy-peer-deps
 ```
 
@@ -77,8 +55,8 @@ Atomic Design 導入
 詳しくは → https://github.com/team-up-develop/teamup-develop-front/issues/86
 
 - コメントは必要に応じて残すこと
-> https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
-> https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight
+  - https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments
+  - https://marketplace.visualstudio.com/items?itemName=wayou.vscode-todo-highlight
 ```
 //* 処理の内容(必要に応じて)
 //? 処理の中の子説明 or paramsの説明
